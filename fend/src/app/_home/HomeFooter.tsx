@@ -6,7 +6,7 @@ export const HomeFooter = () => {
     <footer className="bg-[#09072C] px-4 py-6 text-white">
       <div className="container mx-auto flex flex-col items-center justify-between sm:flex-row">
         <div className="mb-4 flex items-center sm:mb-0">
-          <div className="mr-2 text-xl font-bold">LOTTOVERSE</div>
+          <div className="mr-2 text-xl font-bold">LOTTAVERSE</div>
           <span className="text-xs">© All rights reserved</span>
         </div>
 
