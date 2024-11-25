@@ -13,7 +13,7 @@ const app = express();
 mongoose.set("strictQuery", false);
 
 mongoose
-  .connect(process.env.MONGO_URL||"mongodb+srv://lottaverseio:TzOdMvpT8PEJi8In@lottaverse.w0v2src.mongodb.net/lottaverse?retryWrites=true&w=majority")
+  .connect(process.env.MONGO_URL||"mongodb+srv://Lottaverse-v02:R5O5QkxP1CNbMDo8@cluster0.buorf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
   .then(() => {
     console.log("Connected to MongoDB");
 
@@ -30,7 +30,7 @@ mongoose
     app.use('/*', apiLimiter);
 
     const corsOptions = {
-    origin: process.env.CORS_ORIGIN || "*",
+    origin:  "*",
     methods: ['GET', 'POST'],
     optionsSuccessStatus: 200,
     credentials: true
@@ -58,7 +58,7 @@ mongoose
       res.status(500).send('Something went wrong!');
     });
 
-    const PORT = process.env.PORT || 8001;
+    const PORT = process.env.PORT || 8000;
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}.`);
     });
