@@ -13,7 +13,7 @@ const app = express();
 mongoose.set("strictQuery", false);
 
 mongoose
-  .connect(process.env.MONGO_URL)
+  .connect(process.env.MONGO_URL||"mongodb+srv://Lottaverse-v02:R5O5QkxP1CNbMDo8@cluster0.buorf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
   .then(() => {
     console.log("Connected to MongoDB");
 
@@ -30,7 +30,7 @@ mongoose
     app.use('/*', apiLimiter);
 
     const corsOptions = {
-    origin: process.env.CORS_ORIGIN || "*",
+    origin:  "*",
     methods: ['GET', 'POST'],
     optionsSuccessStatus: 200,
     credentials: true
