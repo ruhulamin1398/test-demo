@@ -13,7 +13,7 @@ const app = express();
 mongoose.set("strictQuery", false);
 
 mongoose
-  .connect(process.env.MONGO_URL||"mongodb+srv://lottaverseio:TzOdMvpT8PEJi8In@lottaverse.w0v2src.mongodb.net/lottaverse?retryWrites=true&w=majority")
+  .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("Connected to MongoDB");
 
@@ -58,7 +58,7 @@ mongoose
       res.status(500).send('Something went wrong!');
     });
 
-    const PORT = process.env.PORT || 8001;
+    const PORT = process.env.PORT || 8000;
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}.`);
     });
