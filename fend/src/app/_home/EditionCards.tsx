@@ -22,7 +22,7 @@ export const EditionCards = ({ jackpotType, ...props }: Props) => {
                 <span className={`font-medium uppercase`}>1st Prize 1 Person</span>
               </p>
               <p className="space-x-1 font-medium leading-4 text-green-400">
-                <span>300</span>
+                <span>5000</span>
                 <span className="usdt">USDT</span>
               </p>
             </div>
