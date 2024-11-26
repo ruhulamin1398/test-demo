@@ -13,7 +13,7 @@ export const Hero = ({ ...props }: Props) => {
           WELCOME TO LOTTAVERSE
         </h1>
         <p className="mt-5 box-border max-w-xs text-center font-sans text-xl font-bold uppercase tracking-[-0.38px] text-[#E3E8FC] antialiased opacity-70 md:max-w-full md:text-3xl md:leading-[41.8px]">
-          THE BIGGEST WEB3 ONLINE LOTTERY PLATFORM ON <br /> THE WORLD
+          THE BIGGEST DECENTRALIZED ONLINE LOTTERY PLATFORM ON <br /> THE WORLD
         </p>
 
         {/* <Image
