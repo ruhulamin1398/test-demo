@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Table,
   TableBody,
@@ -8,75 +6,87 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/utils";
-import { capitalizeFirstLetter } from "@/utils/utils";
 
-export const LotteryTable = ({ data }: any) => {
+interface LotteryDrawResponse<T> {
+  message: string;
+  data: T[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
 
+interface Result {
+  ticket: number[];
+  winner: string;
+  prize: number;
+}
+
+interface DrawData {
+  lottery_id: number;
+  round: number;
+  lottery_type: string;
+  is_draw: boolean;
+  result: Result[];
+}
+
+type LotteryDraws = LotteryDrawResponse<DrawData>;
+
+interface Props extends React.ComponentPropsWithoutRef<"div"> {
+  data: any;
+}
+
+export const WinnerTable = ({ data, ...props }: Props) => {
+  const formatAddress = (address: string) => {
+    return `${address?.slice(0, 2)}......${address?.slice(-4)}`;
+  };
+
+
+  console.log(data)
 
   return (
-    <>
-      <Table>
+    <div {...props} className="mt-2">
+      <Table className="text-center">
         <TableHeader>
           <TableRow>
-            <TableHead>SL</TableHead>
-            <TableHead>Package</TableHead>
-            <TableHead>Ticket number</TableHead>
-            <TableHead>Result</TableHead>
+            <TableHead>Winner</TableHead>
+            <TableHead>User</TableHead>
+            <TableHead>Ticket</TableHead>
+            <TableHead>Prize</TableHead>
           </TableRow>
         </TableHeader>
-        {
+        <TableBody>
+          {data?.lotteries?.length > 0 ? (
+            data.lotteries.map((drawData: any, drawArrayIndex: number) =>
+              drawData.result.map((draw: any) => (
+                <TableRow key={`${drawData.lottery_id}-${draw.prize}`}>
+                  <TableCell>{draw.prize}</TableCell>
+                  <TableCell>{formatAddress(draw.winner)}</TableCell>
+                  <TableCell>
+                    <div className="flex justify-center space-x-2">
+                      {draw.ticket.map((lottery: number, idx: number) => (
+                        <div
+                          key={idx}
+                          className="flex items-center justify-center rounded-full bg-[#4D22FC] text-xs font-black sm:size-10 md:size-7 lg:size-8"
+                        >
+                          {lottery}
+                        </div>
+                      ))}
+                    </div>
+                  </TableCell>
+                  <TableCell>${draw.amount}</TableCell>
+                </TableRow>
+              ))
+            )
+          ) : (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center">
+                <div className="flex justify-center my-5 text-xl">No data found</div>
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
 
-
-          data?.purchases?.length > 0 ?
-            <TableBody>
-
-              {data?.purchases?.map((purchase: any, index: number) => {
-                const limit = data?.meta?.limit
-                const globalIndex = (data?.meta?.currentPage - 1) * limit + (index + 1);
-                return (
-                  <TableRow key={index}>
-                    <TableCell>
-                      <div>
-                        <p>{globalIndex}</p> {/* Show the global index */}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <p>{capitalizeFirstLetter((purchase?.tax?.lotteryType == 0) ? "Easy" : "Super")} Jackpot</p>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex grow flex-nowrap items-center justify-center gap-[0.20rem] sm:gap-x-2 md:gap-[0.10rem] lg:gap-x-2 space-x-2 ">
-                        {purchase?.tax?.lottery?.map((num: any, index: number) => (
-                          <span
-                            key={index}
-                            style={{
-                              boxShadow: `#000000cc 0px 5px 10px 0px`,
-                              fontFamily: `"Open Sans", sans-serif`,
-                            }}
-                            className={cn(
-                              "flex items-center justify-center rounded-full bg-[#4D22FC] text-xs font-black sm:size-10 md:size-7 lg:size-8",
-                              `[#1a9d92] cursor-pointer text-center leading-8 text-white`,
-                            )}
-                          >
-                            {num}
-                          </span>
-                        ))}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-yellow-500">
-                      <p>{capitalizeFirstLetter(purchase?.tax?.status)}</p>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-
-            </TableBody>
-
-            : <TableBody className="h-40 text-xl flex justify-center items-center w-full"> No lottery found</TableBody>
-
-        }
       </Table>
-
-    </>
+    </div>
   );
 };
