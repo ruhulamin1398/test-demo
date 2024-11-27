@@ -30,14 +30,14 @@ export default function App() {
     setPremiumUsers(premiumList);
 
     console.warn(Number(premiumReserve));
-    console.log(premiumReserve, ); 
+    // console.log(premiumReserve, ); 
 
   };
 
   const adPremium = async () => {
     try {
       toast.loading("Adding premium member....")
-      console.log("newMember =======================", newMember);
+      // console.log("newMember =======================", newMember);
 
       const provider = new BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
@@ -48,7 +48,7 @@ export default function App() {
         premiumMember.push(newMember)
         
         const tx = await contract.addPremiumAccount(newMember,{ gasLimit: 1000000 });
-        console.log("newMember =======================", newMember);
+        // console.log("newMember =======================", newMember);
 
         // const tx = await contract.addPremiumAccount(premiumMember);
         const Tx = await tx.wait(1);
@@ -87,7 +87,7 @@ export default function App() {
     })
       .then((data) => {
         setUsers(data.data)
-        console.log("users   ===", data.data)
+        // console.log("users   ===", data.data)
   })
       
       .catch((err) => console.warn(err.message));

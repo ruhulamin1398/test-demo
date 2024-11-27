@@ -93,7 +93,7 @@ export default function App({ isOpen, onClose, lottery }) {
           //   false
           // )
 
-          console.log(" tcccccccccccccccccccccxxxxxxxxxxx ");
+          // console.log(" tcccccccccccccccccccccxxxxxxxxxxx ");
           const Tx = await lottaverse.purchaseTicket(
             parseInt(lottery.lotteryId),
            bytesTickets.length, referral
@@ -101,7 +101,7 @@ export default function App({ isOpen, onClose, lottery }) {
           // console.log(" hello ", parseInt(lottery.lotteryId));
           // console.log(" hello ", parseInt(lottery.lotteryId));
           const tx = await Tx.wait();
-          console.log(" tcccccccccccccccccccccxxxxxxxxxxx ", tx)
+          // console.log(" tcccccccccccccccccccccxxxxxxxxxxx ", tx)
 
           console.warn(tx, Tx)
           await axios.post(`${appConfig.api}/purchase`, {

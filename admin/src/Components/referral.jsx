@@ -39,9 +39,9 @@ export default function Referral(){
       setReferralsAddresses(refereesData);
 
 
-      console.log("referralAmountTotal _____ ", (Number(referralAmountTotal)/blockChainConfig.decimals)) ; 
-      console.log("raferralAmountList _____ ", raferralAmountList) ;
-      console.log("referralsAddresses _____ ", refereesData) ;
+      // console.log("referralAmountTotal _____ ", (Number(referralAmountTotal)/blockChainConfig.decimals)) ; 
+      // console.log("raferralAmountList _____ ", raferralAmountList) ;
+      // console.log("referralsAddresses _____ ", refereesData) ;
 
       // 0xBa926bE5738D978e6e1006f6bB66570FC4123064
       // 0x3ff88B69d1762AA444c85c30C4B0B795f9c48B59
@@ -50,10 +50,10 @@ export default function Referral(){
 
 
       const user  = await contract.users('0x3ff88B69d1762AA444c85c30C4B0B795f9c48B59');
-      console.log(" 0x3ff88B69d1762AA444c85c30C4B0B795f9c48B59 ", user);
+      // console.log(" 0x3ff88B69d1762AA444c85c30C4B0B795f9c48B59 ", user);
 
       const user2  = await contract.users('0xBa926bE5738D978e6e1006f6bB66570FC4123064');
-      console.log(" 0xBa926bE5738D978e6e1006f6bB66570FC4123064 ", user);
+      // console.log(" 0xBa926bE5738D978e6e1006f6bB66570FC4123064 ", user);
 
 
 

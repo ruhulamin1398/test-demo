@@ -245,7 +245,7 @@ export default function App({ isOpen, onClose }) {
             );
 
 
-            console.log(tx);
+            // console.log(tx);
             const Tx = await tx.wait(10);
             console.warn(Tx, tx);
             if (Tx.status === 1) {
@@ -285,8 +285,8 @@ export default function App({ isOpen, onClose }) {
           
 
           if (localStorage.getItem("creationTax") == 1) {
-            console.log("creationTax", localStorage.getItem("creationTax"));
-            console.log("lotteryStatus", localStorage.getItem('lotteryStatus'));
+            // console.log("creationTax", localStorage.getItem("creationTax"));
+            // console.log("lotteryStatus", localStorage.getItem('lotteryStatus'));
 
             if (localStorage.getItem('lotteryStatus') == 1) {
              

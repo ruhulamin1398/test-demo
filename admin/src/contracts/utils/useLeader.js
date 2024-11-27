@@ -24,21 +24,21 @@ export const useLeader = (userAddress) => {
     const fetchTopBuyers = async () => {
       try {
         const contractData = await inContract.getTopBuyerList();
-        console.log("getTopBuyerList", contractData);
+        // console.log("getTopBuyerList", contractData);
         if (contractData) {
        
        setTopBuyers(contractData[0]);
           setTopBuyerRunningBalance(Number(contractData[1]));
         }
       } catch (error) {
-        console.error("Error fetching getTopBuyerList", error);
+        // console.error("Error fetching getTopBuyerList", error);
       }
     };
 
     const fetchTopLeaders = async () => {
       try {
         const topLaders = await inContract.getTop20Leaders();
-        console.log("topLeaders", topLaders);
+        // console.log("topLeaders", topLaders);
     
         if (topLaders) {
           const updatedLeaders = topLaders[0].map((leader, i) => {

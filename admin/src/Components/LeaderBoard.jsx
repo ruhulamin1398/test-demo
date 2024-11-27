@@ -25,7 +25,7 @@ useEffect(()=>{
    
 useEffect(()=>{
  
-  console.log( topBuyers, topLeaders,   topLeaderRunningBalance, topBuyerRunningBalance  )
+  // console.log( topBuyers, topLeaders,   topLeaderRunningBalance, topBuyerRunningBalance  )
 
   if(type == 0){
     setLoad(0);

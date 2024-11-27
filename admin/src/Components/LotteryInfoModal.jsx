@@ -91,7 +91,7 @@ export default function LotteryInfo({ isOpen, onClose, lottery }) {
       const tx = await inContract.Draw(250, 2500000, { gasLimit: 6000000 });
       await tx.wait(15);
       const winnerListResponse = await contract.getchainLinkRandomWords();
-      console.log(winnerListResponse);
+      // console.log(winnerListResponse);
     } catch (error) {
       console.error("Error executing transaction:", error);
     }
@@ -231,7 +231,7 @@ export default function LotteryInfo({ isOpen, onClose, lottery }) {
             }
 
          
-          console.log("winners", winners);
+          // console.log("winners", winners);
 
 
           /// sening to database
@@ -246,7 +246,7 @@ export default function LotteryInfo({ isOpen, onClose, lottery }) {
               result: winners
             }
 
-            console.log(" Request send to database ", dbRequestData)
+            // console.log(" Request send to database ", dbRequestData)
             
 
 
@@ -269,7 +269,7 @@ export default function LotteryInfo({ isOpen, onClose, lottery }) {
               toast.success("Draw  completed successfully");
 
               // Handle the response as needed
-              console.log("Lottery updated successfully:", response.data);
+              // console.log("Lottery updated successfully:", response.data);
             } catch (error) {
               toast.dismiss();
               toast.error('something went wring', '10s')

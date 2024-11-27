@@ -22,7 +22,7 @@ export const useProvider = (userAddress) => {
             // Create a signer from MetaMask's provider
             const signer = await metaMaskProvider.getSigner();
       
-            console.log("Connected to MetaMask with address:", await signer.getAddress());
+            // console.log("Connected to MetaMask with address:", await signer.getAddress());
       
             // Infura provider for fallback or additional interaction
             const inProvider = new JsonRpcProvider(
@@ -31,14 +31,14 @@ export const useProvider = (userAddress) => {
             );
       
             const network = await inProvider.getNetwork();
-            console.log("Connected to Infura network:", network);
+            // console.log("Connected to Infura network:", network);
       
             const contract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, inProvider);
             const contractWithSigner = contract.connect(signer);
             setInfuraContract(contractWithSigner);
             const ownerTax= await contractWithSigner.getOwnerTax();
-            console.log("ownerTax",ownerTax);
-            console.log(contractWithSigner)
+            // console.log("ownerTax",ownerTax);
+            // console.log(contractWithSigner)
           } catch (error) {
             console.error("Error connecting to MetaMask:", error);
           }
