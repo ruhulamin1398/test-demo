@@ -101,23 +101,23 @@ useEffect(()=>{
  
   // Transform the user data into the User interface format
   const user: User | null = userData
-    ? {
-        premium: Number(userData?.premium ) ,
-        totalSpend: Number(userData?.totalspend )/ blockChainConfig.decimals,
-        purchasedTickets: Number(userData?.purchasedTickets )/ blockChainConfig.decimals,
-        firstLottery: Number(userData?.firstLottery )/ blockChainConfig.decimals,
-        lastTicketPurchased: Number(userData?.lastTicketPurchased )/ blockChainConfig.decimals,
-        referrer: userData?.referrer,
-        winningAmount: Number(userData?.winningAmount) / blockChainConfig.decimals || 0,
-        topBuyerTax:Number(userData?.topBuyerTax),
-        topLeaderTax: Number(userData?.topLeaderTax),
-        premiumReferralRewards: Number(userData?.premiumReferralRewards) / blockChainConfig.decimals || 0,
-        totalRewadBalanceWithdraw: Number(userData?.spend?.totalRewadBalanceWithdraw),
-        usdT:Number(balance)/blockChainConfig.decimals,
-        ownerTax:ownerTaxAmount, 
-     
-      }
-    : null;
+  ? {
+      premium: isNaN(Number(userData?.premium)) ? 0 : Number(userData?.premium),
+      totalSpend: isNaN(Number(userData?.totalspend)) ? 0 : Number(userData?.totalspend) / blockChainConfig.decimals,
+      purchasedTickets: isNaN(Number(userData?.purchasedTickets)) ? 0 : Number(userData?.purchasedTickets) / blockChainConfig.decimals,
+      firstLottery: isNaN(Number(userData?.firstLottery)) ? 0 : Number(userData?.firstLottery) / blockChainConfig.decimals,
+      lastTicketPurchased: isNaN(Number(userData?.lastTicketPurchased)) ? 0 : Number(userData?.lastTicketPurchased) / blockChainConfig.decimals,
+      referrer: userData?.referrer || '',  // assuming referrer can be a string and empty if not available
+      winningAmount: isNaN(Number(userData?.winningAmount)) ? 0 : Number(userData?.winningAmount) / blockChainConfig.decimals || 0,
+      topBuyerTax: isNaN(Number(userData?.topBuyerTax)) ? 0 : Number(userData?.topBuyerTax),
+      topLeaderTax: isNaN(Number(userData?.topLeaderTax)) ? 0 : Number(userData?.topLeaderTax),
+      premiumReferralRewards: isNaN(Number(userData?.premiumReferralRewards)) ? 0 : Number(userData?.premiumReferralRewards) / blockChainConfig.decimals || 0,
+      totalRewadBalanceWithdraw: isNaN(Number(userData?.spend?.totalRewadBalanceWithdraw)) ? 0 : Number(userData?.spend?.totalRewadBalanceWithdraw),
+      usdT: isNaN(Number(balance)) ? 0 : Number(balance) / blockChainConfig.decimals,
+      ownerTax: isNaN(ownerTaxAmount) ? 0 : ownerTaxAmount,
+    }
+  : null;
+
 
   return { user, isError  };
 };
