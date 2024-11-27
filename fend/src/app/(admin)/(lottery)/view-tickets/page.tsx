@@ -11,7 +11,7 @@ const ViewTickets = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(25);
 
-  const { data, isLoading } = useGetSingleUserLotteryDetailsQuery({ address, page, limit });
+  const { data, isLoading, error } = useGetSingleUserLotteryDetailsQuery({ address, page, limit });
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -21,27 +21,27 @@ const ViewTickets = () => {
     setPage(1);
   };
 
-
   if (isLoading) {
-    return <div className="flex justify-center items-center h-40">Loading...</div>;
+    return <div>Loading...</div>;
   }
 
+  if (error) {
+    return <div>Error loading data.</div>;
+  }
 
   return (
     <section>
       <h1 className="mb-1 mt-0 text-xl font-black">View Tickets</h1>
       <LotteryTable data={data} />
 
-      {
-        data?.purchases?.length > 0 &&
-        <PaginationComponent
-          currentPage={page}
-          totalPages={data?.meta?.totalPages}
-          onPageChange={handlePageChange}
-          limit={limit}
-          onLimitChange={handleLimitChange}
-        />
-      }
+      {/* Pagination component*/}
+      <PaginationComponent
+        currentPage={page}
+        totalPages={data.totalPages}
+        onPageChange={handlePageChange}
+        limit={limit}
+        onLimitChange={handleLimitChange}
+      />
     </section>
   );
 };
