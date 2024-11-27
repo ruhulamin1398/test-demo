@@ -49,15 +49,7 @@ export const useUser = () => {
     args: [address], 
     enabled: isConnected &&!!address, // Only run if connected and address is available
   });  
-  // const { data: ownerTax, isLoading2, isError2} = useContractRead({
-  //   address: blockChainConfig.contractAddress  as `0x${string}`,
-  //   abi: blockChainConfig.lotteryABI,
-  //   functionName: "getOwnerTax",
-  //   args:[],
-
-  //   enabled: isConnected &&!!address, // Only run if connected and address is available
-   
-  // });
+ 
  
 
 
@@ -96,7 +88,7 @@ async function fetchOwnerTax() {
 
     setOwnerTaxAmount(ownerTax);
   } catch (error) {
-    console.error("Error fetching owner tax:", error.message);
+    // console.error("Error fetching owner tax:", error.message);
   }
 }
 

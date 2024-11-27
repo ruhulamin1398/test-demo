@@ -26,11 +26,11 @@ export const LotteryTable = ({ data }: any) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.purchases?.map((purchase: any, index: number) => (
+          {data?.purchases.map((purchase: any, index: number) => (
             <TableRow key={index}>
               <TableCell>
                 <div>
-                  {purchase?.tax?.map((lottery: any, idx: number) => (
+                  {purchase?.tax.map((lottery: any, idx: number) => (
                     <div key={idx} className={"py-[10px]"}>
                       {/* Use serial number and increment after rendering */}
                       <p>{serialNumber++}</p>

@@ -10,7 +10,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@/contracts/contractUtils/useUser";
 
 export const ConnectBtn = () => {
-  const { user } = useUser();
+  const { user, isError } = useUser();
   const router = useRouter();
   const account = useAccount();
   const pathName = usePathname();
@@ -51,6 +51,11 @@ export const ConnectBtn = () => {
       }
     }
   }, [account, pathName, router, sendData]);
+
+
+  useEffect(()=>{
+    console.log(" user ", user, " is Error ", isError);
+    },[user]);
 
   return (
     <ConnectButton.Custom>
