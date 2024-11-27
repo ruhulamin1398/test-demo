@@ -12,6 +12,7 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 
 import { polygon, polygonAmoy, avalanche, avalancheFuji } from "wagmi/chains";
+import { blockChainConfig } from "@/contracts/const";
 
 const connectors = connectorsForWallets(
   [
@@ -28,7 +29,7 @@ const connectors = connectorsForWallets(
 
 export const wagmiConfig = createConfig({
   connectors: connectors,
-  chains: [polygon, polygonAmoy, avalanche, avalancheFuji],
+  chains: [blockChainConfig.chainName ],
   ssr: true,
   client({ chain }) {
     return createClient({ chain, transport: http() });

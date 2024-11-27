@@ -129,7 +129,7 @@ export const ConnectBtn = () => {
                     )}
                     {/* {chain.name}  */}
                     {/* <WalletMinimal className="mr-3 size-5" /> */}
-                    {user?.usdT.toFixed(2)} &nbsp; <span className="text-lg"> USDT </span>
+                    {user?.usdT.toFixed(2)} &nbsp; <span className="text-sm"> USDT </span>
                   </Button>
                   <Button
                     onClick={openAccountModal}
