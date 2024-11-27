@@ -13,7 +13,7 @@ import { RiListCheck } from "react-icons/ri";
 import { Contract, BrowserProvider, JsonRpcProvider, AbiCoder, ethers, Wallet, parseUnits } from "ethers";
 
 
-import { blockChainConfig, owner, LInkAddress,  secretKey, pk } from "../contracts/const";
+import { blockChainConfig,   LInkAddress,  secretKey, pk } from "../contracts/const";
 import { toast } from "react-toastify";
 import Web3Token from "web3-token";
 import { MdOutlineDashboard } from "react-icons/md";
@@ -67,77 +67,27 @@ export default function LotteryInfo({ isOpen, onClose, lottery }) {
     setBuyerReserve(600);
     // =====================================================================
   }
-
-  const testDrawData = async (lotteryId) => {
-
-
-
-    const inProvider = new JsonRpcProvider(
-      "https://polygon-amoy.infura.io/v3/276f8cf7af2341738b0fd12245ffd948",
-      {
-        chainId: 80002, // Chain ID for Polygon Amoy testnet
-        name: "polygon-amoy"
-      }
-    );
-    const wallet = new Wallet(pk, inProvider);
-
-    const inContract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, wallet);
-
-    const provider = new BrowserProvider(window.ethereum);
-
-    const contract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, provider);
-
-    try {
-      const tx = await inContract.Draw(250, 2500000, { gasLimit: 6000000 });
-      await tx.wait(15);
-      const winnerListResponse = await contract.getchainLinkRandomWords();
-      // console.log(winnerListResponse);
-    } catch (error) {
-      console.error("Error executing transaction:", error);
-    }
-
-
-  }
+ 
  
 
 
 
   const Draw = async () => {
     try {
-      //toast.loading("please wait....")
       const provider = new BrowserProvider(window.ethereum);
-      //console.warn(provider)
       const signer = await provider.getSigner();
       const token = await Web3Token.sign(async msg => await signer.signMessage(msg));
+      const contract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, signer);
 
 
-      //console.warn(lottery.lotteryId)
       try {
 
-        // const signingContract = contract.connect(signer);
-        // console.log(" hello                       ================================= ", lottery.lotteryId);
-        // const drawTx = await contract.Draw(parseInt(lottery.lotteryId), { gasLimit: 30000000 });
-        // await drawTx.wait(10);
-        // const disTx = await contract.distributeWinningAmounts(parseInt(lottery.lotteryId), { gasLimit: 30000000 });
-        // await disTx.wait(1);
-        //  const disTx2 = await contract.distributeTopBuyersAmounts({ gasLimit: 30000000 });
-        // await disTx2.wait(1);
 
-        // setDrawStatus(0);
-        const inProvider = new JsonRpcProvider(
-          "https://polygon-amoy.infura.io/v3/276f8cf7af2341738b0fd12245ffd948",
-          {
-            chainId: 80002, // Chain ID for Polygon Amoy testnet
-            name: "polygon-amoy"
-          }
-        );
-        const wallet = new Wallet(pk, inProvider);
 
-        const inContract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, wallet);
 
         if (localStorage.getItem('drawStatus') == null) {
           toast.loading("Draw  running .....(1/4)");
-          const drawTx = await inContract.Draw(parseInt(lottery.lotteryId), { gasLimit: 25000000, gasPrice: parseUnits("29", "gwei") });
+          const drawTx = await contract.Draw(parseInt(lottery.lotteryId), { gasLimit: 25000000, gasPrice: parseUnits("29", "gwei") });
           await drawTx.wait(10);
           localStorage.setItem('drawId', parseInt(lottery.lotteryId));
           localStorage.setItem('drawStatus', 1);
@@ -156,7 +106,7 @@ export default function LotteryInfo({ isOpen, onClose, lottery }) {
         if (localStorage.getItem('drawStatus') == 1) {
 
           toast.loading("Draw  running .....(2/4)");
-          const tx = await inContract.PerformDraw({ gasLimit: 25000000, gasPrice: parseUnits("27", "gwei") });
+          const tx = await contract.PerformDraw({ gasLimit: 25000000, gasPrice: parseUnits("27", "gwei") });
           await tx.wait(15);
           localStorage.setItem('drawStatus', 2);
           
@@ -171,17 +121,12 @@ export default function LotteryInfo({ isOpen, onClose, lottery }) {
              toast.error("Some thing went wrong ");
            }
 
-        }
-
-        // setDrawStatus(2);
-        // const disTx = await inContract.distributeWinningAmounts(parseInt(lottery.lotteryId),{ gasLimit: 25000000, gasPrice: parseUnits("29", "gwei") });
-        // await disTx.wait(1);
-        // toast.dismiss();
+        } 
 
         if (localStorage.getItem('drawStatus') == 2) {
           toast.loading("Draw  running .....(3/4)");
 
-          const disTx2 = await inContract.distributeTopBuyersAmounts({ gasLimit: 25000000, gasPrice: parseUnits("29", "gwei") });
+          const disTx2 = await contract.distributeTopBuyersAmounts({ gasLimit: 25000000, gasPrice: parseUnits("29", "gwei") });
           await disTx2.wait(1);
           localStorage.setItem('drawStatus', 3);
           if( localStorage.getItem("drawStatus") ==3 )
@@ -201,7 +146,7 @@ export default function LotteryInfo({ isOpen, onClose, lottery }) {
 
           let lotteryIdfromStorage = localStorage.getItem('drawId');
 
-          const winnerListResponse = await inContract.getWinnersList(parseInt(lotteryIdfromStorage));
+          const winnerListResponse = await contract.getWinnersList(parseInt(lotteryIdfromStorage));
 
           console.log("winnerListResponse", winnerListResponse ); 
           console.log("Winners From BC ", winnerListResponse[0] ); 
@@ -309,7 +254,7 @@ export default function LotteryInfo({ isOpen, onClose, lottery }) {
   const distributeBuyerr = async () => {
     const provider = new BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
-    if (signer.address === owner) {
+    if (signer.address === blockChainConfig.owner) {
       toast.loading("Leader board distribute waiting...");
       const contract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, signer);
       const leaderBoards = [];

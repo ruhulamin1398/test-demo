@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon";
- 
-import {  owner,  blockChainConfig, pk } from "../contracts/const";
+  
 import {toast} from "react-toastify"
 import { useMetaMask } from "metamask-react";
 import Error from "./error"
@@ -9,6 +8,8 @@ import { Button } from "@nextui-org/react";
 
 import { useLeader } from "../contracts/utils/useLeader";
 import { Contract, JsonRpcProvider, parseUnits, Wallet } from "ethers";
+import { blockChainConfig } from "../contracts/const";
+import { getContract } from "../contracts/utils/metaMaskProviderContract";
 export default function App() {
   const { status, account } = useMetaMask(); 
  
@@ -39,18 +40,10 @@ useEffect(()=>{
 
 
  const distributeLeaderAmount = async() =>{
-  const inProvider = new JsonRpcProvider(
-    "https://polygon-amoy.infura.io/v3/276f8cf7af2341738b0fd12245ffd948",
-    {
-      chainId: 80002, // Chain ID for Polygon Amoy testnet
-      name: "polygon-amoy"
-    }
-  );
-  const wallet = new Wallet(pk, inProvider);
-
-  const inContract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, wallet);
+   
+  const { mContract, signer, token } = await getContract();
   try{
-    const tx = await inContract.distributeTopLeadersAmounts( { gasLimit: 22000000, gasPrice: parseUnits("29", "gwei") });
+    const tx = await mContract.distributeTopLeadersAmounts( { gasLimit: 22000000, gasPrice: parseUnits("29", "gwei") });
     const Tx = await tx.wait(10);
     if (Tx.status === 1) {
       toast.dismiss();
@@ -106,7 +99,7 @@ useEffect(()=>{
   return (
     <>
       {status === "connected" &&
-      account.toLowerCase() === owner.toLowerCase() ? (
+      account.toLowerCase() === blockChainConfig.owner.toLowerCase() ? (
         <>
           <div className="w-[90%] mx-auto mt-2 rounded-md flex  justify-between p-4 bg-gradient-to-br from-black to-gray-300">
             <div className="grow flex  justify-start">
