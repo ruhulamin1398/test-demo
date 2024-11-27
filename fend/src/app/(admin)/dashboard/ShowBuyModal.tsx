@@ -29,9 +29,9 @@ export const ShowBuyModal = ({ lottery, activeLottery }: props) => {
   const [tax, setTax] = useState<TaxType[]>([]);
 
   const handleTicket = () => {
-    console.log("usdt ", user?.usdT);
-    console.log("lottery ", lottery.price);
-    console.log("totalTickets ", totalTickets.length);
+    // console.log("usdt ", user?.usdT);
+    // console.log("lottery ", lottery.price);
+    // console.log("totalTickets ", totalTickets.length);
     if (user?.usdT < lottery.price * (totalTickets.length + 1)) {
       toast.error(" Opps!! you don not enough usdt");
       return;

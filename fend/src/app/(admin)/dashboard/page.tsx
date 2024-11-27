@@ -101,7 +101,7 @@ const Dashboard = () => {
   }, [isDisconnected, isConnected]);
 
 
-  console.log("boardData", boardData)
+  // console.log("boardData", boardData)
 
 
   if (loading || isLoading || boardLoading) return;

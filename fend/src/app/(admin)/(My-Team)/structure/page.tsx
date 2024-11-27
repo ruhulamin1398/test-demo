@@ -69,7 +69,7 @@ const Structure = () => {
   const levelsUsers = data.levelDetails;
 
 
-  console.log(levelsUsers)
+  // console.log(levelsUsers)
 
   return (
     <div className="mt-14 flex flex-col gap-y-5 w-full items-center justify-center">

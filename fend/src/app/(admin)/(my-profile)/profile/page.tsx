@@ -108,7 +108,7 @@ const Profile = () => {
   }
 const becomePremiumAccount= async()=>{
   const requireUsdtAmount = 200 ;
- console.log( "Current usdT balance is ", user?.usdT)
+//  console.log( "Current usdT balance is ", user?.usdT)
  toast.loading("Wait .......");
 
   if(user?.usdT < requireUsdtAmount ){
@@ -165,7 +165,7 @@ useEffect(()=>{
 
 
   useEffect(() => {
-    console.log(" withDraw in  iswithDrwan Changed  ", iswithDrwan)
+    // console.log(" withDraw in  iswithDrwan Changed  ", iswithDrwan)
 
     if (iswithDrwan) {
       toast.dismiss();

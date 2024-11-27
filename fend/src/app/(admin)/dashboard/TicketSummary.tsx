@@ -116,7 +116,7 @@ export const TicketSummary = ({
     // console.log(" stringArrayOfTickets", stringArrayOfTickets);
     if (type == 1 || isConfirmed) {
       if (isConfirmed) {
-        console.log(" purchaed type _____________________", type);
+        // console.log(" purchaed type _____________________", type);
 
         try {
           buyTicket({
@@ -138,10 +138,10 @@ export const TicketSummary = ({
           toast.error("An error occurred during the purchase.");
         }
       } else {
-        console.log(" purchaed type ____________________=_ ", type);
+        // console.log(" purchaed type ____________________=_ ", type);
 
         try {
-          console.log(" purchaed type ____________________=_ ", type);
+          // console.log(" purchaed type ____________________=_ ", type);
 
           buyTicket({
             abi: blockChainConfig.lotteryABI,
@@ -156,7 +156,7 @@ export const TicketSummary = ({
             ],
           });
         } catch (err) {
-          console.log(" purchaed type __ err __________________=_ ", type);
+          // console.log(" purchaed type __ err __________________=_ ", type);
 
           toast.error("An error occurred during the purchase.");
 

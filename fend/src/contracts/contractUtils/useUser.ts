@@ -60,16 +60,16 @@ useEffect(()=>{
  
   if(balance){
     
-    console.log("balance", balance);
+    // console.log("balance", balance);
   }
 }, [balance])
 
 
 useEffect(()=>{
   if(userData){
-console.log("userData", userData);
-console.log("userData spend", userData?.spend);
-console.log("userData totalRewadBalanceWithdraw", userData?.spend?.totalRewadBalanceWithdraw);
+// console.log("userData", userData);
+// console.log("userData spend", userData?.spend);
+// console.log("userData totalRewadBalanceWithdraw", userData?.spend?.totalRewadBalanceWithdraw);
   }
 }, [userData])
 
@@ -84,7 +84,7 @@ async function fetchOwnerTax() {
       signer  
     ); 
     const ownerTax = await contract.getOwnerBalance();
-    console.log("Owner Tax:", ownerTax);  
+    // console.log("Owner Tax:", ownerTax);  
 
     setOwnerTaxAmount(ownerTax);
   } catch (error) {

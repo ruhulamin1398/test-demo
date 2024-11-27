@@ -62,7 +62,7 @@ export const useLeader = () => {
 
 
   useEffect(() => {
-    console.log("getTopBuyerList ", contractData);
+    // console.log("getTopBuyerList ", contractData);
     if (contractData) {
       for (let i = 0; i < contractData[0]?.length; i++) {
         contractData[0][i].reward = Number(contractData[1]) / 30;
@@ -74,7 +74,7 @@ export const useLeader = () => {
       }
 
       setTopBuyers(contractData[0]);
-      console.log(" getTopBuyerList ", contractData);
+      // console.log(" getTopBuyerList ", contractData);
         setTopBuyerRunningBalance(Number(contractData[1]));
     }
   }, [contractData]);
@@ -93,7 +93,7 @@ export const useLeader = () => {
   });
 
   useEffect(() => {
-    console.log("topLeadersData  from blockchain - ", topLeadersData);
+    // console.log("topLeadersData  from blockchain - ", topLeadersData);
     if (topLeadersData) {
 
       setTopLeaders(topLeadersData[0]);
@@ -108,7 +108,7 @@ export const useLeader = () => {
       }
 
 
-      console.log(" topLeadersData ", topLeadersData);
+      // console.log(" topLeadersData ", topLeadersData);
  
 
  

@@ -15,7 +15,7 @@ interface LeaderboardTableProps {
 }
 
 export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ users, reward }) => {
-  console.log(users);
+  // console.log(users);
   return (
     <div>
       <Table>

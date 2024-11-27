@@ -54,7 +54,7 @@ export const ConnectBtn = () => {
 
 
   useEffect(()=>{
-    console.log(" user ", user, " is Error ", isError);
+    // console.log(" user ", user, " is Error ", isError);
     },[user]);
 
   return (

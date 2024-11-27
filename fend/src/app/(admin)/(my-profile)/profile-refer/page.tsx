@@ -17,7 +17,7 @@ const ProfileRefer = ({ ...props }: Props) => {
 
   const { data, isLoading } = useGetSingleUserDetailsQuery({address});
 
-  console.log(data);
+  // console.log(data);
 
   
 
