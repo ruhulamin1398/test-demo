@@ -24,7 +24,7 @@ const Profile = () => {
   const { address } = useAccount();
   const { premiumBalance } = usePremiumBalance();
   const { referralInfo } = useReferralData();
-  const { user } = useUser();
+  const { user, ownerTaxAmount } = useUser();
 
   const { data, isLoading } = useGetSingleUserDetailsQuery({ address });
   const [totalEarning, setTotalEarning] = useState<number>(0);
@@ -343,9 +343,7 @@ useEffect(()=>{
               >
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">
-                  
-                {isNaN(Number(user?.ownerTax[0]) / blockChainConfig.decimals)? 0.00 : (Number(user?.ownerTax[0]) / blockChainConfig.decimals).toFixed(2)}
-
+                {ownerTaxAmount[0]} 
 
                 </span>
               </p>
@@ -361,9 +359,8 @@ useEffect(()=>{
                 >
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">
-                {isNaN(Number(user?.ownerTax[1]) / blockChainConfig.decimals) 
-  ? 0.00 
-  : (Number(user?.ownerTax[1]) / blockChainConfig.decimals).toFixed(2)}
+                
+                {ownerTaxAmount[1]} 
 
                   </span>
               </p>
@@ -377,7 +374,8 @@ useEffect(()=>{
                 >
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">
-                {isNaN(Number(user?.ownerTax[2]) / blockChainConfig.decimals)? 0.00 : (Number(user?.ownerTax[2]) / blockChainConfig.decimals).toFixed(2)}
+                
+                {ownerTaxAmount[2]} 
                
 
                 </span>
