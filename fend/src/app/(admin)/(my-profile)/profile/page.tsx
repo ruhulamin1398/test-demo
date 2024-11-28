@@ -257,7 +257,7 @@ useEffect(()=>{
                   <div className="flex h-5 items-center">
                     <User className="size-4" />
                     <p className="h-full font-black">
-                      {(user?.premium !=0) ? "User" : "Premium"}
+                      {(user?.premium ==0) ? "User" : "Premium"}
                     </p>
                   </div>
 
