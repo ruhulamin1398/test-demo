@@ -249,12 +249,15 @@ useEffect(()=>{
                 <Copy className="size-3 -translate-y-1" />
               </div>
 
+              {( blockChainConfig.owner != address)?(
               <div className="flex flex-col items-start gap-x-4 gap-y-2 md:flex-row">
+
+
                 <div className="flex items-center gap-x-4">
                   <div className="flex h-5 items-center">
                     <User className="size-4" />
                     <p className="h-full font-black">
-                      {data?.originalUser?.userType === "user" ? "User" : "Premium"}
+                      {(user?.premium !=0) ? "User" : "Premium"}
                     </p>
                   </div>
 
@@ -284,9 +287,17 @@ useEffect(()=>{
                   </p>
                 </div>
               </div>
+              ):(
+                <div className="flex h-5 items-center">
+                <User className="size-4" />
+                <p className="h-full font-black">
+                  Owner
+                </p>
+              </div>
+              )}
             </div>
             <div className="flex items-center gap-x-2">
-              {(process.env.NEXT_PUBLIC_OWNER == address) ?
+              {(blockChainConfig.owner == address) ?
                 <button className="btn-gradient-purple lg:text-lg" onClick={() => withDrawOwnerReawrdAmount()}>Withdraw Owner Tax</button>
                 :
                 <>
@@ -294,7 +305,7 @@ useEffect(()=>{
                 <button className="btn-gradient-purple lg:text-lg" onClick={() => withDrawReawrdAmount()}>Withdraw</button>
                 </>
               }
-              {(user?.premium==0 && process.env.NEXT_PUBLIC_OWNER != address)&&(<button className="btn-gradient-purple lg:text-lg" onClick={() => becomePremiumAccount()}>Become Premium</button>)}
+              {(user?.premium==0 && blockChainConfig.owner != address)&&(<button className="btn-gradient-purple lg:text-lg" onClick={() => becomePremiumAccount()}>Become Premium</button>)}
              
              
               
@@ -302,7 +313,7 @@ useEffect(()=>{
           </div>
         </div>
 
-        {(process.env.NEXT_PUBLIC_OWNER != address) ?
+        {(blockChainConfig.owner != address) ?
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
 
             {arr.map((items, index) => {
@@ -331,7 +342,12 @@ useEffect(()=>{
                 className="mt-3 gap-x-1 text-lg font-black lg:text-xl   flex items-center"
               >
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
-                <span className="translate-y-1">{Number(user?.ownerTax[0])/blockChainConfig.decimals}</span>
+                <span className="translate-y-1">
+                  
+                {isNaN(Number(user?.ownerTax[0]) / blockChainConfig.decimals)? 0 : Number(user?.ownerTax[0]) / blockChainConfig.decimals}
+
+
+                </span>
               </p>
             </div>
 
@@ -342,9 +358,12 @@ useEffect(()=>{
               <p className="font-black lg:text-xl">Owner Premium Tax </p>
               <p
                 className="mt-3 gap-x-1 text-lg font-black lg:text-xl   flex items-center"
-              >
+                >
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
-                <span className="translate-y-1">{Number(user?.ownerTax[1])/blockChainConfig.decimals}</span>
+                <span className="translate-y-1">
+                {isNaN(Number(user?.ownerTax[1]) / blockChainConfig.decimals)? 0 : Number(user?.ownerTax[1]) / blockChainConfig.decimals}
+                   
+                  </span>
               </p>
             </div>
 
@@ -353,9 +372,13 @@ useEffect(()=>{
               <p className="font-black lg:text-xl">Owner Total Tax </p>
               <p
                 className="mt-3 gap-x-1 text-lg font-black lg:text-xl   flex items-center"
-              >
+                >
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
-                <span className="translate-y-1">{Number(user?.ownerTax[2])/blockChainConfig.decimals }</span>
+                <span className="translate-y-1">
+                {isNaN(Number(user?.ownerTax[2]) / blockChainConfig.decimals)? 0 : Number(user?.ownerTax[2]) / blockChainConfig.decimals}
+               
+
+                </span>
               </p>
             </div>
 
