@@ -1,5 +1,6 @@
 import { useAccount, useContractRead } from 'wagmi';
 import { blockChainConfig } from '../const';  
+import { useEffect } from 'react';
 
  
 export interface ReferralsAddress {
@@ -24,6 +25,11 @@ export interface ReferralsAddress {
       args: [address],
       enabled: isConnected && !!address,  
     });
+
+    useEffect(()=>{
+      console.log("referralData  ", referralData)
+
+    },[referralData])
     // console.log("ref data :", referralData);
   
     // Transform the referral data into the LotteryReferralData interface format
