@@ -344,7 +344,7 @@ useEffect(()=>{
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">
                   
-                {isNaN(Number(user?.ownerTax[0]) / blockChainConfig.decimals)? 0 : Number(user?.ownerTax[0]) / blockChainConfig.decimals}
+                {isNaN(Number(user?.ownerTax[0]) / blockChainConfig.decimals)? 0.00 : (Number(user?.ownerTax[0]) / blockChainConfig.decimals).toFixed(2)}
 
 
                 </span>
@@ -361,8 +361,10 @@ useEffect(()=>{
                 >
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">
-                {isNaN(Number(user?.ownerTax[1]) / blockChainConfig.decimals)? 0 : Number(user?.ownerTax[1]) / blockChainConfig.decimals}
-                   
+                {isNaN(Number(user?.ownerTax[1]) / blockChainConfig.decimals) 
+  ? 0.00 
+  : (Number(user?.ownerTax[1]) / blockChainConfig.decimals).toFixed(2)}
+
                   </span>
               </p>
             </div>
@@ -375,7 +377,7 @@ useEffect(()=>{
                 >
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">
-                {isNaN(Number(user?.ownerTax[2]) / blockChainConfig.decimals)? 0 : Number(user?.ownerTax[2]) / blockChainConfig.decimals}
+                {isNaN(Number(user?.ownerTax[2]) / blockChainConfig.decimals)? 0.00 : (Number(user?.ownerTax[2]) / blockChainConfig.decimals).toFixed(2)}
                
 
                 </span>
