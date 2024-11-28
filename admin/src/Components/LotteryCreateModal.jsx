@@ -17,8 +17,7 @@ import axios from "axios";
 import { useMetaMask } from "metamask-react";
 import { BrowserProvider, JsonRpcProvider, Contract, Wallet, parseUnits } from "ethers";
 import Web3Token from "web3-token";
-import {
-  owner, 
+import { 
   secretKey,
   blockChainConfig,
   pk
@@ -193,7 +192,7 @@ export default function App({ isOpen, onClose }) {
       const token = await Web3Token.sign(
         async (msg) => await signer.signMessage(msg)
       );
-      if (signer.address == owner) {
+      if (signer.address == blockChainConfig.owner) {
 
 
         const lottaverseContract = new Contract(

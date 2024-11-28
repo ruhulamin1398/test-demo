@@ -106,7 +106,7 @@ useEffect(()=>{
   return (
     <>
       {status === "connected" &&
-      account.toLowerCase() === owner.toLowerCase() ? (
+      account.toLowerCase() === blockChainConfig.owner.toLowerCase() ? (
         <>
           <div className="w-[90%] mx-auto mt-2 rounded-md flex  justify-between p-4 bg-gradient-to-br from-black to-gray-300">
             <div className="grow flex  justify-start">

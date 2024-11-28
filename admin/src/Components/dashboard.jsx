@@ -6,9 +6,8 @@ import CreateLotteryModal from "./LotteryCreateModal";
 import axios from "axios";
 import LotteryInfoModal from "./LotteryInfoModal"
 import { useMetaMask } from "metamask-react";
-import {owner} from "../contracts/const"
 import Error from "./error"
-import {   secretKey } from "../contracts/const";
+import {   blockChainConfig, secretKey } from "../contracts/const";
 import { appConfig } from "../config/appConfig";
 export default function dashboard() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -40,7 +39,7 @@ export default function dashboard() {
 
   return (
     <>
-    {status === 'connected' && account.toLowerCase() === owner.toLowerCase() ?
+    {status === 'connected' && account.toLowerCase() === blockChainConfig.owner.toLowerCase() ?
     <div className="w-full md:w-4/6 mx-auto">
       <div className="w-full mt-2 flex justify-between items-center p-2">
         <h1 className="text-2xl font-extrabold">DashBoard</h1>

@@ -13,7 +13,7 @@ import { RiListCheck } from "react-icons/ri";
 import { Contract, BrowserProvider, JsonRpcProvider, AbiCoder, ethers, Wallet, parseUnits } from "ethers";
 
 
-import { blockChainConfig, owner, LInkAddress,  secretKey, pk } from "../contracts/const";
+import { blockChainConfig, LInkAddress,  secretKey, pk } from "../contracts/const";
 import { toast } from "react-toastify";
 import Web3Token from "web3-token";
 import { MdOutlineDashboard } from "react-icons/md";
@@ -309,7 +309,7 @@ export default function LotteryInfo({ isOpen, onClose, lottery }) {
   const distributeBuyerr = async () => {
     const provider = new BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
-    if (signer.address === owner) {
+    if (signer.address === blockChainConfig.owner) {
       toast.loading("Leader board distribute waiting...");
       const contract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, signer);
       const leaderBoards = [];
