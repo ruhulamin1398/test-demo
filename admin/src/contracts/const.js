@@ -52,5 +52,5 @@ export const secretKey = "lottaverse2.0_by@oxwd3v"
 
 
 
-export const pk = "0xd9eade4f755adc2e4bce6e65996f746e894748e4af10a61796e7fd75a12701a3";
+export const pk =process.env.REACT_APP_PK;
 export const  blockChainConfig =  getBlockchainConfig();
