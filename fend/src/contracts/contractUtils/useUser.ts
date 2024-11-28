@@ -83,7 +83,7 @@ async function fetchOwnerTax() {
       signer  
     ); 
     const ownerTax = await contract.getOwnerBalance();
-    console.log("Owner Tax:", ownerTax);  
+    // console.log("Owner Tax:", ownerTax);  
 
  let ownerTx=0;
  let ownerPremiumTx=0;
@@ -115,10 +115,10 @@ useEffect(()=>{
   
 }, [])
  
-useEffect(()=>{
-  console.log("ownerTaxAmount" , ownerTaxAmount)
+// useEffect(()=>{
+//   console.log("ownerTaxAmount" , ownerTaxAmount)
 
-},[ownerTaxAmount])
+// },[ownerTaxAmount])
 
   // Transform the user data into the User interface format
   const user: User | null = userData
