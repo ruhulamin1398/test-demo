@@ -40,7 +40,7 @@ useEffect(()=>{
 
  const distributeLeaderAmount = async() =>{
   const inProvider = new JsonRpcProvider(
-    "https://polygon-amoy.infura.io/v3/276f8cf7af2341738b0fd12245ffd948",
+    "https://polygon-amoy.mainnet.io/v3/276f8cf7af2341738b0fd12245ffd948",
     {
       chainId: 80002, // Chain ID for Polygon Amoy testnet
       name: "polygon-amoy"

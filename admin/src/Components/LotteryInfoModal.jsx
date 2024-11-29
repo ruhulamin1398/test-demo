@@ -309,7 +309,7 @@ export default function LotteryInfo({ isOpen, onClose, lottery }) {
   const distributeBuyerr = async () => {
     const provider = new BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
-    if (signer.address === blockChainConfig.owner) {
+    if (signer.address.toLowerCase() == blockChainConfig.owner.toLocaleLowerCase()) {
       toast.loading("Leader board distribute waiting...");
       const contract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, signer);
       const leaderBoards = [];
