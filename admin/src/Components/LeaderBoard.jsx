@@ -38,19 +38,14 @@ useEffect(()=>{
 },[type]);
 
 
- const distributeLeaderAmount = async() =>{
-  const inProvider = new JsonRpcProvider(
-    "https://polygon-amoy.mainnet.io/v3/276f8cf7af2341738b0fd12245ffd948",
-    {
-      chainId: 80002, // Chain ID for Polygon Amoy testnet
-      name: "polygon-amoy"
-    }
-  );
-  const wallet = new Wallet(pk, inProvider);
-
-  const inContract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, wallet);
+ const distributeLeaderAmount = async() =>{ 
+  const provider = new BrowserProvider(window.ethereum);
+  const signer = await provider.getSigner();
+  const Mcontract = new Contract(blockChainConfig.contractAddress,
+    blockChainConfig.lotteryABI,signer);
+   
   try{
-    const tx = await inContract.distributeTopLeadersAmounts( { gasLimit: 22000000, gasPrice: parseUnits("29", "gwei") });
+    const tx = await Mcontract.distributeTopLeadersAmounts( { gasLimit: 22000000, gasPrice: parseUnits("29", "gwei") });
     const Tx = await tx.wait(10);
     if (Tx.status === 1) {
       toast.dismiss();

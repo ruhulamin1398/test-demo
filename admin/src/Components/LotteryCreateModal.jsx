@@ -31,8 +31,7 @@ import {useProvider} from "../contracts/utils/useProvider"
 export default function App({ isOpen, onClose }) {
 
 
-  const { status, connect, account, chainId, ethereum } = useMetaMask();
-  const {infuraContract} = useProvider();
+  const { status, connect, account, chainId, ethereum } = useMetaMask(); 
   const [LotteryName, setLotteryName] = useState("");
   const [ticketPrice, setTicketPrice] = useState(0);
   const [maxTicket, setMaxTicket] = useState(0);
@@ -184,19 +183,19 @@ export default function App({ isOpen, onClose }) {
 
 
 
+    
+      const inContract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, blockChainConfig.provider);
       const provider = new BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
+      const Mcontract = new Contract(blockChainConfig.contractAddress,
+        blockChainConfig.lotteryABI,signer);
       const token = await Web3Token.sign(
         async (msg) => await signer.signMessage(msg)
       );
       if (signer.address == blockChainConfig.owner) {
 
 
-        const lottaverseContract = new Contract(
-          blockChainConfig.contractAddress,
-          blockChainConfig.lotteryABI,
-          provider
-        );
+       
 
 
 
@@ -208,11 +207,6 @@ export default function App({ isOpen, onClose }) {
 
            
 
-          const inContract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, blockChainConfig.provider);
-          const provider = new BrowserProvider(window.ethereum);
-          const signer = await provider.getSigner();
-          const Mcontract = new Contract(blockChainConfig.contractAddress,
-            blockChainConfig.lotteryABI,signer);
 
 
 
@@ -375,7 +369,7 @@ export default function App({ isOpen, onClose }) {
         size="3xl"
         onClose={() => onClose(false)}
         backdrop="blur"
-        className="border-2 border-blue-500 rounded-xl"
+        className="border-2 border-blue-500 rounded-xl bg-white"
       >
         <ModalContent>
           {(onClose) => (
