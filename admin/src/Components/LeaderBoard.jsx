@@ -9,6 +9,7 @@ import { Button } from "@nextui-org/react";
 
 import { useLeader } from "../contracts/utils/useLeader";
 import { Contract, JsonRpcProvider, parseUnits, Wallet } from "ethers";
+import { BrowserProvider } from "ethers";
 export default function App() {
   const { status, account } = useMetaMask(); 
  
