@@ -23,7 +23,7 @@ export const secretKey = "lottaverse2.0_by@oxwd3v"
 
  const  polygonConfig = {   
     contractAddress :process.env.REACT_APP_CONTRACT_ADDRESS,
-    owner: process.env.REACT_APP_OWNER,
+    owner: '0x821D0D38885Fc83a2bB36dB69714F0C45d711996',
     USDTaddress : "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
     LInkAddress : "0x0Fd9e8d3aF1aaee056EB9e802c3A762a667b1904", 
     lotteryABI : lotteryABI.abi,
