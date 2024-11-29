@@ -80,14 +80,11 @@ export default function App({ isOpen, onClose }) {
 
 
 
-    const provider = new BrowserProvider(window.ethereum);
-
-    const contract = new Contract(blockChainConfig.contractAddress,
-      blockChainConfig.lotteryABI,
-      provider);
-
+  
+    const inContract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, blockChainConfig.provider);
+    console.log(inContract)
     try {
-      const latestLottery = await contract.GetLatestLottery(parseInt(e));
+      const latestLottery = await inContract.GetLatestLottery(parseInt(e));
       console.log("latest lottery is ", Number(latestLottery[0]));
 
 
@@ -209,17 +206,13 @@ export default function App({ isOpen, onClose }) {
 
         try {
 
-          const inProvider = new JsonRpcProvider(
-            "https://polygon-amoy.infura.io/v3/276f8cf7af2341738b0fd12245ffd948",
-            {
-              chainId: 80002, // Chain ID for Polygon Amoy testnet
-              name: "polygon-amoy"
-            }
-          );
-          const wallet = new Wallet(pk, inProvider);
+           
 
-          const inContract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, wallet);
-
+          const inContract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, blockChainConfig.provider);
+          const provider = new BrowserProvider(window.ethereum);
+          const signer = await provider.getSigner();
+          const Mcontract = new Contract(blockChainConfig.contractAddress,
+            blockChainConfig.lotteryABI,signer);
 
 
 
@@ -231,7 +224,7 @@ export default function App({ isOpen, onClose }) {
 
 
             // const signingContract = inContract.connect(signer);
-            const tx = await inContract.createLottery(
+            const tx = await Mcontract.createLottery(
               LotteryName,
               minTicket,
               maxTicket,
