@@ -10,7 +10,7 @@ import { CircularProgress } from "@nextui-org/react";
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon";
 import axios from "axios";
 import { RiListCheck } from "react-icons/ri";
-import { Contract, BrowserProvider, JsonRpcProvider, AbiCoder, ethers, Wallet, parseUnits } from "ethers";
+import { Contract, BrowserProvider,  parseUnits } from "ethers";
 
 
 import { blockChainConfig, LInkAddress,  secretKey, pk } from "../contracts/const";
@@ -53,8 +53,7 @@ export default function LotteryInfo({ isOpen, onClose, lottery }) {
 
 
   const getLInkBalance = async () => {
-    const provider = new BrowserProvider(window.ethereum);
-    //const signer = await provider.getSigner();
+    const provider = new BrowserProvider(window.ethereum); 
     const contract = new Contract(blockChainConfig.LInkAddress, blockChainConfig.erc20ABI, provider);
     const balance = await contract.balanceOf(blockChainConfig.contractAddress);
     setLinkBal(Number(balance) / (10 ** 18));

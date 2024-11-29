@@ -77,20 +77,7 @@ export default function App({ isOpen, onClose }) {
 
   const handleLotteryPrice = async (e) => {
 
-
-
   
-    const inContract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, blockChainConfig.provider);
-    console.log(inContract)
-    try {
-      const latestLottery = await inContract.GetLatestLottery(parseInt(e));
-      console.log("latest lottery is ", Number(latestLottery[0]));
-
-
-
-    } catch (error) {
-      console.error("No lottery found or error in fetching:", error);
-    }
 
     // console.log(e);
     if (e === "0") {
@@ -281,6 +268,7 @@ export default function App({ isOpen, onClose }) {
               if (requestData && typeof requestData === 'object' && !Array.isArray(requestData)) {
                 // Push new data to requestData or modify it as needed
                 const latestLottery2 = await inContract.GetLatestLottery(parseInt(localStorage.getItem('requestedLottery')));
+                console.log("created lottery is", latestLottery2)
                 requestData.lotteryId = Number(latestLottery2[0]); // example: add a new property
                 localStorage.setItem('requestData', JSON.stringify(requestData));
                 localStorage.setItem('lotteryStatus', 2);
@@ -303,6 +291,8 @@ export default function App({ isOpen, onClose }) {
 
 
                 try {
+
+                  console.log(" data semd to database", requestData);
                   const response = await axios.post(
                     `${appConfig.api}/createLottery`,
                     requestData,
@@ -327,6 +317,10 @@ export default function App({ isOpen, onClose }) {
                     toast.dismiss();
                     toast.success("Successfully created Lottery");
                   } else {
+                    
+                  toast.dismiss();
+                  toast.error("something went wrong");
+                      console.error("Error creating lottery:");
                     return;
                   }
                 } catch (error) {
