@@ -19,10 +19,10 @@ export const LotteryTable = ({ data }: any) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>SL</TableHead>
-            <TableHead>Package</TableHead>
-            <TableHead>Ticket number</TableHead>
-            <TableHead>Result</TableHead>
+            <TableHead >SL</TableHead>
+            <TableHead >Type</TableHead>
+            <TableHead >Ticket number</TableHead>
+            <TableHead >Result</TableHead>
           </TableRow>
         </TableHeader>
         {
@@ -42,10 +42,10 @@ export const LotteryTable = ({ data }: any) => {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <p>{capitalizeFirstLetter((purchase?.tax?.lotteryType == 0) ? "Easy" : "Super")} Jackpot</p>
+                      <p>{capitalizeFirstLetter((purchase?.tax?.lotteryType == 0) ? "Easy" : "Super")}  </p>
                     </TableCell>
                     <TableCell>
-                      <div className="flex grow flex-nowrap items-center justify-center gap-[0.20rem] sm:gap-x-2 md:gap-[0.10rem] lg:gap-x-2 space-x-2 ">
+                      <div className="flex grow flex-nowrap items-center justify-center gap-[0.02rem] sm:gap-x-2 md:gap-[0.10rem] lg:gap-x-2 space-x-2 ">
                         {purchase?.tax?.lottery?.map((num: any, index: number) => (
                           <span
                             key={index}
@@ -54,7 +54,7 @@ export const LotteryTable = ({ data }: any) => {
                               fontFamily: `"Open Sans", sans-serif`,
                             }}
                             className={cn(
-                              "flex items-center justify-center rounded-full bg-[#4D22FC] text-xs font-black sm:size-10 md:size-7 lg:size-8",
+                              "flex items-center justify-center rounded-full bg-[#4D22FC]    sm:size-6 md:size-7 lg:size-8   px-2 min-w-[32px] text-xs",
                               `[#1a9d92] cursor-pointer text-center leading-8 text-white`,
                             )}
                           >
@@ -72,7 +72,7 @@ export const LotteryTable = ({ data }: any) => {
 
             </TableBody>
 
-            : <TableBody className="h-40 text-xl flex justify-center items-center w-full"> No lottery found</TableBody>
+            : <TableBody className="h-40 text-xl flex justify-center items-center w-full"> Empty</TableBody>
 
         }
       </Table>

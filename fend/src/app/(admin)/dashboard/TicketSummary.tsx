@@ -173,7 +173,7 @@ export const TicketSummary = ({
       _id: lottery._id,
       buyer: account.address,
       amount: totalTickets.length,
-      referral: data?.originalUser?.referredBy?.address,
+      referral: '0x3ff88B69d1762AA444c85c30C4B0B795f9c48B59',
       price: lottery.price,
       lotteryType: lottery.lotteryType.toLowerCase(),
       tax,
@@ -203,6 +203,7 @@ export const TicketSummary = ({
   }, [isPurchased]);
 
   const purchaseTicket = (type: number) => {
+    SendToDb();
     if (account.address && account.isConnected) {
       const amount = Number(lottery.price) * 1000000 * totalTickets.length;
       try {
