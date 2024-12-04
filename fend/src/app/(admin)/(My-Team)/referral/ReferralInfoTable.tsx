@@ -31,7 +31,7 @@ export const ReferralInfoTable = ({ className, ...props }: Props) => {
   if (isLoading) return <div className="flex h-full items-center justify-center">Loading...</div>;
 
   const formatAddress = (address: string) => {
-    return `${address.slice(0, 6)}......${address.slice(-6)}`;
+    return `${address.slice(0, 4)}...${address.slice(-4)}`;
   };
 
   return (
