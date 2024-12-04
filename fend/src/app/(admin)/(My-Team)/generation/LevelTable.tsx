@@ -26,17 +26,17 @@ export const LevelTable = ({ levelDetails }: ReferralResponse) => {
   const { referralInfo, isError } = useReferralData();
 
   return (
-    <div className="text-xs font-thin md:text-sm lg:text-base xl:text-xl">
+    <div className="text-xs font-thin md:text-sm lg:text-base xl:text-lg">
       {levels.map(([levelName, stats], index) => (
         <div
           className={`grid grid-cols-5 rounded-md bg-[#271E45] px-2 py-3 text-start font-bold leading-[#34.1333px] md:items-center md:text-center ${SrbijaFont.className} font-normal leading-8`}
           key={index}
           style={{ marginTop: "clamp(8px,1vw,16px)" }}
         >
-          <p className="md:py-3">{levelName.charAt(0).toUpperCase() + levelName.slice(1)}</p>
-          <p>Active {stats.active}</p>
-          <p>Inactive {stats.inactive}</p>
-          <p className="col-span-2">Ref. Com   ${referralInfo?.referralAmounts[index].toFixed(2)}</p>
+          <p className="md:py-3 text-center">{levelName.charAt(0).toUpperCase() + levelName.slice(1)}</p>
+          <p className="text-center">Active {stats.active}</p>
+          <p className="text-center">Inactive {stats.inactive}</p>
+          <p className="col-span-2 text-center">Ref. Com   ${referralInfo?.referralAmounts[index].toFixed(2)}</p>
         </div>
       ))}
     </div>
