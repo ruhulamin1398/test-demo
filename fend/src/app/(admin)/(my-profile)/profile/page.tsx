@@ -240,7 +240,7 @@ const Profile = () => {
         </div>
         
         {(user?.premium ==0 && blockChainConfig.owner != address )&& (<div className="flex flex-col md:flex-row  gap-2 rounded-sm bg-[#1A1D46] p-4 justify-between text-center items-center w-full">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae at laudantium voluptas, neque 
+          ARE YOU INTERESTED PREMIUM MEMBER ! GET $200 USDT AND ENJOY 15% GLOBAL BONUS  
           
         {(user?.premium == 0 && blockChainConfig.owner != address) && (<button className="btn-gradient-purple lg:text-lg w-48" onClick={() => becomePremiumAccount()}>Add Premium</button>)}
         </div>)}
