@@ -34,7 +34,7 @@ const  polygonConfig = {
 const getBlockchainConfig=  () => {
    const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'prod';
    if(environment == "dev"){
-      // console.log("dev Environment ", devAmoyConfig)
+      console.log("dev Environment ", devAmoyConfig)
       return devAmoyConfig;
    }
    else{

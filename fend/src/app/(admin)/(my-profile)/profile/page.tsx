@@ -53,11 +53,9 @@ const Profile = () => {
       withdrawAmount({
         abi: blockChainConfig.lotteryABI,
         address: blockChainConfig.contractAddress as `0x${string}`,
-        functionName: 'OwnerTaxWithDraw',
+        functionName: 'withdrawOwnerBalance',
         args: [],
-        maxFeePerGas: parseGwei('30'),
-        gas: 25_333_333n,
-      });
+      })
 
 
 
@@ -87,9 +85,7 @@ const Profile = () => {
           abi: blockChainConfig.lotteryABI,
           address: blockChainConfig.contractAddress as `0x${string}`,
           functionName: 'WithDrawRewardBaalance',
-          args: [],
-          maxFeePerGas: parseGwei('30'),
-          gas: 25_333_333n,
+          args: [] 
         });
 
 

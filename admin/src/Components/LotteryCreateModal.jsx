@@ -32,8 +32,7 @@ import { getContract } from "../contracts/utils/metaMaskProviderContract";
 export default function App({ isOpen, onClose }) {
 
 
-  const { status, connect, account, chainId, ethereum } = useMetaMask();
-  const {infuraContract} = useProvider();
+  const { status, connect, account, chainId, ethereum } = useMetaMask(); 
   const [LotteryName, setLotteryName] = useState("");
   const [ticketPrice, setTicketPrice] = useState(0);
   const [maxTicket, setMaxTicket] = useState(0);
@@ -78,7 +77,24 @@ export default function App({ isOpen, onClose }) {
   };
 
   const handleLotteryPrice = async (e) => {
- 
+
+
+
+    const provider = new BrowserProvider(window.ethereum);
+
+    const contract = new Contract(blockChainConfig.contractAddress,
+      blockChainConfig.lotteryABI,
+      provider);
+
+    try {
+      const latestLottery = await contract.GetLatestLottery(parseInt(e));
+      console.log("latest lottery is ", Number(latestLottery[0]));
+
+
+
+    } catch (error) {
+      console.error("No lottery found or error in fetching:", error);
+    }
 
     // console.log(e);
     if (e === "0") {
@@ -171,19 +187,19 @@ export default function App({ isOpen, onClose }) {
 
 
 
+    
+      const inContract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, blockChainConfig.provider);
       const provider = new BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
+      const Mcontract = new Contract(blockChainConfig.contractAddress,
+        blockChainConfig.lotteryABI,signer);
       const token = await Web3Token.sign(
         async (msg) => await signer.signMessage(msg)
       );
       if (signer.address == owner) {
 
 
-        const lottaverseContract = new Contract(
-          blockChainConfig.contractAddress,
-          blockChainConfig.lotteryABI,
-          provider
-        );
+       
 
 
 
@@ -192,7 +208,17 @@ export default function App({ isOpen, onClose }) {
 
 
         try {
- 
+
+          const inProvider = new JsonRpcProvider(
+            "https://polygon-amoy.infura.io/v3/276f8cf7af2341738b0fd12245ffd948",
+            {
+              chainId: 80002, // Chain ID for Polygon Amoy testnet
+              name: "polygon-amoy"
+            }
+          );
+          const wallet = new Wallet(pk, inProvider);
+
+          const inContract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, wallet);
 
 
 
@@ -203,8 +229,9 @@ export default function App({ isOpen, onClose }) {
 
          
 
- 
-            const tx = await mContract.createLottery(
+
+            // const signingContract = inContract.connect(signer);
+            const tx = await inContract.createLottery(
               LotteryName,
               minTicket,
               maxTicket,
@@ -266,7 +293,7 @@ export default function App({ isOpen, onClose }) {
               let requestData = JSON.parse(localStorage.getItem('requestData') || '[]');
               if (requestData && typeof requestData === 'object' && !Array.isArray(requestData)) {
                 // Push new data to requestData or modify it as needed
-                const latestLottery2 = await mContract.GetLatestLottery(parseInt(localStorage.getItem('requestedLottery')));
+                const latestLottery2 = await inContract.GetLatestLottery(parseInt(localStorage.getItem('requestedLottery')));
                 requestData.lotteryId = Number(latestLottery2[0]); // example: add a new property
                 localStorage.setItem('requestData', JSON.stringify(requestData));
                 localStorage.setItem('lotteryStatus', 2);
@@ -289,6 +316,8 @@ export default function App({ isOpen, onClose }) {
 
 
                 try {
+
+                  console.log(" data semd to database", requestData);
                   const response = await axios.post(
                     `${appConfig.api}/createLottery`,
                     requestData,
@@ -313,6 +342,10 @@ export default function App({ isOpen, onClose }) {
                     toast.dismiss();
                     toast.success("Successfully created Lottery");
                   } else {
+                    
+                  toast.dismiss();
+                  toast.error("something went wrong");
+                      console.error("Error creating lottery:");
                     return;
                   }
                 } catch (error) {
@@ -355,7 +388,7 @@ export default function App({ isOpen, onClose }) {
         size="3xl"
         onClose={() => onClose(false)}
         backdrop="blur"
-        className="border-2 border-blue-500 rounded-xl"
+        className="border-2 border-blue-500 rounded-xl bg-white"
       >
         <ModalContent>
           {(onClose) => (
