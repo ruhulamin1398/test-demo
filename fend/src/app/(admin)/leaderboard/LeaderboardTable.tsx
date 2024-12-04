@@ -33,7 +33,7 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ users, rewar
             <TableRow key={index}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>
-                {user.user.slice(0, 4)}....{user.user.slice(-4)}
+                {user.user.slice(0, 4)}...{user.user.slice(-4)}
               </TableCell>
               <TableCell>{(user.reward/ blockChainConfig.decimals ).toFixed(2)} USDT</TableCell>
               <TableCell>{Number(user.ticket)}</TableCell>

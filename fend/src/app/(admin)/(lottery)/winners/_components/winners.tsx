@@ -76,12 +76,12 @@ const Winners = () => {
 
   return (
     <div>
-      <div className="min-h-36 rounded-md bg-midnight-200 px-4 py-4">
         <h1 className="mb-1 mt-0 text-xl font-black">Winners</h1>
-        <div className="flex flex-col gap-x-10 gap-y-8 md:flex-row">
+      <div className="min-h-10 rounded-md bg-midnight-200 px-4 py-4">
+        <div className="flex flex-col gap-x-10 gap-y-8 md:flex-row py-5 justify-between">
           {/* Lottery Type */}
-          <div>
-            <p className="items-center rounded-t-md text-sm font-black md:text-lg">Packages</p>
+          <div className="flex flex-row gap-3 flex-1 w-full">
+            <p className="items-center rounded-t-md text-sm font-bold md:text-lg w-[500px] " style={{width:"90px" }}>Packages&nbsp;: </p>
             <Select
               onValueChange={(value: LotteryType) => {
                 setLotteryType(value);
@@ -99,8 +99,8 @@ const Winners = () => {
           </div>
 
           {/* Round */}
-          <div>
-            <p className="items-center rounded-t-md text-sm font-black md:text-lg">Round</p>
+          <div className="flex flex-row gap-3 flex-1 w-full">
+            <p className="items-center rounded-t-md text-sm font-bold md:text-lg w-[500px] " style={{width:"90px" }}>Round&nbsp;:</p>
             <Select onValueChange={(value) => setRound(value)}>
               <SelectTrigger className="md:min-w-56">
                 <SelectValue placeholder="Select" className="font-black" />
@@ -120,13 +120,13 @@ const Winners = () => {
           </div>
 
           {/* Ticket Search */}
-          <div>
-            <p className="items-center rounded-t-md text-sm font-black md:text-lg">Ticket</p>
+          <div className="flex flex-row gap-3 flex-1 w-full">
+            <p className="items-center rounded-t-md text-sm font-bold md:text-lg w-[500px] " style={{width:"90px" }}>Ticket&nbsp;:</p>
             <input
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchId(e.target.value)}
               type="number"
               placeholder="Enter your ticket number"
-              className="w-full max-w-full rounded-lg border bg-midnight-200 px-4 py-[0.30rem] sm:max-w-52 md:w-44 md:min-w-56"
+              className="  rounded-lg border bg-midnight-200 px-4 py-[0.30rem] w-full"
             />
           </div>
         </div>
@@ -136,10 +136,10 @@ const Winners = () => {
       <Table className="text-center mt-4">
         <TableHeader>
           <TableRow>
-            <TableHead>Winner</TableHead>
             <TableHead>User</TableHead>
-            <TableHead>Ticket</TableHead>
             <TableHead>Prize</TableHead>
+            <TableHead>Ticket</TableHead>
+            <TableHead>Amount</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -147,8 +147,8 @@ const Winners = () => {
           {
             data?.lotteries?.length > 0 ? <> {data?.lotteries.map((draw: any, index: number) => (
               <TableRow key={`${draw.prize}-${index}`}>
-                <TableCell>  {draw.prize}</TableCell>
                 <TableCell>{formatAddress(draw.winner)}</TableCell>
+                <TableCell>  {draw.prize}</TableCell>
                 <TableCell>
                   <div className="flex justify-center space-x-2">
                     {draw?.ticket?.map((lottery: number, idx: number) => (

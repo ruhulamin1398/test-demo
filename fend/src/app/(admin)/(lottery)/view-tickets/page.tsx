@@ -31,17 +31,17 @@ const ViewTickets = () => {
 
   return (
     <section>
-      <h1 className="mb-1 mt-0 text-xl font-black">View Tickets</h1>
+      <h1 className="mb-1 mt-0 text-md md:text-xl text-bold py-4" >View Tickets</h1>
       <LotteryTable data={data} />
 
       {/* Pagination component*/}
-      <PaginationComponent
+      {/* <PaginationComponent
         currentPage={page}
         totalPages={data.totalPages}
         onPageChange={handlePageChange}
         limit={limit}
         onLimitChange={handleLimitChange}
-      />
+      /> */}
     </section>
   );
 };
