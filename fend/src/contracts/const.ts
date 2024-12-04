@@ -22,7 +22,7 @@ const  devAmoyConfig = {
 const  polygonConfig = {
    chainName : polygon,
    contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS, 
-   owner: "0x9B1e830584caDf455F1406C255F24e84e6BE5738",
+   owner: process.env.NEXT_PUBLIC_OWNER,
    USDTaddress : "0xc2132D05D31c914a87C6611C10748AEb04B58e8F", 
    ProviderUrl : "https://rpc-mainnet.matic.quiknode.pro",
    lotteryABI : lotteryABI.abi,

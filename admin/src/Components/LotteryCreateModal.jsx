@@ -16,7 +16,9 @@ import { RiDeleteBin4Fill, RiCloseCircleLine } from "react-icons/ri";
 import axios from "axios";
 import { useMetaMask } from "metamask-react";
 import { BrowserProvider, JsonRpcProvider, Contract, Wallet, parseUnits } from "ethers";
-import { 
+import Web3Token from "web3-token";
+import {
+  owner, 
   secretKey,
   blockChainConfig,
  
@@ -168,10 +170,20 @@ export default function App({ isOpen, onClose }) {
       onClose(false);
 
 
-      const { mContract, signer, token } = await getContract();
+
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const token = await Web3Token.sign(
+        async (msg) => await signer.signMessage(msg)
+      );
+      if (signer.address == owner) {
 
 
-      if (signer.address == blockChainConfig.owner) {
+        const lottaverseContract = new Contract(
+          blockChainConfig.contractAddress,
+          blockChainConfig.lotteryABI,
+          provider
+        );
 
 
 

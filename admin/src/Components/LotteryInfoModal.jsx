@@ -13,7 +13,7 @@ import { RiListCheck } from "react-icons/ri";
 import { Contract, BrowserProvider, JsonRpcProvider, AbiCoder, ethers, Wallet, parseUnits } from "ethers";
 
 
-import { blockChainConfig,   LInkAddress,  secretKey, pk } from "../contracts/const";
+import { blockChainConfig, owner, LInkAddress,  secretKey, pk } from "../contracts/const";
 import { toast } from "react-toastify";
 import Web3Token from "web3-token";
 import { MdOutlineDashboard } from "react-icons/md";

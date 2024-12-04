@@ -20,8 +20,7 @@ export interface User {
   topBuyerTax:number;
   topLeaderTax : number;
   totalRewadBalanceWithdraw:number;
-  usdT:number;
-  ownerTax:number;
+  usdT:number; 
   premiumReferralRewards:number; 
 }
 
@@ -30,7 +29,7 @@ export interface User {
 
 export const useUser = () => {
   const { address, isConnected } = useAccount();
-  const [ownerTaxAmount, setOwnerTaxAmount] = useState(0);
+  const [ownerTaxAmount, setOwnerTaxAmount] = useState([0,0,0]);
   // cosnt [totalEarning , setTotalEarning] = useState<number>(0);
 
   // Use wagmi's useContractRead to read user data
@@ -86,7 +85,23 @@ async function fetchOwnerTax() {
     const ownerTax = await contract.getOwnerBalance();
     // console.log("Owner Tax:", ownerTax);  
 
-    setOwnerTaxAmount(ownerTax);
+ let ownerTx=0;
+ let ownerPremiumTx=0;
+ let ownerTotalTx=0;
+ if(! isNaN(Number( ownerTax[0]) / blockChainConfig.decimals)){
+  ownerTx= (Number( ownerTax[0]) / blockChainConfig.decimals).toFixed(2)
+ }
+ if(! isNaN(Number( ownerTax[1]) / blockChainConfig.decimals)){
+  ownerPremiumTx= (Number( ownerTax[1]) / blockChainConfig.decimals).toFixed(2)
+ }
+ if(! isNaN(Number( ownerTax[2]) / blockChainConfig.decimals)){
+  ownerTotalTx= (Number( ownerTax[2]) / blockChainConfig.decimals).toFixed(2)
+ }
+    
+     
+
+
+    setOwnerTaxAmount([ownerTx, ownerPremiumTx, ownerTotalTx]);
   } catch (error) {
     // console.error("Error fetching owner tax:", error.message);
   }
@@ -97,8 +112,14 @@ async function fetchOwnerTax() {
 
 useEffect(()=>{
   fetchOwnerTax();
+  
 }, [])
  
+// useEffect(()=>{
+//   console.log("ownerTaxAmount" , ownerTaxAmount)
+
+// },[ownerTaxAmount])
+
   // Transform the user data into the User interface format
   const user: User | null = userData
   ? {
@@ -114,11 +135,11 @@ useEffect(()=>{
       premiumReferralRewards: isNaN(Number(userData?.premiumReferralRewards)) ? 0 : Number(userData?.premiumReferralRewards) / blockChainConfig.decimals || 0,
       totalRewadBalanceWithdraw: isNaN(Number(userData?.spend?.totalRewadBalanceWithdraw)) ? 0 : Number(userData?.spend?.totalRewadBalanceWithdraw),
       usdT: isNaN(Number(balance)) ? 0 : Number(balance) / blockChainConfig.decimals,
-      ownerTax: isNaN(ownerTaxAmount) ? 0 : ownerTaxAmount,
+      
     }
   : null;
 
 
-  return { user, isError  };
+  return { user, isError,ownerTaxAmount  };
 };
 

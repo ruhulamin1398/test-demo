@@ -5,7 +5,8 @@ import { CircularProgress } from "@nextui-org/react";
 import CreateLotteryModal from "./LotteryCreateModal";
 import axios from "axios";
 import LotteryInfoModal from "./LotteryInfoModal"
-import { useMetaMask } from "metamask-react"; 
+import { useMetaMask } from "metamask-react";
+import {owner} from "../contracts/const"
 import Error from "./error"
 import {   blockChainConfig, secretKey } from "../contracts/const";
 import { appConfig } from "../config/appConfig";
