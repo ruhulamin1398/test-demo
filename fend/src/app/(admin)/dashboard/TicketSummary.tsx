@@ -203,7 +203,7 @@ export const TicketSummary = ({
   }, [isPurchased]);
 
   const purchaseTicket = (type: number) => {
-    SendToDb();
+ 
     if (account.address && account.isConnected) {
       const amount = Number(lottery.price) * 1000000 * totalTickets.length;
       try {

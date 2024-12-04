@@ -28,7 +28,7 @@ export const LotteryTable = ({ data }: any) => {
         {
 
 
-          data?.purchases?.length > 0 ?
+          data?.purchases?.length > 0 &&
             <TableBody>
 
               {data?.purchases?.map((purchase: any, index: number) => {
@@ -54,8 +54,8 @@ export const LotteryTable = ({ data }: any) => {
                               fontFamily: `"Open Sans", sans-serif`,
                             }}
                             className={cn(
-                              "flex items-center justify-center rounded-full bg-[#4D22FC]    sm:size-6 md:size-7 lg:size-8   px-2 min-w-[32px] text-xs",
-                              `[#1a9d92] cursor-pointer text-center leading-8 text-white`,
+                              "flex items-center justify-center rounded-full bg-[#4D22FC]    sm:size-7 md:size-7 lg:size-8   px-2 min-w-[32px]  ",
+                              `[#1a9d92] cursor-pointer text-center leading-8 text-white font-bold`,
                             )}
                           >
                             {num}
@@ -72,10 +72,16 @@ export const LotteryTable = ({ data }: any) => {
 
             </TableBody>
 
-            : <TableBody className="h-40 text-xl flex justify-center items-center w-full"> Empty</TableBody>
-
+            
         }
       </Table>
+      {data?.purchases?.length == 0 && (
+        <div className="flex flex-col w-full items-center justify-center gap-2 py-6 my-6">
+          <p>No purchases yet</p>
+         
+        </div>
+  
+      )}
 
     </>
   );
