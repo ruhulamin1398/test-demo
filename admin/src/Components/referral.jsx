@@ -1,6 +1,7 @@
 'use client'
 import {useEffect, useState} from 'react';
-import { contractAddress, owner , fujiProviderUrl, blockChainConfig} from "../contracts/const"; 
+import { contractAddress, owner , fujiProviderUrl, blockChainConfig} from "../contracts/const";
+import lottaverseABI from "../contracts/Lottaverse.json";
 import {Contract, BrowserProvider, JsonRpcApiProvider, JsonRpcProvider} from "ethers";
 
 export default function Referral(){
@@ -10,23 +11,23 @@ export default function Referral(){
   const [referralsTotal, setReferralsTotal] = useState([])
     const [add, setAdd] = useState('')
 
-    // const getReferral = async()=>{
-    //     const provider = new JsonRpcProvider(fujiProviderUrl);
-    //     const contract = new Contract(contractAddress, lottaverseABI, provider);
-    //     const _referrals = [];
-    //     var query = add;
-    //     for(let i = 0; i < 7; i++){
-    //         const _ref = await contract.referral(query);
-    //         console.warn(_ref)
-    //         if(_ref !== '0x0000000000000000000000000000000000000000'){
-    //             _referrals.push(_ref);
-    //             query = _ref
-    //         }else{
-    //             break;
-    //         }
-    //     }
-    //     setReferrals(_referrals);
-    // }
+    const getReferral = async()=>{
+        const provider = new JsonRpcProvider(fujiProviderUrl);
+        const contract = new Contract(contractAddress, lottaverseABI, provider);
+        const _referrals = [];
+        var query = add;
+        for(let i = 0; i < 7; i++){
+            const _ref = await contract.referral(query);
+            console.warn(_ref)
+            if(_ref !== '0x0000000000000000000000000000000000000000'){
+                _referrals.push(_ref);
+                query = _ref
+            }else{
+                break;
+            }
+        }
+        setReferrals(_referrals);
+    }
 
     const getRef = async() =>{
 

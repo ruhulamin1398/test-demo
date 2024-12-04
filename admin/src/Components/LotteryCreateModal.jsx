@@ -17,16 +17,17 @@ import axios from "axios";
 import { useMetaMask } from "metamask-react";
 import { BrowserProvider, JsonRpcProvider, Contract, Wallet, parseUnits } from "ethers";
 import Web3Token from "web3-token";
-import { 
+import {
+  owner, 
   secretKey,
   blockChainConfig,
-  pk
+ 
 } from "../contracts/const";
-import { ToastContainer, toast } from "react-toastify";
-import LotteryProcessModal from "./LotteryProcessModal";
+import { ToastContainer, toast } from "react-toastify"; 
 import LotteryErrorModal from "./LotteryErrorModal";
 import { appConfig } from "../config/appConfig";
 import {useProvider} from "../contracts/utils/useProvider"
+import { getContract } from "../contracts/utils/metaMaskProviderContract";
 
 export default function App({ isOpen, onClose }) {
 
@@ -77,7 +78,23 @@ export default function App({ isOpen, onClose }) {
 
   const handleLotteryPrice = async (e) => {
 
-  
+
+
+    const provider = new BrowserProvider(window.ethereum);
+
+    const contract = new Contract(blockChainConfig.contractAddress,
+      blockChainConfig.lotteryABI,
+      provider);
+
+    try {
+      const latestLottery = await contract.GetLatestLottery(parseInt(e));
+      console.log("latest lottery is ", Number(latestLottery[0]));
+
+
+
+    } catch (error) {
+      console.error("No lottery found or error in fetching:", error);
+    }
 
     // console.log(e);
     if (e === "0") {
@@ -179,7 +196,7 @@ export default function App({ isOpen, onClose }) {
       const token = await Web3Token.sign(
         async (msg) => await signer.signMessage(msg)
       );
-      if (signer.address == blockChainConfig.owner) {
+      if (signer.address == owner) {
 
 
        
@@ -192,7 +209,16 @@ export default function App({ isOpen, onClose }) {
 
         try {
 
-           
+          const inProvider = new JsonRpcProvider(
+            "https://polygon-amoy.infura.io/v3/276f8cf7af2341738b0fd12245ffd948",
+            {
+              chainId: 80002, // Chain ID for Polygon Amoy testnet
+              name: "polygon-amoy"
+            }
+          );
+          const wallet = new Wallet(pk, inProvider);
+
+          const inContract = new Contract(blockChainConfig.contractAddress, blockChainConfig.lotteryABI, wallet);
 
 
 
@@ -205,7 +231,7 @@ export default function App({ isOpen, onClose }) {
 
 
             // const signingContract = inContract.connect(signer);
-            const tx = await Mcontract.createLottery(
+            const tx = await inContract.createLottery(
               LotteryName,
               minTicket,
               maxTicket,
@@ -268,7 +294,6 @@ export default function App({ isOpen, onClose }) {
               if (requestData && typeof requestData === 'object' && !Array.isArray(requestData)) {
                 // Push new data to requestData or modify it as needed
                 const latestLottery2 = await inContract.GetLatestLottery(parseInt(localStorage.getItem('requestedLottery')));
-                console.log("created lottery is", latestLottery2)
                 requestData.lotteryId = Number(latestLottery2[0]); // example: add a new property
                 localStorage.setItem('requestData', JSON.stringify(requestData));
                 localStorage.setItem('lotteryStatus', 2);
