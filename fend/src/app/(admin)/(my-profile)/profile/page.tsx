@@ -364,7 +364,7 @@ useEffect(()=>{
 
           
             <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
-              <p className="font-black lg:text-xl">Owner Total Tax </p>
+              <p className="font-black lg:text-xl">Total Tax </p>
               <p
                 className="mt-3 gap-x-1 text-lg font-black lg:text-xl   flex items-center"
                 >
