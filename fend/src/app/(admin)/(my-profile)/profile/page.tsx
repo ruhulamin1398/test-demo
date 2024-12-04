@@ -294,14 +294,14 @@ useEffect(()=>{
             </div>
             <div className="flex items-center gap-x-2">
               {(blockChainConfig.owner == address) ?
-                <button className="btn-gradient-purple lg:text-lg" onClick={() => withDrawOwnerReawrdAmount()}>Withdraw Owner Tax</button>
+                <button className="btn-gradient-purple lg:text-lg" onClick={() => withDrawOwnerReawrdAmount()}>Withdraw</button>
                 :
                 <>
                 
                 <button className="btn-gradient-purple lg:text-lg" onClick={() => withDrawReawrdAmount()}>Withdraw</button>
                 </>
               }
-              {(user?.premium==0 && blockChainConfig.owner != address)&&(<button className="btn-gradient-purple lg:text-lg" onClick={() => becomePremiumAccount()}>Become Premium</button>)}
+              {(user?.premium==0 && blockChainConfig.owner != address)&&(<button className="btn-gradient-purple lg:text-lg" onClick={() => becomePremiumAccount()}>Add Premium</button>)}
              
              
               
