@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ChevronLeft, Trash2 } from "lucide-react";
 import { useWriteContract, useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { solidityPackedKeccak256 } from "ethers";
@@ -41,6 +41,8 @@ export const TicketSummary = ({
   ...props
 }: Props) => {
   const dialogRef = useRef<HTMLButtonElement | null>(null);
+  const [runningPurhase,setRunningPurchase] = useState<Boolean>(false)
+
 
   const ticketPrice = lottery.price;
   const ticketHashes: string[] = [];
@@ -84,39 +86,16 @@ export const TicketSummary = ({
     ticketHashes.push(ticketBytes);
   });
 
-  // console.log("data", data)
 
-  //   const completePurchase = async () => {
 
-  //     if (isConfirmed) {
-  //       buyTicket({
-  //         abi: blockChainConfig.lotteryABI,
-  //         address: blockChainConfig.contractAddress as `0x${string}`,
-  //         functionName: 'purchaseTicket',
-  //         args: [
-  //           lottery.lotteryId,
-  //           totalTickets.length,
-  //           data?.originalUser?.referredBy?.address,
-  //           stringArrayOfTickets
 
-  //         ] ,
-
-  //       });
-
-  //       const dbData = {
-  //         _id: lottery._id,
-  //         buyer: account.address,
-  //         amount: totalTickets.length,
-  //         referral: data?.originalUser?.address,
-  //         price: lottery.price,
-  //         lotteryType: lottery.lotteryType.toLowerCase(),
-  //         tax
 
   const completePurchase = async (type: number) => {
     // console.log(" stringArrayOfTickets", stringArrayOfTickets);
     if (type == 1 || isConfirmed) {
       if (isConfirmed) {
-        // console.log(" purchaed type _____________________", type);
+        
+
 
         try {
           buyTicket({
@@ -132,38 +111,14 @@ export const TicketSummary = ({
             ],
           });
         } catch (err) {
-          toast.error("An error occurred during the purchase.");
-
-          console.error("Error in ticket purchase", err);
-          toast.error("An error occurred during the purchase.");
-        }
-      } else {
-        // console.log(" purchaed type ____________________=_ ", type);
-
-        try {
-          // console.log(" purchaed type ____________________=_ ", type);
-
-          buyTicket({
-            abi: blockChainConfig.lotteryABI,
-            address: blockChainConfig.contractAddress as `0x${string}`,
-            functionName: "purchaseTicket",
-            args: [
-              lottery.lotteryId,
-              totalTickets.length,
-              "0xBa926bE5738D978e6e1006f6bB66570FC4123064" as `0x${string}`,
-              stringArrayOfTickets,
-              1,
-            ],
+          toast.dismiss(); 
+          toast.error("Purchase failed", {
+            position: "top-left",theme: "colored"
           });
-        } catch (err) {
-          // console.log(" purchaed type __ err __________________=_ ", type);
-
-          toast.error("An error occurred during the purchase.");
-
-          console.error("Error in ticket purchase", err);
-          toast.error("An error occurred during the purchase.");
+ 
         }
-      }
+      } 
+      
     }
   };
 
@@ -173,7 +128,7 @@ export const TicketSummary = ({
       _id: lottery._id,
       buyer: account.address,
       amount: totalTickets.length,
-      referral: '0x3ff88B69d1762AA444c85c30C4B0B795f9c48B59',
+      referral: data?.originalUser?.referredBy?.address,
       price: lottery.price,
       lotteryType: lottery.lotteryType.toLowerCase(),
       tax,
@@ -182,27 +137,69 @@ export const TicketSummary = ({
     const response = await createPurchase(dbData).unwrap();
 
     if (response.message === "Ticket purchased successfully") {
-      toast.success("Ticket purchased successfully");
+      setRunningPurchase(false);
+
+      localStorage.removeItem("purchaseStatus");
+      localStorage.removeItem("dbData");
+
+      toast.dismiss();
+      toast.success("Ticket purchased successfully", {
+        position: "top-left",theme: "colored"
+      });
       setIsNextStep(false);
       // console.log("ticket send to DB successfull");
       dialogRef.current?.click();
       totalTickets = [];
       setTotalTickets([]);
-    } else {
-      toast.error("An error occurred during the purchase.");
-    }
+
+    }else{
+
+      toast.dismiss();
+      // toast.success("Ticket purchased successfully", {
+      //   position: "top-left",theme: "colored"
+      // });
+    } 
   };
 
   useEffect(() => {
     if (ticketPurchaseHash && isPurchased) {
-      //     toast.success("ticket updated to blockchain successfully");
-      // console.log(isPurchased);
-      // console.log(ticketPurchaseHash);
+
+      localStorage.setItem("purchaseStatus" , "1");
+   
+      const dbData = {
+        _id: lottery._id,
+        buyer: account.address,
+        amount: totalTickets.length,
+        referral: '0x3ff88B69d1762AA444c85c30C4B0B795f9c48B59',
+        price: lottery.price,
+        lotteryType: lottery.lotteryType.toLowerCase(),
+        tax,
+      };
+  
+      localStorage.setItem("purchaseStatus" , "1");
+      localStorage.setItem("dbData" , JSON.stringify(dbData));
+
+ 
       SendToDb();
     }
   }, [isPurchased]);
 
+
+  useEffect(()=>{
+    if(buyTicketsErr){
+      toast.dismiss();
+     
+      toast.error("Purchase failed", {
+        position: "top-left",theme: "colored"
+      });
+    }
+
+  },[buyTicketsErr])
+
   const purchaseTicket = (type: number) => {
+    toast.loading(" Please wait ...", {
+      position: "top-left",theme: "colored"
+    })
  
     if (account.address && account.isConnected) {
       const amount = Number(lottery.price) * 1000000 * totalTickets.length;
@@ -215,7 +212,11 @@ export const TicketSummary = ({
           gas: 2172500n, 
         });
       } catch (err) {
-        // console.log("error", err);
+        toast.dismiss();
+        toast.error("failed to approve USDT", {
+          position: "top-left",theme: "colored"
+        });
+        console.log("error", err);
       }
     }
   };
@@ -225,6 +226,15 @@ export const TicketSummary = ({
       completePurchase(0);
     }
   }, [isConfirmed]);
+  useEffect(()=>{
+    if(usdtApprovalErr){
+      toast.dismiss();
+      toast.error("failed to approve USDT", {
+        position: "top-left",theme: "colored"
+      }); 
+    }
+
+  },[usdtApprovalErr])
 
   // console.log("usdtApprovalHash: ", usdtApprovalHash, "error: ", usdtApprovalErr)
   // console.log("LotteverseHash: ", ticketPurchaseHash, "error: ", buyTicketsErr)
