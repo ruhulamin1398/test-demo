@@ -3,7 +3,7 @@ import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 import axios from "axios"
 import { RiArrowRightLine } from "react-icons/ri";
 import { BrowserProvider, Contract } from "ethers";
-import { blockChainConfig, owner, secretKey } from "../contracts/const";
+import { blockChainConfig, secretKey } from "../contracts/const";
 import Web3Token from "web3-token";
 import { toast } from "react-toastify"
 import { useMetaMask } from "metamask-react";
@@ -97,7 +97,7 @@ export default function App() {
   return (
     <>
       {
-        status === "connected" && owner.toLowerCase() === account.toLowerCase() ?
+        status === "connected" &&  blockChainConfig.owner.toLowerCase() === account.toLowerCase() ?
           <>
             <div className="w-[90%]  mx-auto mt-2 rounded-md flex  justify-between p-4 bg-gradient-to-br from-black to-gray-300">
               <div className="grow flex justify-start">
