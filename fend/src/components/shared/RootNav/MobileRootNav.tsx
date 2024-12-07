@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-no-comment-textnodes */
-"use client";
 
 import { cn } from "@/utils";
 import React, { useState } from "react";

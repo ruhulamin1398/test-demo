@@ -1,3 +1,6 @@
+
+"use client";
+
 import React, { useEffect } from "react";
 import { LargeRootNav } from "./LargeRootNav";
 import { MobileRootNav } from "./MobileRootNav";
