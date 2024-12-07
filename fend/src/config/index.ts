@@ -9,16 +9,27 @@ import {
   trustWallet,
   binanceWallet,
   walletConnectWallet,
+  tokenPocketWallet,
+  safeWallet,
+  bitgetWallet,
+  uniswapWallet,
+  okxWallet,
+  imTokenWallet,
+  compassWallet,
+  foxWallet,
+  gateWallet,
+  coinbaseWallet,
+  omniWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 
-import { polygon, polygonAmoy, avalanche, avalancheFuji } from "wagmi/chains";
+import { polygon, polygonAmoy } from "wagmi/chains";
 import { blockChainConfig } from "@/contracts/const";
 
 const connectors = connectorsForWallets(
   [
     {
       groupName: "Recomended",
-      wallets: [metaMaskWallet, trustWallet, binanceWallet, walletConnectWallet],
+      wallets: [metaMaskWallet,coinbaseWallet, trustWallet, binanceWallet,tokenPocketWallet, safeWallet, bitgetWallet,uniswapWallet,okxWallet,omniWallet,imTokenWallet,gateWallet,compassWallet,foxWallet, walletConnectWallet],
     },
   ],
   {
