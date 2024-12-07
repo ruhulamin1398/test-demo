@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { LargeRootNav } from "./LargeRootNav";
 import { MobileRootNav } from "./MobileRootNav";
+import { useCreatePurchaseMutation } from "@/redux/api/all-api/lottery";
 interface Props extends React.ComponentProps<"div"> {}
 
 export const RootNav = ({ ...props }: Props) => {
+
+  const [createPurchase] = useCreatePurchaseMutation();
+
   const routs = [
     {
       name: "home",
@@ -26,6 +30,40 @@ export const RootNav = ({ ...props }: Props) => {
       path: "/contact",
     },
   ];
+
+
+  useEffect(() => {
+
+    const SendToDb = async () => {
+
+      const dbData = localStorage.getItem("dbData");
+      if(dbData){
+
+        const response = await createPurchase(JSON.parse(dbData)).unwrap();
+        
+        if (response.message === "Ticket purchased successfully") {
+          
+          localStorage.removeItem("purchaseStatus");
+          localStorage.removeItem("dbData");
+          
+          
+          // toast.success("Ticket purchased successfully");
+          
+          
+        } else {
+          // toast.error("An error occurred during the purchase.");
+        }
+      }
+    }
+    const status = localStorage.getItem("dbData");
+
+    if (status !== null) {
+      SendToDb();
+    }
+
+
+
+  }, [])
 
   return (
     <nav {...props} className="border-b border-gray-400/50 bg-[#1A1D46] px-10 py-3 text-white">

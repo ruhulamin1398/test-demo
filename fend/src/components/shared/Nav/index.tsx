@@ -14,38 +14,7 @@ export const Nav = ({ ...props }: Props) => {
   const [createPurchase] = useCreatePurchaseMutation();
 
 
-  useEffect(() => {
 
-    const SendToDb = async () => {
-
-      const dbData = localStorage.getItem("dbData");
-      if(dbData){
-
-        const response = await createPurchase(JSON.parse(dbData)).unwrap();
-        
-        if (response.message === "Ticket purchased successfully") {
-          
-          localStorage.removeItem("purchaseStatus");
-          localStorage.removeItem("dbData");
-          
-          
-          // toast.success("Ticket purchased successfully");
-          
-          
-        } else {
-          // toast.error("An error occurred during the purchase.");
-        }
-      }
-    }
-    const status = localStorage.getItem("dbData");
-
-    if (status !== null) {
-      SendToDb();
-    }
-
-
-
-  }, [])
 
 
 
