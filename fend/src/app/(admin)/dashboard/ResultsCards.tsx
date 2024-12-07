@@ -36,7 +36,7 @@ export const ResultsCards = ({ className, data, round, ...props }: Props) => {
   return (
     <div className={cn("rounded-2xl px-2 py-6", className)} {...props}>
       <div className="flex items-center justify-between px-3">
-        <p className="font-black">EASY JACKPOT</p>
+        <p className="font-black">EASY JACKPOT RESULT</p>
         <p>Round #{round}</p>
       </div>
       <Table className="mt-6 w-full text-center">

@@ -240,9 +240,11 @@ const Profile = () => {
         </div>
         
         {(user?.premium ==0 && blockChainConfig.owner != address )&& (<div className="flex flex-col md:flex-row  gap-2 rounded-sm bg-[#1A1D46] p-4 justify-between text-center items-center w-full">
+          <div className="text-center w-full">
           ARE YOU INTERESTED PREMIUM MEMBER ! GET $200 USDT AND ENJOY 15% GLOBAL BONUS  
+          </div>
           
-        {(user?.premium == 0 && blockChainConfig.owner != address) && (<button className="btn-gradient-purple lg:text-lg w-48" onClick={() => becomePremiumAccount()}>Add Premium</button>)}
+        {(user?.premium == 0 && blockChainConfig.owner != address) && (<div className="w-64 text-right"> <button className="btn-gradient-purple lg:text-base px-4  " onClick={() => becomePremiumAccount()}>Add Premium</button> </div>)}
         </div>)}
 
 
@@ -284,7 +286,7 @@ const Profile = () => {
                     <SquareMousePointer className="size-4" />
                     <p className="h-full font-bold">
                       <span className="text-sm leading-3 text-gray-300 mr-2">EXP: </span>
-                      <span>
+                      <span className="text-xs">
                         {new Date(data?.originalUser?.expiryDate).toLocaleString('en-US', {
                           year: 'numeric',
                           month: 'short',
@@ -316,7 +318,7 @@ const Profile = () => {
                   <button className="btn-gradient-purple lg:text-lg " onClick={() => withDrawReawrdAmount()}>Withdraw</button>
                 </>
               }
-              {(user?.premium==0 && blockChainConfig.owner != address)&&(<button className="btn-gradient-purple lg:text-lg" onClick={() => becomePremiumAccount()}>Become Premium</button>)}
+          
              
              
               
@@ -347,11 +349,11 @@ const Profile = () => {
 
             <div   className="gap-x-3 rounded-sm   p-4 text-gray-200 text-center md:text-left block md:hidden">
             {(blockChainConfig.owner == address) ?
-                <button className="btn-gradient-purple lg:text-lg w-full" onClick={() => withDrawOwnerReawrdAmount()}>Withdraw Owner Tax</button>
+                <button className="btn-gradient-purple lg:text-base w-full" onClick={() => withDrawOwnerReawrdAmount()}>Withdraw Owner Tax</button>
                 :
                 <>
 
-                  <button className="btn-gradient-purple lg:text-lg w-full" onClick={() => withDrawReawrdAmount()}>Withdraw</button>
+                  <button className="btn-gradient-purple lg:text-base w-full" onClick={() => withDrawReawrdAmount()}>Withdraw</button>
                 </>
               }
          

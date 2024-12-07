@@ -267,7 +267,7 @@ export const TicketSummary = ({
 
           <div className="font-black">
             <div className="px-4">
-              <p className="text-xl">Checkout </p>
+              <p className="text-lg">Checkout </p>
               <div className="flex items-center justify-between">
                 <p className="text-[#67696F]">Ticket</p>
                 <p>{totalTickets?.length}X</p>

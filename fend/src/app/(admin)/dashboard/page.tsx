@@ -132,17 +132,17 @@ const Dashboard = () => {
        
       </div>
 
-      <h4 className="mt-5">Results Board </h4>
-      <div className="grid w-full grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2">
+      {/* <h4 className="mt-5">Results Board </h4> */}
+      <div className="grid w-full grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2 mt-12">
         <ResultsCards className="main-gradient" round={boardData?.roundForEasy} data={boardData?.lotteryType0} />
 
 
         <SuperResultsCards className="primary-bg-gradient" round={boardData?.roundForSuper} data={boardData?.lotteryType1} />
       </div>
 
-      <h4 className="mt-5">Earning Board</h4>
+      {/* <h4 className="mt-5">Earning Board</h4> */}
       <div
-        className={`grid w-full grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2 ${SrbijaFont.className}`}
+        className={`grid w-full grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2 mt-12 ${SrbijaFont.className}`}
       >
 
         <ShowEarningCard className="main-gradient"

@@ -5,7 +5,7 @@ import { Noise } from "@/components/shared";
 
 const RootPage = () => {
   return (
-    <Noise className="mx-auto 2xl:container">
+    <Noise className="mx-auto w-full">
       <RootNav />
       <div className="mx-auto">
         <Hero />

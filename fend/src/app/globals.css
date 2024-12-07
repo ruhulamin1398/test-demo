@@ -83,10 +83,10 @@
     @apply px-10 py-5;
   }
   .btn-gradient-purple {
-    @apply mb-2 me-2 rounded-lg bg-teal-700 px-5 py-2.5 text-center text-sm font-black uppercase text-white focus:outline-none;
+    @apply mb-2 me-2 rounded-lg bg-teal-700 px-5 py-2.5 text-center text-sm font-bold  text-white focus:outline-none;
   }
   .table-heading {
-    @apply mt-4 items-center rounded-t-md bg-gray-950 text-center text-lg font-black;
+    @apply mt-4 items-center rounded-t-md bg-gray-950 text-center text-lg font-bold;
   }
 
   .table-elements-container {

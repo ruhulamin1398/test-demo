@@ -77,7 +77,7 @@ const Winners = () => {
   return (
     <div>
         <h1 className="mb-1 mt-0 text-xl font-black">Winners</h1>
-      <div className="min-h-10 rounded-md bg-midnight-200 px-4 py-4">
+      <div className="min-h-10 rounded-md bg-[#1a1d46] px-4 py-4">
         <div className="flex flex-col gap-x-10 gap-y-8 md:flex-row py-5 justify-between">
           {/* Lottery Type */}
           <div className="flex flex-row gap-3 flex-1 w-full">
@@ -126,7 +126,7 @@ const Winners = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchId(e.target.value)}
               type="number"
               placeholder="Enter your ticket number"
-              className="  rounded-lg border bg-midnight-200 px-4 py-[0.30rem] w-full"
+              className="  rounded-lg border  bg-[#1a1d46] px-4 py-[0.30rem] w-full"
             />
           </div>
         </div>

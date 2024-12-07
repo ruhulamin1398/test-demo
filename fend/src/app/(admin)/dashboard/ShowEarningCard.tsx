@@ -51,7 +51,7 @@ export const ShowEarningCard = ({
         {EarningSources.map((source) => (
           <div
             key={source.name}
-            className="flex items-center justify-between rounded-md px-2 lg:text-xl"
+            className="flex items-center justify-between rounded-md px-2 lg:text-lg "
           >
             <p className="">{source.name}</p>
             <p className="space-x-1">

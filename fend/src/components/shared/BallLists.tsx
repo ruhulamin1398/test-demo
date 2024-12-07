@@ -33,7 +33,7 @@ const BallLists = ({ className, ballClassName, totalTickets, deleteTickets, ...p
                       fontFamily: `"Open Sans", sans-serif`,
                     }}
                     className={cn(
-                      "flex size-6 items-center justify-center rounded-full bg-[#4D22FC] text-xs font-black sm:size-10 md:size-7 lg:size-8",
+                      "flex size-6 items-center justify-center rounded-full bg-[#4D22FC] text-xs font-bold sm:size-10 md:size-7 lg:size-8",
                       `[#1a9d92] cursor-pointer text-center leading-8 text-white`,
                       ballClassName,
                     )}
