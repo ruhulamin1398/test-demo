@@ -1,6 +1,7 @@
 const BasicController = require("../controllers/basic.js");
 const authMiddleware = require("../middlewares/authMiddleware.js");
 const UserController = require("../controllers/userController.js");
+const BlockchainController = require("../controllers/blockchainContoller.js");
 
 module.exports = (app) => {
   app
@@ -40,6 +41,7 @@ module.exports = (app) => {
   app
     .route("/get-draw-lottery")
     .get( BasicController.getLotteryDrawFromDB);
+
   app
     .route("/get-lottery-board")
     .get( BasicController.getDrawLotteryForDashboard);
@@ -102,4 +104,22 @@ module.exports = (app) => {
   app
     .route("/user/:id/earnings")
     .get(authMiddleware.getRequest, UserController.getUsersByType);
+
+
+
+
+
+// Blockcahin Area 
+ 
+
+
+    app.route("/getLottery").get(BlockchainController.getLottery);
+
+
+
+
+
+
+
+
 };

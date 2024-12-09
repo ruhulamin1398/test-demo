@@ -12,8 +12,7 @@ import { Lottery } from "@/types";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { blockChainConfig } from "@/contracts/const";
 import { useGetSingleUserDetailsQuery } from "@/redux/api/all-api/users";
-import { useCreatePurchaseMutation } from "@/redux/api/all-api/lottery";
-import { parseGwei } from "viem";
+import { useCreatePurchaseMutation } from "@/redux/api/all-api/lottery"; 
 
 type TaxType = {
   lotteryType: string;
@@ -55,9 +54,7 @@ export const TicketSummary = ({
 
   const { data, isLoading } = useGetSingleUserDetailsQuery({ address: account.address });
 
-  const {
-    data: usdtApprovalHash,
-    writeContract: approveUSDT,
+  const {  data: usdtApprovalHash,  writeContract: approveUSDT,
     error: usdtApprovalErr,
   } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
@@ -138,9 +135,7 @@ export const TicketSummary = ({
 
     if (response.message === "Ticket purchased successfully") {
       setRunningPurchase(false);
-
-      localStorage.removeItem("purchaseStatus");
-      localStorage.removeItem("dbData");
+ 
 
       toast.dismiss();
       toast.success("Ticket purchased successfully", {
@@ -163,8 +158,7 @@ export const TicketSummary = ({
 
   useEffect(() => {
     if (ticketPurchaseHash && isPurchased) {
-
-      localStorage.setItem("purchaseStatus" , "1");
+ 
    
       const dbData = {
         _id: lottery._id,
@@ -175,10 +169,7 @@ export const TicketSummary = ({
         lotteryType: lottery.lotteryType.toLowerCase(),
         tax,
       };
-  
-      localStorage.setItem("purchaseStatus" , "1");
-      localStorage.setItem("dbData" , JSON.stringify(dbData));
-
+   
  
       SendToDb();
     }

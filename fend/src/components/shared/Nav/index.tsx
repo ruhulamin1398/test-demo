@@ -1,18 +1,14 @@
 "use client";
-
-import { useCreatePurchaseMutation } from "@/redux/api/all-api/lottery";
+ 
 import React, { useEffect } from "react";
 import { LargeDeviceNav } from "./LargeDeviceNav";
 import { MobileNav } from "./MobileNav";
-import { InterFont } from "@/fonts";
-import { toast } from "react-toastify";
+import { InterFont } from "@/fonts"; 
 
 interface Props extends React.ComponentProps<"nav"> { }
 
 export const Nav = ({ ...props }: Props) => {
-
-  const [createPurchase] = useCreatePurchaseMutation();
-
+ 
 
 
 
