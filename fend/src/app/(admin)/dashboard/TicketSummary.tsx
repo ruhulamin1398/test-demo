@@ -84,15 +84,13 @@ export const TicketSummary = ({
   });
 
 
-
-
-
   const completePurchase = async (type: number) => {
-    // console.log(" stringArrayOfTickets", stringArrayOfTickets);
-    if (type == 1 || isConfirmed) {
-      if (isConfirmed) {
-        
-
+  toast.warn("complete purchases is called ");
+  
+  // console.log(" stringArrayOfTickets", stringArrayOfTickets);
+  
+  if (isConfirmed) {
+        toast.warn("complete purchases is called ans pass isconfirmed ");
 
         try {
           buyTicket({
@@ -116,7 +114,7 @@ export const TicketSummary = ({
         }
       } 
       
-    }
+   
   };
 
   const SendToDb = async () => {
@@ -158,7 +156,7 @@ export const TicketSummary = ({
   };
 
   useEffect(() => {
-    if (ticketPurchaseHash && isPurchased) {
+    if ( isPurchased) {
  
 
    
@@ -203,7 +201,7 @@ export const TicketSummary = ({
   };
 
   useEffect(() => {
-    if (usdtApprovalHash  && isConfirmed) {
+    if ( isConfirmed) {
       toast.loading(" Please wait ...", {
         position: "top-left",theme: "colored"
       })
