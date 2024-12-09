@@ -120,6 +120,10 @@ export const TicketSummary = ({
   };
 
   const SendToDb = async () => {
+    toast.dismiss();
+    toast.success("Ticket purchased successfully", {
+      position: "top-left",theme: "colored"
+    });
     // console.log("called                       .......................... db");
     const dbData = {
       _id: lottery._id,
@@ -137,10 +141,7 @@ export const TicketSummary = ({
       setRunningPurchase(false);
  
 
-      toast.dismiss();
-      toast.success("Ticket purchased successfully", {
-        position: "top-left",theme: "colored"
-      });
+ 
       setIsNextStep(false);
       // console.log("ticket send to DB successfull");
       dialogRef.current?.click();
@@ -149,7 +150,7 @@ export const TicketSummary = ({
 
     }else{
 
-      toast.dismiss();
+      // toast.dismiss();
       // toast.success("Ticket purchased successfully", {
       //   position: "top-left",theme: "colored"
       // });
@@ -159,16 +160,7 @@ export const TicketSummary = ({
   useEffect(() => {
     if (ticketPurchaseHash && isPurchased) {
  
-   
-      const dbData = {
-        _id: lottery._id,
-        buyer: account.address,
-        amount: totalTickets.length,
-        referral: '0x3ff88B69d1762AA444c85c30C4B0B795f9c48B59',
-        price: lottery.price,
-        lotteryType: lottery.lotteryType.toLowerCase(),
-        tax,
-      };
+
    
  
       SendToDb();
@@ -211,7 +203,7 @@ export const TicketSummary = ({
   };
 
   useEffect(() => {
-    if (usdtApprovalHash && !ticketPurchaseHash && isConfirmed) {
+    if (usdtApprovalHash  && isConfirmed) {
       toast.loading(" Please wait ...", {
         position: "top-left",theme: "colored"
       })

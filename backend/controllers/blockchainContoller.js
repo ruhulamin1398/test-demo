@@ -276,8 +276,9 @@ module.exports = {
 
 
     //  1. Find the latest Easy lottery from Blockchain
-    const lotteryDAta = await upgradeLotteryTicketCount(0); // compare and upgrade Easy Lottery tickets
+    const lotteryDAta = await upgradeLotteryTicketCount(0); 
+    const lotteryDAta2 = await upgradeLotteryTicketCount(1); 
 
-    res.status(200).json(lotteryDAta);
+    res.status(200).json(lotteryDAta,lotteryDAta2);
   },
 };
