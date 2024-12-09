@@ -188,9 +188,7 @@ export const TicketSummary = ({
   },[buyTicketsErr])
 
   const purchaseTicket = (type: number) => {
-    toast.loading(" Please wait ...", {
-      position: "top-left",theme: "colored"
-    })
+    
  
     if (account.address && account.isConnected) {
       const amount = Number(lottery.price) * 1000000 * totalTickets.length;
@@ -214,6 +212,9 @@ export const TicketSummary = ({
 
   useEffect(() => {
     if (usdtApprovalHash && !ticketPurchaseHash && isConfirmed) {
+      toast.loading(" Please wait ...", {
+        position: "top-left",theme: "colored"
+      })
       completePurchase(0);
     }
   }, [isConfirmed]);

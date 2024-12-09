@@ -113,7 +113,7 @@ module.exports = (app) => {
  
 
 
-    app.route("/getLottery").get(BlockchainController.getLottery);
+    app.route("/sync-lottery").get(BlockchainController.getLottery);
 
 
 
