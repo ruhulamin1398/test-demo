@@ -263,7 +263,7 @@ const upgradeLotteryTicketCount = async (type) => {
   }
 
 
-  // return (lotteryDataFromBlockchain,lotteryNumbers, lotteryDataFromDB );
+  return (lotteryDataFromBlockchain,lotteryNumbers, lotteryDataFromDB );
 
 }
 
@@ -277,8 +277,8 @@ module.exports = {
 
     //  1. Find the latest Easy lottery from Blockchain
     const lotteryDAta = await upgradeLotteryTicketCount(0); 
-    const lotteryDAta2 = await upgradeLotteryTicketCount(1); 
+    const lotteryDAta2 =  await upgradeLotteryTicketCount(1); 
 
-    res.status(200).json(lotteryDAta,lotteryDAta2);
+    res.status(200).json({lotteryDAta,lotteryDAta2});
   },
 };
