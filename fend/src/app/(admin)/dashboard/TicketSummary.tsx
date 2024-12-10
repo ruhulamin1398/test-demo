@@ -180,6 +180,52 @@ export const TicketSummary = ({
 
   },[buyTicketsErr])
 
+/// should remove 
+
+useEffect(()=>{
+toast.warn('testing toast '+ 'usdtApprovalHash : ' +usdtApprovalHash )
+},[usdtApprovalHash])
+
+ 
+
+useEffect(()=>{
+toast.warn('testing toast '+ 'usdtApprovalErr : ' +usdtApprovalErr )
+},[usdtApprovalErr]);
+
+
+
+useEffect(()=>{
+toast.warn('testing toast '+ ' usdt approve isConfirmed : ' +isConfirmed )
+},[isConfirmed]);
+
+
+
+
+useEffect(()=>{
+toast.warn('testing toast '+ 'ticketPurchaseHash : ' +ticketPurchaseHash )
+},[ticketPurchaseHash])
+
+
+useEffect(()=>{
+toast.warn('testing toast '+ 'approveUSDT : ' +buyTicketsErr )
+},[buyTicketsErr])
+
+
+useEffect(()=>{
+toast.warn('testing toast '+ 'usdtApprovalErr : ' +isPurchased )
+},[isPurchased]);
+
+
+ 
+
+
+
+
+ 
+
+
+
+
   const purchaseTicket = (type: number) => {
     
  
