@@ -237,6 +237,8 @@ export const TicketSummary = ({
 
           if (!purchaseReceipt.status) {
             throw new Error("Ticket purchase transaction failed");
+          }else{
+             SendToDb()
           }
  
           toast.success("Tickets purchased successfully!", {
