@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { ChevronLeft, Trash2, User } from "lucide-react";
-import { useWriteContract, useAccount, useWaitForTransactionReceipt, useContractRead } from "wagmi";
+import { useAccount } from "wagmi";
+import { writeContract } from '@wagmi/core'
+import { wagmiConfig } from "@/config";
 import { solidityPackedKeccak256 } from "ethers";
 import { toast } from "react-toastify";
 
@@ -12,7 +14,7 @@ import { Lottery } from "@/types";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { blockChainConfig } from "@/contracts/const";
 import { useGetSingleUserDetailsQuery } from "@/redux/api/all-api/users";
-import { useCreatePurchaseMutation } from "@/redux/api/all-api/lottery"; 
+import { useCreatePurchaseMutation } from "@/redux/api/all-api/lottery";
 import { BigNumber } from "ethers";
 type TaxType = {
   lotteryType: string;
@@ -40,7 +42,7 @@ export const TicketSummary = ({
   ...props
 }: Props) => {
   const dialogRef = useRef<HTMLButtonElement | null>(null);
-  const [runningPurhase,setRunningPurchase] = useState<Boolean>(false)
+  const [runningPurhase, setRunningPurchase] = useState<Boolean>(false)
 
 
   const ticketPrice = lottery.price;
@@ -54,22 +56,24 @@ export const TicketSummary = ({
 
   const { data, isLoading } = useGetSingleUserDetailsQuery({ address: account.address });
 
-  const {  data: usdtApprovalHash,  writeContract: approveUSDT,
-    error: usdtApprovalErr, reset: resetApproval
-  } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
-    hash: usdtApprovalHash
-  });
+  // const {  data: usdtApprovalHash,  writeContract: approveUSDT,
+  //   error: usdtApprovalErr, reset: resetApproval
+  // } = useWriteContract();
 
-  const {
-    data: ticketPurchaseHash,
-    writeContract: buyTicket, reset: resetBuyTicket,
-    error: buyTicketsErr,
-  } = useWriteContract();
-  const { isLoading: isPurchasing, isSuccess: isPurchased } = useWaitForTransactionReceipt({
-    hash: ticketPurchaseHash,
-  });
-  
+  // const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+  //   hash: usdtApprovalHash
+  // });
+
+  // const {
+  //   data: ticketPurchaseHash,
+  //   writeContract: buyTicket, reset: resetBuyTicket,
+  //   error: buyTicketsErr,
+  // } = useWriteContract();
+
+  // const { isLoading: isPurchasing, isSuccess: isPurchased } = useWaitForTransactionReceipt({
+  //   hash: ticketPurchaseHash,
+  // });
+
 
   totalTickets.forEach((ticket) => {
     const formattedTicket: string = ticket.map((num) => num.toString().padStart(2, "0")).join("");
@@ -88,35 +92,35 @@ export const TicketSummary = ({
   const completePurchase = async (type: number) => {
 
 
-        try {
-          buyTicket({
-            abi: blockChainConfig.lotteryABI,
-            address: blockChainConfig.contractAddress as `0x${string}`,
-            functionName: "purchaseTicket",
-            args: [
-              lottery.lotteryId,
-              totalTickets.length,
-              data?.originalUser?.referredBy?.address,
-              stringArrayOfTickets,
-              0,
-            ],
-          });
-        } catch (err) {
-          toast.dismiss(); 
-          toast.error("Purchase failed", {
-            position: "top-left",theme: "colored"
-          });
- 
-        }
-   
-      
-   
+    try {
+      buyTicket({
+        abi: blockChainConfig.lotteryABI,
+        address: blockChainConfig.contractAddress as `0x${string}`,
+        functionName: "purchaseTicket",
+        args: [
+          lottery.lotteryId,
+          totalTickets.length,
+          data?.originalUser?.referredBy?.address,
+          stringArrayOfTickets,
+          0,
+        ],
+      });
+    } catch (err) {
+      toast.dismiss();
+      toast.error("Purchase failed", {
+        position: "top-left", theme: "colored"
+      });
+
+    }
+
+
+
   };
 
   const SendToDb = async () => {
     toast.dismiss();
     toast.success("Ticket purchased successfully", {
-      position: "top-left",theme: "colored"
+      position: "top-left", theme: "colored"
     });
     // console.log("called                       .......................... db");
     const dbData = {
@@ -133,138 +137,74 @@ export const TicketSummary = ({
 
     if (response.message === "Ticket purchased successfully") {
       setRunningPurchase(false);
- 
 
- 
+
+
       setIsNextStep(false);
       // console.log("ticket send to DB successfull");
       dialogRef.current?.click();
       totalTickets = [];
       setTotalTickets([]);
 
-    }else{
+    } else {
 
       // toast.dismiss();
       // toast.success("Ticket purchased successfully", {
       //   position: "top-left",theme: "colored"
       // });
-    } 
+    }
   };
 
-  useEffect(() => {
-    if ( isPurchased) {
- 
-      resetBuyTicket();
-      resetApproval();
-
-   
- 
-      SendToDb();
-    }
-  }, [isPurchased]);
-
-
-  useEffect(()=>{
-    if(buyTicketsErr){
-      toast.dismiss();
-     
-      toast.error("Purchase failed", {
-        position: "top-left",theme: "colored"
-      });
-    }
-
-  },[buyTicketsErr])
-
-/// should remove 
-
-useEffect(()=>{
-toast.warn('testing toast '+ 'usdtApprovalHash : ' +usdtApprovalHash )
-},[usdtApprovalHash])
-
- 
-
-useEffect(()=>{
-toast.warn('testing toast '+ 'usdtApprovalErr : ' +usdtApprovalErr )
-},[usdtApprovalErr]);
-
-
-
-useEffect(()=>{
-toast.warn('testing toast '+ ' usdt approve isConfirmed : ' +isConfirmed )
-},[isConfirmed]);
 
 
 
 
-useEffect(()=>{
-toast.warn('testing toast '+ 'ticketPurchaseHash : ' +ticketPurchaseHash )
-},[ticketPurchaseHash])
-
-
-useEffect(()=>{
-toast.warn('testing toast '+ 'buyTicketsErr : ' +buyTicketsErr )
-},[buyTicketsErr])
-
-
-useEffect(()=>{
-toast.warn('testing toast '+ 'isPurchased : ' +isPurchased )
-},[isPurchased]);
-
-
- 
 
 
 
 
- 
+
+  const purchaseTicket = async (type: number) => {
 
 
-
-
-  const purchaseTicket = (type: number) => {
-    
- 
     if (account?.address && account?.isConnected) {
       const amount = Number(lottery.price) * 1000000 * totalTickets.length;
 
 
-      try {
-        approveUSDT({
-          abi: blockChainConfig.erc20ABI,
-          address: blockChainConfig.USDTaddress as `0x${string}`,
-          functionName: "approve",
-          args: [blockChainConfig.contractAddress as `0x${string}`, amount],
-          gas: 2172500n, 
-        });
-      } catch (err) {
-        toast.dismiss();
-        toast.error("failed to approve USDT", {
-          position: "top-left",theme: "colored"
-        });
-        console.log("error", err);
-      }
+
+      const approvedUsdt = await writeContract(wagmiConfig, {
+        abi: blockChainConfig.erc20ABI,
+        address: blockChainConfig.USDTaddress as `0x${string}`,
+        functionName: "approve",
+        args: [blockChainConfig.contractAddress as `0x${string}`, amount],
+        gas: 2172500n,
+      })
+      console.log("approvedUsdt __________________________", approvedUsdt)
+
+      toast.dismiss();
+      toast.loading("Processing ... Please Wait.", {
+        position: "top-left", theme: "colored"
+      })
+
+      // try {
+      //   approveUSDT({
+      //     abi: blockChainConfig.erc20ABI,
+      //     address: blockChainConfig.USDTaddress as `0x${string}`,
+      //     functionName: "approve",
+      //     args: [blockChainConfig.contractAddress as `0x${string}`, amount],
+      //     gas: 2172500n, 
+      //   });
+      // } catch (err) {
+      //   toast.dismiss();
+      //   toast.error("failed to approve USDT", {
+      //     position: "top-left",theme: "colored"
+      //   });
+      //   console.log("error", err);
+      // }
     }
   };
 
-  useEffect(() => {
 
-
-    if ( isConfirmed) {
-      toast.loading(" Please wait ...", {
-        position: "top-left",theme: "colored"
-      })
-      completePurchase(0);
-    }
-  }, [isConfirmed]);
-  useEffect(()=>{
-    if(usdtApprovalErr){
-      toast.dismiss();
-      toast.error("failed to approve USDT", {
-        position: "top-left",theme: "colored"
-      }); 
-    }
-
-  },[usdtApprovalErr])
 
   // console.log("usdtApprovalHash: ", usdtApprovalHash, "error: ", usdtApprovalErr)
   // console.log("LotteverseHash: ", ticketPurchaseHash, "error: ", buyTicketsErr)
