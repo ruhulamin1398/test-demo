@@ -20,6 +20,7 @@ import {
   gateWallet,
   coinbaseWallet,
   omniWallet,
+  rabbyWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 
 import { polygon, polygonAmoy } from "wagmi/chains";
@@ -29,7 +30,7 @@ const connectors = connectorsForWallets(
   [
     {
       groupName: "Recomended",
-      wallets: [metaMaskWallet,coinbaseWallet, trustWallet, binanceWallet,tokenPocketWallet, safeWallet, bitgetWallet,uniswapWallet,okxWallet,omniWallet,imTokenWallet,gateWallet,compassWallet,foxWallet, walletConnectWallet],
+      wallets: [metaMaskWallet,coinbaseWallet, rabbyWallet, trustWallet, binanceWallet,tokenPocketWallet, safeWallet, bitgetWallet,uniswapWallet,okxWallet,omniWallet,imTokenWallet,gateWallet,compassWallet,foxWallet, walletConnectWallet],
     },
   ],
   {

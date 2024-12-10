@@ -175,6 +175,11 @@ export const TicketSummary = ({
 
         try {
           // Step 1: Approve USDT
+
+          toast.loading("start Approvals", {
+            position: "top-right",
+            theme: "colored",
+          });
           const approveTx = await writeContract(wagmiConfig,{
             abi: blockChainConfig.erc20ABI,
             address: blockChainConfig.USDTaddress as `0x${string}`,
