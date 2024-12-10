@@ -3,7 +3,7 @@
 import React, { useRef, useState } from "react";
 import { ChevronLeft, Trash2, User } from "lucide-react";
 import { useAccount } from "wagmi";
-import { writeContract } from '@wagmi/core'
+import { writeContract,waitForTransaction } from '@wagmi/core'
 import { wagmiConfig } from "@/config";
 import { solidityPackedKeccak256 } from "ethers";
 import { toast } from "react-toastify";
@@ -171,57 +171,86 @@ export const TicketSummary = ({
       const amount = Number(lottery.price) * 1000000 * totalTickets.length;
 
 
+ 
 
-      try {
-        // Approve USDT
-        const approvedUsdt = await writeContract(wagmiConfig,{
-          abi: blockChainConfig.erc20ABI,
-          address: blockChainConfig.USDTaddress as `0x${string}`,
-          functionName: "approve",
-          args: [blockChainConfig.contractAddress as `0x${string}`, amount],
-          gas: 2172500n,
-        });
-        console.log("USDT Approved:", approvedUsdt);
+        try {
+          // Step 1: Approve USDT
+          const approveTx = await writeContract(wagmiConfig,{
+            abi: blockChainConfig.erc20ABI,
+            address: blockChainConfig.USDTaddress as `0x${string}`,
+            functionName: "approve",
+            args: [blockChainConfig.contractAddress as `0x${string}`, amount],
+          });
 
-        toast.success("USDT approved successfully!", {
-          position: "top-right",
-          theme: "colored",
-        });
+          console.log("Approve transaction sent:");
 
-        // If approval is successful, proceed to buy tickets
-        const ticketPurchase = await writeContract(wagmiConfig,{
-          abi: blockChainConfig.lotteryABI,
-          address: blockChainConfig.contractAddress as `0x${string}`,
-          functionName: "purchaseTicket",
-          args: [
-            lottery.lotteryId, // Lottery ID
-            totalTickets.length, // Total number of tickets
-            data?.originalUser?.referredBy?.address || "0x0000000000000000000000000000000000000000", // ReferredBy address or zero address if null
-            stringArrayOfTickets, // Array of tickets
-            0, // Default value for any additional parameter
-          ],
-          gas: 3000000n, // Adjust gas limit as required
-        });
-
-        console.log("Ticket Purchase Successful:", ticketPurchase);
-
-        toast.success("Tickets purchased successfully!", {
-          position: "top-right",
-          theme: "colored",
-        });
-      } catch (error: any) {
-        console.error("Error during approval or ticket purchase:", error);
-
-        toast.error(
-          `Transaction failed: ${error.message || "Unknown error occurred"}`,
-          {
+          toast.loading("Approval in progress...", {
             position: "top-right",
             theme: "colored",
-          }
-        );
-      }
+          });
 
-    }
+          // Wait for the approval transaction to be mined
+          const approveReceipt = await waitForTransaction( wagmiConfig ,{
+            hash: approveTx,
+          });
+
+          if (!approveReceipt.status) {
+            toast.error("approved failed")
+            throw new Error("Approval transaction failed");
+          }
+ 
+
+          toast.success("USDT approved successfully!", {
+            position: "top-right",
+            theme: "colored",
+          });
+
+          // Step 2: Purchase Tickets
+          const purchaseTx = await writeContract(wagmiConfig, {
+            abi: blockChainConfig.lotteryABI,
+            address: blockChainConfig.contractAddress as `0x${string}`,
+            functionName: "purchaseTicket",
+            args: [
+              lottery.lotteryId,
+              totalTickets.length,
+              data?.originalUser?.referredBy?.address || "0x0000000000000000000000000000000000000000",
+              stringArrayOfTickets,
+              0,
+            ],
+          });
+ 
+
+          toast.loading("Ticket purchase in progress...", {
+            position: "top-right",
+            theme: "colored",
+          });
+
+          // Wait for the ticket purchase transaction to be mined
+          const purchaseReceipt = await waitForTransaction(wagmiConfig, {
+            hash: purchaseTx.hash,
+          });
+
+          if (!purchaseReceipt.status) {
+            throw new Error("Ticket purchase transaction failed");
+          }
+ 
+          toast.success("Tickets purchased successfully!", {
+            position: "top-right",
+            theme: "colored",
+          });
+        } catch (error: any) {
+          console.error("Error during approval or ticket purchase:", error);
+
+          toast.error(
+            `Transaction failed: ${error.message || "Unknown error occurred"}`,
+            {
+              position: "top-right",
+              theme: "colored",
+            }
+          );
+        }
+
+      }
 
 
 
