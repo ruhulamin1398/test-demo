@@ -89,33 +89,33 @@ export const TicketSummary = ({
   });
 
 
-  const completePurchase = async (type: number) => {
+  // const completePurchase = async (type: number) => {
 
 
-    try {
-      buyTicket({
-        abi: blockChainConfig.lotteryABI,
-        address: blockChainConfig.contractAddress as `0x${string}`,
-        functionName: "purchaseTicket",
-        args: [
-          lottery.lotteryId,
-          totalTickets.length,
-          data?.originalUser?.referredBy?.address,
-          stringArrayOfTickets,
-          0,
-        ],
-      });
-    } catch (err) {
-      toast.dismiss();
-      toast.error("Purchase failed", {
-        position: "top-left", theme: "colored"
-      });
+  //   try {
+  //     buyTicket({
+  //       abi: blockChainConfig.lotteryABI,
+  //       address: blockChainConfig.contractAddress as `0x${string}`,
+  //       functionName: "purchaseTicket",
+  //       args: [
+  //         lottery.lotteryId,
+  //         totalTickets.length,
+  //         data?.originalUser?.referredBy?.address,
+  //         stringArrayOfTickets,
+  //         0,
+  //       ],
+  //     });
+  //   } catch (err) {
+  //     toast.dismiss();
+  //     toast.error("Purchase failed", {
+  //       position: "top-left", theme: "colored"
+  //     });
 
-    }
+  //   }
 
 
 
-  };
+  // };
 
   const SendToDb = async () => {
     toast.dismiss();
@@ -227,7 +227,7 @@ export const TicketSummary = ({
 
           // Wait for the ticket purchase transaction to be mined
           const purchaseReceipt = await waitForTransaction(wagmiConfig, {
-            hash: purchaseTx.hash,
+            hash: purchaseTx,
           });
 
           if (!purchaseReceipt.status) {
