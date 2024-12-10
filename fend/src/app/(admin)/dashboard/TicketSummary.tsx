@@ -55,20 +55,21 @@ export const TicketSummary = ({
   const { data, isLoading } = useGetSingleUserDetailsQuery({ address: account.address });
 
   const {  data: usdtApprovalHash,  writeContract: approveUSDT,
-    error: usdtApprovalErr,
+    error: usdtApprovalErr, reset: resetApproval
   } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
-    hash: usdtApprovalHash,
+    hash: usdtApprovalHash
   });
 
   const {
     data: ticketPurchaseHash,
-    writeContract: buyTicket,
+    writeContract: buyTicket, reset: resetBuyTicket,
     error: buyTicketsErr,
   } = useWriteContract();
   const { isLoading: isPurchasing, isSuccess: isPurchased } = useWaitForTransactionReceipt({
     hash: ticketPurchaseHash,
   });
+  
 
   totalTickets.forEach((ticket) => {
     const formattedTicket: string = ticket.map((num) => num.toString().padStart(2, "0")).join("");
@@ -158,6 +159,8 @@ export const TicketSummary = ({
   useEffect(() => {
     if ( isPurchased) {
  
+      resetBuyTicket();
+      resetApproval();
 
    
  
@@ -201,6 +204,8 @@ export const TicketSummary = ({
   };
 
   useEffect(() => {
+
+
     if ( isConfirmed) {
       toast.loading(" Please wait ...", {
         position: "top-left",theme: "colored"
