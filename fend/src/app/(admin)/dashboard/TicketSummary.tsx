@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { ChevronLeft, Trash2 } from "lucide-react";
-import { useWriteContract, useAccount, useWaitForTransactionReceipt } from "wagmi";
+import { ChevronLeft, Trash2, User } from "lucide-react";
+import { useWriteContract, useAccount, useWaitForTransactionReceipt, useContractRead } from "wagmi";
 import { solidityPackedKeccak256 } from "ethers";
 import { toast } from "react-toastify";
 
@@ -13,7 +13,7 @@ import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { blockChainConfig } from "@/contracts/const";
 import { useGetSingleUserDetailsQuery } from "@/redux/api/all-api/users";
 import { useCreatePurchaseMutation } from "@/redux/api/all-api/lottery"; 
-
+import { BigNumber } from "ethers";
 type TaxType = {
   lotteryType: string;
   lottery: number[];
@@ -86,12 +86,7 @@ export const TicketSummary = ({
 
 
   const completePurchase = async (type: number) => {
-  toast.warn("complete purchases is called ");
-  
-  // console.log(" stringArrayOfTickets", stringArrayOfTickets);
-  
-  if (isConfirmed) {
-        toast.warn("complete purchases is called ans pass isconfirmed ");
+
 
         try {
           buyTicket({
@@ -113,7 +108,7 @@ export const TicketSummary = ({
           });
  
         }
-      } 
+   
       
    
   };
@@ -207,12 +202,12 @@ toast.warn('testing toast '+ 'ticketPurchaseHash : ' +ticketPurchaseHash )
 
 
 useEffect(()=>{
-toast.warn('testing toast '+ 'approveUSDT : ' +buyTicketsErr )
+toast.warn('testing toast '+ 'buyTicketsErr : ' +buyTicketsErr )
 },[buyTicketsErr])
 
 
 useEffect(()=>{
-toast.warn('testing toast '+ 'usdtApprovalErr : ' +isPurchased )
+toast.warn('testing toast '+ 'isPurchased : ' +isPurchased )
 },[isPurchased]);
 
 
@@ -229,8 +224,10 @@ toast.warn('testing toast '+ 'usdtApprovalErr : ' +isPurchased )
   const purchaseTicket = (type: number) => {
     
  
-    if (account.address && account.isConnected) {
+    if (account?.address && account?.isConnected) {
       const amount = Number(lottery.price) * 1000000 * totalTickets.length;
+
+
       try {
         approveUSDT({
           abi: blockChainConfig.erc20ABI,
