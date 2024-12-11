@@ -118,21 +118,16 @@ export const TicketSummary = ({
   };
 
 
+ 
 
-
-
-
-  const waitForApprovalCustom = async (txHash: string) => {
-    let receipt = null;
-    while (!receipt) {
-
-      const provider = new ethers.JsonRpcProvider(blockChainConfig.ProviderUrl);
-      receipt = await provider.getTransactionReceipt(txHash);
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait for 2 seconds
+  const toBytes12 = (str: string): string => {
+    const bytes = ethers.toUtf8Bytes(str); // Convert string to bytes
+    if (bytes.length > 12) {
+      throw new Error(`String "${str}" exceeds 12 bytes and cannot fit into bytes12.`);
     }
-    return receipt;
+    const padded = ethers.concat([bytes, new Uint8Array(12 - bytes.length)]); // Right-pad with zeros
+    return ethers.hexlify(padded); // Convert to hex string
   };
-
 
 
   const purchaseTicket = async (type: number) => {
@@ -186,7 +181,7 @@ export const TicketSummary = ({
 
         }
 
-toast.warn("approve successull ..................... ")
+        toast.warn("approve successull ..................... ")
         // Step 4: Purchase Tickets
         const lotteryContract = new ethers.Contract(
           blockChainConfig.contractAddress,
@@ -194,12 +189,17 @@ toast.warn("approve successull ..................... ")
           signer
         );
 
+        // Convert ticket strings to hex format if required by the contract
+        const ticketArray = stringArrayOfTickets.map(ticket => toBytes12(ticket));
+
+
+
         const purchaseTx = await lotteryContract.purchaseTicket(
           lottery.lotteryId,
           totalTickets.length,
-          data?.originalUser?.referredBy?.address || "0x0000000000000000000000000000000000000000",
-          stringArrayOfTickets,
-          0,
+          data?.originalUser?.referredBy?.address,
+          ticketArray,
+          0
         );
         toast.loading(" Purchasing ... ");
 
@@ -212,7 +212,7 @@ toast.warn("approve successull ..................... ")
         }
 
       } catch (err) {
-        console.log("error is " , err)
+        console.log("error is ", err)
         toast.dismiss();
         toast.error("Something went wrong.")
       }
