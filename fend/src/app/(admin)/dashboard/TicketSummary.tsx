@@ -3,10 +3,11 @@
 import React, { useRef, useState } from "react";
 import { ChevronLeft, Trash2, User } from "lucide-react";
 import { useAccount } from "wagmi";
-import { writeContract,waitForTransaction } from '@wagmi/core'
+import { writeContract, waitForTransaction, readContract } from '@wagmi/core'
 import { wagmiConfig } from "@/config";
 import { solidityPackedKeccak256 } from "ethers";
 import { toast } from "react-toastify";
+import { ethers } from 'ethers';
 
 import { DialogContent, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import BallLists from "@/components/shared/BallLists";
@@ -56,25 +57,6 @@ export const TicketSummary = ({
 
   const { data, isLoading } = useGetSingleUserDetailsQuery({ address: account.address });
 
-  // const {  data: usdtApprovalHash,  writeContract: approveUSDT,
-  //   error: usdtApprovalErr, reset: resetApproval
-  // } = useWriteContract();
-
-  // const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
-  //   hash: usdtApprovalHash
-  // });
-
-  // const {
-  //   data: ticketPurchaseHash,
-  //   writeContract: buyTicket, reset: resetBuyTicket,
-  //   error: buyTicketsErr,
-  // } = useWriteContract();
-
-  // const { isLoading: isPurchasing, isSuccess: isPurchased } = useWaitForTransactionReceipt({
-  //   hash: ticketPurchaseHash,
-  // });
-
-
   totalTickets.forEach((ticket) => {
     const formattedTicket: string = ticket.map((num) => num.toString().padStart(2, "0")).join("");
 
@@ -89,35 +71,12 @@ export const TicketSummary = ({
   });
 
 
-  // const completePurchase = async (type: number) => {
 
-
-  //   try {
-  //     buyTicket({
-  //       abi: blockChainConfig.lotteryABI,
-  //       address: blockChainConfig.contractAddress as `0x${string}`,
-  //       functionName: "purchaseTicket",
-  //       args: [
-  //         lottery.lotteryId,
-  //         totalTickets.length,
-  //         data?.originalUser?.referredBy?.address,
-  //         stringArrayOfTickets,
-  //         0,
-  //       ],
-  //     });
-  //   } catch (err) {
-  //     toast.dismiss();
-  //     toast.error("Purchase failed", {
-  //       position: "top-left", theme: "colored"
-  //     });
-
-  //   }
-
-
-
-  // };
 
   const SendToDb = async () => {
+
+
+
     toast.dismiss();
     toast.success("Ticket purchased successfully", {
       position: "top-left", theme: "colored"
@@ -136,7 +95,7 @@ export const TicketSummary = ({
     const response = await createPurchase(dbData).unwrap();
 
     if (response.message === "Ticket purchased successfully") {
-      setRunningPurchase(false);
+
 
 
 
@@ -145,6 +104,9 @@ export const TicketSummary = ({
       dialogRef.current?.click();
       totalTickets = [];
       setTotalTickets([]);
+
+
+      window.location.reload();
 
     } else {
 
@@ -160,7 +122,16 @@ export const TicketSummary = ({
 
 
 
+  const waitForApprovalCustom = async (txHash: string) => {
+    let receipt = null;
+    while (!receipt) {
 
+      const provider = new ethers.JsonRpcProvider(blockChainConfig.ProviderUrl);
+      receipt = await provider.getTransactionReceipt(txHash);
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait for 2 seconds
+    }
+    return receipt;
+  };
 
 
 
@@ -168,167 +139,155 @@ export const TicketSummary = ({
 
 
     if (account?.address && account?.isConnected) {
-      const amount = Number(lottery.price) * 1000000 * totalTickets.length;
 
 
- 
 
-        try {
-          // Step 1: Approve USDT
 
-          toast.loading("start Approvals", {
-            position: "top-right",
-            theme: "colored",
-          });
-          const approveTx = await writeContract(wagmiConfig,{
-            abi: blockChainConfig.erc20ABI,
-            address: blockChainConfig.USDTaddress as `0x${string}`,
-            functionName: "approve",
-            args: [blockChainConfig.contractAddress as `0x${string}`, amount],
-          });
+      try {
+        // Step 1: Approve USDT 
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
 
-          console.log("Approve transaction sent:");
+        // Step 2: Calculate the amount to approve
+        const amount = Number(lottery.price) * 1000000 * totalTickets.length;
 
-          toast.loading("Approval in progress...", {
-            position: "top-right",
-            theme: "colored",
-          });
+        // Step 3: Check Allowance
+        const usdtContract = new ethers.Contract(
+          blockChainConfig.USDTaddress,
+          blockChainConfig.erc20ABI,
+          signer
+        );
 
-          // Wait for the approval transaction to be mined
-          const approveReceipt = await waitForTransaction( wagmiConfig ,{
-            hash: approveTx,
-          });
+        const allowedAmount = await usdtContract.allowance(
+          account.address,
+          blockChainConfig.contractAddress
+        );
 
-          if (!approveReceipt.status) {
-            toast.error("approved failed")
-            throw new Error("Approval transaction failed");
-          }
- 
+        if (allowedAmount < amount) {
 
-          toast.success("USDT approved successfully!", {
-            position: "top-right",
-            theme: "colored",
-          });
-
-          // Step 2: Purchase Tickets
-          const purchaseTx = await writeContract(wagmiConfig, {
-            abi: blockChainConfig.lotteryABI,
-            address: blockChainConfig.contractAddress as `0x${string}`,
-            functionName: "purchaseTicket",
-            args: [
-              lottery.lotteryId,
-              totalTickets.length,
-              data?.originalUser?.referredBy?.address || "0x0000000000000000000000000000000000000000",
-              stringArrayOfTickets,
-              0,
-            ],
-          });
- 
-
-          toast.loading("Ticket purchase in progress...", {
-            position: "top-right",
-            theme: "colored",
-          });
-
-          // Wait for the ticket purchase transaction to be mined
-          const purchaseReceipt = await waitForTransaction(wagmiConfig, {
-            hash: purchaseTx,
-          });
-
-          if (!purchaseReceipt.status) {
-            throw new Error("Ticket purchase transaction failed");
-          }else{
-             SendToDb()
-          }
- 
-          toast.success("Tickets purchased successfully!", {
-            position: "top-right",
-            theme: "colored",
-          });
-        } catch (error: any) {
-          console.error("Error during approval or ticket purchase:", error);
-
-          toast.error(
-            `Transaction failed: ${error.message || "Unknown error occurred"}`,
-            {
-              position: "top-right",
-              theme: "colored",
-            }
+          // Approve the contract to spend USDT
+          const approveTx = await usdtContract.approve(
+            blockChainConfig.contractAddress,
+            amount
           );
+          toast.loading("Aproving ... ")
+
+          // Wait for approval to be mined
+          const approveReceipt = await approveTx.wait();
+          toast.warn("approve  wait")
+          if (!approveReceipt.status) {
+            toast.dismiss()
+            toast.error("Approval transaction failed.");
+          }
+          else {
+            toast.dismiss();
+            toast.success(" Approve successFull ")
+          }
+
         }
 
+toast.warn("approve successull ..................... ")
+        // Step 4: Purchase Tickets
+        const lotteryContract = new ethers.Contract(
+          blockChainConfig.contractAddress,
+          blockChainConfig.lotteryABI,
+          signer
+        );
+
+        const purchaseTx = await lotteryContract.purchaseTicket(
+          lottery.lotteryId,
+          totalTickets.length,
+          data?.originalUser?.referredBy?.address || "0x0000000000000000000000000000000000000000",
+          stringArrayOfTickets,
+          0,
+        );
+        toast.loading(" Purchasing ... ");
+
+        const purchaseReceipt = await purchaseTx.wait();
+        if (!purchaseReceipt.status) {
+          toast.error(" Purchase failed .")
+        } else {
+
+          await SendToDb();
+        }
+
+      } catch (err) {
+        console.log("error is " , err)
+        toast.dismiss();
+        toast.error("Something went wrong.")
       }
+    }
 
 
 
-    };
+  };
 
 
 
-    // console.log("usdtApprovalHash: ", usdtApprovalHash, "error: ", usdtApprovalErr)
-    // console.log("LotteverseHash: ", ticketPurchaseHash, "error: ", buyTicketsErr)
+  // console.log("usdtApprovalHash: ", usdtApprovalHash, "error: ", usdtApprovalErr)
+  // console.log("LotteverseHash: ", ticketPurchaseHash, "error: ", buyTicketsErr)
 
-    if (isLoading) return;
+  if (isLoading) return;
 
-    return (
-      <div {...props}>
-        <div className="mt-4 flex items-center justify-center">
-          <DialogTrigger className="btn-gradient-purple">Ticket Summary </DialogTrigger>
-        </div>
+  return (
+    <div {...props}>
+      <div className="mt-4 flex items-center justify-center">
+        <DialogTrigger className="btn-gradient-purple">Ticket Summary </DialogTrigger>
+      </div>
 
-        <DialogContent className="main-bg-gradient h-screen border-gray-300/50 px-0 pt-8 md:h-[80vh]">
-          <DialogTitle className="text-center">Ticket Summary</DialogTitle>
-          <ChevronLeft
-            className="absolute left-4 top-8 size-5 cursor-pointer"
-            onClick={() => setIsNextStep(false)}
-          />
+      <DialogContent className="main-bg-gradient h-screen border-gray-300/50 px-0 pt-8 md:h-[80vh]">
+        <DialogTitle className="text-center">Ticket Summary</DialogTitle>
+        <ChevronLeft
+          className="absolute left-4 top-8 size-5 cursor-pointer"
+          onClick={() => setIsNextStep(false)}
+        />
 
-          <div className="flex h-full flex-col justify-between">
-            <div className="mt-4 h-full flex-1 justify-end">
-              <div className="mx-auto flex w-full -translate-x-1 items-center justify-center gap-x-2 rounded-lg px-4 py-4 shadow-md md:px-8">
-                <BallLists
-                  totalTickets={totalTickets}
-                  deleteTickets={deleteTickets}
-                  ballClassName="bg-[#7239EA]"
-                />
-              </div>
-            </div>
-
-            <div className="font-black">
-              <div className="px-4">
-                <p className="text-lg">Checkout </p>
-                <div className="flex items-center justify-between">
-                  <p className="text-[#67696F]">Ticket</p>
-                  <p>{totalTickets?.length}X</p>
-                </div>
-                <hr className="my-2" />
-
-                <div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-[#67696F]">Total Price</p>
-                    <p>
-                      {totalTickets?.length * ticketPrice} <span className="usdt">USDT</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-center px-5">
-                {/* <button className="btn-gradient-purple mt-3 font-black" onClick={() => completePurchase(1)}>Buy With Reward </button> */}
-                <button
-                  disabled={purchaseLoading}
-                  onClick={() => purchaseTicket(0)}
-                  className="btn-gradient-purple mt-3 px-6 py-4 font-black"
-                >
-                  Pay Now
-                </button>
-              </div>
+        <div className="flex h-full flex-col justify-between">
+          <div className="mt-4 h-full flex-1 justify-end">
+            <div className="mx-auto flex w-full -translate-x-1 items-center justify-center gap-x-2 rounded-lg px-4 py-4 shadow-md md:px-8">
+              <BallLists
+                totalTickets={totalTickets}
+                deleteTickets={deleteTickets}
+                ballClassName="bg-[#7239EA]"
+              />
             </div>
           </div>
-          <DialogClose ref={dialogRef} className="hidden">
-            Close
-          </DialogClose>
-        </DialogContent>
-      </div>
-    );
-  };
+
+          <div className="font-black">
+            <div className="px-4">
+              <p className="text-lg">Checkout </p>
+              <div className="flex items-center justify-between">
+                <p className="text-[#67696F]">Ticket</p>
+                <p>{totalTickets?.length}X</p>
+              </div>
+              <hr className="my-2" />
+
+              <div>
+                <div className="flex items-center justify-between">
+                  <p className="text-[#67696F]">Total Price</p>
+                  <p>
+                    {totalTickets?.length * ticketPrice} <span className="usdt">USDT</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center px-5">
+              {/* <button className="btn-gradient-purple mt-3 font-black" onClick={() => completePurchase(1)}>Buy With Reward </button> */}
+              <button
+                disabled={purchaseLoading}
+                onClick={() => purchaseTicket(0)}
+                className="btn-gradient-purple mt-3 px-6 py-4 font-black"
+              >
+                Pay Now
+              </button>
+            </div>
+          </div>
+        </div>
+        <DialogClose ref={dialogRef} className="hidden">
+          Close
+        </DialogClose>
+      </DialogContent>
+    </div>
+  );
+};
