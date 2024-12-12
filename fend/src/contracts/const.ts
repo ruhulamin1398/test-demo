@@ -4,6 +4,7 @@ import ERC20ABI from "./ERC20ABI.json"
 
 import { polygon, polygonAmoy  } from "wagmi/chains";
 
+import { JsonRpcProvider } from "ethers";
 
 
 
@@ -18,6 +19,11 @@ const  devAmoyConfig = {
    lotteryABI : lotteryABI.abi,
    erc20ABI: ERC20ABI,
    decimals:1e6,
+   provider: new JsonRpcProvider(
+      'https://polygon-amoy.infura.io/v3/276f8cf7af2341738b0fd12245ffd948',
+      {  chainId: 80002, // Chain ID for Polygon Amoy testnet
+        name: "polygon-amoy"}
+     ) 
 } 
 const  polygonConfig = {
    chainName : polygon,
@@ -27,7 +33,14 @@ const  polygonConfig = {
    ProviderUrl : "https://rpc-mainnet.matic.quiknode.pro",
    lotteryABI : lotteryABI.abi,
    erc20ABI: ERC20ABI,
-   decimals:1e6,
+   decimals:1e6,      
+   provider: new JsonRpcProvider(
+      'https://polygon-mainnet.infura.io/v3/276f8cf7af2341738b0fd12245ffd948',
+      {
+        chainId: 137, 
+        name: "polygon-mainnet"
+      }
+    ),
 }
 
 

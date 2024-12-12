@@ -42,7 +42,7 @@ const connectors = connectorsForWallets(
 export const wagmiConfig = createConfig({
   connectors: connectors,
   chains: [blockChainConfig.chainName ],
-  ssr: true,
+  ssr: false,
   client({ chain }) {
     return createClient({ chain, transport: http() });
   },

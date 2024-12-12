@@ -3,8 +3,8 @@
 import React, { useRef, useState } from "react";
 import { ChevronLeft, Trash2, User } from "lucide-react";
 import { useAccount } from "wagmi";
-import { writeContract, waitForTransaction, readContract } from '@wagmi/core'
-import { wagmiConfig } from "@/config";
+import { writeContract, waitForTransaction, getConnections, readContract } from '@wagmi/core'
+import { wagmiConfig, wagmiConfig2 } from "@/config";
 import { solidityPackedKeccak256 } from "ethers";
 import { toast } from "react-toastify";
 import { ethers } from 'ethers';
@@ -17,6 +17,10 @@ import { blockChainConfig } from "@/contracts/const";
 import { useGetSingleUserDetailsQuery } from "@/redux/api/all-api/users";
 import { useCreatePurchaseMutation } from "@/redux/api/all-api/lottery";
 import { BigNumber } from "ethers";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import { writeContracts } from "viem/experimental";
+
+import { polygon } from "wagmi/chains";
 type TaxType = {
   lotteryType: string;
   lottery: number[];
@@ -106,19 +110,21 @@ export const TicketSummary = ({
       setTotalTickets([]);
 
 
-      window.location.reload();
-
+      // window.location.reload();
+      toast.dismiss();
+      toast.success("Ticket purchased successfully", {
+        position: "top-left", theme: "colored"
+      });
     } else {
 
-      // toast.dismiss();
-      // toast.success("Ticket purchased successfully", {
-      //   position: "top-left",theme: "colored"
-      // });
+      toast.dismiss();
+      toast.success("Ticket purchased successfully", {
+        position: "top-left", theme: "colored"
+      });
     }
   };
 
 
- 
 
   const toBytes12 = (str: string): string => {
     const bytes = ethers.toUtf8Bytes(str); // Convert string to bytes
@@ -129,103 +135,126 @@ export const TicketSummary = ({
     return ethers.hexlify(padded); // Convert to hex string
   };
 
+  const waitForApproval = async (txHash: string) => {
+    let receipt = null;
+    while (!receipt) {
+      receipt = await blockChainConfig.provider.getTransactionReceipt(txHash);
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait for 2 seconds
+    }
+    return receipt;
+  };
+
+
 
   const purchaseTicket = async (type: number) => {
 
 
     if (account?.address && account?.isConnected) {
+      const amount = Number(lottery.price) * 1000000 * totalTickets.length;
 
 
 
 
       try {
-        // Step 1: Approve USDT 
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner();
+        // Step 1: Approve USDT
 
-        // Step 2: Calculate the amount to approve
-        const amount = Number(lottery.price) * 1000000 * totalTickets.length;
 
-        // Step 3: Check Allowance
+        const provider = new ethers.JsonRpcProvider(blockChainConfig.ProviderUrl);
+
         const usdtContract = new ethers.Contract(
           blockChainConfig.USDTaddress,
           blockChainConfig.erc20ABI,
-          signer
+          provider
         );
 
-        const allowedAmount = await usdtContract.allowance(
-          account.address,
-          blockChainConfig.contractAddress
-        );
+        const allowance = await usdtContract.allowance(account.address, blockChainConfig.contractAddress);
+        console.log("Allowance:", allowance.toString()); // Log allowance
 
-        if (allowedAmount < amount) {
 
-          // Approve the contract to spend USDT
-          const approveTx = await usdtContract.approve(
-            blockChainConfig.contractAddress,
-            amount
-          );
-          toast.loading("Aproving ... ")
+        if (allowance<amount) {
+          console.log("Allowance is less than required amount. Proceeding with approval...");
+          const approveTx = await writeContract(wagmiConfig, {
+            abi: blockChainConfig.erc20ABI,
+            address: blockChainConfig.USDTaddress as `0x${string}`,
+            functionName: "approve",
+            args: [blockChainConfig.contractAddress as `0x${string}`, amount]
+          });
 
-          // Wait for approval to be mined
-          const approveReceipt = await approveTx.wait();
-          toast.warn("approve  wait")
-          if (!approveReceipt.status) {
-            toast.dismiss()
-            toast.error("Approval transaction failed.");
-          }
-          else {
+          console.log("Approval transaction hash:", approveTx); 
+          toast.loading("Approval in progress...", {
+            position: "top-right",
+            theme: "colored",
+          });
+
+          const approveReceipt = await waitForApproval(approveTx);
+          console.log("Approval receipt:", approveReceipt);
+
+          if (!approveReceipt || !approveReceipt.status) {
             toast.dismiss();
-            toast.success(" Approve successFull ")
+            toast.error("Approval transaction failed or not confirmed.");
+            return;
+          } else {
+            toast.dismiss();
+            toast.success("Approval successful.");
           }
-
         }
+        ///////////////////////////////////////
 
-        toast.warn("approve successull ..................... ")
-        // Step 4: Purchase Tickets
-        const lotteryContract = new ethers.Contract(
-          blockChainConfig.contractAddress,
-          blockChainConfig.lotteryABI,
-          signer
-        );
+        // Step 2: Purchase Tickets
+        const purchaseTx = await writeContract(wagmiConfig, {
+          abi: blockChainConfig.lotteryABI,
+          address: blockChainConfig.contractAddress as `0x${string}`,
+          functionName: "purchaseTicket",
+          args: [
+            lottery.lotteryId,
+            totalTickets.length,
+            data?.originalUser?.referredBy?.address || "0x0000000000000000000000000000000000000000",
+            stringArrayOfTickets,
+            0,
+          ]
+        });
 
-        // Convert ticket strings to hex format if required by the contract
-        const ticketArray = stringArrayOfTickets.map(ticket => toBytes12(ticket));
+
+        toast.loading("Ticket purchase in progress...", {
+          position: "top-right",
+          theme: "colored",
+        });
+
+        // Wait for the ticket purchase transaction to be mined
+
+        const purchaseReceipt = await waitForApproval(purchaseTx);
 
 
 
-        const purchaseTx = await lotteryContract.purchaseTicket(
-          lottery.lotteryId,
-          totalTickets.length,
-          data?.originalUser?.referredBy?.address,
-          ticketArray,
-          0
-        );
-        toast.loading(" Purchasing ... ");
 
-        const purchaseReceipt = await purchaseTx.wait();
-        if (!purchaseReceipt.status) {
-          toast.error(" Purchase failed .")
-        } else {
-
+        if (!purchaseReceipt || !purchaseReceipt.status) {
+          toast.dismiss();
+          toast.error("Purchase failed. ");
+          return;
+        }
+        else {
+          toast.dismiss();
           await SendToDb();
         }
 
-      } catch (err) {
-        console.log("error is ", err)
-        toast.dismiss();
-        toast.error("Something went wrong.")
+      } catch (error: any) {
+        console.error("Error during approval or ticket purchase:", error);
+
+        toast.error(
+          `Transaction failed: ${error.message || "Unknown error occurred"}`,
+          {
+            position: "top-right",
+            theme: "colored",
+          }
+        );
       }
+
     }
 
 
+  }
 
-  };
-
-
-
-  // console.log("usdtApprovalHash: ", usdtApprovalHash, "error: ", usdtApprovalErr)
-  // console.log("LotteverseHash: ", ticketPurchaseHash, "error: ", buyTicketsErr)
+   
 
   if (isLoading) return;
 
