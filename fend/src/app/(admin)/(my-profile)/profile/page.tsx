@@ -244,7 +244,7 @@ const Profile = () => {
           ARE YOU INTERESTED PREMIUM MEMBER ! GET $200 USDT AND ENJOY 15% GLOBAL BONUS  
           </div>
           
-        {(user?.premium == 0 && blockChainConfig.owner != address) && (<div className="w-64 text-right"> <button className="btn-gradient-purple lg:text-base px-4  " onClick={() => becomePremiumAccount()}>Add Premium</button> </div>)}
+        {(user?.premium == 0 && blockChainConfig.owner != address) && (<div className="w-full md:w-64 text-center md:text-right"> <button className="btn-gradient-purple lg:text-base px-4  " onClick={() => becomePremiumAccount()}>Add Premium</button> </div>)}
         </div>)}
 
 

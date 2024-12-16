@@ -112,7 +112,7 @@ const Dashboard = () => {
     <div>
       <h1 className="mb-3 mt-5 text-xl font-black">Dashboard</h1>
 
-      <div className="grid w-full grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2">
+      <div className="grid w-full grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2">
          
      {(latestEasy>-1) && <JackPotCards
             lottery={lotteries[latestEasy]}
@@ -133,7 +133,7 @@ const Dashboard = () => {
       </div>
 
       {/* <h4 className="mt-5">Results Board </h4> */}
-      <div className="grid w-full grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2 mt-12">
+      <div className="grid w-full grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2 mt-4  md:mt-12">
         <ResultsCards className="main-gradient" round={boardData?.roundForEasy} data={boardData?.lotteryType0} />
 
 
@@ -142,7 +142,7 @@ const Dashboard = () => {
 
       {/* <h4 className="mt-5">Earning Board</h4> */}
       <div
-        className={`grid w-full grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2 mt-12 ${SrbijaFont.className}`}
+        className={`grid w-full grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2 mt-4 md:mt-12 ${SrbijaFont.className}`}
       >
 
         <ShowEarningCard className="main-gradient"

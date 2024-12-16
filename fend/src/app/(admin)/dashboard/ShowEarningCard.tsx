@@ -41,7 +41,7 @@ export const ShowEarningCard = ({
     });
   }
   return (
-    <div {...props} className={cn("rounded-2xl px-4 py-4", className)}>
+    <div {...props} className={cn("rounded-2xl px-4 py-4 min-h-[400px]", className)}>
       <div className="flex items-center justify-between px-0 py-3">
         <h4 className="w-full text-center text-lg lg:text-2xl">Total Earning Summary</h4>
         <p></p>

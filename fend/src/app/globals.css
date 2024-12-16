@@ -67,10 +67,10 @@
 
 @layer components {
   .home-header {
-    @apply box-border text-center text-2xl uppercase leading-none text-[#E3E8FC] sm:text-3xl md:text-4xl md:text-[5vw] lg:max-w-[1080px] lg:text-[4.6vw] xl:max-w-full 2xl:py-10 2xl:text-6xl;
+    @apply box-border text-center text-2xl uppercase leading-none text-[#E3E8FC] sm:text-3xl md:text-4xl md:text-[5vw] lg:max-w-[1080px] lg:text-[4.6vw] xl:max-w-full 2xl:py-4 2xl:text-6xl;
   }
   .home-subheader {
-    @apply mt-3 box-border text-center text-base leading-6 text-[#E3E8FC] lg:mb-24 lg:text-[1.3vw] 2xl:leading-9;
+    @apply mt-3 box-border text-center text-base leading-6 text-[#E3E8FC] lg:mb-10  mt-4 lg:text-[1.3vw] 2xl:leading-9;
   }
   .home-accordion-item {
     @apply relative box-border min-h-fit w-full cursor-pointer overflow-hidden rounded-[10px] border border-white/20 bg-[linear-gradient(0deg,#FFFFFF1A,#FFFFFF1A),radial-gradient(158.48%_294.91%_at_50%_320.96%,#06D6A033_0px,#06D6A000_100%)] px-[clamp(22px,_2vw,_55px)] py-[clamp(18px,_2vw,_28px)] duration-500;

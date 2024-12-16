@@ -3,7 +3,7 @@
 import React, { useRef, useState } from "react";
 import { ChevronLeft, Trash2, User } from "lucide-react";
 import { useAccount } from "wagmi";
-import { writeContract,waitForTransaction } from '@wagmi/core'
+import { writeContract, waitForTransaction } from '@wagmi/core'
 import { wagmiConfig } from "@/config";
 import { solidityPackedKeccak256 } from "ethers";
 import { toast } from "react-toastify";
@@ -171,161 +171,161 @@ export const TicketSummary = ({
       const amount = Number(lottery.price) * 1000000 * totalTickets.length;
 
 
- 
 
-        try {
-          // Step 1: Approve USDT
 
-          const approveTx = await writeContract(wagmiConfig,{
-            abi: blockChainConfig.erc20ABI,
-            address: blockChainConfig.USDTaddress as `0x${string}`,
-            functionName: "approve",
-            args: [blockChainConfig.contractAddress as `0x${string}`, amount],
-          });
-          
-         
-          console.log("Approve transaction sent:");
+      try {
+        // Step 1: Approve USDT
 
-          toast.loading("Approval in progress...", {
-            position: "top-right",
-            theme: "colored",
-          });
+        const approveTx = await writeContract(wagmiConfig, {
+          abi: blockChainConfig.erc20ABI,
+          address: blockChainConfig.USDTaddress as `0x${string}`,
+          functionName: "approve",
+          args: [blockChainConfig.contractAddress as `0x${string}`, amount],
+        });
 
-          // Wait for the approval transaction to be mined
-          const approveReceipt = await waitForTransaction( wagmiConfig ,{
-            hash: approveTx,
-          });
 
-          if (!approveReceipt.status) {
-            toast.error("approved failed")
-            throw new Error("Approval transaction failed");
-          }
- console.log("USDT approved successfully!")
+        console.log("Approve transaction sent:");
 
-          // toast.success("USDT approved successfully!", {
-          //   position: "top-right",
-          //   theme: "colored",
-          // });
+        toast.loading("Approval in progress...", {
+          position: "top-right",
+          theme: "colored",
+        });
 
-          // Step 2: Purchase Tickets
-          const purchaseTx = await writeContract(wagmiConfig, {
-            abi: blockChainConfig.lotteryABI,
-            address: blockChainConfig.contractAddress as `0x${string}`,
-            functionName: "purchaseTicket",
-            args: [
-              lottery.lotteryId,
-              totalTickets.length,
-              data?.originalUser?.referredBy?.address || "0x656C98c03BB2b6D57D4b633aEA3181E5C25E1de7",
-              stringArrayOfTickets,
-              0,
-            ],
-          });
- 
-toast.dismiss();
-          toast.loading("Ticket purchase in progress...", {
-            position: "top-right",
-            theme: "colored",
-          });
+        // Wait for the approval transaction to be mined
+        const approveReceipt = await waitForTransaction(wagmiConfig, {
+          hash: approveTx,
+        });
 
-          // Wait for the ticket purchase transaction to be mined
-          const purchaseReceipt = await waitForTransaction(wagmiConfig, {
-            hash: purchaseTx,
-          });
-
-          if (!purchaseReceipt.status) {
-            throw new Error("Ticket purchase transaction failed");
-          }else{
-            //  SendToDb()
-          }
-//  toast.dismiss();
-//           toast.success("Tickets purchased successfully!", {
-//             position: "top-right",
-//             theme: "colored",
-//           });
-        } catch (error: any) {
-          console.error("Error during approval or ticket purchase:", error);
-
-          toast.error(
-            `Transaction failed: ${error.message || "Unknown error occurred"}`,
-            {
-              position: "top-right",
-              theme: "colored",
-            }
-          );
+        if (!approveReceipt.status) {
+          toast.error("approved failed")
+          throw new Error("Approval transaction failed");
         }
+        console.log("USDT approved successfully!")
 
+        // toast.success("USDT approved successfully!", {
+        //   position: "top-right",
+        //   theme: "colored",
+        // });
+
+        // Step 2: Purchase Tickets
+        const purchaseTx = await writeContract(wagmiConfig, {
+          abi: blockChainConfig.lotteryABI,
+          address: blockChainConfig.contractAddress as `0x${string}`,
+          functionName: "purchaseTicket",
+          args: [
+            lottery.lotteryId,
+            totalTickets.length,
+            data?.originalUser?.referredBy?.address || "0x656C98c03BB2b6D57D4b633aEA3181E5C25E1de7",
+            stringArrayOfTickets,
+            0,
+          ],
+        });
+
+        toast.dismiss();
+        toast.loading("Ticket purchase in progress...", {
+          position: "top-right",
+          theme: "colored",
+        });
+
+        // Wait for the ticket purchase transaction to be mined
+        const purchaseReceipt = await waitForTransaction(wagmiConfig, {
+          hash: purchaseTx,
+        });
+
+        if (!purchaseReceipt.status) {
+          throw new Error("Ticket purchase transaction failed");
+        } else {
+           SendToDb()
+        }
+        //  toast.dismiss();
+        //           toast.success("Tickets purchased successfully!", {
+        //             position: "top-right",
+        //             theme: "colored",
+        //           });
+      } catch (error: any) {
+        console.error("Error during approval or ticket purchase:", error);
+
+        toast.error(
+          `Transaction failed: ${error.message || "Unknown error occurred"}`,
+          {
+            position: "top-right",
+            theme: "colored",
+          }
+        );
       }
 
-
-
-    };
+    }
 
 
 
-    // console.log("usdtApprovalHash: ", usdtApprovalHash, "error: ", usdtApprovalErr)
-    // console.log("LotteverseHash: ", ticketPurchaseHash, "error: ", buyTicketsErr)
+  };
 
-    if (isLoading) return;
 
-    return (
-      <div {...props}>
-        <div className="mt-4 flex items-center justify-center">
-          <DialogTrigger className="btn-gradient-purple">Ticket Summary </DialogTrigger>
-        </div>
 
-        <DialogContent className="main-bg-gradient h-screen border-gray-300/50 px-0 pt-8 md:h-[80vh]">
-          <DialogTitle className="text-center">Ticket Summary</DialogTitle>
-          <ChevronLeft
-            className="absolute left-4 top-8 size-5 cursor-pointer"
-            onClick={() => setIsNextStep(false)}
-          />
+  // console.log("usdtApprovalHash: ", usdtApprovalHash, "error: ", usdtApprovalErr)
+  // console.log("LotteverseHash: ", ticketPurchaseHash, "error: ", buyTicketsErr)
 
-          <div className="flex h-full flex-col justify-between">
-            <div className="mt-4 h-full flex-1 justify-end">
-              <div className="mx-auto flex w-full -translate-x-1 items-center justify-center gap-x-2 rounded-lg px-4 py-4 shadow-md md:px-8">
-                <BallLists
-                  totalTickets={totalTickets}
-                  deleteTickets={deleteTickets}
-                  ballClassName="bg-[#7239EA]"
-                />
-              </div>
-            </div>
+  if (isLoading) return;
 
-            <div className="font-black">
-              <div className="px-4">
-                <p className="text-lg">Checkout </p>
-                <div className="flex items-center justify-between">
-                  <p className="text-[#67696F]">Ticket</p>
-                  <p>{totalTickets?.length}X</p>
-                </div>
-                <hr className="my-2" />
+  return (
+    <div {...props}>
+      <div className="mt-4 flex items-center justify-center">
+        <DialogTrigger className="btn-gradient-purple">Ticket Summary </DialogTrigger>
+      </div>
 
-                <div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-[#67696F]">Total Price</p>
-                    <p>
-                      {totalTickets?.length * ticketPrice} <span className="usdt">USDT</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
+      <DialogContent className="main-bg-gradient h-screen border-gray-300/50 px-0 pt-8 md:h-[80vh]">
+        <DialogTitle className="text-center">Ticket Summary</DialogTitle>
+        <ChevronLeft
+          className="absolute left-4 top-8 size-5 cursor-pointer"
+          onClick={() => setIsNextStep(false)}
+        />
 
-              <div className="flex items-center justify-center px-5">
-                {/* <button className="btn-gradient-purple mt-3 font-black" onClick={() => completePurchase(1)}>Buy With Reward </button> */}
-                <button
-                  disabled={purchaseLoading}
-                  onClick={() => purchaseTicket(0)}
-                  className="btn-gradient-purple mt-3 px-6 py-4 font-black"
-                >
-                  Pay Now
-                </button>
-              </div>
+        <div className="flex h-full flex-col justify-between">
+          <div className="mt-4 h-full flex-1 justify-end">
+            <div className="mx-auto flex w-full -translate-x-1 items-center justify-center gap-x-2 rounded-lg px-4 py-4 shadow-md md:px-8">
+              <BallLists
+                totalTickets={totalTickets}
+                deleteTickets={deleteTickets}
+                ballClassName="bg-[#7239EA]"
+              />
             </div>
           </div>
-          <DialogClose ref={dialogRef} className="hidden">
-            Close
-          </DialogClose>
-        </DialogContent>
-      </div>
-    );
-  };
+
+          <div className="font-black">
+            <div className="px-4">
+              <p className="text-lg">Checkout </p>
+              <div className="flex items-center justify-between">
+                <p className="text-[#67696F]">Ticket</p>
+                <p>{totalTickets?.length}X</p>
+              </div>
+              <hr className="my-2" />
+
+              <div>
+                <div className="flex items-center justify-between">
+                  <p className="text-[#67696F]">Total Price</p>
+                  <p>
+                    {totalTickets?.length * ticketPrice} <span className="usdt">USDT</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center px-5">
+              {/* <button className="btn-gradient-purple mt-3 font-black" onClick={() => completePurchase(1)}>Buy With Reward </button> */}
+              <button
+                disabled={purchaseLoading}
+                onClick={() => purchaseTicket(0)}
+                className="btn-gradient-purple mt-3 px-6 py-4 font-black"
+              >
+                Pay Now
+              </button>
+            </div>
+          </div>
+        </div>
+        <DialogClose ref={dialogRef} className="hidden">
+          Close
+        </DialogClose>
+      </DialogContent>
+    </div>
+  );
+};

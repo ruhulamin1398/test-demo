@@ -8,9 +8,9 @@ import Image from "next/image";
 import { cn } from "@/utils";
 
 const stastics = [
-  { name: "Rounds Played", icon: repostIcon, value: "394" },
-  { name: "Total Tickets Purchased", icon: ticketIcon, value: "661,393" },
-  { name: "All Participant", icon: userIcon, value: "7,247" },
+  { name: "Winners ", icon: repostIcon, value: "500" },
+  { name: "Total Tickets Purchased", icon: ticketIcon, value: "10,000" },
+  { name: "All Participant", icon: userIcon, value: "2500" },
 ];
 
 export const ShowHomeStates = ({ ...props }: Props) => {

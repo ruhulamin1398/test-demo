@@ -66,7 +66,7 @@ export const JackPotCards = ({ className, lottery, loading, ...props }: Props) =
                     {`${idx + 1}${ordinal(idx + 1)} Prize ${prize.person} Person${prize.person > 1 ? "s" : ""}`}
                   </span>
                 </p>
-                <p className="space-x-1 text-xl  font-light leading-4 text-green-400">
+                <p className="space-x-1   font-light leading-4 text-green-400">
                   <span>{prize.amount}</span>
                   <span className="usdt">USDT</span>
                 </p>
