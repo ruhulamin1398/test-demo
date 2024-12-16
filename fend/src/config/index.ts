@@ -1,4 +1,3 @@
-"use client";
 
 import "@rainbow-me/rainbowkit/styles.css";
 import { createConfig } from "wagmi";
@@ -7,19 +6,6 @@ import { createClient, http } from "viem";
 import {
   metaMaskWallet,
   trustWallet,
-  binanceWallet,
-  walletConnectWallet,
-  tokenPocketWallet,
-  safeWallet,
-  bitgetWallet,
-  uniswapWallet,
-  okxWallet,
-  imTokenWallet,
-  compassWallet,
-  foxWallet,
-  gateWallet,
-  coinbaseWallet,
-  omniWallet,
   rabbyWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 
@@ -30,24 +16,33 @@ const connectors = connectorsForWallets(
   [
     {
       groupName: "Recomended",
-      wallets: [metaMaskWallet,coinbaseWallet, rabbyWallet, trustWallet, binanceWallet,tokenPocketWallet, safeWallet, bitgetWallet,uniswapWallet,okxWallet,omniWallet,imTokenWallet,gateWallet,compassWallet,foxWallet, walletConnectWallet],
+      wallets: [metaMaskWallet, rabbyWallet, trustWallet],
     },
   ],
   {
-    appName: "lottaverse",
+    appName: "lottaverse10",
     projectId: `${process.env.NEXT_PUBLIC_PROJECT_ID}`,
   },
 );
 
+ 
+ 
+
+const polygonAmoyChain = {
+  ...polygonAmoy,
+  id: 80002, // Chain ID for Polygon Amoy
+ 
+};
+
 export const wagmiConfig = createConfig({
   connectors: connectors,
-  chains: [blockChainConfig.chainName ],
+  chains: [polygonAmoyChain],
   ssr: false,
   client({ chain }) {
     return createClient({ chain, transport: http() });
   },
 });
- 
+
  
 
 

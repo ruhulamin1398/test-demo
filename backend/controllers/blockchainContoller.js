@@ -176,6 +176,7 @@ const upgradeLotteryTicketCount = async (type) => {
 
 
       ticektSoldBlockchain = lotteryDataFromBlockchain[10];
+     
   } catch (error) {
     console.error("Error fetching lottery data:", error);
   }
@@ -195,6 +196,8 @@ const upgradeLotteryTicketCount = async (type) => {
   }
   const ticektSoldB = lotteryDataFromDB.ticketSold;
  
+
+  console.log("ticektSoldB", ticektSoldB);
 
   if (ticektSoldB < ticektSoldBlockchain.length) { 
     let difference = ticektSoldBlockchain.length - ticektSoldB;
@@ -216,8 +219,10 @@ const upgradeLotteryTicketCount = async (type) => {
         const ticketNumbersArray = [];
         for (let i = 0; i < ticketString.length; i += 2) {
           const twoDigitString = ticketString.slice(i, i + 2);
-          ticketNumbersArray.push(parseInt(twoDigitString, 10));
+          const isValidNumber = /^\d+$/.test(twoDigitString); // Check if the string contains only digits
+          ticketNumbersArray.push(isValidNumber ? parseInt(twoDigitString, 10) : 0);
         }
+        
         
         try {
           const purchaseData = {
@@ -227,7 +232,7 @@ const upgradeLotteryTicketCount = async (type) => {
             price:  type === 0 ? 3 : 10,
             referral: originalUser.referredBy.address,
             lotteryType: type,
-            tax: [{ lottery:ticketNumbersArray }],
+            tax: [{lotteryType:type, lottery:ticketNumbersArray }],
           };
 
           purchaseDataArray.push(purchaseData);

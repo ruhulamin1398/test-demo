@@ -152,13 +152,12 @@ exports.GetMyPurchase = async (req, res) => {
       .populate('lotteryId')
       .sort({ createdAt: -1 });
 
-
-    const resultsArray = purchases.flatMap(data =>
-      data.tax.map(taxDetail => ({
-        tax: taxDetail,
-        buyer: data.buyer
-      }))
-    );
+      const resultsArray = purchases.flatMap(data =>
+        data.tax.map(taxDetail => ({
+          tax: taxDetail,
+          buyer: data.buyer
+        }))
+      ); 
 
     // If pagination parameters exist, apply pagination
     let paginatedResults = resultsArray;

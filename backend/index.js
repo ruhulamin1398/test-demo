@@ -15,6 +15,7 @@ mongoose.set("strictQuery", false);
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
+    console.log(process.env.MONGO_URL)
     console.log("Connected to MongoDB");
 
     app.use(helmet());

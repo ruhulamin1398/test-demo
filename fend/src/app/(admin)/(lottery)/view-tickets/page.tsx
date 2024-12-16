@@ -9,9 +9,12 @@ import { useGetSingleUserLotteryDetailsQuery } from "@/redux/api/all-api/lottery
 const ViewTickets = () => {
   const { address } = useAccount();
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(25);
+  const [limit, setLimit] = useState(100);
 
   const { data, isLoading, error } = useGetSingleUserLotteryDetailsQuery({ address, page, limit });
+
+
+  console.log(data)
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
