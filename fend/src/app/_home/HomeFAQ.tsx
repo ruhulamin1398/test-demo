@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react";
 
 // import { faqAccordionData } from "@/data";
@@ -11,10 +13,17 @@ import {
 } from "@/components/ui/table";
 import { BallList } from "@/components/shared";
 
+import { useGetLotteryForBoardQuery } from "@/redux/api/all-api/lottery";
+import { ResultsCards } from "../(admin)/dashboard/ResultsCards";
+import { SuperResultsCards } from "../(admin)/dashboard/SuperResultsCards";
 interface Props extends React.ComponentProps<"div"> {}
 
 export const HomeFAQ = ({ ...props }: Props) => {
+
+    const { data: boardData  } = useGetLotteryForBoardQuery(undefined)
   return (
+
+    <>
     <div {...props} className="pt-36">
       <h3 className="home-header">FREQUENTLY ASKED QUESTIONS</h3>
       <p className="home-subheader">All you want to know about Lottaverse</p>
@@ -48,6 +57,15 @@ export const HomeFAQ = ({ ...props }: Props) => {
         </Table>
       </div>
     </div>
+
+
+    <div className="grid w-full grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2 mt-12">
+        <ResultsCards className="main-gradient" round={boardData?.roundForEasy} data={boardData?.lotteryType0} />
+
+
+        <SuperResultsCards className="primary-bg-gradient" round={boardData?.roundForSuper} data={boardData?.lotteryType1} />
+      </div>
+</>
   );
 };
 

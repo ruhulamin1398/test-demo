@@ -1,6 +1,6 @@
 import React from "react";
 import { RoundBall } from "@/components/shapes";
-import heroImg from "@/assets/temp/hero-img.png";
+import heroImg from "@/assets/images/ibol.jpg";
 import Image from "next/image";
 
 interface Props extends React.ComponentProps<"div"> {}
@@ -16,6 +16,9 @@ export const Hero = ({ ...props }: Props) => {
           THE BIGGEST DECENTRALIZED ONLINE LOTTERY PLATFORM ON <br /> THE WORLD
         </p>
 
+<div className="h-[40vh]">
+&nbsp;
+</div>
         {/* <Image
           src={heroImg}
           alt="Hero"
@@ -23,7 +26,7 @@ export const Hero = ({ ...props }: Props) => {
         /> */}
       </main>
 
-      <RoundBall className="absolute bottom-0 left-0 z-10" />
+      {/* <RoundBall className="absolute bottom-0 left-0 z-10" /> */}
     </main>
   );
 };
