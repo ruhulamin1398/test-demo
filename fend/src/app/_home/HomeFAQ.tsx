@@ -46,13 +46,7 @@ export const HomeFAQ = ({ ...props }: Props) => {
     });
     winnersTickets.sort((a, b) => b.amount - a.amount);
     // Update winner list
-    if (more) {
-      // Trim to size 15
-      setWinnerList(winnersTickets.slice(0, 2));
-    } else {
-      // Trim to size 25
-      setWinnerList(winnersTickets.slice(0, 25));
-    }
+ 
  
   }, [boardData]);
 
@@ -106,7 +100,7 @@ export const HomeFAQ = ({ ...props }: Props) => {
               })}
             </TableBody>
           </Table>
-          <button className="text-center w-full" onClick={()=>{setMore(!more)}}> {(more)?"View Less":"View More"}</button>
+          {/* <button className="text-center w-full" onClick={()=>{setMore(!more)}}> {(more)?"View Less":"View More"}</button> */}
         </div>
       </div>
 

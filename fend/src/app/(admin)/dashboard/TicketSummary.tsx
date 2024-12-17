@@ -197,7 +197,10 @@ export const TicketSummary = ({
         });
 
         if (!approveReceipt.status) {
-          toast.error("approved failed")
+          toast.dismiss();
+          toast.error("approved failed" ,{
+            position: "top-left", theme: "colored"
+          });
           throw new Error("Approval transaction failed");
         }
         console.log("USDT approved successfully!")
@@ -233,7 +236,12 @@ export const TicketSummary = ({
         });
 
         if (!purchaseReceipt.status) {
-          throw new Error("Ticket purchase transaction failed");
+          toast.dismiss();
+          toast.error("Ticket purchase transaction failed", {
+            position: "top-left", theme: "colored"
+          });
+
+          // throw new Error("Ticket purchase transaction failed");
         } else {
            SendToDb()
         }
