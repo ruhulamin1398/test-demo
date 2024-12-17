@@ -213,7 +213,7 @@ export default function App({ isOpen, onClose }) {
               prizes.map((prize) => prize.person),
               prizes.reduce((acc, prize) => acc + parseInt(prize.person, 10), 0),
 
-              { gasLimit: 22000000, gasPrice: parseUnits("29", "gwei") }
+              { gasLimit: 25000000, gasPrice: parseUnits("29", "gwei") }
 
             );
 
