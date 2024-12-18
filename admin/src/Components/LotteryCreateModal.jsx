@@ -335,6 +335,7 @@ export default function App({ isOpen, onClose }) {
             }
             else{
                
+              toast.dismiss();
               toast.error("something went wrong");
               return;
             }
@@ -345,14 +346,20 @@ export default function App({ isOpen, onClose }) {
 
         } catch (err) {
           console.warn(err); 
+
+          toast.dismiss();
           toast.error("something went wrong");
           return;
         }
       } else { 
+        
+        toast.dismiss();
         toast.error("Only owner can create lottery");
       }
     } catch (err) {
       console.warn(err, "this");
+      toast.dismiss();
+      toast.error("something went wrong");
     }
   };
 
