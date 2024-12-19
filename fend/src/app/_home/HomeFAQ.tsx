@@ -26,6 +26,7 @@ export const HomeFAQ = ({ ...props }: Props) => {
   const [winnerList, setWinnerList] = useState([]);
   const[limit , setLimit]= useState<Number>(10);
 
+  const suffixes = ["1st", "2nd", "3rd", "4th", "5th"];
   const { data: boardData } = useGetLotteryForBoardQuery(undefined) 
 
 
@@ -83,7 +84,7 @@ export const HomeFAQ = ({ ...props }: Props) => {
                 return (
                   <TableRow key={index}>
                     <TableCell>  {formatAddress(data?.winner)} </TableCell>
-                    <TableCell>{data?.prize}</TableCell>
+                    <TableCell>{suffixes[data?.prize-1]}</TableCell>
                     <TableCell>
 
                     <div className="flex justify-center space-x-2">
