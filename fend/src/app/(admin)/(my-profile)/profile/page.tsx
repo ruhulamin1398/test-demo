@@ -169,6 +169,14 @@ const Profile = () => {
     }
 
   }, [iswithDrwan]);
+  useEffect(()=>{
+
+    if(withdrawAmountErr|| usdtApprovalErr || becomePremiumErr){
+      toast.dismiss();
+      toast.error("Transaction failed . . ")
+    }
+    
+  },[withdrawAmountErr,usdtApprovalErr,becomePremiumErr])
 
   const formatAddress = (address: string) => {
     return `${address?.slice(0, 4)}...${address?.slice(-4)}`;

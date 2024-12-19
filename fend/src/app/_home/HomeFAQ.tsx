@@ -14,8 +14,6 @@ import {
 import { BallList } from "@/components/shared";
 
 import { useGetLotteryForBoardQuery } from "@/redux/api/all-api/lottery";
-import { ResultsCards } from "../(admin)/dashboard/ResultsCards";
-import { SuperResultsCards } from "../(admin)/dashboard/SuperResultsCards";
 interface Props extends React.ComponentProps<"div"> { }
 
 export const HomeFAQ = ({ ...props }: Props) => {
@@ -26,6 +24,7 @@ export const HomeFAQ = ({ ...props }: Props) => {
 
   const [more, setMore] = useState<Boolean>(false);
   const [winnerList, setWinnerList] = useState([]);
+  const[limit , setLimit]= useState<Number>(10);
 
   const { data: boardData } = useGetLotteryForBoardQuery(undefined) 
 
@@ -46,11 +45,19 @@ export const HomeFAQ = ({ ...props }: Props) => {
     });
     winnersTickets.sort((a, b) => b.amount - a.amount);
     // Update winner list
- 
+    setWinnerList(winnersTickets)
  
   }, [boardData]);
 
- 
+ useEffect(()=>{
+
+  if(more){
+    setLimit(30)
+  }else{
+    setLimit(10)
+  }
+
+ },[more])
  
 
 
@@ -72,7 +79,7 @@ export const HomeFAQ = ({ ...props }: Props) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {winnerList?.map((data, index) => {
+              {winnerList?.slice(0, limit).map((data, index) => {
                 return (
                   <TableRow key={index}>
                     <TableCell>  {formatAddress(data?.winner)} </TableCell>
@@ -80,7 +87,7 @@ export const HomeFAQ = ({ ...props }: Props) => {
                     <TableCell>
 
                     <div className="flex justify-center space-x-2">
-                      {data?.ticket?.map((lottery: number, idx: number) => (
+                      {data?.ticket.map((lottery: number, idx: number) => (
                         <div
                           key={idx}
                           className="flex size-8 items-center justify-center rounded-full bg-[#4D22FC] text-xs font-black"
@@ -100,7 +107,7 @@ export const HomeFAQ = ({ ...props }: Props) => {
               })}
             </TableBody>
           </Table>
-          {/* <button className="text-center w-full" onClick={()=>{setMore(!more)}}> {(more)?"View Less":"View More"}</button> */}
+          <button className="text-center w-full" onClick={()=>{setMore(!more)}}> {(more)?"View Less":"View More"}</button>
         </div>
       </div>
 
