@@ -24,6 +24,9 @@ export const ConnectBtn = () => {
       localStorage.setItem("ref", userRef);
     }
   }
+  if (pathName == '/' && account?.address) {
+    router.push('/dashboard'); 
+  }
 
   useEffect(() => {
     const hasBeenRedirected = localStorage.getItem("hasBeenRedirected");
