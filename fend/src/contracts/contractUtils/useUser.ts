@@ -95,7 +95,7 @@ async function fetchOwnerTax() {
   ownerPremiumTx= (Number( ownerTax[1]) / blockChainConfig.decimals).toFixed(2)
  }
  if(! isNaN(Number( ownerTax[2]) / blockChainConfig.decimals)){
-  ownerTotalTx= (Number( ownerTax[2]) / blockChainConfig.decimals).toFixed(2)
+  ownerTotalTx= (Number( ownerTax[2]) / blockChainConfig.decimals)
  }
     
      

@@ -8,16 +8,13 @@ import { cn } from "@/utils";
 import { useGetSingleUserDetailsQuery } from "@/redux/api/all-api/users";
 import { usePremiumBalance } from "@/contracts/contractUtils/usePremiumBalance";
 import { useUser } from "@/contracts/contractUtils/useUser";
-import { useReferralData } from "@/contracts/contractUtils/useReferralData";
-import { useLeader } from "@/contracts/contractUtils/useLeader";
+import { useReferralData } from "@/contracts/contractUtils/useReferralData"; 
 import { blockChainConfig } from "@/contracts/const";
 
-import { toast } from "react-toastify";
-import { parseEther, parseGwei } from 'viem'
+import { toast } from "react-toastify"; 
 
 
-import { useWriteContract, useAccount, useWaitForTransactionReceipt } from 'wagmi'
-import { BrowserProvider, Contract, ethers, JsonRpcProvider, solidityPackedKeccak256 } from "ethers"
+import { useWriteContract, useAccount, useWaitForTransactionReceipt } from 'wagmi' 
 
 const Profile = () => {
 
@@ -318,8 +315,10 @@ const Profile = () => {
               )}
             </div>
             <div className="flex items-center gap-x-2 hidden md:block">
-              {(blockChainConfig.owner == address) ?
+              {(blockChainConfig.owner == address) ?(<>              
                 <button className="btn-gradient-purple lg:text-lg" onClick={() => withDrawOwnerReawrdAmount()}>Withdraw Owner Tax</button>
+                <button className="btn-gradient-purple lg:text-lg " onClick={() => withDrawReawrdAmount()}>Withdraw User Tax</button>
+                </>)
                 :
                 <>
 
@@ -369,7 +368,7 @@ const Profile = () => {
               
             </div>
           </div> :
-          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-4">
 
 
             <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
@@ -404,6 +403,20 @@ const Profile = () => {
 
 
             <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
+              <p className="font-bold lg:text-xl">User Tax </p>
+              <p
+                className="mt-3 gap-x-1 text-lg font-bold lg:text-xl   flex items-center"
+              >
+                <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
+                <span className="translate-y-1">
+
+                  ${totalUSDTBalance.toFixed(2)}
+
+                </span>
+              </p>
+            </div>
+
+            <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
               <p className="font-black lg:text-xl">Owner Total Tax </p>
               <p
                 className="mt-3 gap-x-1 text-lg font-bold lg:text-xl   flex items-center"
@@ -411,7 +424,7 @@ const Profile = () => {
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">
 
-                  {ownerTaxAmount[2]}
+                  {(ownerTaxAmount[2]+ totalUSDTBalance).toFixed(2)}
 
 
                 </span>
