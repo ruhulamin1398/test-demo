@@ -176,6 +176,7 @@ const upgradeLotteryTicketCount = async (type) => {
 
 
       ticektSoldBlockchain = lotteryDataFromBlockchain[10];
+      // console.log("ticektSoldBlockchain ", lotteryData);
      
   } catch (error) {
     console.error("Error fetching lottery data:", error);
@@ -197,7 +198,7 @@ const upgradeLotteryTicketCount = async (type) => {
   const ticektSoldB = lotteryDataFromDB.ticketSold;
  
 
-  console.log("ticektSoldB", ticektSoldB);
+  // console.log("ticektSoldB", ticektSoldB);
 
   if (ticektSoldB < ticektSoldBlockchain.length) { 
     let difference = ticektSoldBlockchain.length - ticektSoldB;
@@ -262,7 +263,7 @@ const upgradeLotteryTicketCount = async (type) => {
 
 
   } else {
-    console.log(" lotteryData", ticektSoldBlockchain.length, ticektSoldB);
+    // console.log(" lotteryData", ticektSoldBlockchain.length, ticektSoldB);
     return ({ msg: "match", bc:ticektSoldBlockchain.length,db:ticektSoldB, bc2:ticektSoldBlockchain,db2:lotteryNumbers});
 
   }
