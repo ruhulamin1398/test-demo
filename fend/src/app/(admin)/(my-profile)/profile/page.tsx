@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 
 
 import { useWriteContract, useAccount, useWaitForTransactionReceipt } from 'wagmi' 
+import Link from "next/link";
 
 const Profile = () => {
 
@@ -241,7 +242,14 @@ const Profile = () => {
 
         <div className="flex   mb-2  flex-col md:flex-left">
         <div className="flex flex-row  items-center w-48 ">
-        <h2 className="mb-2 text-lg font-extrabold lg:text-2xl">My&nbsp;Profile </h2>
+        <h2 className="mb-2 text-lg font-extrabold lg:text-2xl mr-4">My&nbsp;Profile </h2>
+        {(blockChainConfig.owner == address)&&(< >
+        
+        
+          <button className="lg:text-lg text-gray-400 font-weight-normal border-r border-gray-400 px-2 mx-1 underline  "  > <Link href="/premium-users" > Premium&nbsp;Users </Link></button> 
+          <button className="lg:text-lg text-gray-400 font-weight-normal  px-2 mx-1 underline  "  > <Link href="/premium-users" >Manage&nbsp;Lottery </Link></button> 
+          {/* <button className="lg:text-lg text-gray-400 font-weight-normal  px-2 mx-1 underline  " onClick={() => withDrawOwnerReawrdAmount()}>Premium&nbsp;Users</button>  */}
+        </>)}
         </div>
         
         {(user?.premium ==0 && blockChainConfig.owner != address )&& (<div className="flex flex-col md:flex-row  gap-2 rounded-sm bg-[#1A1D46] p-4 justify-between text-center items-center w-full">
