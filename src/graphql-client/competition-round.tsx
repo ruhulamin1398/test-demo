@@ -1,0 +1,52 @@
+import { gql } from "@apollo/client";
+
+export const CREATE_COMPETITION_ROUND = gql`
+  mutation CreateCompetitionRound($input: CreateCompetitionRoundInput!) {
+    createRound(input: $input) {
+      id
+      competition
+      title
+      description
+      roundNumber
+      judgementCriteria
+      startDate
+      endDate
+      maxScore
+      status
+      judges {
+        id
+        username
+        firstName
+        lastName
+      }
+      maxWinners
+    }
+  }
+`;
+
+export const UPDATE_COMPETITION_ROUND = gql`
+  mutation UpdateCompetitionRound(
+    $id: ID!
+    $input: CreateCompetitionRoundInput!
+  ) {
+    updateRound(id: $id, input: $input) {
+      id
+      competition
+      title
+      description
+      roundNumber
+      judgementCriteria
+      startDate
+      endDate
+      maxScore
+      status
+      judges {
+        id
+        username
+        firstName
+        lastName
+      }
+      maxWinners
+    }
+  }
+`;
