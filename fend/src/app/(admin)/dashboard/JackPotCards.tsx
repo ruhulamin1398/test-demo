@@ -76,16 +76,16 @@ export const JackPotCards = ({ className, lottery, loading, ...props }: Props) =
         </div>
 
         <div className={`mt-6 w-full text-center ${SrbijaFont.className}`}>
-          <div className="grid grid-cols-8 md:grid-cols-3">
+          <div className="grid grid-cols-4 md:grid-cols-2">
             <p className="  text-center col-span-2 md:col-span-1 ">Round</p>
-            <p className="whitespace-nowrap text-center col-span-3 md:col-span-1">Ticket Sold </p>
+            <p className="whitespace-nowrap text-center col-span-2 md:col-span-1">Ticket Sold </p>
             {/* <p className="text-center col-span-3 md:col-span-1" >Participants</p> */}
           </div>
 
-          <div className="main-gradient-reserver grid grid-cols-8 md:grid-cols-3 rounded-md py-2">
+          <div className="main-gradient-reserver grid grid-cols-4 md:grid-cols-2 rounded-md py-2">
             <p className=" text-center col-span-2 md:col-span-1">{Number(activeLottery ? activeLottery[0] : 0)} </p>
-            <p className=" text-center    col-span-3  md:col-span-1">{Number(activeLottery ? activeLottery[1] : 0)} </p>
-            <p className="col-span-3  md:col-span-1">{Number(activeLottery ? activeLottery[2] : 0)} </p>
+            <p className=" text-center    col-span-2  md:col-span-1">{Number(activeLottery ? activeLottery[1] : 0)} </p>
+            {/* <p className="col-span-3  md:col-span-1">{Number(activeLottery ? activeLottery[2] : 0)} </p> */}
           </div>
         </div>
 
