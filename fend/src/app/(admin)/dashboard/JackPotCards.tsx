@@ -79,7 +79,7 @@ export const JackPotCards = ({ className, lottery, loading, ...props }: Props) =
           <div className="grid grid-cols-8 md:grid-cols-3">
             <p className="  text-center col-span-2 md:col-span-1 ">Round</p>
             <p className="whitespace-nowrap text-center col-span-3 md:col-span-1">Ticket Sold </p>
-            <p className="text-center col-span-3 md:col-span-1" >Participants</p>
+            {/* <p className="text-center col-span-3 md:col-span-1" >Participants</p> */}
           </div>
 
           <div className="main-gradient-reserver grid grid-cols-8 md:grid-cols-3 rounded-md py-2">

@@ -232,8 +232,7 @@ export const TicketSummary = ({
             lottery.lotteryId,
             totalTickets.length,
             data?.originalUser?.referredBy?.address ,
-            stringArrayOfTickets,
-            0,
+            stringArrayOfTickets
           ],
         });
 
