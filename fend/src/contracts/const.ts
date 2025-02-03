@@ -12,7 +12,7 @@ export const secretKey = "lottaverse2.0_by@oxwd3v"
   
 const  devAmoyConfig = {
    chainName : polygonAmoy,
-   contractAddress: process.env.NEXT_PUBLIC_DEV_CONTRACT_ADDRESS ||'0xA8eCF1BC1961547E18bc49Bf4a00a4F25202438d',  
+   contractAddress: process.env.NEXT_PUBLIC_DEV_CONTRACT_ADDRESS ||'0x566Aa3B48B44f9437fb54d6bF38a413C19Dc6B01',  
    owner: "0x3ff88B69d1762AA444c85c30C4B0B795f9c48B59",
    USDTaddress : "0x7722DA925D988533f825D13C353ee9A0085d347e", 
    ProviderUrl : "https://rpc-amoy.polygon.technology",

@@ -247,7 +247,7 @@ const Profile = () => {
         
         
           <button className="lg:text-lg text-gray-400 font-weight-normal border-r border-gray-400 px-2 mx-1 underline  "  > <Link href="/premium-users" > Premium&nbsp;Users </Link></button> 
-          <button className="lg:text-lg text-gray-400 font-weight-normal  px-2 mx-1 underline  "  > <Link href="/premium-users" >Manage&nbsp;Lottery </Link></button> 
+          <button className="lg:text-lg text-gray-400 font-weight-normal  px-2 mx-1 underline  "  > <Link href="/lottery" >Manage&nbsp;Lottery </Link></button> 
           {/* <button className="lg:text-lg text-gray-400 font-weight-normal  px-2 mx-1 underline  " onClick={() => withDrawOwnerReawrdAmount()}>Premium&nbsp;Users</button>  */}
         </>)}
         </div>

@@ -28,7 +28,7 @@ const PremiumUsers = async () => {
   return ( <> 
     <section className="[#16183E] bg-transparent">
       
-    <h1 className="mb-1 mt-0 text-xl font-bold">Premium User List</h1>
+    <h1 className="mb-1 mt-0 text-xl font-bold py-4">Premium User List</h1>
 
 
     <div>
