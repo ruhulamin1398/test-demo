@@ -30,15 +30,22 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ users, rewar
         </TableHeader>
         <TableBody>
           {users?.map((user, index) => (
+            <>
+            {user.user !="0x0000000000000000000000000000000000000000" && (
+            <>
             <TableRow key={index}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>
+             
                 {user.user.slice(0, 4)}...{user.user.slice(-4)}
               </TableCell>
               <TableCell>{(user.reward/ blockChainConfig.decimals ).toFixed(2)} USDT</TableCell>
               <TableCell>{Number(user.ticket)}</TableCell>
               <TableCell>${(Number(user.amount) / 1e6).toFixed(0)}</TableCell>
             </TableRow>
+            </>
+          )}
+          </>
           ))}
         </TableBody>
       </Table>
