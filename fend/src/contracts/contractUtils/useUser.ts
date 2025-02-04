@@ -11,15 +11,11 @@ import {  ethers } from "ethers";
 
 export interface User {
   premium: number;           // The premium balance
-  totalSpend: number;       // Total amount spent
-  purchasedTickets: number;  // Number of tickets purchased
-  firstLottery: number;     // Timestamp or ID of the first lottery
-  lastTicketPurchased: number; // Timestamp or ID of the last ticket purchased
+  totalSpend: number;       // Total amount spent 
   referrer: string;         // Referrer address 
   winningAmount:number;
   topBuyerTax:number;
-  topLeaderTax : number;
-  totalRewadBalanceWithdraw:number;
+  topLeaderTax : number; 
   usdT:number; 
   premiumReferralRewards:number; 
 }
@@ -64,13 +60,7 @@ useEffect(()=>{
 }, [balance])
 
 
-useEffect(()=>{
-  if(userData){
-// console.log("userData", userData);
-// console.log("userData spend", userData?.spend);
-// console.log("userData totalRewadBalanceWithdraw", userData?.spend?.totalRewadBalanceWithdraw);
-  }
-}, [userData])
+
 
 async function fetchOwnerTax() {
   try { 
@@ -124,21 +114,26 @@ useEffect(()=>{
   const user: User | null = userData
   ? {
       premium: isNaN(Number(userData?.premium)) ? 0 : Number(userData?.premium),
-      totalSpend: isNaN(Number(userData?.totalspend)) ? 0 : Number(userData?.totalspend) / blockChainConfig.decimals,
-      purchasedTickets: isNaN(Number(userData?.purchasedTickets)) ? 0 : Number(userData?.purchasedTickets) / blockChainConfig.decimals,
-      firstLottery: isNaN(Number(userData?.firstLottery)) ? 0 : Number(userData?.firstLottery) / blockChainConfig.decimals,
-      lastTicketPurchased: isNaN(Number(userData?.lastTicketPurchased)) ? 0 : Number(userData?.lastTicketPurchased) / blockChainConfig.decimals,
+      totalSpend: isNaN(Number(userData?.totalPurchaseTicketCost)) ? 0 : Number(userData?.totalPurchaseTicketCost) / blockChainConfig.decimals, 
       referrer: userData?.referrer || '',  // assuming referrer can be a string and empty if not available
-      winningAmount: isNaN(Number(userData?.winningAmount)) ? 0 : Number(userData?.winningAmount) / blockChainConfig.decimals || 0,
-      topBuyerTax: isNaN(Number(userData?.topBuyerTax)) ? 0 : Number(userData?.topBuyerTax),
-      topLeaderTax: isNaN(Number(userData?.topLeaderTax)) ? 0 : Number(userData?.topLeaderTax),
-      premiumReferralRewards: isNaN(Number(userData?.premiumReferralRewards)) ? 0 : Number(userData?.premiumReferralRewards) / blockChainConfig.decimals || 0,
-      totalRewadBalanceWithdraw: isNaN(Number(userData?.spend?.totalRewadBalanceWithdraw)) ? 0 : Number(userData?.spend?.totalRewadBalanceWithdraw),
+      winningAmount: isNaN(Number(userData?.availableTax.winningAmount)) ? 0 : Number(userData?.availableTax.winningAmount) / blockChainConfig.decimals || 0,
+      topBuyerTax: isNaN(Number(userData?.availableTax.topBuyerTax)) ? 0 : Number(userData?.availableTax.topBuyerTax),
+      topLeaderTax: isNaN(Number(userData?.availableTax.topLeaderTax)) ? 0 : Number(userData?.availableTax.topLeaderTax),
+      premiumReferralRewards: isNaN(Number(userData?.availableTax.premiumReferralTax)) ? 0 : Number(userData?.availableTax.premiumReferralTax) / blockChainConfig.decimals || 0, 
       usdT: isNaN(Number(balance)) ? 0 : Number(balance) / blockChainConfig.decimals,
       
     }
   : null;
 
+
+
+  useEffect(()=>{
+    if(userData){
+  console.log("userData", userData);
+  console.log("user", user);
+  // console.log("userData spend", userData?.spend); 
+    }
+  }, [userData, user])
 
   return { user, isError,ownerTaxAmount  };
 };

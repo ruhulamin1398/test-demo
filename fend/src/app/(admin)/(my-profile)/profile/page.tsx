@@ -185,25 +185,21 @@ const Profile = () => {
       referralInfo?.totalReferredAmount !== undefined &&
       user?.winningAmount !== undefined &&
       user?.topLeaderTax !== undefined &&
-      user?.topBuyerTax !== undefined &&
-      user?.totalRewadBalanceWithdraw !== undefined
+      user?.topBuyerTax !== undefined 
     ) {
 
-      // setTotalEarning(premiumBalance + referralInfo?.totalReferredAmount  + user?.winningAmount+(user?.topLeaderTax+user?.topBuyerTax+ user?.totalRewadBalanceWithdraw)/blockChainConfig.decimals);
-      const earning = (isNaN(premiumBalance) ? 0 : premiumBalance) +
+         const earning = (isNaN(premiumBalance) ? 0 : premiumBalance) +
         (isNaN(referralInfo?.totalReferredAmount) ? 0 : referralInfo?.totalReferredAmount) +
         (isNaN(user?.winningAmount) ? 0 : user?.winningAmount) +
         (isNaN(user?.topLeaderTax) ? 0 : user?.topLeaderTax / blockChainConfig.decimals) +
-        (isNaN(user?.topBuyerTax) ? 0 : user?.topBuyerTax / blockChainConfig.decimals) +
-        (isNaN(user?.totalRewadBalanceWithdraw) ? 0 : user?.totalRewadBalanceWithdraw / blockChainConfig.decimals)
+        (isNaN(user?.topBuyerTax) ? 0 : user?.topBuyerTax / blockChainConfig.decimals) 
 
       setTotalEarning(earning);
 
 
       // setTotalUSDTBalance(premiumBalance + referralInfo?.totalReferredAmount  + user?.winningAmount+(user?.topLeaderTax+user?.topBuyerTax)/blockChainConfig.decimals);
       const ustdBal =
-        (isNaN(premiumBalance) ? 0 : premiumBalance) +
-        (isNaN(referralInfo?.totalReferredAmount) ? 0 : referralInfo?.totalReferredAmount) +
+        (isNaN(premiumBalance) ? 0 : premiumBalance) + 
         (isNaN(user?.winningAmount) ? 0 : user?.winningAmount) +
         (isNaN(user?.premiumReferralRewards) ? 0 : user?.premiumReferralRewards) +
         (isNaN(user?.topLeaderTax) ? 0 : user?.topLeaderTax / blockChainConfig.decimals) +
@@ -254,7 +250,7 @@ const Profile = () => {
         
         {(user?.premium ==0 && blockChainConfig.owner != address )&& (<div className="flex flex-col md:flex-row  gap-2 rounded-sm bg-[#1A1D46] p-4 justify-between text-center items-center w-full">
           <div className="text-center w-full">
-          ARE YOU INTERESTED PREMIUM MEMBER ! GET $200 USDT AND ENJOY 15% GLOBAL BONUS  
+          ARE YOU INTERESTED PREMIUM MEMBER ! GET $100 USDT AND ENJOY 15% GLOBAL BONUS  
           </div>
           
         {(user?.premium == 0 && blockChainConfig.owner != address) && (<div className="w-full md:w-64 text-center md:text-right"> <button className="btn-gradient-purple lg:text-base px-4  " onClick={() => becomePremiumAccount()}>Add Premium</button> </div>)}
