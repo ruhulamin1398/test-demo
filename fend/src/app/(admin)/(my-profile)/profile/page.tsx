@@ -313,8 +313,7 @@ const Profile = () => {
             </div>
             <div className="flex items-center gap-x-2 hidden md:block">
               {(blockChainConfig.owner == address) ?(<>              
-                <button className="btn-gradient-purple lg:text-lg" onClick={() => withDrawOwnerReawrdAmount()}>Withdraw Owner Tax</button>
-                <button className="btn-gradient-purple lg:text-lg " onClick={() => withDrawReawrdAmount()}>Withdraw User Tax</button>
+                <button className="btn-gradient-purple lg:text-lg" onClick={() => withDrawOwnerReawrdAmount()}>Withdraw Owner Tax</button> 
                 </>)
                 :
                 <>

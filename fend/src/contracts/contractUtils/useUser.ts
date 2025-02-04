@@ -76,7 +76,7 @@ async function fetchOwnerTax() {
       signer  
     ); 
     const ownerTax = await contract.getOwnerBalance();
-    // console.log("Owner Tax:", ownerTax);  
+    console.log("Owner Tax:", ownerTax);  
 
  let ownerTx=0;
  let ownerPremiumTx=0;
