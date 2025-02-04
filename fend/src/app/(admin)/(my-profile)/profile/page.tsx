@@ -194,7 +194,7 @@ const Profile = () => {
         (isNaN(user?.winningAmount) ? 0 : user?.winningAmount) +  
         (isNaN(user?.premiumReferralRewards) ? 0 : user?.premiumReferralRewards) +  
         (isNaN(user?.premiumTax) ? 0 : user?.premiumTax) +  
-        (isNaN(user?.refTax) ? 0 : user?.refTax / blockChainConfig.decimals) +  
+        (isNaN(user?.refTax) ? 0 : user?.refTax) +  
         (isNaN(user?.topBuyerTax) ? 0 : user?.topBuyerTax / blockChainConfig.decimals) +  
         (isNaN(user?.topLeaderTax) ? 0 : user?.topLeaderTax / blockChainConfig.decimals)
 

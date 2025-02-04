@@ -150,7 +150,7 @@ const Dashboard = () => {
           leaderboardBonus={((user?.topBuyerTax + user?.topLeaderTax) / blockChainConfig.decimals)?.toFixed(2) || "0.00"}
           premiumBonus={user?.premiumTax.toFixed(2)}
 
-          referralCommission={((isNaN(user?.premiumReferralRewards) ? 0 : user?.premiumReferralRewards) +        (isNaN(referralInfo?.totalReferredAmount) ? 0 : referralInfo?.totalReferredAmount)).toFixed(2) || "0.00"}
+          referralCommission={((isNaN(user?.premiumReferralRewards) ? 0 : user?.premiumReferralRewards) +        (isNaN(user?.refTax) ? 0 : user?.refTax)).toFixed(2) || "0.00"}
 
         />
 
