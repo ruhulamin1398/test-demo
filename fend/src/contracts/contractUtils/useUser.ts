@@ -12,6 +12,7 @@ import {  ethers } from "ethers";
 export interface User {
   premium: number;           // The premium balance
   totalSpend: number;       // Total amount spent 
+  totalEarning: number;       // Total amount spent 
   referrer: string;         // Referrer address 
   winningAmount:number;
   topBuyerTax:number;
@@ -116,6 +117,7 @@ useEffect(()=>{
   ? {
       premium: isNaN(Number(userData?.premium)) ? 0 : Number(userData?.premium),
       totalSpend: isNaN(Number(userData?.totalPurchaseTicketCost)) ? 0 : Number(userData?.totalPurchaseTicketCost) / blockChainConfig.decimals, 
+      totalEarning: isNaN(Number(userData?.totalEarning)) ? 0 : Number(userData?.totalEarning) / blockChainConfig.decimals, 
       referrer: userData?.referrer || '',  // assuming referrer can be a string and empty if not available
       winningAmount: isNaN(Number(userData?.availableTax.winningAmount)) ? 0 : Number(userData?.availableTax.winningAmount) / blockChainConfig.decimals || 0,
       topBuyerTax: isNaN(Number(userData?.availableTax.topBuyerTax)) ? 0 : Number(userData?.availableTax.topBuyerTax),

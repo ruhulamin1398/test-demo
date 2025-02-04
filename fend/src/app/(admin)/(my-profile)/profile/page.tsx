@@ -20,12 +20,10 @@ import Link from "next/link";
 const Profile = () => {
 
   const { address } = useAccount();
-  const { premiumBalance } = usePremiumBalance();
-  const { referralInfo } = useReferralData();
+  const { premiumBalance } = usePremiumBalance(); 
   const { user, ownerTaxAmount } = useUser();
 
-  const { data, isLoading } = useGetSingleUserDetailsQuery({ address });
-  const [totalEarning, setTotalEarning] = useState<number>(0);
+  const { data, isLoading } = useGetSingleUserDetailsQuery({ address }); 
   const [totalUSDTBalance, setTotalUSDTBalance] = useState<number>(0);
 
 
@@ -181,29 +179,22 @@ const Profile = () => {
   };
   useEffect(() => {
     if (
-      premiumBalance !== undefined &&
-      referralInfo?.totalReferredAmount !== undefined &&
-      user?.winningAmount !== undefined &&
+      user?.winningAmount !== undefined && 
+      user?.topBuyerTax !== undefined && 
       user?.topLeaderTax !== undefined &&
-      user?.topBuyerTax !== undefined 
+      user?.premiumReferralRewards !== undefined &&
+      user?.premiumTax !== undefined 
     ) {
-
-         const earning = (isNaN(premiumBalance) ? 0 : premiumBalance) +
-        (isNaN(referralInfo?.totalReferredAmount) ? 0 : referralInfo?.totalReferredAmount) +
-        (isNaN(user?.winningAmount) ? 0 : user?.winningAmount) +
-        (isNaN(user?.topLeaderTax) ? 0 : user?.topLeaderTax / blockChainConfig.decimals) +
-        (isNaN(user?.topBuyerTax) ? 0 : user?.topBuyerTax / blockChainConfig.decimals) 
-
-      setTotalEarning(earning);
+ 
 
 
       // setTotalUSDTBalance(premiumBalance + referralInfo?.totalReferredAmount  + user?.winningAmount+(user?.topLeaderTax+user?.topBuyerTax)/blockChainConfig.decimals);
-      const ustdBal =
-        (isNaN(premiumBalance) ? 0 : premiumBalance) + 
-        (isNaN(user?.winningAmount) ? 0 : user?.winningAmount) +
-        (isNaN(user?.premiumReferralRewards) ? 0 : user?.premiumReferralRewards) +
-        (isNaN(user?.topLeaderTax) ? 0 : user?.topLeaderTax / blockChainConfig.decimals) +
-        (isNaN(user?.topBuyerTax) ? 0 : user?.topBuyerTax / blockChainConfig.decimals)
+      const ustdBal = 
+        (isNaN(user?.winningAmount) ? 0 : user?.winningAmount) +  
+        (isNaN(user?.premiumReferralRewards) ? 0 : user?.premiumReferralRewards) +  
+        (isNaN(user?.premiumTax) ? 0 : user?.premiumTax) +  
+        (isNaN(user?.topBuyerTax) ? 0 : user?.topBuyerTax / blockChainConfig.decimals) +  
+        (isNaN(user?.topLeaderTax) ? 0 : user?.topLeaderTax / blockChainConfig.decimals)
 
 
       setTotalUSDTBalance(ustdBal);
@@ -221,7 +212,7 @@ const Profile = () => {
     },
     {
       title: "Total Earnings",
-      value: `$${totalEarning.toFixed(2)}`,
+      value: `$${user?.totalEarning.toFixed(2)}`,
     },
     {
       title: "Total Purchase",
