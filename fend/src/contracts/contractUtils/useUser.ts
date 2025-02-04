@@ -17,6 +17,7 @@ export interface User {
   winningAmount:number;
   topBuyerTax:number;
   topLeaderTax : number; 
+  refTax : number; 
   premiumTax : number; 
   usdT:number; 
   premiumReferralRewards:number; 
@@ -122,6 +123,7 @@ useEffect(()=>{
       winningAmount: isNaN(Number(userData?.availableTax.winningAmount)) ? 0 : Number(userData?.availableTax.winningAmount) / blockChainConfig.decimals || 0,
       topBuyerTax: isNaN(Number(userData?.availableTax.topBuyerTax)) ? 0 : Number(userData?.availableTax.topBuyerTax),
       topLeaderTax: isNaN(Number(userData?.availableTax.topLeaderTax)) ? 0 : Number(userData?.availableTax.topLeaderTax),
+      refTax: isNaN(Number(userData?.availableTax.refTax)) ? 0 : Number(userData?.availableTax.refTax),
       premiumReferralRewards: isNaN(Number(userData?.availableTax.premiumReferralTax)) ? 0 : Number(userData?.availableTax.premiumReferralTax) / blockChainConfig.decimals || 0, 
       premiumTax: isNaN(Number(userData?.availableTax.premiumTax)) ? 0 : Number(userData?.availableTax.premiumTax) / blockChainConfig.decimals || 0, 
       usdT: isNaN(Number(balance)) ? 0 : Number(balance) / blockChainConfig.decimals,
