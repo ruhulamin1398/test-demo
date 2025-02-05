@@ -5,20 +5,37 @@ import React from "react";
 import { useGetSingleUserDetailsQuery } from "@/redux/api/all-api/users";
 import { useAccount } from "wagmi";
 import { useReferralData } from "@/contracts/contractUtils/useReferralData";
+import { useUser } from "@/contracts/contractUtils/useUser";
+import { blockChainConfig } from "@/contracts/const";
 
 const Generation = () => {
   const { address } = useAccount();
   const { referralInfo, isError } = useReferralData();
   const { data, isLoading } = useGetSingleUserDetailsQuery({ address });
 
+  const { user, ownerTaxAmount } = useUser();
+
+  const calculateAvailableRefTax = (refTax) => {
+    console.log("ref ", refTax);
+    let totalRefTax = 0;
+    if (!isNaN(refTax)) {
+      for (let i = 0; i < 7; i++) {
+        if (!isNaN(Number(refTax[i]))) {
+          totalRefTax += Number(refTax[i]);
+        }
+        console.log(totalRefTax);
+      }
+    }
+    return (totalRefTax / blockChainConfig.decimals).toFixed(2);
+  };
+
   if (isLoading) return;
 
   return (
     <div>
-        <h1 className="text-xl font-normal my-6">Generation</h1>
-      <div className="min-h-36 rounded-md   px-4 pt-5 bg-[#1a1d46]">
-
-        <div className="mt-4 grid grid-cols-3 items-center justify-start gap-x-5 text-start bg-[#1a1d46]">
+      <h1 className="my-6 text-xl font-normal">Generation</h1>
+      <div className="min-h-36 rounded-md bg-[#1a1d46] px-4 pt-5">
+        <div className="mt-4 grid grid-cols-3 items-center justify-start gap-x-5 bg-[#1a1d46] text-start">
           <p
             className={`flex flex-col items-center text-center font-normal leading-8 sm:text-sm lg:text-lg xl:text-xl ${SrbijaFont.className} `}
           >
@@ -27,15 +44,14 @@ const Generation = () => {
           <p
             className={`flex flex-col items-center text-center font-normal leading-8 sm:text-sm md:text-base lg:text-lg xl:text-xl ${SrbijaFont.className} `}
           >
-            <span>Total Ticket</span> <span>{referralInfo?.totalPurchasedTicket  }</span>
+            <span>Total Ticket</span> <span>{user?.refTickets}</span>
           </p>
           <p
             className={`flex flex-col items-center font-normal leading-8 sm:text-sm md:text-base lg:text-lg xl:text-xl ${SrbijaFont.className} `}
           >
             <span className="sm:hidden"> All Com.</span>
             <span className="hidden sm:inline"> All Commission</span>
-            <span> ${referralInfo?.totalReferredAmount.toFixed(2)  }</span>
-           
+            <span> ${calculateAvailableRefTax(calculateAvailableRefTax(user?.refTax))}</span>
           </p>
         </div>
       </div>

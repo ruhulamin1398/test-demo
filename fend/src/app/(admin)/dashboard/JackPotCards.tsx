@@ -29,7 +29,9 @@ export const JackPotCards = ({ className, lottery, loading, ...props }: Props) =
 
   return (
     <div {...props}>
-      <div className="mb-2 flex w-full items-center justify-end gap-x-2">
+      <div
+        className={`mb-2 flex w-full items-center justify-end gap-x-2 ${activeLottery[0] == 0 ? "hidden" : ""}`}
+      >
         <p className="flex items-center justify-center gap-x-2 rounded-lg bg-green-500 px-2">
           <span>Live</span> <span className="inline-block size-4 rounded-full bg-red-600"></span>
         </p>
@@ -62,11 +64,11 @@ export const JackPotCards = ({ className, lottery, loading, ...props }: Props) =
               >
                 <p className="flex items-center gap-x-1">
                   <Gift className="text-yellow-500" />
-                  <span className={` uppercase font-light`}>
+                  <span className={`font-light uppercase`}>
                     {`${idx + 1}${ordinal(idx + 1)} Prize ${prize.person} Person${prize.person > 1 ? "s" : ""}`}
                   </span>
                 </p>
-                <p className="space-x-1   font-light leading-4 text-green-400">
+                <p className="space-x-1 font-light leading-4 text-green-400">
                   <span>{prize.amount}</span>
                   <span className="usdt">USDT</span>
                 </p>
@@ -76,16 +78,22 @@ export const JackPotCards = ({ className, lottery, loading, ...props }: Props) =
         </div>
 
         <div className={`mt-6 w-full text-center ${SrbijaFont.className}`}>
-          <div className="grid grid-cols-4 md:grid-cols-2">
-            <p className="  text-center col-span-2 md:col-span-1 ">Round</p>
-            <p className="whitespace-nowrap text-center col-span-2 md:col-span-1">Ticket Sold </p>
-            {/* <p className="text-center col-span-3 md:col-span-1" >Participants</p> */}
+          <div className="grid grid-cols-8 md:grid-cols-3">
+            <p className="col-span-2 text-center md:col-span-1">Round</p>
+            <p className="col-span-3 whitespace-nowrap text-center md:col-span-1">Ticket Sold </p>
+            <p className="col-span-3 text-center md:col-span-1">Participants</p>
           </div>
 
-          <div className="main-gradient-reserver grid grid-cols-4 md:grid-cols-2 rounded-md py-2">
-            <p className=" text-center col-span-2 md:col-span-1">{Number(activeLottery ? activeLottery[0] : 0)} </p>
-            <p className=" text-center    col-span-2  md:col-span-1">{Number(activeLottery ? activeLottery[1] : 0)} </p>
-            {/* <p className="col-span-3  md:col-span-1">{Number(activeLottery ? activeLottery[2] : 0)} </p> */}
+          <div className="main-gradient-reserver grid grid-cols-8 rounded-md py-2 md:grid-cols-3">
+            <p className="col-span-2 text-center md:col-span-1">
+              {Number(activeLottery ? activeLottery[0] : 0)}{" "}
+            </p>
+            <p className="col-span-3 text-center md:col-span-1">
+              {Number(activeLottery ? activeLottery[1] : 0)}{" "}
+            </p>
+            <p className="col-span-3 md:col-span-1">
+              {Number(activeLottery ? activeLottery[2] : 0)}{" "}
+            </p>
           </div>
         </div>
 

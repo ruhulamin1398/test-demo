@@ -16,14 +16,13 @@ import { useReferralData } from "@/contracts/contractUtils/useReferralData";
 import { useLeader } from "@/contracts/contractUtils/useLeader";
 import { useUser } from "@/contracts/contractUtils/useUser";
 
-
 import { useCreateUserMutation, useGetSingleUserDetailsQuery } from "@/redux/api/all-api/users";
 
 import { useGetLotteryForBoardQuery } from "@/redux/api/all-api/lottery";
 import { SuperResultsCards } from "./SuperResultsCards";
 
 import { blockChainConfig } from "@/contracts/const";
-
+import { useLatestLottery } from "@/contracts/contractUtils/useLatestLottery";
 
 const Dashboard = () => {
   const { address, isConnected, isDisconnected } = useAccount();
@@ -32,7 +31,9 @@ const Dashboard = () => {
 
   const { data, isLoading } = useGetSingleUserDetailsQuery({ address });
 
-  const { data: boardData, isLoading: boardLoading } = useGetLotteryForBoardQuery(undefined)
+  const { data: boardData, isLoading: boardLoading } = useGetLotteryForBoardQuery(undefined);
+
+  const { latestEasyLottery, latestSuperLottery } = useLatestLottery();
 
   const { lotteries, loading } = GetLottery();
 
@@ -55,8 +56,7 @@ const Dashboard = () => {
         setLatestEasy(i);
       }
     }
-
-  }, [lotteries])
+  }, [lotteries]);
   const sendAccountData = useCallback(async () => {
     if (isConnected && !sendData) {
       const ref = localStorage.getItem("ref");
@@ -100,58 +100,69 @@ const Dashboard = () => {
     }
   }, [isDisconnected, isConnected]);
 
-
   // console.log("boardData", boardData)
 
-
   if (loading || isLoading || boardLoading) return;
-
-
 
   return (
     <div>
       <h1 className="mb-3 mt-5 text-xl font-black">Dashboard</h1>
 
       <div className="grid w-full grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2">
-         
-     {(latestEasy>-1) && <JackPotCards
+        {latestEasy > -1 && (
+          <JackPotCards
             lottery={lotteries[latestEasy]}
             loading={loading}
             key={lotteries[latestEasy]?._id}
-            className={`${lotteries[latestEasy]?.lotteryType === "0" ? "main-gradient" : "primary-bg-gradient"} ${lotteries[latestEasy]?.drawn !== false && "hidden"}`}
-          />}
-                
-     {(latestSuper>-1) && <JackPotCards
+            className={`${lotteries[latestEasy]?.lotteryType === "0" ? "main-gradient" : "primary-bg-gradient"} ${latestEasyLottery[0] == 0 && "hidden"}`}
+          />
+        )}
+
+        {latestSuper > -1 && (
+          <JackPotCards
             lottery={lotteries[latestSuper]}
             loading={loading}
             key={lotteries[latestSuper]?._id}
-            className={`${lotteries[latestSuper]?.lotteryType === "0" ? "main-gradient" : "primary-bg-gradient"} ${lotteries[latestSuper]?.drawn !== false && "hidden"}`}
-          />}
-          
-     
-       
+            className={`${lotteries[latestSuper]?.lotteryType === "0" ? "main-gradient" : "primary-bg-gradient"} ${latestSuperLottery[0] == 0 && "hidden"}`}
+          />
+        )}
       </div>
 
       {/* <h4 className="mt-5">Results Board </h4> */}
-      <div className="grid w-full grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2 mt-4  md:mt-12">
-        <ResultsCards className="main-gradient" round={boardData?.roundForEasy} data={boardData?.lotteryType0} />
+      <div className="mt-4 grid w-full grid-cols-1 gap-x-8 gap-y-5 md:mt-12 md:grid-cols-2">
+        <ResultsCards
+          className="main-gradient"
+          round={boardData?.roundForEasy}
+          data={boardData?.lotteryType0}
+        />
 
-
-        <SuperResultsCards className="primary-bg-gradient" round={boardData?.roundForSuper} data={boardData?.lotteryType1} />
+        <SuperResultsCards
+          className="primary-bg-gradient"
+          round={boardData?.roundForSuper}
+          data={boardData?.lotteryType1}
+        />
       </div>
 
       {/* <h4 className="mt-5">Earning Board</h4> */}
       <div
-        className={`grid w-full grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2 mt-4 md:mt-12 ${SrbijaFont.className}`}
+        className={`mt-4 grid w-full grid-cols-1 gap-x-8 gap-y-5 md:mt-12 md:grid-cols-2 ${SrbijaFont.className}`}
       >
-
-        <ShowEarningCard className="main-gradient"
-          jackpotFund={user?.winningAmount?.toFixed(2) || "0.00"}
-          leaderboardBonus={((user?.topBuyerTax + user?.topLeaderTax) / blockChainConfig.decimals)?.toFixed(2) || "0.00"}
-          premiumBonus={user?.premiumTax.toFixed(2)}
-
-          referralCommission={((isNaN(user?.premiumReferralRewards) ? 0 : user?.premiumReferralRewards) +        (isNaN(user?.refTax) ? 0 : user?.refTax)).toFixed(2) || "0.00"}
-
+        <ShowEarningCard
+          className="main-gradient"
+          jackpotFund={user?.totalEarningWinningAmount?.toFixed(2) || "0.00"}
+          leaderboardBonus={
+            (user?.totalEarningTopBuyerTax + user?.totalEarningTopLeaderTax)?.toFixed(2) || "0.00"
+          }
+          premiumBonus={user?.totalEarningPremiumTax.toFixed(2)}
+          referralCommission={
+            (
+              (isNaN(user?.totalEarningPremiumReferralTax)
+                ? 0
+                : user?.totalEarningPremiumReferralTax) +
+              (isNaN(user?.totalEarningPremiumTax) ? 0 : user?.totalEarningPremiumTax) +
+              (isNaN(user?.totalEarningRefTax) ? 0 : user?.totalEarningRefTax)
+            ).toFixed(2) || "0.00"
+          }
         />
 
         <LeaderboardBonusCards className="primary-bg-gradient" />

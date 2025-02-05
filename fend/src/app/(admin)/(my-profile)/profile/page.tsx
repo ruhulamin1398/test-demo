@@ -8,96 +8,81 @@ import { cn } from "@/utils";
 import { useGetSingleUserDetailsQuery } from "@/redux/api/all-api/users";
 import { usePremiumBalance } from "@/contracts/contractUtils/usePremiumBalance";
 import { useUser } from "@/contracts/contractUtils/useUser";
-import { useReferralData } from "@/contracts/contractUtils/useReferralData"; 
+import { useReferralData } from "@/contracts/contractUtils/useReferralData";
 import { blockChainConfig } from "@/contracts/const";
 
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 
-
-import { useWriteContract, useAccount, useWaitForTransactionReceipt } from 'wagmi' 
+import { useWriteContract, useAccount, useWaitForTransactionReceipt } from "wagmi";
 import Link from "next/link";
 
 const Profile = () => {
-
   const { address } = useAccount();
-  const { premiumBalance } = usePremiumBalance(); 
+  const { premiumBalance } = usePremiumBalance();
   const { user, ownerTaxAmount } = useUser();
 
-  const { data, isLoading } = useGetSingleUserDetailsQuery({ address }); 
+  const { data, isLoading } = useGetSingleUserDetailsQuery({ address });
   const [totalUSDTBalance, setTotalUSDTBalance] = useState<number>(0);
 
+  const {
+    data: withdrawAmountHash,
+    writeContract: withdrawAmount,
+    error: withdrawAmountErr,
+  } = useWriteContract();
+  const { isLoading: isWithDewing, isSuccess: iswithDrwan } = useWaitForTransactionReceipt({
+    hash: withdrawAmountHash,
+  });
 
+  const {
+    data: usdtApprovalHash,
+    writeContract: approveUSDT,
+    error: usdtApprovalErr,
+  } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    hash: usdtApprovalHash,
+  });
 
-  const { data: withdrawAmountHash, writeContract: withdrawAmount, error: withdrawAmountErr } = useWriteContract();
-  const { isLoading: isWithDewing, isSuccess: iswithDrwan } = useWaitForTransactionReceipt({ hash: withdrawAmountHash });
-
-  const { data: usdtApprovalHash, writeContract: approveUSDT, error: usdtApprovalErr, } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash: usdtApprovalHash, });
-
-  const { data: becomePremiumHash, writeContract: becomePremium, error: becomePremiumErr, } = useWriteContract();
-  const { isLoading: becomePremiumLoading, isSuccess: becomePremiumCompleted } = useWaitForTransactionReceipt({ hash: becomePremiumHash, });
+  const {
+    data: becomePremiumHash,
+    writeContract: becomePremium,
+    error: becomePremiumErr,
+  } = useWriteContract();
+  const { isLoading: becomePremiumLoading, isSuccess: becomePremiumCompleted } =
+    useWaitForTransactionReceipt({ hash: becomePremiumHash });
 
   const withDrawOwnerReawrdAmount = async () => {
-
     toast.loading("Transferring ...");
     try {
-
-
-
-
-
       withdrawAmount({
         abi: blockChainConfig.lotteryABI,
         address: blockChainConfig.contractAddress as `0x${string}`,
-        functionName: 'withdrawOwnerBalance',
+        functionName: "withdrawOwnerBalance",
         args: [],
-      })
-
-
-
-
-
+      });
     } catch (err) {
       toast.dismiss();
       toast.error("Error in Withdraw ");
     }
-  }
-
+  };
 
   const withDrawReawrdAmount = async () => {
     if (totalUSDTBalance < 10) {
-
       toast.error(`Withdraw required minimum 10 USDT`);
     } else {
-
       toast.loading("Transferring ...");
       try {
-
-
-
-
-
         withdrawAmount({
           abi: blockChainConfig.lotteryABI,
           address: blockChainConfig.contractAddress as `0x${string}`,
-          functionName: 'WithDrawRewardBaalance',
-          args: []
+          functionName: "WithDrawRewardBaalance",
+          args: [],
         });
-
-
-
-
-
       } catch (err) {
         toast.dismiss();
         toast.error("Error in Withdraw ");
       }
-
     }
-
-
-
-  }
+  };
   const becomePremiumAccount = async () => {
     const requireUsdtAmount = 200;
     //  console.log( "Current usdT balance is ", user?.usdT)
@@ -117,33 +102,28 @@ const Profile = () => {
         abi: blockChainConfig.erc20ABI,
         address: blockChainConfig.USDTaddress as `0x${string}`,
         functionName: "approve",
-        args: [blockChainConfig.contractAddress as `0x${string}`, requireUsdtAmount * blockChainConfig.decimals],
-
+        args: [
+          blockChainConfig.contractAddress as `0x${string}`,
+          requireUsdtAmount * blockChainConfig.decimals,
+        ],
       });
     } catch (err) {
       // console.log("error", err);
     }
-
-  }
+  };
 
   useEffect(() => {
     if (usdtApprovalHash && isConfirmed) {
-
       try {
         becomePremium({
           abi: blockChainConfig.lotteryABI,
           address: blockChainConfig.contractAddress as `0x${string}`,
           functionName: "addPremiumAccountWithReferral",
-          args: [
-            data?.originalUser?.referredBy?.address,
-          ],
+          args: [data?.originalUser?.referredBy?.address],
         });
       } catch (err) {
         toast.error("An error occurred during become Premium");
       }
-
-
-
     }
   }, [isConfirmed]);
 
@@ -152,9 +132,7 @@ const Profile = () => {
       toast.dismiss();
       toast.success("You are now a premium account");
     }
-
-  }, [becomePremiumCompleted])
-
+  }, [becomePremiumCompleted]);
 
   useEffect(() => {
     // console.log(" withDraw in  iswithDrwan Changed  ", iswithDrwan)
@@ -163,48 +141,46 @@ const Profile = () => {
       toast.dismiss();
       toast.success("Withdraw success");
     }
-
   }, [iswithDrwan]);
-  useEffect(()=>{
-
-    if(withdrawAmountErr|| usdtApprovalErr || becomePremiumErr){
+  useEffect(() => {
+    if (withdrawAmountErr || usdtApprovalErr || becomePremiumErr) {
       toast.dismiss();
-      toast.error("Transaction failed . . ")
+      toast.error("Transaction failed . . ");
     }
-    
-  },[withdrawAmountErr,usdtApprovalErr,becomePremiumErr])
+  }, [withdrawAmountErr, usdtApprovalErr, becomePremiumErr]);
 
   const formatAddress = (address: string) => {
     return `${address?.slice(0, 4)}...${address?.slice(-4)}`;
   };
+
+  const calculateAvailableRefTax = (refTax) => {
+    let totalRefTax = 0;
+    for (let i = 0; i < refTax.length; i++) {
+      totalRefTax += Number(refTax[i]);
+    }
+    return totalRefTax / blockChainConfig.decimals;
+  };
   useEffect(() => {
     if (
-      user?.winningAmount !== undefined && 
-      user?.topBuyerTax !== undefined && 
+      user?.winningAmount !== undefined &&
+      user?.topBuyerTax !== undefined &&
       user?.topLeaderTax !== undefined &&
       user?.premiumReferralRewards !== undefined &&
       user?.refTax !== undefined &&
-      user?.premiumTax !== undefined 
+      user?.premiumTax !== undefined
     ) {
- 
-
-
       // setTotalUSDTBalance(premiumBalance + referralInfo?.totalReferredAmount  + user?.winningAmount+(user?.topLeaderTax+user?.topBuyerTax)/blockChainConfig.decimals);
-      const ustdBal = 
-        (isNaN(user?.winningAmount) ? 0 : user?.winningAmount) +  
-        (isNaN(user?.premiumReferralRewards) ? 0 : user?.premiumReferralRewards) +  
-        (isNaN(user?.premiumTax) ? 0 : user?.premiumTax) +  
-        (isNaN(user?.refTax) ? 0 : user?.refTax) +  
-        (isNaN(user?.topBuyerTax) ? 0 : user?.topBuyerTax / blockChainConfig.decimals) +  
-        (isNaN(user?.topLeaderTax) ? 0 : user?.topLeaderTax / blockChainConfig.decimals)
 
+      const ustdBal =
+        (isNaN(user?.winningAmount) ? 0 : user?.winningAmount) +
+        (isNaN(user?.premiumReferralRewards) ? 0 : user?.premiumReferralRewards) +
+        (isNaN(user?.premiumTax) ? 0 : user?.premiumTax) +
+        (isNaN(user?.refTax) ? 0 : calculateAvailableRefTax(user.refTax)) +
+        (isNaN(user?.topBuyerTax) ? 0 : user?.topBuyerTax / blockChainConfig.decimals) +
+        (isNaN(user?.topLeaderTax) ? 0 : user?.topLeaderTax / blockChainConfig.decimals);
 
       setTotalUSDTBalance(ustdBal);
-
-
     }
-
-
   }, [premiumBalance, user]);
 
   const arr = [
@@ -214,7 +190,7 @@ const Profile = () => {
     },
     {
       title: "Total Earnings",
-      value: `$${user?.totalEarning.toFixed(2)}`,
+      value: `$${(user?.totalEarningPremiumReferralTax + user?.totalEarningPremiumTax + user?.totalEarningRefTax + user?.totalEarningTopBuyerTax + user?.totalEarningTopLeaderTax + user?.totalEarningWinningAmount).toFixed(2)}`,
     },
     {
       title: "Total Purchase",
@@ -228,30 +204,44 @@ const Profile = () => {
   return (
     <section>
       <div className="mt-2">
-
-        <div className="flex   mb-2  flex-col md:flex-left">
-        <div className="flex flex-row  items-center w-48 ">
-        <h2 className="mb-2 text-lg font-extrabold lg:text-2xl mr-4">My&nbsp;Profile </h2>
-        {(blockChainConfig.owner == address)&&(< >
-        
-        
-          <button className="lg:text-lg text-gray-400 font-weight-normal border-r border-gray-400 px-2 mx-1 underline  "  > <Link href="/premium-users" > Premium&nbsp;Users </Link></button> 
-          <button className="lg:text-lg text-gray-400 font-weight-normal  px-2 mx-1 underline  "  > <Link href="/lottery" >Manage&nbsp;Lottery </Link></button> 
-          {/* <button className="lg:text-lg text-gray-400 font-weight-normal  px-2 mx-1 underline  " onClick={() => withDrawOwnerReawrdAmount()}>Premium&nbsp;Users</button>  */}
-        </>)}
-        </div>
-        
-        {(user?.premium ==0 && blockChainConfig.owner != address )&& (<div className="flex flex-col md:flex-row  gap-2 rounded-sm bg-[#1A1D46] p-4 justify-between text-center items-center w-full">
-          <div className="text-center w-full">
-          ARE YOU INTERESTED PREMIUM MEMBER ! GET $100 USDT AND ENJOY 15% GLOBAL BONUS  
+        <div className="md:flex-left mb-2 flex flex-col">
+          <div className="flex w-48 flex-row items-center">
+            <h2 className="mb-2 mr-4 text-lg font-extrabold lg:text-2xl">My&nbsp;Profile </h2>
+            {blockChainConfig.owner == address && (
+              <>
+                <button className="font-weight-normal mx-1 border-r border-gray-400 px-2 text-gray-400 underline lg:text-lg">
+                  {" "}
+                  <Link href="/premium-users"> Premium&nbsp;Users </Link>
+                </button>
+                <button className="font-weight-normal mx-1 px-2 text-gray-400 underline lg:text-lg">
+                  {" "}
+                  <Link href="/lottery">Manage&nbsp;Lottery </Link>
+                </button>
+                {/* <button className="lg:text-lg text-gray-400 font-weight-normal  px-2 mx-1 underline  " onClick={() => withDrawOwnerReawrdAmount()}>Premium&nbsp;Users</button>  */}
+              </>
+            )}
           </div>
-          
-        {(user?.premium == 0 && blockChainConfig.owner != address) && (<div className="w-full md:w-64 text-center md:text-right"> <button className="btn-gradient-purple lg:text-base px-4  " onClick={() => becomePremiumAccount()}>Add Premium</button> </div>)}
-        </div>)}
 
+          {user?.premium == 0 && blockChainConfig.owner != address && (
+            <div className="flex w-full flex-col items-center justify-between gap-2 rounded-sm bg-[#1A1D46] p-4 text-center md:flex-row">
+              <div className="w-full text-center">
+                ARE YOU INTERESTED PREMIUM MEMBER ! GET $100 USDT AND ENJOY 15% GLOBAL BONUS
+              </div>
 
+              {user?.premium == 0 && blockChainConfig.owner != address && (
+                <div className="w-full text-center md:w-64 md:text-right">
+                  {" "}
+                  <button
+                    className="btn-gradient-purple px-4 lg:text-base"
+                    onClick={() => becomePremiumAccount()}
+                  >
+                    Add Premium
+                  </button>{" "}
+                </div>
+              )}
+            </div>
+          )}
         </div>
-
 
         <div className="flex items-start gap-3 rounded-sm bg-[#1A1D46] pt-2 text-gray-200 sm:p-2 lg:items-center">
           <LogoMin className="ml-2 size-24" />
@@ -264,16 +254,12 @@ const Profile = () => {
                 <Copy className="size-3 -translate-y-1" />
               </div>
 
-              {(blockChainConfig.owner != address) ? (
+              {blockChainConfig.owner != address ? (
                 <div className="flex flex-col items-start gap-x-4 gap-y-2 md:flex-row">
-
-
                   <div className="flex items-center gap-x-4">
                     <div className="flex h-5 items-center">
                       <User className="size-4" />
-                      <p className="h-full font-bold">
-                        {(user?.premium == 0) ? "User" : "Premium"}
-                      </p>
+                      <p className="h-full font-bold">{user?.premium == 0 ? "User" : "Premium"}</p>
                     </div>
 
                     <div className="flex h-5 items-center">
@@ -287,150 +273,131 @@ const Profile = () => {
                   <div className="flex h-5 items-center">
                     <SquareMousePointer className="size-4" />
                     <p className="h-full font-bold">
-                      <span className="text-sm leading-3 text-gray-300 mr-2">EXP: </span>
+                      <span className="mr-2 text-sm leading-3 text-gray-300">EXP: </span>
                       <span className="text-xs">
-                        {new Date(data?.originalUser?.expiryDate).toLocaleString('en-US', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                          hour: 'numeric',
-                          minute: 'numeric',
+                        {new Date(data?.originalUser?.expiryDate).toLocaleString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric",
                           hour12: true, // This ensures AM/PM is displayed
                         })}
                       </span>
-
                     </p>
                   </div>
                 </div>
               ) : (
                 <div className="flex h-5 items-center">
                   <User className="size-4" />
-                  <p className="h-full font-bold">
-                    Owner
-                  </p>
+                  <p className="h-full font-bold">Owner</p>
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-x-2 hidden md:block">
-              {(blockChainConfig.owner == address) ?(<>              
-                <button className="btn-gradient-purple lg:text-lg" onClick={() => withDrawOwnerReawrdAmount()}>Withdraw Owner Tax</button> 
-                </>)
-                :
+            <div className="flex hidden items-center gap-x-2 md:block">
+              {blockChainConfig.owner == address ? (
                 <>
-
-                  <button className="btn-gradient-purple lg:text-lg " onClick={() => withDrawReawrdAmount()}>Withdraw</button>
+                  <button
+                    className="btn-gradient-purple lg:text-lg"
+                    onClick={() => withDrawOwnerReawrdAmount()}
+                  >
+                    Withdraw Owner Tax
+                  </button>
                 </>
-              }
-          
-             
-             
-              
+              ) : (
+                <>
+                  <button
+                    className="btn-gradient-purple lg:text-lg"
+                    onClick={() => withDrawReawrdAmount()}
+                  >
+                    Withdraw
+                  </button>
+                </>
+              )}
             </div>
-              
           </div>
         </div>
 
-        {(blockChainConfig.owner != address) ?
+        {blockChainConfig.owner != address ? (
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-
             {arr.map((items, index) => {
               return (
-                <div key={items.title} className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200 text-center md:text-left">
+                <div
+                  key={items.title}
+                  className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-center text-gray-200 md:text-left"
+                >
                   <p className="font-bold lg:text-xl">{items?.title}</p>
                   <p
-                    className={cn("mt-3 gap-x-1 text-lg font-bold lg:text-xl justify-center md:justify-start", {
-                      "flex items-center": index === 0,
-                    })}
+                    className={cn(
+                      "mt-3 justify-center gap-x-1 text-lg font-bold md:justify-start lg:text-xl",
+                      {
+                        "flex items-center": index === 0,
+                      },
+                    )}
                   >
-              
                     <span className="translate-y-1 text-center md:text-left"> {items?.value}</span>
                   </p>
                 </div>
               );
             })}
 
-
-            <div   className="gap-x-3 rounded-sm   p-4 text-gray-200 text-center md:text-left block md:hidden">
-            {(blockChainConfig.owner == address) ?
-                <button className="btn-gradient-purple lg:text-base w-full" onClick={() => withDrawOwnerReawrdAmount()}>Withdraw Owner Tax</button>
-                :
+            <div className="block gap-x-3 rounded-sm p-4 text-center text-gray-200 md:hidden md:text-left">
+              {blockChainConfig.owner == address ? (
+                <button
+                  className="btn-gradient-purple w-full lg:text-base"
+                  onClick={() => withDrawOwnerReawrdAmount()}
+                >
+                  Withdraw Owner Tax
+                </button>
+              ) : (
                 <>
-
-                  <button className="btn-gradient-purple lg:text-base w-full" onClick={() => withDrawReawrdAmount()}>Withdraw</button>
+                  <button
+                    className="btn-gradient-purple w-full lg:text-base"
+                    onClick={() => withDrawReawrdAmount()}
+                  >
+                    Withdraw
+                  </button>
                 </>
-              }
-         
-
-              
+              )}
             </div>
-          </div> :
+          </div>
+        ) : (
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-4">
-
-
             <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
               <p className="font-bold lg:text-xl">Owner Tax </p>
-              <p
-                className="mt-3 gap-x-1 text-lg font-bold lg:text-xl   flex items-center"
-              >
+              <p className="mt-3 flex items-center gap-x-1 text-lg font-bold lg:text-xl">
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
-                <span className="translate-y-1">
-                  {ownerTaxAmount[0]}
-
-                </span>
+                <span className="translate-y-1">{ownerTaxAmount[0]}</span>
               </p>
             </div>
-
-
-
 
             <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
               <p className="font-bold lg:text-xl">Premium Tax </p>
-              <p
-                className="mt-3 gap-x-1 text-lg font-bold lg:text-xl   flex items-center"
-              >
+              <p className="mt-3 flex items-center gap-x-1 text-lg font-bold lg:text-xl">
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
-                <span className="translate-y-1">
-
-                  {ownerTaxAmount[1]}
-
-                </span>
+                <span className="translate-y-1">{ownerTaxAmount[1]}</span>
               </p>
             </div>
 
-
             <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
               <p className="font-bold lg:text-xl">User Tax </p>
-              <p
-                className="mt-3 gap-x-1 text-lg font-bold lg:text-xl   flex items-center"
-              >
+              <p className="mt-3 flex items-center gap-x-1 text-lg font-bold lg:text-xl">
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
-                <span className="translate-y-1">
-
-                  ${totalUSDTBalance.toFixed(2)}
-
-                </span>
+                <span className="translate-y-1">{`$${(user?.totalEarningPremiumReferralTax + user?.totalEarningPremiumTax + user?.totalEarningRefTax + user?.totalEarningTopBuyerTax + user?.totalEarningTopLeaderTax + user?.totalEarningWinningAmount).toFixed(2)}`}</span>
               </p>
             </div>
 
             <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
               <p className="font-black lg:text-xl">Owner Total Tax </p>
-              <p
-                className="mt-3 gap-x-1 text-lg font-bold lg:text-xl   flex items-center"
-              >
+              <p className="mt-3 flex items-center gap-x-1 text-lg font-bold lg:text-xl">
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">
-
-                  {(ownerTaxAmount[2]+ totalUSDTBalance).toFixed(2)}
-
-
+                  {(ownerTaxAmount[2] + totalUSDTBalance).toFixed(2)}
                 </span>
               </p>
             </div>
-
-
-
           </div>
-        }
+        )}
       </div>
     </section>
   );
