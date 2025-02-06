@@ -13,6 +13,7 @@ export interface User {
   topLeaderTax: number;
   refTickets: number;
   refTax: [];
+  availeableRefTax: number;
   premiumTax: number;
   usdT: number;
   premiumReferralRewards: number;
@@ -47,6 +48,7 @@ export const useUser = () => {
     topLeaderTax: 0,
     refTickets: 0,
     refTax: [],
+    availeableRefTax: 0,
     premiumTax: 0,
     usdT: 0,
     premiumReferralRewards: 0,
@@ -92,10 +94,11 @@ export const useUser = () => {
 
   const calculateAvailableRefTax = (refTax) => {
     let totalRefTax = 0;
+
     for (let i = 0; i < refTax.length; i++) {
-      totalRefTax += Number(refTax[i]);
+      totalRefTax += Number(refTax[i]) / blockChainConfig.decimals;
     }
-    return totalRefTax / blockChainConfig.decimals;
+    return totalRefTax;
   };
 
   useEffect(() => {
@@ -230,6 +233,7 @@ export const useUser = () => {
       setUser({
         ...userInformation,
         totalEarningBalance: totalEarningBalance,
+        availeableRefTax: availeableRefTax,
         totalRefBalance:
           userInformation.totalEarningPremiumReferralTax + userInformation.totalEarningRefTax,
         totalLeaderBalance:

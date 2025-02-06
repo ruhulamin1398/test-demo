@@ -15,20 +15,6 @@ const Generation = () => {
 
   const { user, ownerTaxAmount } = useUser();
 
-  const calculateAvailableRefTax = (refTax) => {
-    console.log("ref ", refTax);
-    let totalRefTax = 0;
-    if (!isNaN(refTax)) {
-      for (let i = 0; i < 7; i++) {
-        if (!isNaN(Number(refTax[i]))) {
-          totalRefTax += Number(refTax[i]);
-        }
-        console.log(totalRefTax);
-      }
-    }
-    return (totalRefTax / blockChainConfig.decimals).toFixed(2);
-  };
-
   if (isLoading) return;
 
   return (
@@ -51,7 +37,7 @@ const Generation = () => {
           >
             <span className="sm:hidden"> All Com.</span>
             <span className="hidden sm:inline"> All Commission</span>
-            <span> ${calculateAvailableRefTax(calculateAvailableRefTax(user?.refTax))}</span>
+            <span> ${user?.availeableRefTax.toFixed(2)} </span>
           </p>
         </div>
       </div>
