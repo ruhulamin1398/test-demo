@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Contract, JsonRpcProvider } = require("ethers");
 const { contractAddress, fujiProviderUrl } = require("../const/address");
 const lottaverseABI = require("../const/lottaverse.json");
@@ -6,9 +6,8 @@ const Lottery = require("../models/lottery");
 const Purchase = require("../models/purchase");
 const TicketHolder = require("../models/ticketHolders");
 const User = require("../models/user");
-const { formatLotteryNumber, formatDrawLotteryNumber } = require('../utils');
-const LotteryDraw = require('../models/lotteryDraw');
-
+const { formatLotteryNumber, formatDrawLotteryNumber } = require("../utils");
+const LotteryDraw = require("../models/lotteryDraw");
 
 exports.purchase = async (req, res) => {
   const session = await mongoose.startSession();
@@ -17,14 +16,15 @@ exports.purchase = async (req, res) => {
   try {
     const { _id, buyer, amount, price, referral, lotteryType, tax } = req.body;
 
-    tax.forEach(taxEntry => {
+    tax.forEach((taxEntry) => {
       taxEntry.lottery = Array.from(new Set(taxEntry.lottery)); // Remove duplicates
     });
 
-
     const user = buyer;
 
-    const existingUser = await User.findOne({ address: buyer }).session(session);
+    const existingUser = await User.findOne({ address: buyer }).session(
+      session
+    );
 
     if (existingUser) {
       const currentDate = new Date();
@@ -32,22 +32,20 @@ exports.purchase = async (req, res) => {
       // Check if the expiryDate is not set or has already expired
       if (!existingUser.expiryDate || existingUser.expiryDate < currentDate) {
         // If expired or not set, extend from current date
-        existingUser.expiryDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
-        existingUser.userStatus = 'active'
+        existingUser.expiryDate = new Date(Date.now() + 60 * 60 * 1000);
+        existingUser.userStatus = "active";
       } else {
         // If expiryDate is in the future, extend from the existing expiryDate
-        existingUser.expiryDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
-        existingUser.userStatus = 'active'
+        existingUser.expiryDate = new Date(Date.now() + 60 * 60 * 1000);
+        existingUser.userStatus = "active";
       }
 
       if (existingUser.expiryDate < new Date()) {
-        existingUser.userStatus = 'inactive';
+        existingUser.userStatus = "inactive";
       }
 
       await existingUser.save({ session });
     }
-
-
 
     const totalPrice = price * amount;
     let alreadyUser = await TicketHolder.findOne({
@@ -77,7 +75,8 @@ exports.purchase = async (req, res) => {
       lottery.holders.push(alreadyUser._id);
     }
 
-    const currentBuyerAmount = lottery.holdersBuy?.get(buyer.toLowerCase()) || 0;
+    const currentBuyerAmount =
+      lottery.holdersBuy?.get(buyer.toLowerCase()) || 0;
     lottery.set(
       `holdersBuy.${buyer.toLowerCase()}`,
       currentBuyerAmount + amount * price
@@ -90,7 +89,7 @@ exports.purchase = async (req, res) => {
       price,
       referral,
       lotteryType,
-      tax
+      tax,
     });
     await newPurchase.save({ session });
 
@@ -98,19 +97,32 @@ exports.purchase = async (req, res) => {
     lottery.ticketSold = (lottery.ticketSold || 0) + amount;
 
     // Validate and process tax array of arrays
-    if (Array.isArray(tax) && tax.every(t => Array.isArray(t.lottery) && t.lottery.every(val => typeof val === 'number' && !isNaN(val)))) {
+    if (
+      Array.isArray(tax) &&
+      tax.every(
+        (t) =>
+          Array.isArray(t.lottery) &&
+          t.lottery.every((val) => typeof val === "number" && !isNaN(val))
+      )
+    ) {
       // Flatten the nested array of 'lottery' tax numbers and calculate the total tax
-      const totalTax = tax.flatMap(t => t.lottery).reduce((sum, val) => sum + val, 0);
+      const totalTax = tax
+        .flatMap((t) => t.lottery)
+        .reduce((sum, val) => sum + val, 0);
 
       // Add the total tax to 'lottery.taxCollected'
       lottery.taxCollected = (lottery.taxCollected || 0) + totalTax;
 
       // Calculate the treasury tax by subtracting the first 4 tax values from the total
-      const treasuryTax = totalTax - tax.flatMap(t => t.lottery).slice(0, 4).reduce((sum, val) => sum + val, 0);
+      const treasuryTax =
+        totalTax -
+        tax
+          .flatMap((t) => t.lottery)
+          .slice(0, 4)
+          .reduce((sum, val) => sum + val, 0);
       lottery.treasuryTax = (lottery.treasuryTax || 0) + treasuryTax;
-
     } else {
-      throw new Error('Invalid tax format or values');
+      throw new Error("Invalid tax format or values");
     }
 
     await lottery.save({ session });
@@ -144,20 +156,19 @@ exports.GetMyPurchase = async (req, res) => {
     const { address } = req.params;
     let { page, limit } = req.query;
 
-
     page = page ? parseInt(page, 10) : null;
     limit = limit ? parseInt(limit, 10) : null;
 
     const purchases = await Purchase.find({ buyer: address })
-      .populate('lotteryId')
+      .populate("lotteryId")
       .sort({ createdAt: -1 });
 
-      const resultsArray = purchases.flatMap(data =>
-        data.tax.map(taxDetail => ({
-          tax: taxDetail,
-          buyer: data.buyer
-        }))
-      ); 
+    const resultsArray = purchases.flatMap((data) =>
+      data.tax.map((taxDetail) => ({
+        tax: taxDetail,
+        buyer: data.buyer,
+      }))
+    );
 
     // If pagination parameters exist, apply pagination
     let paginatedResults = resultsArray;
@@ -171,26 +182,23 @@ exports.GetMyPurchase = async (req, res) => {
       paginatedResults = resultsArray.slice(startIndex, endIndex);
       totalItems = resultsArray.length;
       totalPages = Math.ceil(totalItems / limit);
-
-
     }
 
     // Send the response with or without pagination
     res.status(200).json({
       purchases: paginatedResults,
       meta: {
-        totalItems,     // Total number of items in resultsArray
-        totalPages,     // Total number of pages (only if pagination is applied)
+        totalItems, // Total number of items in resultsArray
+        totalPages, // Total number of pages (only if pagination is applied)
         currentPage: page, // Current page number, default to 1 if not provided
-        limit           // Limit per page
-      }
+        limit, // Limit per page
+      },
     });
   } catch (err) {
     console.error("Error in GetMyPurchase:", err);
     res.status(500).send("Something went wrong");
   }
 };
-
 
 exports.getLotteryDrawFromDB = async (req, res) => {
   try {
@@ -227,7 +235,6 @@ exports.getLotteryDrawFromDB = async (req, res) => {
     const roundForEasy = lastRoundNumbers[0]?.roundForEasy || null;
     const roundForSuper = lastRoundNumbers[0]?.roundForSuper || null;
 
-    
     const matchConditions = {};
     if (lotteryType) {
       matchConditions.lottery_type = lotteryType;
@@ -349,9 +356,6 @@ exports.getLotteryDrawFromDB = async (req, res) => {
   }
 };
 
-
-
-
 // exports.getLotteryDrawFromDB = async (req, res) => {
 //   try {
 //     const { lotteryType, round, search_ticket, page, limit } = req.query;
@@ -399,19 +403,19 @@ exports.getLotteryDrawFromDB = async (req, res) => {
 //                   { $match: { round: parsedRound } }, // Match specific round value
 //                 ]
 //               : [
-                  
+
 //                   { $sort: { numericLotteryId: -1 } }, // Default sorting
 //                 ]),
 //           ],
 //           lotteryType1: [
 //             { $match: { lottery_type: "1" } },
 //             { $addFields: { numericLotteryId: { $toInt: "$round" } } },
-//             ...(parsedRound !== null && parsedRound > 0  
+//             ...(parsedRound !== null && parsedRound > 0
 //               ? [
 //                   { $match: { round: parsedRound } }, // Match specific round value
 //                 ]
 //               : [
-                  
+
 //                   { $sort: { numericLotteryId: -1 } }, // Default sorting
 //                 ]),
 //           ],
@@ -554,7 +558,6 @@ exports.getLotteryDrawFromDB = async (req, res) => {
 //   }
 // };
 
-
 exports.getLotteryBuyer = async (req, res) => {
   const { lotteryId } = req.query;
   try {
@@ -616,14 +619,14 @@ exports.addPremiums = async (req, res) => {
     if (!alreadyUser) {
       alreadyUser = new TicketHolder({ address });
     }
-    const existingUser = await User.findOne({ address })
+    const existingUser = await User.findOne({ address });
     if (!existingUser) {
       return res.status(500).send("No user found.");
     }
 
     alreadyUser.premium = true;
 
-    existingUser.userType = "premium"
+    existingUser.userType = "premium";
     await existingUser.save();
 
     await alreadyUser.save();
@@ -689,21 +692,28 @@ exports.updateLottery = async (req, res) => {
   session.startTransaction();
 
   try {
-
     // Step 1: Check for duplicate entry
-    const existingEntry = await LotteryDraw.findOne({ lottery_id, round, lottery_type });
+    const existingEntry = await LotteryDraw.findOne({
+      lottery_id,
+      round,
+      lottery_type,
+    });
     if (existingEntry) {
-      return res.status(400).json({ message: "A lottery draw with this lottery_type, round, and lottery_id already exists." });
+      return res
+        .status(400)
+        .json({
+          message:
+            "A lottery draw with this lottery_type, round, and lottery_id already exists.",
+        });
     }
 
     if (!Array.isArray(result) || result.length === 0) {
       return res.status(400).json({ message: "Invalid lottery result data." });
     }
 
+    const existingLottery = await Lottery.findOne({ lotteryId: lottery_id });
 
-    const existingLottery = await Lottery.findOne({ lotteryId: lottery_id })
-
-    const lotteryData = result.map(res => {
+    const lotteryData = result.map((res) => {
       const lotteryNumber = res.ticket.slice(2, 14);
       const formattedLotteryNumbers = formatDrawLotteryNumber(lotteryNumber);
 
@@ -711,13 +721,13 @@ exports.updateLottery = async (req, res) => {
         ticket: formattedLotteryNumbers.arrayNumbers,
         search_ticket: formattedLotteryNumbers.solidNumber,
         winner: res.winner,
-        prize: res.prize
+        prize: res.prize,
       };
     });
 
     const userLotteries = new Map();
 
-    lotteryData.forEach(data => {
+    lotteryData.forEach((data) => {
       const { winner, prize, ticket, search_ticket } = data;
 
       if (!userLotteries.has(winner)) {
@@ -725,7 +735,7 @@ exports.updateLottery = async (req, res) => {
           tickets: new Set(),
           prizeTicketMap: new Map(),
           search_tickets: new Set(),
-          lottery_id
+          lottery_id,
         });
       }
 
@@ -734,63 +744,89 @@ exports.updateLottery = async (req, res) => {
       userLotteries.get(winner).prizeTicketMap.set(ticket, prize);
     });
 
-    const userLotteryData = Array.from(userLotteries.entries()).map(([winner, details]) => ({
-      winner,
-      lottery_id: details.lottery_id,
-      tickets: Array.from(details.tickets),
-      prizeTicketMap: Object.fromEntries(details.prizeTicketMap),
-      search_tickets: Array.from(details.search_tickets)
-    }));
+    const userLotteryData = Array.from(userLotteries.entries()).map(
+      ([winner, details]) => ({
+        winner,
+        lottery_id: details.lottery_id,
+        tickets: Array.from(details.tickets),
+        prizeTicketMap: Object.fromEntries(details.prizeTicketMap),
+        search_tickets: Array.from(details.search_tickets),
+      })
+    );
 
     const allResultEntries = [];
 
-    for (const { winner, tickets, prizeTicketMap, search_tickets } of userLotteryData) {
+    for (const {
+      winner,
+      tickets,
+      prizeTicketMap,
+      search_tickets,
+    } of userLotteryData) {
       // Use all tickets and search_tickets directly
       const allTickets = Array.from(tickets);
       let allSearchTickets = Array.from(search_tickets);
 
       // If search_tickets is shorter than tickets, pad with null to match lengths
       if (allSearchTickets.length < allTickets.length) {
-        allSearchTickets = [...allSearchTickets, ...Array(allTickets.length - allSearchTickets.length).fill(null)];
+        allSearchTickets = [
+          ...allSearchTickets,
+          ...Array(allTickets.length - allSearchTickets.length).fill(null),
+        ];
       }
 
       // Map result entries without slicing, covering all tickets
-      const resultEntries = allTickets.map((ticket, index) => {
-        const searchTicket = allSearchTickets[index]; // Use empty string if no search ticket
-        const prize = prizeTicketMap[ticket.join(',')] || null; // Match ticket with prize, if available
+      const resultEntries = allTickets
+        .map((ticket, index) => {
+          const searchTicket = allSearchTickets[index]; // Use empty string if no search ticket
+          const prize = prizeTicketMap[ticket.join(",")] || null; // Match ticket with prize, if available
 
-        // Only include non-empty tickets
-        return ticket && ticket.length ? {
-          ticket,
-          search_ticket: searchTicket,
-          winner,
-          prize,
-        } : null;
-      }).filter(entry => entry !== null); // Remove null entries
+          // Only include non-empty tickets
+          return ticket && ticket.length
+            ? {
+                ticket,
+                search_ticket: searchTicket,
+                winner,
+                prize,
+              }
+            : null;
+        })
+        .filter((entry) => entry !== null); // Remove null entries
 
       allResultEntries.push(...resultEntries);
     }
 
     if (allResultEntries.length > 0) {
-      await LotteryDraw.create([{
-        result: allResultEntries,
-        lottery_id,
-        round,
-        lottery_type,
-        is_draw
-      }], { session });
+      await LotteryDraw.create(
+        [
+          {
+            result: allResultEntries,
+            lottery_id,
+            round,
+            lottery_type,
+            is_draw,
+          },
+        ],
+        { session }
+      );
     }
 
-    await Lottery.findOneAndUpdate({ lotteryId: lottery_id }, { drawn: true }, { session });
+    await Lottery.findOneAndUpdate(
+      { lotteryId: lottery_id },
+      { drawn: true },
+      { session }
+    );
 
     const purchaseUpdates = [];
 
-
-
-    const winningTickets = new Set(lotteryData.map(data => data.ticket.join(','))); // Create a set of winning tickets
+    const winningTickets = new Set(
+      lotteryData.map((data) => data.ticket.join(","))
+    ); // Create a set of winning tickets
 
     for (const buyer of userLotteries.keys()) {
-      const purchaseLotteries = await Purchase.find({ lotteryId: existingLottery._id, buyer }).session(session);
+      const purchaseLotteries = await Purchase.find({
+        lotteryId: existingLottery._id,
+        buyer,
+      }).session(session);
 
       if (!purchaseLotteries || purchaseLotteries.length === 0) {
         continue;
@@ -808,20 +844,21 @@ exports.updateLottery = async (req, res) => {
               return entry;
             }
 
-
-            if (entry.status === 'win') {
+            if (entry.status === "win") {
               return entry; // Return the original entry if it's already a win
             }
 
-            const isLotteryMatched = purchaseLottery.lotteryId && purchaseLottery.lotteryId.equals(existingLottery._id);
+            const isLotteryMatched =
+              purchaseLottery.lotteryId &&
+              purchaseLottery.lotteryId.equals(existingLottery._id);
 
             if (isLotteryMatched) {
-              const ticketKey = entry.lottery.join(','); // Create a string key for the ticket
+              const ticketKey = entry.lottery.join(","); // Create a string key for the ticket
               const isMatched = winningTickets.has(ticketKey); // Check if this ticket is a winning ticket
 
               return {
                 ...entry,
-                status: isMatched ? 'win' : 'loss',
+                status: isMatched ? "win" : "loss",
               };
             }
 
@@ -837,22 +874,19 @@ exports.updateLottery = async (req, res) => {
       purchaseUpdates.push(...updatedPurchases);
     }
 
-
     await session.commitTransaction();
     session.endSession();
 
     res.status(200).json({
       message: "Lottery draw successful.",
     });
-
   } catch (err) {
     await session.abortTransaction();
     session.endSession();
-    console.log(err)
+    console.log(err);
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 exports.getDrawLotteryForDashboard = async (req, res) => {
   try {
@@ -863,22 +897,22 @@ exports.getDrawLotteryForDashboard = async (req, res) => {
             { $match: { lottery_type: "0" } },
             { $addFields: { numericLotteryId: { $toInt: "$lottery_id" } } },
             { $sort: { numericLotteryId: -1, round: -1 } },
-            { $limit: 1 }
+            { $limit: 1 },
           ],
           lotteryType1: [
             { $match: { lottery_type: "1" } },
             { $addFields: { numericLotteryId: { $toInt: "$lottery_id" } } },
             { $sort: { numericLotteryId: -1, round: -1 } },
-            { $limit: 1 }
-          ]
-        }
+            { $limit: 1 },
+          ],
+        },
       },
       {
         $project: {
           lotteryType0: { $arrayElemAt: ["$lotteryType0", 0] },
-          lotteryType1: { $arrayElemAt: ["$lotteryType1", 0] }
-        }
-      }
+          lotteryType1: { $arrayElemAt: ["$lotteryType1", 0] },
+        },
+      },
     ]);
 
     const lotteryType0Id = highestLotteryIdDocs[0]?.lotteryType0?.lottery_id;
@@ -886,9 +920,18 @@ exports.getDrawLotteryForDashboard = async (req, res) => {
     const roundForEasy = highestLotteryIdDocs[0]?.lotteryType0?.round || null;
     const roundForSuper = highestLotteryIdDocs[0]?.lotteryType1?.round || null;
 
-    const lotteryType0Draws = lotteryType0Id ? await LotteryDraw.find({ lottery_id: lotteryType0Id, lottery_type: "0" }) : [];
-    const lotteryType1Draws = lotteryType1Id ? await LotteryDraw.find({ lottery_id: lotteryType1Id, lottery_type: "1" }) : [];
-
+    const lotteryType0Draws = lotteryType0Id
+      ? await LotteryDraw.find({
+          lottery_id: lotteryType0Id,
+          lottery_type: "0",
+        })
+      : [];
+    const lotteryType1Draws = lotteryType1Id
+      ? await LotteryDraw.find({
+          lottery_id: lotteryType1Id,
+          lottery_type: "1",
+        })
+      : [];
 
     const resultType0 = [];
     const resultType1 = [];
@@ -897,33 +940,34 @@ exports.getDrawLotteryForDashboard = async (req, res) => {
       ...lotteryType0Draws.map(async (draw) => {
         const prizeData = await Lottery.findOne({
           lotteryId: draw.lottery_id.toString(),
-          lotteryType: draw.lottery_type.toString()
+          lotteryType: draw.lottery_type.toString(),
         });
 
-        const sortedPrizeDistribution = prizeData?.prizeDistribution
-          ?.map((prize) => {
-            const personCount = prize.person || 1;
-            const amount = prize.amount / personCount;
+        const sortedPrizeDistribution =
+          prizeData?.prizeDistribution
+            ?.map((prize) => {
+              const personCount = prize.person || 1;
+              const amount = prize.amount / personCount;
 
-            return { ...prize, amount };
-          })
-          .sort((a, b) => b.amount - a.amount) || [];
+              return { ...prize, amount };
+            })
+            .sort((a, b) => b.amount - a.amount) || [];
 
         draw.result.forEach((userResult) => {
-
           if (userResult.prize >= 1 && userResult.prize <= 4) {
             const prizeIndex = userResult.prize - 1; // Get the index based on the prize
 
             // Check if prizeIndex is within the bounds of sortedPrizeDistribution
             if (sortedPrizeDistribution[prizeIndex]) {
-              const matchedPrizeDistribution = sortedPrizeDistribution[prizeIndex];
+              const matchedPrizeDistribution =
+                sortedPrizeDistribution[prizeIndex];
 
               resultType0.push({
                 winner: userResult.winner,
                 ticket: userResult.ticket,
                 prize: userResult.prize,
                 amount: matchedPrizeDistribution.amount,
-                search_ticket: userResult.search_ticket
+                search_ticket: userResult.search_ticket,
               });
             }
           }
@@ -933,45 +977,43 @@ exports.getDrawLotteryForDashboard = async (req, res) => {
       ...lotteryType1Draws.map(async (draw) => {
         const prizeData = await Lottery.findOne({
           lotteryId: draw.lottery_id.toString(),
-          lotteryType: draw.lottery_type.toString()
+          lotteryType: draw.lottery_type.toString(),
         });
 
         // const sortedPrizeDistribution = prizeData?.prizeDistribution?.sort((a, b) => b.amount - a.amount) || [];
 
+        const sortedPrizeDistribution =
+          prizeData?.prizeDistribution
+            ?.map((prize) => {
+              const personCount = prize.person || 1;
+              const amount = prize.amount / personCount;
 
-        const sortedPrizeDistribution = prizeData?.prizeDistribution
-          ?.map((prize) => {
-            const personCount = prize.person || 1;
-            const amount = prize.amount / personCount;
-
-            return { ...prize, amount };
-          })
-          .sort((a, b) => b.amount - a.amount) || [];
-
+              return { ...prize, amount };
+            })
+            .sort((a, b) => b.amount - a.amount) || [];
 
         draw.result.forEach((userResult) => {
-
           // Process only prizes 1 to 4
           if (userResult.prize >= 1 && userResult.prize <= 4) {
             const prizeIndex = userResult.prize - 1; // Get the index based on the prize
 
             // Check if prizeIndex is within the bounds of sortedPrizeDistribution
             if (sortedPrizeDistribution[prizeIndex]) {
-              const matchedPrizeDistribution = sortedPrizeDistribution[prizeIndex];
+              const matchedPrizeDistribution =
+                sortedPrizeDistribution[prizeIndex];
 
               resultType1.push({
                 winner: userResult.winner,
                 ticket: userResult.ticket,
                 prize: userResult.prize,
                 amount: matchedPrizeDistribution.amount,
-                search_ticket: userResult.search_ticket
+                search_ticket: userResult.search_ticket,
               });
             }
           }
         });
-      })
+      }),
     ]);
-
 
     resultType0.sort((a, b) => b.amount - a.amount);
     resultType1.sort((a, b) => b.amount - a.amount);
@@ -980,10 +1022,10 @@ exports.getDrawLotteryForDashboard = async (req, res) => {
       roundForEasy,
       roundForSuper,
       lotteryType0: resultType0,
-      lotteryType1: resultType1
+      lotteryType1: resultType1,
     });
   } catch (error) {
-    console.error('Error fetching lottery draws:', error);
-    return res.status(500).json({ message: 'Internal server error', error });
+    console.error("Error fetching lottery draws:", error);
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };

@@ -58,9 +58,7 @@ const purchaseTicket = async ({
       //   existingUser.userStatus = "inactive";
       // }
 
-      existingUser.expiryDate = new Date(
-        currentDate.setHours(currentDate.getHours() + 1)
-      );
+      existingUser.expiryDate = new Date(Date.now() + 60 * 60 * 1000);
 
       await existingUser.save({ session });
     }
