@@ -159,7 +159,6 @@ const Dashboard = () => {
               (isNaN(user?.totalEarningPremiumReferralTax)
                 ? 0
                 : user?.totalEarningPremiumReferralTax) +
-              (isNaN(user?.totalEarningPremiumTax) ? 0 : user?.totalEarningPremiumTax) +
               (isNaN(user?.totalEarningRefTax) ? 0 : user?.totalEarningRefTax)
             ).toFixed(2) || "0.00"
           }
