@@ -351,7 +351,7 @@ const Profile = () => {
         ) : (
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-4">
             <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
-              <p className="font-bold lg:text-xl">Available Owner Tax </p>
+              <p className="font-bold lg:text-xl"> Owner Tax </p>
               <p className="mt-3 flex items-center gap-x-1 text-lg font-bold lg:text-xl">
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">{ownerTaxAmount[0]}</span>
@@ -359,7 +359,7 @@ const Profile = () => {
             </div>
 
             <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
-              <p className="font-bold lg:text-xl">Available Premium Tax </p>
+              <p className="font-bold lg:text-xl"> Premium Tax </p>
               <p className="mt-3 flex items-center gap-x-1 text-lg font-bold lg:text-xl">
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">{ownerTaxAmount[1]}</span>
@@ -367,7 +367,7 @@ const Profile = () => {
             </div>
 
             <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
-              <p className="font-bold lg:text-xl">Available User Tax </p>
+              <p className="font-bold lg:text-xl">User Tax </p>
               <p className="mt-3 flex items-center gap-x-1 text-lg font-bold lg:text-xl">
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">{`$${(user?.avaibleUsdBalance).toFixed(2)}`}</span>
@@ -375,11 +375,11 @@ const Profile = () => {
             </div>
 
             <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
-              <p className="font-black lg:text-xl">Owner Total Tax </p>
+              <p className="font-black lg:text-xl">Total Tax </p>
               <p className="mt-3 flex items-center gap-x-1 text-lg font-bold lg:text-xl">
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">
-                  {(ownerTaxAmount[2] + user?.totalEarningBalance).toFixed(2)}
+                  {(ownerTaxAmount[0] + ownerTaxAmount[1] + user?.avaibleUsdBalance).toFixed(2)}
                 </span>
               </p>
             </div>
