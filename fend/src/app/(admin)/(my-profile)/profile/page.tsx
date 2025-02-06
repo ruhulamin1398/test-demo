@@ -379,7 +379,11 @@ const Profile = () => {
               <p className="mt-3 flex items-center gap-x-1 text-lg font-bold lg:text-xl">
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">
-                  {(ownerTaxAmount[0] + ownerTaxAmount[1] + user?.avaibleUsdBalance).toFixed(2)}
+                  {(
+                    Number(ownerTaxAmount[0]) +
+                    Number(ownerTaxAmount[1]) +
+                    Number(user?.totalEarningBalance)
+                  ).toFixed(2)}
                 </span>
               </p>
             </div>
