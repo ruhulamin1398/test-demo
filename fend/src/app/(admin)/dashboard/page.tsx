@@ -150,18 +150,9 @@ const Dashboard = () => {
         <ShowEarningCard
           className="main-gradient"
           jackpotFund={user?.totalEarningWinningAmount?.toFixed(2) || "0.00"}
-          leaderboardBonus={
-            (user?.totalEarningTopBuyerTax + user?.totalEarningTopLeaderTax)?.toFixed(2) || "0.00"
-          }
-          premiumBonus={user?.totalEarningPremiumTax.toFixed(2)}
-          referralCommission={
-            (
-              (isNaN(user?.totalEarningPremiumReferralTax)
-                ? 0
-                : user?.totalEarningPremiumReferralTax) +
-              (isNaN(user?.totalEarningRefTax) ? 0 : user?.totalEarningRefTax)
-            ).toFixed(2) || "0.00"
-          }
+          leaderboardBonus={user?.totalLeaderBalance?.toFixed(2) || "0.00"}
+          premiumBonus={user?.totalPremiumBalance.toFixed(2)}
+          referralCommission={user?.totalRefBalance.toFixed(2) || "0.00"}
         />
 
         <LeaderboardBonusCards className="primary-bg-gradient" />

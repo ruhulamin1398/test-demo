@@ -153,13 +153,6 @@ const Profile = () => {
     return `${address?.slice(0, 4)}...${address?.slice(-4)}`;
   };
 
-  const calculateAvailableRefTax = (refTax) => {
-    let totalRefTax = 0;
-    for (let i = 0; i < refTax.length; i++) {
-      totalRefTax += Number(refTax[i]);
-    }
-    return totalRefTax / blockChainConfig.decimals;
-  };
   useEffect(() => {
     if (
       user?.winningAmount !== undefined &&
@@ -171,13 +164,7 @@ const Profile = () => {
     ) {
       // setTotalUSDTBalance(premiumBalance + referralInfo?.totalReferredAmount  + user?.winningAmount+(user?.topLeaderTax+user?.topBuyerTax)/blockChainConfig.decimals);
 
-      const ustdBal =
-        (isNaN(user?.winningAmount) ? 0 : user?.winningAmount) +
-        (isNaN(user?.premiumReferralRewards) ? 0 : user?.premiumReferralRewards) +
-        (isNaN(user?.premiumTax) ? 0 : user?.premiumTax) +
-        (isNaN(user?.refTax) ? 0 : calculateAvailableRefTax(user.refTax)) +
-        (isNaN(user?.topBuyerTax) ? 0 : user?.topBuyerTax / blockChainConfig.decimals) +
-        (isNaN(user?.topLeaderTax) ? 0 : user?.topLeaderTax / blockChainConfig.decimals);
+      const ustdBal = user?.avaibleUsdBalance / blockChainConfig.decimals;
 
       setTotalUSDTBalance(ustdBal);
     }
@@ -190,7 +177,7 @@ const Profile = () => {
     },
     {
       title: "Total Earnings",
-      value: `$${(user?.totalEarningPremiumReferralTax + user?.totalEarningPremiumTax + user?.totalEarningRefTax + user?.totalEarningTopBuyerTax + user?.totalEarningTopLeaderTax + user?.totalEarningWinningAmount).toFixed(2)}`,
+      value: `$${(user?.totalEarningBalance).toFixed(2)}`,
     },
     {
       title: "Total Purchase",
@@ -364,7 +351,7 @@ const Profile = () => {
         ) : (
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-4">
             <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
-              <p className="font-bold lg:text-xl">Owner Tax </p>
+              <p className="font-bold lg:text-xl">Available Owner Tax </p>
               <p className="mt-3 flex items-center gap-x-1 text-lg font-bold lg:text-xl">
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">{ownerTaxAmount[0]}</span>
@@ -372,7 +359,7 @@ const Profile = () => {
             </div>
 
             <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
-              <p className="font-bold lg:text-xl">Premium Tax </p>
+              <p className="font-bold lg:text-xl">Available Premium Tax </p>
               <p className="mt-3 flex items-center gap-x-1 text-lg font-bold lg:text-xl">
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">{ownerTaxAmount[1]}</span>
@@ -380,10 +367,10 @@ const Profile = () => {
             </div>
 
             <div className="gap-x-3 rounded-sm bg-[#1A1D46] p-4 text-gray-200">
-              <p className="font-bold lg:text-xl">User Tax </p>
+              <p className="font-bold lg:text-xl">Available User Tax </p>
               <p className="mt-3 flex items-center gap-x-1 text-lg font-bold lg:text-xl">
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
-                <span className="translate-y-1">{`$${(user?.totalEarningPremiumReferralTax + user?.totalEarningPremiumTax + user?.totalEarningRefTax + user?.totalEarningTopBuyerTax + user?.totalEarningTopLeaderTax + user?.totalEarningWinningAmount).toFixed(2)}`}</span>
+                <span className="translate-y-1">{`$${(user?.avaibleUsdBalance).toFixed(2)}`}</span>
               </p>
             </div>
 
@@ -392,7 +379,7 @@ const Profile = () => {
               <p className="mt-3 flex items-center gap-x-1 text-lg font-bold lg:text-xl">
                 <Image src={usdtIcons} alt="USDT Icon" className="size-5" />
                 <span className="translate-y-1">
-                  {(ownerTaxAmount[2] + totalUSDTBalance).toFixed(2)}
+                  {(ownerTaxAmount[2] + user?.totalEarningBalance).toFixed(2)}
                 </span>
               </p>
             </div>
