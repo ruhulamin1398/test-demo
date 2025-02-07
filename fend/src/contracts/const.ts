@@ -4,9 +4,9 @@ import ERC20ABI from "./ERC20ABI.json";
 import { polygon, polygonAmoy } from "wagmi/chains";
 
 import { JsonRpcProvider } from "ethers";
-
+ 
 export const secretKey = "lottaverse2.0_by@oxwd3v";
-
+// settings for amoy
 const devAmoyConfig = {
   chainName: polygonAmoy,
   contractAddress: process.env.NEXT_PUBLIC_DEV_CONTRACT_ADDRESS,
