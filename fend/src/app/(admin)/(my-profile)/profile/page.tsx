@@ -84,7 +84,7 @@ const Profile = () => {
     }
   };
   const becomePremiumAccount = async () => {
-    const requireUsdtAmount = 200;
+    const requireUsdtAmount = 100;
     //  console.log( "Current usdT balance is ", user?.usdT)
     toast.loading("Wait .......");
 
