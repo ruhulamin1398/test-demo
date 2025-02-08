@@ -248,7 +248,7 @@ export const useUser = () => {
           availeableRefTax +
           userInformation.topBuyerTax +
           userInformation.topLeaderTax,
-        lastPurchased: 0, // This seems to be unused in the current implementation
+        lastPurchased: 0, //  This seems to be unused in the current implementation
       });
     }
   }, [userInformation]);
