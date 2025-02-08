@@ -90,7 +90,7 @@ const Profile = () => {
 
     if (user?.usdT < requireUsdtAmount) {
       toast.dismiss();
-      toast.error(`Balance required minimum 200 USDT`);
+      toast.error(`Balance required minimum 100 USDT`);
 
       return;
     }
@@ -381,7 +381,7 @@ const Profile = () => {
                   {(
                     Number(ownerTaxAmount[0]) +
                     Number(ownerTaxAmount[1]) +
-                    Number(user?.totalEarningBalance)
+                    Number(user?.avaibleUsdBalance)
                   ).toFixed(2)}
                 </span>
               </p>

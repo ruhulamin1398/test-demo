@@ -11,7 +11,7 @@ export interface User {
   winningAmount: number;
   topBuyerTax: number;
   topLeaderTax: number;
-  refTickets: number;
+  topBuyerTickets: number;
   refTax: [];
   availeableRefTax: number;
   premiumTax: number;
@@ -153,6 +153,7 @@ export const useUser = () => {
   // Transform the user data into the User interface format
 
   useEffect(() => {
+    console.log("user from blockchain ", userData);
     let userInformationData = {
       premium: isNaN(Number(userData?.premium)) ? 0 : Number(userData?.premium),
       totalSpend: isNaN(Number(userData?.totalPurchaseTicketCost))
@@ -178,9 +179,9 @@ export const useUser = () => {
         ? 0
         : Number(userData?.availableTax.premiumTax)   || 0,
       //
-      refTickets: isNaN(Number(userData?.purchasedTickets.refTickets))
+      refTickets: isNaN(Number(userData?.purchasedTickets.topBuyerTickets))
         ? 0
-        : Number(userData?.purchasedTickets.refTickets) || 0,
+        : Number(userData?.purchasedTickets.topBuyerTickets) || 0,
       /// total amount area
       totalEarningPremiumReferralTax: isNaN(Number(userData?.totalEarning.premiumReferralTax))
         ? 0
