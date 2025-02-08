@@ -80,13 +80,13 @@ const Profile = () => {
       } catch (err) {
         toast.dismiss();
         toast.error("Error in Withdraw ");
-      }
+      } 
     }
   };
   const becomePremiumAccount = async () => {
     const requireUsdtAmount = 100;
-    //  console.log( "Current usdT balance is ", user?.usdT)
-    toast.loading("Wait .......");
+    //  console.log( "CurrentusdT balance is ", user?.usdT)
+    toast.loading("Wait ...... .");
 
     if (user?.usdT < requireUsdtAmount) {
       toast.dismiss();
@@ -159,7 +159,7 @@ const Profile = () => {
       user?.topBuyerTax !== undefined &&
       user?.topLeaderTax !== undefined &&
       user?.premiumReferralRewards !== undefined &&
-      user?.refTax !== undefined &&
+      user?.refTax !== undefined && 
       user?.premiumTax !== undefined
     ) {
       // setTotalUSDTBalance(premiumBalance + referralInfo?.totalReferredAmount  + user?.winningAmount+(user?.topLeaderTax+user?.topBuyerTax)/blockChainConfig.decimals);
