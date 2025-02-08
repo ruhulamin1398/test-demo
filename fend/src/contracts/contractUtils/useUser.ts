@@ -211,7 +211,7 @@ export const useUser = () => {
     };
 
     setUserInformation(userInformationData);
-  }, [userData]);
+  }, [userData , balance]);
 
   useEffect(() => {
     if (userInformation) {
