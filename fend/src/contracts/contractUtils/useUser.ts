@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { ethers } from "ethers";
 
-export interface User {
+export interface User { 
   premium: number;
   totalSpend: number; // Total amount spent
   referrer: string; // Referrer address
