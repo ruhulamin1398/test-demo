@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { ethers } from "ethers";
 
-export interface User { 
+export interface User {
   premium: number;
   totalSpend: number; // Total amount spent
   referrer: string; // Referrer address
@@ -211,7 +211,7 @@ export const useUser = () => {
     };
 
     setUserInformation(userInformationData);
-  }, [userData , balance]);
+  }, [userData, balance]);
 
   useEffect(() => {
     if (userInformation) {
@@ -237,17 +237,17 @@ export const useUser = () => {
         totalRefBalance:
           userInformation.totalEarningPremiumReferralTax + userInformation.totalEarningRefTax,
         totalLeaderBalance:
-          (userInformation.totalEarningTopBuyerTax + userInformation.totalEarningTopLeaderTax) /
-          blockChainConfig.decimals,
+          userInformation.totalEarningTopBuyerTax + userInformation.totalEarningTopLeaderTax,
         totalPremiumBalance: userInformation.totalEarningPremiumTax,
         //
         avaibleUsdBalance:
-          userInformation.winningAmount +
-          userInformation.premiumReferralRewards +
-          userInformation.premiumTax +
-          availeableRefTax +
-          userInformation.topBuyerTax +
-          userInformation.topLeaderTax,
+          (userInformation.winningAmount +
+            userInformation.premiumReferralRewards +
+            userInformation.premiumTax +
+            availeableRefTax +
+            userInformation.topBuyerTax +
+            userInformation.topLeaderTax) /
+          blockChainConfig.decimals,
         lastPurchased: 0, //  This seems to be unused in the current implementation
       });
     }
