@@ -162,8 +162,7 @@ const Profile = () => {
       user?.refTax !== undefined &&
       user?.premiumTax !== undefined
     ) {
-      // setTotalUSDTBalance(premiumBalance + referralInfo?.totalReferredAmount  + user?.winningAmount+(user?.topLeaderTax+user?.topBuyerTax)/blockChainConfig.decimals);
-
+       
       const ustdBal = user?.avaibleUsdBalance;
 
       setTotalUSDTBalance(ustdBal);

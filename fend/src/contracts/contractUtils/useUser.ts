@@ -96,7 +96,7 @@ export const useUser = () => {
     let totalRefTax = 0;
 
     for (let i = 0; i < refTax.length; i++) {
-      totalRefTax += Number(refTax[i]) / blockChainConfig.decimals;
+      totalRefTax += Number(refTax[i]) ;
     }
     return totalRefTax;
   };
@@ -162,7 +162,7 @@ export const useUser = () => {
       referrer: userData?.referrer || "", // assuming referrer can be a string and empty if not available
       winningAmount: isNaN(Number(userData?.availableTax.winningAmount))
         ? 0
-        : Number(userData?.availableTax.winningAmount) / blockChainConfig.decimals || 0,
+        : Number(userData?.availableTax.winningAmount)  ,
       //
       topBuyerTax: isNaN(Number(userData?.availableTax.topBuyerTax))
         ? 0
@@ -173,10 +173,10 @@ export const useUser = () => {
       refTax: userData?.availableTax.refTax,
       premiumReferralRewards: isNaN(Number(userData?.availableTax.premiumReferralTax))
         ? 0
-        : Number(userData?.availableTax.premiumReferralTax) / blockChainConfig.decimals || 0,
+        : Number(userData?.availableTax.premiumReferralTax)   || 0,
       premiumTax: isNaN(Number(userData?.availableTax.premiumTax))
         ? 0
-        : Number(userData?.availableTax.premiumTax) / blockChainConfig.decimals || 0,
+        : Number(userData?.availableTax.premiumTax)   || 0,
       //
       refTickets: isNaN(Number(userData?.purchasedTickets.refTickets))
         ? 0
@@ -233,7 +233,7 @@ export const useUser = () => {
       setUser({
         ...userInformation,
         totalEarningBalance: totalEarningBalance,
-        availeableRefTax: availeableRefTax,
+        availeableRefTax: availeableRefTax/blockChainConfig.decimals,
         totalRefBalance:
           userInformation.totalEarningPremiumReferralTax + userInformation.totalEarningRefTax,
         totalLeaderBalance:
