@@ -21,7 +21,7 @@ export const BallList = ({ ballList, className, ballClassName, ...props }: Props
   for (let i = 0; i < 6; i++) {
     let Randoms;
     do {
-      Randoms = Math.floor(Math.random() * 20 + 1);
+      Randoms = Math.floor(Math.random() * 99 + 1);
     } while (isUnique.has(Randoms));
     ticketsNumber.push(Randoms);
     isUnique.set(Randoms, true);
