@@ -11,7 +11,7 @@ export interface User {
   winningAmount: number;
   topBuyerTax: number;
   topLeaderTax: number;
-  topBuyerTickets: number;
+  refTickets: number;
   refTax: [];
   availeableRefTax: number;
   premiumTax: number;
@@ -96,7 +96,7 @@ export const useUser = () => {
     let totalRefTax = 0;
 
     for (let i = 0; i < refTax.length; i++) {
-      totalRefTax += Number(refTax[i]) ;
+      totalRefTax += Number(refTax[i]) / blockChainConfig.decimals;
     }
     return totalRefTax;
   };
@@ -153,7 +153,6 @@ export const useUser = () => {
   // Transform the user data into the User interface format
 
   useEffect(() => {
-    console.log("user from blockchain ", userData);
     let userInformationData = {
       premium: isNaN(Number(userData?.premium)) ? 0 : Number(userData?.premium),
       totalSpend: isNaN(Number(userData?.totalPurchaseTicketCost))
@@ -163,7 +162,7 @@ export const useUser = () => {
       referrer: userData?.referrer || "", // assuming referrer can be a string and empty if not available
       winningAmount: isNaN(Number(userData?.availableTax.winningAmount))
         ? 0
-        : Number(userData?.availableTax.winningAmount)  ,
+        : Number(userData?.availableTax.winningAmount) / blockChainConfig.decimals || 0,
       //
       topBuyerTax: isNaN(Number(userData?.availableTax.topBuyerTax))
         ? 0
@@ -174,14 +173,14 @@ export const useUser = () => {
       refTax: userData?.availableTax.refTax,
       premiumReferralRewards: isNaN(Number(userData?.availableTax.premiumReferralTax))
         ? 0
-        : Number(userData?.availableTax.premiumReferralTax)   || 0,
+        : Number(userData?.availableTax.premiumReferralTax) / blockChainConfig.decimals || 0,
       premiumTax: isNaN(Number(userData?.availableTax.premiumTax))
         ? 0
-        : Number(userData?.availableTax.premiumTax)   || 0,
+        : Number(userData?.availableTax.premiumTax) / blockChainConfig.decimals || 0,
       //
-      refTickets: isNaN(Number(userData?.purchasedTickets.topBuyerTickets))
+      refTickets: isNaN(Number(userData?.purchasedTickets.refTickets))
         ? 0
-        : Number(userData?.purchasedTickets.topBuyerTickets) || 0,
+        : Number(userData?.purchasedTickets.refTickets) || 0,
       /// total amount area
       totalEarningPremiumReferralTax: isNaN(Number(userData?.totalEarning.premiumReferralTax))
         ? 0
@@ -234,7 +233,7 @@ export const useUser = () => {
       setUser({
         ...userInformation,
         totalEarningBalance: totalEarningBalance,
-        availeableRefTax: availeableRefTax/blockChainConfig.decimals,
+        availeableRefTax: availeableRefTax,
         totalRefBalance:
           userInformation.totalEarningPremiumReferralTax + userInformation.totalEarningRefTax,
         totalLeaderBalance:

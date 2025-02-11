@@ -32,11 +32,11 @@ exports.purchase = async (req, res) => {
       // Check if the expiryDate is not set or has already expired
       if (!existingUser.expiryDate || existingUser.expiryDate < currentDate) {
         // If expired or not set, extend from current date
-        existingUser.expiryDate = new Date(Date.now() + 60 * 60 * 1000);
+        existingUser.expiryDate = existingUser.expiryDate.getMonth() + 1;
         existingUser.userStatus = "active";
       } else {
         // If expiryDate is in the future, extend from the existing expiryDate
-        existingUser.expiryDate = new Date(Date.now() + 60 * 60 * 1000);
+        existingUser.expiryDate = existingUser.expiryDate.getMonth() + 1;
         existingUser.userStatus = "active";
       }
 
@@ -699,12 +699,10 @@ exports.updateLottery = async (req, res) => {
       lottery_type,
     });
     if (existingEntry) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "A lottery draw with this lottery_type, round, and lottery_id already exists.",
-        });
+      return res.status(400).json({
+        message:
+          "A lottery draw with this lottery_type, round, and lottery_id already exists.",
+      });
     }
 
     if (!Array.isArray(result) || result.length === 0) {
