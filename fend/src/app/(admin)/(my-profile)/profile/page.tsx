@@ -90,7 +90,7 @@ const Profile = () => {
 
     if (user?.usdT < requireUsdtAmount) {
       toast.dismiss();
-      toast.error(`Balance required minimum 200 USDT`);
+      toast.error(`Balance required minimum 100 USDT`);
 
       return;
     }
@@ -162,8 +162,7 @@ const Profile = () => {
       user?.refTax !== undefined &&
       user?.premiumTax !== undefined
     ) {
-      // setTotalUSDTBalance(premiumBalance + referralInfo?.totalReferredAmount  + user?.winningAmount+(user?.topLeaderTax+user?.topBuyerTax)/blockChainConfig.decimals);
-
+       
       const ustdBal = user?.avaibleUsdBalance;
 
       setTotalUSDTBalance(ustdBal);
@@ -382,7 +381,7 @@ const Profile = () => {
                   {(
                     Number(ownerTaxAmount[0]) +
                     Number(ownerTaxAmount[1]) +
-                    Number(user?.totalEarningBalance)
+                    Number(user?.avaibleUsdBalance)
                   ).toFixed(2)}
                 </span>
               </p>
