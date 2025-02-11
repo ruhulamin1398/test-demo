@@ -45,26 +45,27 @@ const purchaseTicket = async ({
     if (existingUser) {
       const currentDate = new Date();
 
-      if (!existingUser.expiryDate || existingUser.expiryDate < currentDate) {
-        // Extend expiry from current date
-        existingUser.expiryDate = new Date(
-          currentDate.setMonth(currentDate.getMonth() + 1)
-        );
+      // if (!existingUser.expiryDate || existingUser.expiryDate < currentDate) {
+      //   // Extend expiry from current date
+      //   existingUser.expiryDate = new Date(
+      //     currentDate.setMonth(currentDate.getMonth() + 1)
+      //   );
+      //   existingUser.userStatus = "active";
+      // } else {
+      //   // Extend expiry from existing expiryDate
+      //   existingUser.expiryDate = new Date(
+      //     existingUser.expiryDate.setMonth(
+      //       existingUser.expiryDate.getMonth() + 1
+      //     )
+      //   );
+      // }
+
+      // if (existingUser.expiryDate < new Date()) {
+      //   existingUser.userStatus = "inactive";
+      // }
+      
         existingUser.userStatus = "active";
-      } else {
-        // Extend expiry from existing expiryDate
-        existingUser.expiryDate = new Date(
-          existingUser.expiryDate.setMonth(
-            existingUser.expiryDate.getMonth() + 1
-          )
-        );
-      }
-
-      if (existingUser.expiryDate < new Date()) {
-        existingUser.userStatus = "inactive";
-      }
-
-      // existingUser.expiryDate = new Date(Date.now() + 60 * 60 * 1000);
+      existingUser.expiryDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
 
       await existingUser.save({ session });
     }

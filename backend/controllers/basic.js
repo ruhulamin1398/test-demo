@@ -29,21 +29,22 @@ exports.purchase = async (req, res) => {
     if (existingUser) {
       const currentDate = new Date();
 
-      // Check if the expiryDate is not set or has already expired
-      if (!existingUser.expiryDate || existingUser.expiryDate < currentDate) {
-        // If expired or not set, extend from current date
-        existingUser.expiryDate = existingUser.expiryDate.getMonth() + 1;
-        existingUser.userStatus = "active";
-      } else {
-        // If expiryDate is in the future, extend from the existing expiryDate
-        existingUser.expiryDate = existingUser.expiryDate.getMonth() + 1;
-        existingUser.userStatus = "active";
-      }
+      // // Check if the expiryDate is not set or has already expired
+      // if (!existingUser.expiryDate || existingUser.expiryDate < currentDate) {
+      //   // If expired or not set, extend from current date
+      //   existingUser.expiryDate = existingUser.expiryDate.getMonth() + 1;
+      //   existingUser.userStatus = "active";
+      // } else {
+      //   // If expiryDate is in the future, extend from the existing expiryDate
+      //   existingUser.expiryDate = existingUser.expiryDate.getMonth() + 1;
+      //   existingUser.userStatus = "active";
+      // }
 
-      if (existingUser.expiryDate < new Date()) {
-        existingUser.userStatus = "inactive";
-      }
-
+      // if (existingUser.expiryDate < new Date()) {
+      //   existingUser.userStatus = "inactive";
+      // } 
+      existingUser.expiryDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1)); 
+      existingUser.userStatus = "active";
       await existingUser.save({ session });
     }
 
