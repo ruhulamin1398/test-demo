@@ -42,7 +42,7 @@ export const ShowBuyModal = ({ lottery, activeLottery }: props) => {
     for (let i = 0; i < 6; i++) {
       let randomNum;
       do {
-        randomNum = Math.floor(Math.random() * 20 + 1);
+        randomNum = Math.floor(Math.random() * 99 + 1);
       } while (isUnique.has(randomNum));
       isUnique.set(randomNum, true);
       ticketsNumber.push(randomNum);
@@ -73,7 +73,7 @@ export const ShowBuyModal = ({ lottery, activeLottery }: props) => {
   //   for (let i = 0; i < 6; i++) {
   //     let randomNum;
   //     do {
-  //       randomNum = Math.floor(Math.random() * 20 + 1);
+  //       randomNum = Math.floor(Math.random() * 99 + 1);
   //     } while (isUnique.has(randomNum));
   //     isUnique.set(randomNum, true);
   //     ticketsNumber.push(randomNum);

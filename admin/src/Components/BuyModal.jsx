@@ -25,7 +25,7 @@ export default function App({ isOpen, onClose, lottery }) {
     for (let i = 0; i < 6; i++) {
       let Randoms;
       do {
-        Randoms = Math.floor((Math.random() * (20)) + 1);
+        Randoms = Math.floor((Math.random() * (99)) + 1);
       } while (isUnique.get(Randoms) !== undefined);
       ticketsNumber.push(Randoms);
     }
