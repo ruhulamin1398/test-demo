@@ -85,6 +85,8 @@ export const UPDATE_COMPETITION_ELIGIBILITY = gql`
   }
 `;
 
+
+
 export const GET_COMPETITION_QUERY = gql`
   query GetCompetition($id: ID!) {
     getCompetition(id: $id) {

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-import CssBaseline from "@mui/material/CssBaseline";
+// import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import { ToastContainer } from "react-toastify";
@@ -19,7 +19,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   return (
     <AppRouterCacheProvider>
       <ThemeProvider theme={{ dark: darkTheme, light: lightTheme }}>
-        <CssBaseline />
+        {/* <CssBaseline /> */}
         <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
           <Navbar />
           <Box component="main" sx={{ flexGrow: 1 }}>
