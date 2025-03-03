@@ -1,76 +1,86 @@
 "use client";
 import React, { useEffect } from "react";
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import BalloonExplosion from "./BalloonExplosion";
 
 const HeroContainer = styled(Box)({
-  position: "relative",
-  height: "60vh",
+  position: "relative", 
+  height: "100vh",
   width: "100vw",
   overflow: "hidden",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-start",
+  textAlign: "left",
+  color: "#ffffff",
+  padding: "0 20px",
+  paddingLeft: "5%",
 });
 
 const OverlayContent = styled(Box)({
+  zIndex: 2,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-start",
+  justifyContent: "flex-start",
+  maxWidth: "700px",
+});
+
+const BackgroundImage = styled(Box)({
   position: "absolute",
   top: 0,
   left: 0,
   width: "100%",
-  height: "100%",
-  color: "#ffffff",
+  height: "100vh",
+  background: "linear-gradient(rgba(79, 70, 229, 0.7), rgba(79, 70, 229, 0.7)), url(/contest.png) no-repeat center center/cover",
+  filter: "brightness(0.7)",
   zIndex: 1,
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
+  backgroundSize: "cover",
+});
+
+const StyledButton = styled(Button)({
+  borderRadius: "50px",
+  padding: "10px 20px",
+  fontWeight: 600,
+  transition: "all 0.3s ease-in-out",
+  '&:hover': {
+    transform: "scale(1.05)",
+  }
 });
 
 const HeroSection: React.FC = () => {
-  const handleScroll = (): void => {
-    // const hero = document.querySelector<HTMLElement>(".background");
-    // if (hero) {
-    //   const offset = window.scrollY;
-    //   hero.style.transform = `translateY(${offset * 0.5}px)`;
-    // }
-  };
-
   useEffect(() => {
+    const handleScroll = (): void => {};
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <HeroContainer>
+      <BackgroundImage />
       <OverlayContent>
-        <Container>
-          <Typography variant="h2" gutterBottom>
-            Compete to win money and unlock opportunities
-          </Typography>
-          <Typography variant="subtitle1">
-            Take a look at our competitions and see what opportunities are
-            available right now!
-          </Typography>
-          <Box p={2}>
-            <Button variant="contained">View our current competitions</Button>
-          </Box>
-        </Container>
+        <Typography variant="h3" fontWeight={700} gutterBottom>
+          Showcase Your Talent & Win Big!
+        </Typography>
+        <Typography variant="subtitle1" sx={{ opacity: 0.9, mb: 3 }}>
+          Join top competitions, win prizes, and gain recognition in our
+          global creative community.
+        </Typography>
+        <Box display="flex" gap={2}>
+          <StyledButton
+            variant="contained"
+            sx={{ backgroundColor: "#ffffff", color: "#4A00E0" }}
+          >
+            Explore Contests
+          </StyledButton>
+          <StyledButton
+            variant="outlined"
+            sx={{ borderColor: "#ffffff", color: "#ffffff" }}
+          >
+            Submit Entry
+          </StyledButton>
+        </Box>
       </OverlayContent>
-      <svg viewBox="0 0 500 200">
-        <path
-          d="M 0 50 C 150 150 300 0 500 80 L 500 0 L 0 0"
-          fill="rgb(57, 27, 112)"
-        ></path>
-        <path
-          d="M 0 50 C 150 150 330 -30 500 50 L 500 0 L 0 0"
-          fill="#0E7452"
-          opacity="0.8"
-        ></path>
-        <path
-          d="M 0 50 C 215 150 250 0 500 100 L 500 0 L 0 0"
-          fill="#0E7452"
-          opacity="0.5"
-        ></path>
-      </svg>
-      <BalloonExplosion />
     </HeroContainer>
   );
 };

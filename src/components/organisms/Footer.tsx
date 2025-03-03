@@ -1,57 +1,90 @@
+"use client";
 import React from "react";
-import { Box, Container, Divider } from "@mui/material";
-import TextAtom from "@/components/atoms/TextAtom"; // Atom for text
-import LinkList from "@/components/molecules/LinkList"; // Molecule for the link list
-import SocialMediaLinks from "@/components/molecules/SocialMediaLinks"; // Molecule for social media icons
+import { Box, Container, TextField, Button, Typography } from "@mui/material";
+import { Instagram, Twitter, Facebook } from "@mui/icons-material";
 import Grid from "@mui/material/Grid2";
 
 const Footer = () => {
-  const footerLinks = [
-    { label: "Home", href: "/" },
-    { label: "About Us", href: "/about" },
-    { label: "Contact", href: "/contact" },
-  ];
-
-  const additionalInfo = [
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms of Service", href: "/terms" },
-  ];
-
   return (
-    <Box sx={{ backgroundColor: "#333", color: "#fff", py: 3 }}>
+    <Box sx={{ backgroundColor: "#0B0E14", color: "#fff", py: 4 }}>
       <Container maxWidth="lg">
-        <Grid container spacing={3}>
-          {/* Links Section */}
-          <Grid size={4}>
-            <TextAtom text="Quick Links" variant="h6" />
-            <LinkList links={footerLinks} />
+        <Grid container spacing={4}>
+          <Grid size={{xs:12, md:3}}>
+            <Typography variant="h6" fontWeight="bold">BeeJoyi</Typography>
+            <Typography variant="body2" color="textSecondary" mt={1}>
+              Discover, compete, and win in the world most exciting creative contests.
+            </Typography>
           </Grid>
 
-          {/* Additional Section (Could be Contact Info or other important info) */}
-          <Grid size={4}>
-            <TextAtom text="Company Info" variant="h6" />
-            <LinkList links={additionalInfo} />
+          {/* Center Section - Quick Links */}
+          <Grid size={{xs:12, md:3}}>
+            <Typography variant="h6" fontWeight="bold">Quick Links</Typography>
+            <Typography 
+              variant="body2" 
+              mt={1} 
+              sx={{ cursor: "pointer", '&:hover': { color: "#6A5ACD" } }}
+            >
+              About Us
+            </Typography>
+            <Typography 
+              variant="body2" 
+              mt={1} 
+              sx={{ cursor: "pointer", '&:hover': { color: "#6A5ACD" } }}
+            >
+              How It Works
+            </Typography>
+            <Typography 
+              variant="body2" 
+              mt={1} 
+              sx={{ cursor: "pointer", '&:hover': { color: "#6A5ACD" } }}
+            >
+              FAQs
+            </Typography>
+            <Typography 
+              variant="body2" 
+              mt={1} 
+              sx={{ cursor: "pointer", '&:hover': { color: "#6A5ACD" } }}
+            >
+              Contact
+            </Typography>
           </Grid>
 
-          {/* Empty space to balance the layout */}
-          <Grid size={3}>
-            <TextAtom text="Contact Us" variant="h6" />
-            <TextAtom text="Email: support@company.com" variant="body2" />
-            <TextAtom text="Phone: +1234567890" variant="body2" />
-            <Box py={2}>
-              <TextAtom text="Follow Us" variant="h6" />
-              <SocialMediaLinks />
+          {/* Social Media Section */}
+          <Grid size={{xs:12, md:3}}>
+            <Typography variant="h6" fontWeight="bold">Follow Us</Typography>
+            <Box display="flex" gap={2} mt={1}>
+              <Instagram sx={{ cursor: "pointer", '&:hover': { color: "#6A5ACD" } }} />
+              <Twitter sx={{ cursor: "pointer", '&:hover': { color: "#6A5ACD" } }} />
+              <Facebook sx={{ cursor: "pointer", '&:hover': { color: "#6A5ACD" } }} />
+            </Box>
+          </Grid>
+
+          {/* Subscription Section */}
+          <Grid size={{xs:12, md:3}}>
+            <Typography variant="h6" fontWeight="bold">Contest Alert</Typography>
+            <Box display="flex" mt={1}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Your email"
+                size="small"
+                sx={{ bgcolor: "#1C1F26", borderRadius: 1, input: { color: "#fff" } }}
+              />
+              <Button
+                variant="contained"
+                sx={{ bgcolor: "#6A5ACD", ml: 1, px: 3, borderRadius: 1 }}
+              >
+                Subscribe
+              </Button>
             </Box>
           </Grid>
         </Grid>
 
-        {/* Copyright Section with Separator */}
-        <Divider sx={{ my: 2, borderColor: "rgba(255, 255, 255, 0.3)" }} />
-        <Box sx={{ textAlign: "center", mt: 2 }}>
-          <TextAtom
-            text="© 2024 Company Name. All rights reserved."
-            variant="body2"
-          />
+        {/* Copyright Section */}
+        <Box textAlign="center" mt={4}>
+          <Typography variant="body2" color="textSecondary">
+            © 2025 BeeJoyi. All rights reserved.
+          </Typography>
         </Box>
       </Container>
     </Box>

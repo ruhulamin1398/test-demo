@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
@@ -9,19 +8,13 @@ import {
   Typography,
   Box,
   IconButton,
-  Button,
   Container,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import Link from "next/link";
-import {
-  DarkMode,
-  EmojiEventsOutlined,
-  HomeOutlined,
-  LoginOutlined,
-} from "@mui/icons-material";
+import { DarkMode } from "@mui/icons-material";
 import useThemeToggle from "@/app/hooks/useTheme";
 import AccountMenu from "../atoms/AccountMenu";
 import BottomAppBarWithJustifiedMenus from "./AppbarMobile";
@@ -36,10 +29,7 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     if (window !== undefined) {
-      console.log(window.addEventListener);
-      window.addEventListener("scroll", function () {
-        console.log("Window is being scrolled!");
-      });
+      window.addEventListener("scroll", function () {});
     }
     if (typeof document !== "undefined") {
       const handleScroll = () => {
@@ -67,14 +57,22 @@ const Navbar: React.FC = () => {
         elevation={scrolled ? 4 : 0}
         sx={{
           backgroundColor: scrolled
-            ? theme.palette.primary.main
+            ? theme.palette.mode === "dark"
+              ? theme.palette.background.paper
+              : "#ffffff"
             : "transparent",
+          color: scrolled
+            ? theme.palette.mode === "dark"
+              ? "#ffffff"
+              : "#000000"
+            : theme.palette.text.primary,
+          backdropFilter: scrolled ? "blur(10px)" : "none",
           position: "fixed",
           top: 0,
           left: 0,
           right: 0,
           zIndex: 1200,
-          transition: "background-color 0.3s, box-shadow 0.3s",
+          transition: "background-color 0.3s, box-shadow 0.3s, color 0.3s",
           height: "64px",
           width: "100%",
         }}
@@ -97,39 +95,44 @@ const Navbar: React.FC = () => {
               component="div"
               sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
             >
-              BIJOYEE
+              <Link
+                href={"/"}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <Typography variant="h6">BeeJoyi</Typography>
+              </Link>
             </Typography>
             {!isMobile && (
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Link href={"/"}>
-                  <Button sx={{ color: "#fff" }} startIcon={<HomeOutlined />}>
-                    Home
-                  </Button>
+                  <Typography px={3}>Home</Typography>
                 </Link>
-                <Link href={"/competition"}>
-                  <Button
-                    sx={{ color: "#fff" }}
-                    startIcon={<EmojiEventsOutlined />}
-                  >
-                    Competition
-                  </Button>
+                <Link href={"/contest"}>
+                  <Typography px={3}>Contests</Typography>
                 </Link>
-                <IconButton onClick={toggleTheme}>
-                  <DarkMode />
-                </IconButton>
+                <Link href={"/"}>
+                  <Typography px={3}>How It Works</Typography>
+                </Link>
 
                 {user ? (
                   <AccountMenu user={user} />
                 ) : (
-                  <Link href={"/auth/login"}>
-                    <Button
-                      sx={{ color: "#fff" }}
-                      startIcon={<LoginOutlined />}
-                    >
-                      Login
-                    </Button>
+                  <Link
+                    href={"/auth/login"}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography px={3}>
+                      {/* <LoginOutlined fontSize="small" /> */}
+                      Sign In
+                    </Typography>
                   </Link>
                 )}
+                <Link href={"/auth/register"}>
+                  <Typography px={2}>Sign Up</Typography>
+                </Link>
+                {/* <IconButton onClick={toggleTheme} sx={{ marginLeft: "20px" }}>
+                  <DarkMode />
+                </IconButton> */}
               </Box>
             )}
           </Toolbar>
