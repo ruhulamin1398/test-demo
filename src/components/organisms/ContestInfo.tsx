@@ -30,7 +30,6 @@ const ContestInfo = () => {
               color: "#00000000",
               transition: "0.3s",
               paddingBottom: "48px",
-              "&:hover": { boxShadow: 2 },
             }}
           >
             <Typography variant="h6" fontWeight="bold" color="black">
@@ -78,7 +77,6 @@ const ContestInfo = () => {
               transition: "0.3s",
               backgroundColor: "white",
               marginTop: 5,
-              "&:hover": { boxShadow: 2 },
             }}
           >
             <Typography variant="h6" fontWeight="bold">
@@ -109,7 +107,6 @@ const ContestInfo = () => {
               borderRadius: 2,
               transition: "0.3s",
               backgroundColor: "white",
-              "&:hover": { boxShadow: 2 },
             }}
           >
             <Typography variant="h6" fontWeight="bold">
@@ -133,7 +130,6 @@ const ContestInfo = () => {
               borderRadius: 2,
               transition: "0.3s",
               backgroundColor: "white",
-              "&:hover": { boxShadow: 2 },
             }}
           >
             <Typography variant="h6" fontWeight="bold">

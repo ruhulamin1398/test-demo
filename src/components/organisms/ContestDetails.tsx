@@ -15,8 +15,6 @@ const ContestDetails = () => {
                 p: 3,
                 backgroundColor: "white",
                 borderRadius: 2,
-                transition: "0.3s",
-                "&:hover": { boxShadow: 2 },
               }}
             >
               <Typography variant="h6" fontWeight="bold" color="black">
@@ -71,7 +69,6 @@ const ContestDetails = () => {
                 borderRadius: 2,
                 transition: "0.3s",
                 backgroundColor: "white",
-                "&:hover": { boxShadow: 2 },
               }}
             >
               <Typography variant="h6" fontWeight="bold" color="black">

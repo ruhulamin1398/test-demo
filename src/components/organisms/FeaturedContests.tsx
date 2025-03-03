@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import Link from "next/link";
 
 const contests = [
   {
@@ -114,6 +115,23 @@ const FeaturedContests: React.FC = () => {
             </Card>
           </Grid>
         ))}
+        {/* <button>
+          <a href="/submission">View All Contests</a>
+        </button> */}
+
+        <Link href="/submission" passHref>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "#4F46E5",
+              color: "#ffffff",
+              borderRadius: 10,
+            }}
+          >
+            View All Contests
+          </Button>
+        </Link>
+        
       </Grid>
     </Container>
   );

@@ -43,23 +43,42 @@ const PhotographyContestBanner = () => {
           >
             Photography Contest
           </Typography>
-          <Typography variant="h4" fontWeight="bold" fontSize={{ xs: "h5.fontSize", md: "h4.fontSize" }}>
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            fontSize={{ xs: "h5.fontSize", md: "h4.fontSize" }}
+          >
             Global Photography Awards 2025
           </Typography>
-          <Typography variant="body1" fontSize={{ xs: "body2.fontSize", md: "body1.fontSize" }}>
+          <Typography
+            variant="body1"
+            fontSize={{ xs: "body2.fontSize", md: "body1.fontSize" }}
+          >
             Showcase your best shots and compete with photographers worldwide
           </Typography>
-          <Stack direction={{ xs: "column", md: "row" }} spacing={2} alignItems={{ xs: "center", md: "flex-start" }}>
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            spacing={2}
+            alignItems={{ xs: "center", md: "flex-start" }}
+          >
             <Button variant="contained" color="primary" size="large">
               Join Contest →
             </Button>
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Stack direction="row" spacing={1} alignItems="center" py={1}>
               <PeopleIcon />
-              <Typography fontSize={{ xs: "body2.fontSize", md: "body1.fontSize" }}>2,456 Participants</Typography>
+              <Typography
+                fontSize={{ xs: "body2.fontSize", md: "body1.fontSize" }}
+              >
+                2,456 Participants
+              </Typography>
             </Stack>
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Stack direction="row" spacing={1} alignItems="center" py={1}>
               <AccessTimeIcon />
-              <Typography fontSize={{ xs: "body2.fontSize", md: "body1.fontSize" }}>45 Days Left</Typography>
+              <Typography
+                fontSize={{ xs: "body2.fontSize", md: "body1.fontSize" }}
+              >
+                45 Days Left
+              </Typography>
             </Stack>
           </Stack>
         </Stack>
