@@ -1,8 +1,8 @@
-import { cookies } from 'next/headers';
+import { cookies } from "next/headers";
 
-import { defaultSettings, SETTINGS_STORAGE_KEY } from './settings-config';
+import { defaultSettings, SETTINGS_STORAGE_KEY } from "./settings-config";
 
-import type { SettingsState } from './types';
+import type { SettingsState } from "./types";
 
 // ----------------------------------------------------------------------
 
