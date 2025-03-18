@@ -7,7 +7,9 @@ import { useDispatch } from "react-redux";
 import { setUser } from "@/app/store/slices/authSlice";
 
 import AdminLayout from "./AdminLayout";
-import AppLayout from "./AppLayout";
+import { MainLayout } from "@/layouts/main";
+import { AuthSplitLayout } from "@/layouts/auth-split";
+import { DashboardLayout } from "@/layouts/dashboard";
 
 interface LayoutRendererProps {
   children: React.ReactNode;
@@ -26,11 +28,14 @@ const LayoutRenderer: React.FC<LayoutRendererProps> = ({ children }) => {
 
   return (
     <>
-      {path.startsWith("/dashboard") ? (
-        <AdminLayout>{children}</AdminLayout>
+      {path.startsWith("/auth") ? (
+        <AuthSplitLayout>{children}</AuthSplitLayout>
+      ) : path.startsWith("/admin") ? (
+        <DashboardLayout>{children}</DashboardLayout>
       ) : (
-        <AppLayout>{children}</AppLayout>
+        <MainLayout>{children}</MainLayout>
       )}
+
     </>
   );
 };

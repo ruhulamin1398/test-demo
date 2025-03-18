@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "@/app/context/ThemeContext";
-import { adminTheme } from "@/theme/adminTheme";
+import { adminTheme } from "@/old-theme/adminTheme";
 import { Toolbar, useMediaQuery, useTheme } from "@mui/material";
 import AdminNavigator from "@/components/organisms/AdminNavigator";
 import AdminHeader from "../organisms/AdminHeader";

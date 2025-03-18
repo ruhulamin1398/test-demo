@@ -22,7 +22,7 @@ const customLink = new ApolloLink((operation, forward) => {
   return forward(operation);
 });
 
-export const Provider = ({ children }: { children: ReactNode }) => {
+export const ApolloClientProvider = ({ children }: { children: ReactNode }) => {
   const client = new ApolloClient({
     link: from([
       customLink, // Add custom link with headers
