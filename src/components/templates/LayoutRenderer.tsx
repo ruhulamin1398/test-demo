@@ -8,6 +8,7 @@ import { setUser } from "@/app/store/slices/authSlice";
 
 import AdminLayout from "./AdminLayout";
 import {MainLayout} from "@/layouts/main";
+import { AuthSplitLayout } from "@/layouts/auth-split";
 
 interface LayoutRendererProps {
   children: React.ReactNode;
@@ -26,8 +27,8 @@ const LayoutRenderer: React.FC<LayoutRendererProps> = ({ children }) => {
 
   return (
     <>
-      {path.startsWith("/dashboard") ? (
-        <AdminLayout>{children}</AdminLayout>
+      {path.startsWith("/auth") ? (
+        <AuthSplitLayout>{children}</AuthSplitLayout>
       ) : (
         <MainLayout>{children}</MainLayout>
       )}

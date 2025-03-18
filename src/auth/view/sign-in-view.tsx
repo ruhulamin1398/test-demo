@@ -22,7 +22,7 @@ import { Form, Field } from '@/components/hook-form';
 
 // import { useAuthContext } from '../../hooks';
 // import { getErrorMessage } from '../../utils';
-import { FormHead } from '../../components/form-head';
+import { FormHead } from '../components/form-head';
 // import { signInWithPassword } from '../../context/jwt';
 
 // ----------------------------------------------------------------------
@@ -42,7 +42,7 @@ export const SignInSchema = zod.object({
 
 // ----------------------------------------------------------------------
 
-export function JwtSignInView() {
+export function SignInView() {
   // const router = useRouter();
 
   const showPassword = useBoolean();

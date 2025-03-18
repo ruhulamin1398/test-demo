@@ -30,13 +30,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
        
         <AppRouterCacheProvider options={{ key: 'css' }}>
 
-        <SettingsProvider>
+        <SettingsProvider >
           <ThemeProvider
             defaultMode={themeConfig.defaultMode}
             modeStorageKey={themeConfig.modeStorageKey}
           >
-
-
             <ApolloClientProvider>
               <ReduxProvider>
                 <LayoutRenderer>{children}</LayoutRenderer>
