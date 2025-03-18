@@ -68,7 +68,7 @@ export function AuthSplitSection({
     >
       <div>
         <Typography variant="h3" sx={{ textAlign: 'center' }}>
-          {title}
+          {title} 
         </Typography>
 
         {subtitle && (
@@ -85,41 +85,6 @@ export function AuthSplitSection({
         sx={{ width: 1, aspectRatio: '4/3', objectFit: 'cover' }}
       />
 
-      {!!methods?.length && method && (
-        <Box component="ul" sx={{ gap: 2, display: 'flex' }}>
-          {methods.map((option) => {
-            const selected = method === option.label.toLowerCase();
-
-            return (
-              <Box
-                key={option.label}
-                component="li"
-                sx={{
-                  ...(!selected && {
-                    cursor: 'not-allowed',
-                    filter: 'grayscale(1)',
-                  }),
-                }}
-              >
-                <Tooltip title={option.label} placement="top">
-                  <Link
-                    component={RouterLink}
-                    href={option.path}
-                    sx={{ ...(!selected && { pointerEvents: 'none' }) }}
-                  >
-                    <Box
-                      component="img"
-                      alt={option.label}
-                      src={option.icon}
-                      sx={{ width: 32, height: 32 }}
-                    />
-                  </Link>
-                </Tooltip>
-              </Box>
-            );
-          })}
-        </Box>
-      )}
     </Box>
   );
 }

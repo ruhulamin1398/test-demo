@@ -68,7 +68,7 @@ export function AuthSplitLayout({
       ),
       rightArea: (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
-          {/** @slot Help link */}
+          {/** 
           <Link
             href={paths.faqs}
             component={RouterLink}
@@ -78,8 +78,8 @@ export function AuthSplitLayout({
             Need help?
           </Link>
 
-          {/** @slot Settings button */}
           <SettingsButton />
+          */}
         </Box>
       ),
     };
