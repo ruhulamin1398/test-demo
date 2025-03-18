@@ -11,7 +11,7 @@ export async function detectSettings(
 ): Promise<SettingsState> {
   const cookieStore = cookies();
 
-  const settingsStore = cookieStore.get(storageKey);
+  const settingsStore = await cookieStore.get(storageKey);
 
   return settingsStore ? JSON.parse(settingsStore?.value) : defaultSettings;
 }
