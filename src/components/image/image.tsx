@@ -37,7 +37,7 @@ export type ImageProps = React.ComponentProps<typeof ImageRoot> & {
   viewportOptions?: UseInViewOptions;
   ratio?: AspectRatioType | Partial<Record<Breakpoint, AspectRatioType>>;
   slotProps?: {
-    img?: Omit<React.ComponentProps<typeof ImageImg>, 'src' | 'alt'>;
+    img?: Omit<React.ComponentProps<typeof ImageImg>, '@' | 'alt'>;
     overlay?: React.ComponentProps<typeof ImageOverlay>;
     placeholder?: React.ComponentProps<typeof ImagePlaceholder>;
   };

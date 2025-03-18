@@ -67,6 +67,7 @@ export function DashboardLayout({
   const theme = useTheme();
 
   const settings = useSettingsContext();
+  console.log(" _____________________________________________________________________________________", settings);
 
   const navVars = dashboardNavColorVars(theme, settings.state.navColor, settings.state.navLayout);
 
@@ -185,7 +186,11 @@ export function DashboardLayout({
 
   const renderFooter = () => null;
 
-  const renderMain = () => <MainSection {...slotProps?.main}>{children}</MainSection>;
+  const renderMain = () => <MainSection {...slotProps?.main}>
+    
+    {children}
+    
+    </MainSection>;
 
   return (
     <LayoutSection

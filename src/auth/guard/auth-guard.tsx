@@ -9,7 +9,7 @@ import { CONFIG } from '@/global-config';
 
 import { SplashScreen } from '@/components/loading-screen';
 
-import { useAuthContext } from '../hooks';
+// import { useAuthContext } from '../hooks';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { authenticated, loading } = useAuthContext();
+  // const { authenticated, loading } = useAuthContext();
 
   const [isChecking, setIsChecking] = useState<boolean>(true);
 
@@ -38,33 +38,33 @@ export function AuthGuard({ children }: AuthGuardProps) {
     return `${currentPath}?${queryString}`;
   };
 
-  const checkPermissions = async (): Promise<void> => {
-    if (loading) {
-      return;
-    }
+  // const checkPermissions = async (): Promise<void> => {
+  //   if (loading) {
+  //     return;
+  //   }
 
-    if (!authenticated) {
-      const { method } = CONFIG.auth;
+  //   if (!authenticated) {
+  //     const { method } = CONFIG.auth;
 
-      const signInPath = signInPaths[method];
-      const redirectPath = createRedirectPath(signInPath);
+  //     const signInPath = signInPaths[method];
+  //     const redirectPath = createRedirectPath(signInPath);
 
-      router.replace(redirectPath);
+  //     router.replace(redirectPath);
 
-      return;
-    }
+  //     return;
+  //   }
 
-    setIsChecking(false);
-  };
+  //   setIsChecking(false);
+  // };
 
-  useEffect(() => {
-    checkPermissions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authenticated, loading]);
+  // useEffect(() => {
+  //   checkPermissions();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [authenticated, loading]);
 
-  if (isChecking) {
-    return <SplashScreen />;
-  }
+  // if (isChecking) {
+  //   return <SplashScreen />;
+  // }
 
   return <>{children}</>;
 }

@@ -41,6 +41,7 @@
     "@tsparticles/shape-emoji": "^3.7.1",
     "@tsparticles/slim": "^3.7.1",
     "apollo-upload-client": "^18.0.1",
+    "autosuggest-highlight": "^3.3.4",
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
