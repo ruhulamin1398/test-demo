@@ -7,6 +7,13 @@ enum RoleEnum {
   moderator
 }
 
+# Enum for social login providers
+enum AuthProviderEnum {
+  google
+  facebook
+  custom
+}
+
 # Phone number type
 type PhoneNumber {
   countryCode: String!
@@ -26,15 +33,17 @@ type LogoutResponse {
 # User type
 type User {
   id: ID!
-  username: String!
+  name: String!
   email: String!
   firstName: String
   lastName: String
-  phoneNumber: PhoneNumber!
+  phoneNumber: PhoneNumber
   createdAt: String!
   isActive: Boolean!
   avatar: String
   role: RoleEnum
+  authProvider: AuthProviderEnum
+  socialId: String
 }
 
 # Pagination input type
@@ -46,7 +55,7 @@ input PaginationInput {
 # User filter input
 input UserFilterInput {
   isActive: Boolean
-  username: String
+  email: String
   role: RoleEnum
 }
 
@@ -65,7 +74,7 @@ type Query {
 # Mutations
 type Mutation {
   createUser(
-    username: String!
+    name: String!
     email: String!
     password: String!
     firstName: String
@@ -74,7 +83,15 @@ type Mutation {
   ): AuthUser!
   updateProfileAvatar(avatarUrl: String!): User!
   updateGeneralInfo(firstName: String, lastName: String, phoneNumber: PhoneNumberInput): User!
-  login(username: String!, password: String!): AuthUser!
+  login(email: String!, password: String!): AuthUser!
+  socialLogin(
+    socialId: String!
+    email: String!
+    firstName: String
+    lastName: String
+    phoneNumber: PhoneNumberInput
+    authProvider: AuthProviderEnum!
+  ): AuthUser!
   logout: LogoutResponse!
 }
 

@@ -9,6 +9,7 @@ import {
 import { User } from "@/models"; // Assuming your model is exported from this path
 import { GraphQLError } from "graphql";
 import { NextApiRequest } from "next";
+
 interface PhoneNumberInput {
   countryCode: string;
   number: string;
@@ -31,15 +32,15 @@ const resolvers = {
           $or: [
             { email },
             {
-              "phone.countryCode": phoneNumber?.countryCode,
-              "phone.number": phoneNumber?.number,
+              "phoneNumber.countryCode": phoneNumber?.countryCode,
+              "phoneNumber.number": phoneNumber?.number,
             },
           ],
         });
-        if (!findMe) throw new Error("User could not found.");
+        if (!findMe) throw new Error("User could not be found.");
         return findMe;
       } catch (_error: unknown) {
-        throw new Error("Something wents wrong, we are looking into it.");
+        throw new Error("Something went wrong, we are looking into it.");
       }
     },
     getUsers: async (
@@ -94,58 +95,54 @@ const resolvers = {
       }
     },
   },
+
   Mutation: {
-    // Create a new user
+    // Create a new user (regular credentials-based registration)
     createUser: async (
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      _parent: any,
+      _parent: unknown,
       {
-        username,
+        name,
         email,
         password,
         firstName,
         lastName,
         phoneNumber,
       }: {
-        username: string;
+        name: string;
         email: string;
         password: string;
         firstName?: string;
         lastName?: string;
         phoneNumber?: PhoneNumberInput;
       },
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       _context: unknown
     ) => {
       try {
-        // Check if the username or email already exists
-        const existingUser = await User.findOne({
-          $or: [{ username }, { email }],
-        });
+        // Check if the email already exists
+        const existingUser = await User.findOne({ email });
         if (existingUser) {
           throw new GraphQLError("User already exists", {
             extensions: {
               code: "USER_ALREADY_EXISTS", // Custom error code
-              invalidArgs: { email, username },
+              invalidArgs: { email },
             },
           });
         }
 
         // Create a new user instance
         const newUser = new User({
-          username,
+          name,
           email,
           password,
           firstName,
           lastName,
           phoneNumber,
           isActive: true,
+          authProvider: "CUSTOM", // Set to CUSTOM for regular registration
         });
 
         // Save the new user to the database
         await newUser.save();
-        const userPlainObject = newUser.toObject();
-        await setTokenCookie(userPlainObject);
         return { user: newUser };
       } catch (err) {
         if (
@@ -163,100 +160,97 @@ const resolvers = {
       }
     },
 
-    // Update Profile Avatar
-    updateProfileAvatar: async (
-      _parent: unknown,
-      { avatarUrl }: { avatarUrl: string },
-      context: { user: unknown }
-    ) => {
-      const userId = (context.user as IUser).id; // You can get the logged-in user ID from the context
-
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
-
-      // Find the user by ID
-      const user = await User.findById(userId);
-      if (!user) {
-        throw new Error("User not found");
-      }
-
-      // Update avatar URL
-      user.avatar = avatarUrl;
-      await user.save();
-
-      return user;
-    },
-
-    // Update General Info (first name, last name, phone number)
-    updateGeneralInfo: async (
+    // Social login (Google/Facebook)
+    socialLogin: async (
       _parent: unknown,
       {
+        socialId,
+        email,
         firstName,
         lastName,
         phoneNumber,
+        authProvider,
       }: {
+        socialId: string;
+        email: string;
         firstName?: string;
         lastName?: string;
         phoneNumber?: PhoneNumberInput;
+        authProvider: "GOOGLE" | "FACEBOOK"; // Only Google or Facebook for social login
       },
-      context: { userId: string }
+      _context: unknown
     ) => {
-      const userId = context.userId;
+      try {
+        // Check if the user exists with the social ID
+        const existingUser = await User.findOne({ socialId });
+        if (existingUser) {
+          // User already exists, log them in
+          return { user: existingUser };
+        }
 
-      if (!userId) {
-        throw new Error("User not authenticated");
+        // If user does not exist, create a new user
+        const newUser = new User({
+          email,
+          firstName,
+          lastName,
+          phoneNumber,
+          socialId,
+          authProvider,
+          isActive: true,
+        });
+
+        // Save the new user to the database
+        await newUser.save();
+        const userPlainObject = newUser.toObject();
+        await setTokenCookie(userPlainObject);
+        return { user: newUser };
+      } catch (err) {
+        if (err instanceof GraphQLError) {
+          throw err;
+        }
+        throw new GraphQLError("Error during social login", {
+          extensions: {
+            code: "SOCIAL_LOGIN_ERROR",
+            http: { status: 500 },
+          },
+        });
       }
-
-      // Find the user by ID
-      const user = await User.findById(userId);
-      if (!user) {
-        throw new Error("User not found");
-      }
-
-      // Update the fields if provided
-      if (firstName) user.firstName = firstName;
-      if (lastName) user.lastName = lastName;
-      if (phoneNumber) user.phoneNumber = phoneNumber;
-
-      await user.save();
-
-      return user;
     },
+
+    // Regular login (credentials-based login)
     login: async (
       _parent: unknown,
       {
-        username,
+        email,
         password,
       }: {
-        username: string;
+        email: string;
         password: string;
       }
     ) => {
       try {
-        console.log({ username, password });
-        const user = await User.findOne({ username }).select("+password");
+        const user = await User.findOne({ email }).select("+password");
 
         if (!user)
-          throw new GraphQLError("Invalid username or password", {
+          throw new GraphQLError("Invalid email or password", {
             extensions: {
-              code: "UNAUTHENTICATED", // Custom error code for authentication issues
-              http: { status: 401 }, // HTTP Status Code for Unauthorized
+              code: "UNAUTHENTICATED",
+              http: { status: 401 },
             },
           });
 
         const validPassword = await user.comparePassword(password);
         if (!validPassword)
-          throw new GraphQLError("Invalid username or password", {
+          throw new GraphQLError("Invalid email or password", {
             extensions: {
-              code: "UNAUTHENTICATED", // Custom error code for authentication issues
-              http: { status: 401 }, // HTTP Status Code for Unauthorized
+              code: "UNAUTHENTICATED",
+              http: { status: 401 },
             },
           });
+
         const leanUser = user.toObject();
         delete leanUser.password;
         user.password = undefined;
-        await setTokenCookie(leanUser);
         return {
           user,
         };
@@ -264,16 +258,16 @@ const resolvers = {
         if (err instanceof GraphQLError) {
           throw err;
         }
-
-        // Handle any unexpected errors and throw a general GraphQL error
         throw new GraphQLError("An error occurred during login", {
           extensions: {
-            code: "INTERNAL_SERVER_ERROR", // Code for internal server errors
-            http: { status: 500 }, // HTTP Status Code for Internal Server Error
+            code: "INTERNAL_SERVER_ERROR",
+            http: { status: 500 },
           },
         });
       }
     },
+
+    // Logout user by deleting the token
     logout: async () => {
       await deleteTokenCookie();
       return {
