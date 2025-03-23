@@ -4,6 +4,12 @@ export enum RoleEnum {
   MODERATOR = "moderator",
 }
 
+export enum AuthProviderEnum {
+  CUSTOM = "custom",
+  GOOGLE = "google",
+  FACEBOOK = "facebook",
+}
+
 export interface IPhoneNumber {
   countryCode: string;
   number: string;
@@ -11,15 +17,19 @@ export interface IPhoneNumber {
 
 export interface IUser {
   id: string;
-  username: string;
-  email: string;
+  name: string;
+  email?: string;
   password: string;
   firstName?: string;
   lastName?: string;
   phoneNumber?: IPhoneNumber;
+  authProvider: AuthProviderEnum;
+  socialId?: string; // Stores the social media ID (Google, Facebook, Instagram)
+  profilePicture?: string;
   createdAt?: Date;
   role: RoleEnum;
   isActive: boolean;
+  updatedAt: Date;
 }
 
 export interface PaginationInput {

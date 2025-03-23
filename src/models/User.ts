@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 import bcrypt from "bcryptjs";
-import { IUser, RoleEnum } from "@/interfaces";
+import { AuthProviderEnum, IUser, RoleEnum } from "@/interfaces";
+import { string } from "zod";
 
 export interface IPhoneNumber {
   countryCode: string;
@@ -19,7 +20,7 @@ const phoneNumberSchema = new Schema<IPhoneNumber>({
 });
 
 const userSchema = new Schema<IUser & Document>({
-  username: {
+  name: {
     type: String,
     required: true,
     unique: true,
@@ -45,6 +46,14 @@ const userSchema = new Schema<IUser & Document>({
     type: String,
     enum: Object.values(RoleEnum) as RoleEnum[], // Explicit cast
     default: RoleEnum.USER,
+  },
+  authProvider: {
+    type: String,
+    enum: Object.values(AuthProviderEnum) as AuthProviderEnum[], // Explicit cast
+    default: AuthProviderEnum.CUSTOM,
+  },
+  socialId: {
+    type: string,
   },
   isActive: {
     type: Boolean,
