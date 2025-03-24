@@ -86,7 +86,7 @@ export function SignInView() {
   const onSubmit = handleSubmit(async ({ email, password }) => {
     console.log("handle submit data", data);
     await login({
-      variables: { username: "RuhulAmin", password },
+      variables: { name: "RuhulAmin", password },
     });
   });
 

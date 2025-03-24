@@ -6,6 +6,7 @@ export async function adminMiddleware(
   request: NextRequest
 ): Promise<void | NextResponse<unknown>> {
   try {
+    // @TODO: get user from next auth 
     const user = await verifyAuthenticationWithRefreshToken();
     if (!user || user.role !== RoleEnum.ADMIN) {
       return NextResponse.redirect(new URL("/", request.url));

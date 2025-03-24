@@ -47,6 +47,9 @@ export const paths = {
   },
   // AUTH
   auth: {
+    nextAuth: {
+      signIn: `${ROOTS.AUTH}/login`,
+    },
     amplify: {
       signIn: `${ROOTS.AUTH}/amplify/sign-in`,
       verify: `${ROOTS.AUTH}/amplify/verify`,

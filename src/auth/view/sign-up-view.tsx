@@ -95,6 +95,9 @@ export function SignUpView() {
     // }
   });
 
+
+    // @TODO: make this workable with the backend
+
   const renderForm = () => (
     <Box sx={{ gap: 3, display: 'flex', flexDirection: 'column' }}>
       <Box

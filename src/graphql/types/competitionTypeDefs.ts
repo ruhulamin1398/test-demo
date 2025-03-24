@@ -59,7 +59,7 @@ export const competitionTypeDefs = `#graphql
   # User filter input
   input CompetitionFilterInput {
     isActive: Boolean
-    username: String
+    name: String
     role: RoleEnum
   }
 

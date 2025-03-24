@@ -167,7 +167,7 @@ const CompetitionRounds: React.FC = () => {
                       {round.judges.map((judge) => (
                         <List
                           disablePadding
-                          key={judge.username}
+                          key={judge.name}
                           sx={{
                             width: "100%",
                             maxWidth: 360,
@@ -182,7 +182,7 @@ const CompetitionRounds: React.FC = () => {
                             </ListItemAvatar>
                             <ListItemText
                               primary={`${judge.firstName} ${judge.lastName}`}
-                              secondary={`${judge.username}`}
+                              secondary={`${judge.name}`}
                             />
                           </ListItem>
                         </List>

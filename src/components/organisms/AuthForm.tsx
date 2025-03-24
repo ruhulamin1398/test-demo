@@ -57,7 +57,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
       return;
     }
     await login({
-      variables: { username: email, password },
+      variables: { name: email, password },
     });
   };
 

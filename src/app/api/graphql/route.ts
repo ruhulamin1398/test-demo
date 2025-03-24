@@ -43,6 +43,8 @@ const handler = startServerAndCreateNextHandler(
     context: async (req: NextApiRequest) => {
       try {
         // await runCors(req, res);
+
+    // @TODO: get user from next auth 
         const user = await verifyAuthenticationWithRefreshToken();
         return { req, user };
       } catch (_err) {

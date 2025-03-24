@@ -40,11 +40,11 @@ const UsersTable: React.FC<UsersTableProps> = ({ data, loading }) => {
             ) : (
               data.map((row) => (
                 <TableRow
-                  key={row.username}
+                  key={row.name}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.username}
+                    {row.name}
                   </TableCell>
                   <TableCell align="right">{row.phoneNumber?.number}</TableCell>
                   <TableCell align="right">{row.email}</TableCell>

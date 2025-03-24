@@ -29,7 +29,7 @@ export function FormSocials({
       ]}
       {...other}
     >
-      <IconButton color="inherit" onClick={() => signIn("google")}>
+      <IconButton color="inherit" onClick={() => signIn("google",{callbackUrl:"/"})}>
         <GoogleIcon width={22} />
       </IconButton>
       <IconButton color="inherit" onClick={() => signIn("github")}>

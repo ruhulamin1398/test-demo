@@ -22,7 +22,7 @@ const userSchema = new Schema<IUser & Document>({
   name: {
     type: String,
     required: true,
-    unique: true,
+    unique: false,
   },
   email: {
     type: String,
@@ -31,7 +31,7 @@ const userSchema = new Schema<IUser & Document>({
   },
   password: {
     type: String,
-    required: true,
+    required: false,
     select: false,
   },
   firstName: String,
