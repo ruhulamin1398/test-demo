@@ -48,7 +48,7 @@ export const deleteTokenCookie = async () => {
 export const setTokenCookie = async (user: IUser) => {
   const cookieStore = await cookies();
   const accessToken = await generateAccessToken(user);
-  const refreshToken = await generateRefreshToken(user.username);
+  const refreshToken = await generateRefreshToken(user.name);
   cookieStore.set({
     name: "refresh_token",
     value: refreshToken,

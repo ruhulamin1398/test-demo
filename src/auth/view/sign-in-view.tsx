@@ -25,9 +25,7 @@ import { RouterLink } from "@/routes/components";
 
 import { Iconify } from "@/components/iconify";
 import { Form, Field } from "@/components/hook-form";
-
-// import { useAuthContext } from '../../hooks';
-// import { getErrorMessage } from '../../utils';
+ 
 import { FormHead } from "../components/form-head";
 import { LOGIN_MUTATION } from "@/graphql-client/auth";
 import { useMutation } from "@apollo/client";
@@ -36,7 +34,9 @@ import { IUser } from "@/interfaces";
 import { setUser } from "@/app/store/slices/authSlice";
 import { handleGraphQLError } from "@/utils/errorHandling";
 import useNotification from "@/app/hooks/useNotification";
-// import { signInWithPassword } from '../../context/jwt';
+import { FormSocials } from "../components/form-socials";
+import { FormDivider } from "../components/form-divider"; 
+import { useSession } from "next-auth/react";
 
 // ----------------------------------------------------------------------
 
@@ -57,6 +57,8 @@ export const SignInSchema = zod.object({
 
 export function SignInView() {
   const { notify } = useNotification();
+
+  const { data: session, status } = useSession();
   const [login, { data, error, loading }] =
     useMutation<LoginResponse>(LOGIN_MUTATION);
   const router = useRouter();
@@ -68,7 +70,7 @@ export function SignInView() {
 
   const defaultValues: SignInSchemaType = {
     email: "demo@minimals.cc",
-    password: "01678900000@Asd",
+    password: "123456",
   };
 
   const methods = useForm<SignInSchemaType>({
@@ -84,16 +86,26 @@ export function SignInView() {
   const onSubmit = handleSubmit(async ({ email, password }) => {
     console.log("handle submit data", data);
     await login({
-      variables: { username: "01678900000", password },
+      variables: { username: "RuhulAmin", password },
     });
   });
 
+  useEffect(() => {
+    if (status === "authenticated" && session?.user) {
+      // const sessionUser = session.user; 
+      // dispatch(setUser(sessionUser)); // ✅ Set user in Redux 
+      // router.push("/admin/dashboard"); // ✅ Redirect user
+    }
+  }, [session, status, dispatch, router]);
+  
   useEffect(() => {
     if (data?.login?.user) {
       const user = data.login.user;
       notify({ severity: "success", message: "Successfully logged in!" });
       dispatch(setUser(user)); // Assuming you use Redux to manage user state
-      router.push("/");
+      console.log("logged in user - user pass ", user);
+    
+      router.push("/admin/dashboard");
     }
 
     if (error) {
@@ -188,6 +200,9 @@ export function SignInView() {
       <Form methods={methods} onSubmit={onSubmit}>
         {renderForm()}
       </Form>
+
+            <FormDivider/>      
+            <FormSocials/>
     </>
   );
 }

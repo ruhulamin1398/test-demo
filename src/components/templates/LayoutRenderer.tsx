@@ -10,6 +10,7 @@ import AdminLayout from "./AdminLayout";
 import { MainLayout } from "@/layouts/main";
 import { AuthSplitLayout } from "@/layouts/auth-split";
 import { DashboardLayout } from "@/layouts/dashboard";
+import { SessionProvider } from "next-auth/react";
 
 interface LayoutRendererProps {
   children: React.ReactNode;
@@ -27,16 +28,15 @@ const LayoutRenderer: React.FC<LayoutRendererProps> = ({ children }) => {
   }, [data, loading, dispatch]);
 
   return (
-    <>
-      {path.startsWith("/auth") ? (
-        <AuthSplitLayout>{children}</AuthSplitLayout>
-      ) : path.startsWith("/admin") ? (
-        <DashboardLayout>{children}</DashboardLayout>
-      ) : (
-        <MainLayout>{children}</MainLayout>
-      )}
-
-    </>
+    <SessionProvider>
+    {path.startsWith("/auth") ? (
+      <AuthSplitLayout>{children}</AuthSplitLayout>
+    ) : path.startsWith("/admin") ? (
+      <DashboardLayout>{children}</DashboardLayout>
+    ) : (
+      <MainLayout>{children}</MainLayout>
+    )}
+  </SessionProvider>
   );
 };
 
