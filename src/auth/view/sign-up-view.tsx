@@ -20,11 +20,13 @@ import { RouterLink } from '@/routes/components';
 import { Iconify } from '@/components/iconify';
 import { Form, Field } from '@/components/hook-form';
 
-import { signUp } from '../context/jwt';
-import { useAuthContext } from '../hooks';
+// import { signUp } from '../context/jwt';
+// import { useAuthContext } from '../hooks';
 import { getErrorMessage } from '../utils';
 import { FormHead } from '../components/form-head';
 import { SignUpTerms } from '../components/sign-up-terms';
+import { FormSocials } from '../components/form-socials';
+import { FormDivider } from '../components/form-divider'; 
 
 // ----------------------------------------------------------------------
 
@@ -37,6 +39,9 @@ export const SignUpSchema = zod.object({
     .string()
     .min(1, { message: 'Email is required!' })
     .email({ message: 'Email must be a valid email address!' }),
+    phone: zod
+      .string() 
+      .email({ message: 'Phone must be a valid phone address!' }),
   password: zod
     .string()
     .min(1, { message: 'Password is required!' })
@@ -45,12 +50,12 @@ export const SignUpSchema = zod.object({
 
 // ----------------------------------------------------------------------
 
-export function JwtSignUpView() {
+export function SignUpView() {
   const router = useRouter();
 
   const showPassword = useBoolean();
 
-  const { checkUserSession } = useAuthContext();
+  // const { checkUserSession } = useAuthContext();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -58,6 +63,7 @@ export function JwtSignUpView() {
     firstName: 'Hello',
     lastName: 'Friend',
     email: 'hello@gmail.com',
+    phone: '+8801000000000',
     password: '@2Minimal',
   };
 
@@ -72,21 +78,21 @@ export function JwtSignUpView() {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    try {
-      await signUp({
-        email: data.email,
-        password: data.password,
-        firstName: data.firstName,
-        lastName: data.lastName,
-      });
-      await checkUserSession?.();
+    // try {
+    //   await signUp({
+    //     email: data.email,
+    //     password: data.password,
+    //     firstName: data.firstName,
+    //     lastName: data.lastName,
+    //   });
+    //   await checkUserSession?.();
 
-      router.refresh();
-    } catch (error) {
-      console.error(error);
-      const feedbackMessage = getErrorMessage(error);
-      setErrorMessage(feedbackMessage);
-    }
+    //   router.refresh();
+    // } catch (error) {
+    //   console.error(error);
+    //   const feedbackMessage = getErrorMessage(error);
+    //   setErrorMessage(feedbackMessage);
+    // }
   });
 
   const renderForm = () => (
@@ -106,6 +112,7 @@ export function JwtSignUpView() {
         />
       </Box>
 
+      <Field.Text name="phone" label="Phone" slotProps={{ inputLabel: { shrink: true } }} />
       <Field.Text name="email" label="Email address" slotProps={{ inputLabel: { shrink: true } }} />
 
       <Field.Text
@@ -167,6 +174,8 @@ export function JwtSignUpView() {
       </Form>
 
       <SignUpTerms />
+      <FormDivider/>
+      <FormSocials/>
     </>
   );
 }
