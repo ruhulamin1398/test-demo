@@ -1,5 +1,6 @@
 // middlewareConfig.ts
 
+import withAuth from "next-auth/middleware";
 import { authMiddleware } from "./auth";
 import { adminMiddleware } from "./admin";
 import { NextRequest, NextResponse } from "next/server";
@@ -10,10 +11,12 @@ export type MiddlewareHandler = (
   request: NextRequest
 ) => Promise<NextResponse | void> | NextResponse | void;
 
+export type MiddlewareType = MiddlewareHandler | ReturnType<typeof withAuth>;
+
 // Define the type for each configuration object in the middlewareConfig
 export interface PathMiddlewareConfig {
   matcher: string; // Path pattern to match (e.g., /profile/*)
-  middlewares: MiddlewareHandler[]; // List of middlewares to apply for the matching path
+  middlewares: MiddlewareType[]; // List of middlewares to apply for the matching path
 }
 
 // Define the type for the middlewareConfig array

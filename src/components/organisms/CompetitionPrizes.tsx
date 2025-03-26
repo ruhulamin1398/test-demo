@@ -1,4 +1,4 @@
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -18,7 +18,7 @@ import { ICompetition, IPrizesAndRewards } from "@/interfaces";
 import {
   CompetitionUiModeEnum,
   setUiControlsPrizes,
-} from "@/app/store/slices/competitionSlice";
+} from "@/store/slices/competitionSlice";
 import { CustomModal } from "./CustomDialog";
 import CustomPagination from "../atoms/CustomPagination";
 import NoData from "../atoms/NoData";

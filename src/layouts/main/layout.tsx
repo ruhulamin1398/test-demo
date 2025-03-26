@@ -31,12 +31,12 @@ import type { LayoutSectionProps } from "../core/layout-section";
 import { AccountDrawer } from "../components/account-drawer";
 import { _account } from "../nav-config-account";
 import { useSelector } from "react-redux";
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/store/store";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 
 import { useDispatch } from "react-redux";
-import { setUser } from "@/app/store/slices/authSlice";
+import { setUser } from "@/store/slices/authSlice";
 
 // ----------------------------------------------------------------------
 

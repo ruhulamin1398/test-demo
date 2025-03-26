@@ -12,7 +12,7 @@ import {
 import { useQuery } from "@apollo/client";
 import { GET_COMPETITION_QUERY } from "@/graphql-client/competition";
 import { useDispatch } from "react-redux";
-import { setCompetition } from "@/app/store/slices/competitionSlice";
+import { setCompetition } from "@/store/slices/competitionSlice";
 import { handleGraphQLError } from "@/utils/errorHandling";
 import useNotification from "@/app/hooks/useNotification";
 import AdminCompetitionBasicInfo from "@/components/organisms/AdminCompetitionBasicInfo";

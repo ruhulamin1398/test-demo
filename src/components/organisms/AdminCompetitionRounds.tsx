@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/store/store";
 import {
   Button,
   Card,
@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   CompetitionUiModeEnum,
   setUiControlsRounds,
-} from "@/app/store/slices/competitionSlice";
+} from "@/store/slices/competitionSlice";
 import CompetitionRounds from "./CompetitionRounds";
 import { AddOutlined, CancelOutlined } from "@mui/icons-material";
 import RoundForm from "./RoundForm";

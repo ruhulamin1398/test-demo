@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/store/store";
 import { CancelOutlined, EditOutlined } from "@mui/icons-material";
 import { Box, Card, CardContent, CardHeader, IconButton } from "@mui/material";
 import ReactMarkdown from "react-markdown";
@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   CompetitionUiModeEnum,
   setUiControlsEligibility,
-} from "@/app/store/slices/competitionSlice";
+} from "@/store/slices/competitionSlice";
 import CompetitionEligibiliyForm from "./CompetitionEligibiliyForm";
 
 const AdminCompetitionEligibility: React.FC = () => {

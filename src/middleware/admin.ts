@@ -1,16 +1,15 @@
-import { RootState } from "@/app/store/store";
 import { RoleEnum } from "@/interfaces";
 import { NextRequest, NextResponse } from "next/server";
-import { useSelector } from "react-redux";
+
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function adminMiddleware(
   request: NextRequest
 ): Promise<void | NextResponse<unknown>> {
   try {
-    // @TODO: get user from next auth
-    const user = useSelector((state: RootState) => state.auth.user);
-
-    if (!user || user.role !== RoleEnum.ADMIN) {
+    const session = await getServerSession(authOptions);
+    if (!session || session?.user?.role !== RoleEnum.ADMIN) {
       return NextResponse.redirect(new URL("/", request.url));
     }
     const response = NextResponse.next();
@@ -18,7 +17,14 @@ export async function adminMiddleware(
     console.log("Admin Middleware");
     return response;
   } catch (_err) {
-    // Catch if any
-    console.log("guestMiddleware error", _err);
+    const isApiRoute = request.nextUrl.pathname.startsWith("/api");
+    if (isApiRoute) {
+      return NextResponse.json(
+        { error: "Internal Server Error" },
+        { status: 500 }
+      );
+    } else {
+      return NextResponse.redirect(new URL("/error", request.url));
+    }
   }
 }

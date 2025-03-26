@@ -4,13 +4,11 @@ import { usePathname } from "next/navigation";
 import { useQuery } from "@apollo/client";
 import { ME_QUERY } from "@/graphql-client/auth";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/app/store/slices/authSlice";
+import { setUser } from "@/store/slices/authSlice";
 
-import AdminLayout from "./AdminLayout";
 import { MainLayout } from "@/layouts/main";
 import { AuthSplitLayout } from "@/layouts/auth-split";
 import { DashboardLayout } from "@/layouts/dashboard";
-import { SessionProvider } from "next-auth/react";
 
 interface LayoutRendererProps {
   children: React.ReactNode;
@@ -18,27 +16,27 @@ interface LayoutRendererProps {
 
 const LayoutRenderer: React.FC<LayoutRendererProps> = ({ children }) => {
   const path = usePathname();
-  // @TODO get user data from next auth 
+  // @TODO get user data from next auth
   // const dispatch = useDispatch();
   // const { data, loading } = useQuery(ME_QUERY);
 
   // useEffect(() => {
   //   if (!loading && data) {
-    
+
   //     dispatch(setUser(data.me));
   //   }
   // }, [data, loading, dispatch]);
 
   return (
-    <SessionProvider>
-    {path.startsWith("/auth") ? (
-      <AuthSplitLayout>{children}</AuthSplitLayout>
-    ) : path.startsWith("/admin") ? (
-      <DashboardLayout>{children}</DashboardLayout>
-    ) : (
-      <MainLayout>{children}</MainLayout>
-    )}
-  </SessionProvider>
+    <>
+      {path.startsWith("/auth") ? (
+        <AuthSplitLayout>{children}</AuthSplitLayout>
+      ) : path.startsWith("/admin") ? (
+        <DashboardLayout>{children}</DashboardLayout>
+      ) : (
+        <MainLayout>{children}</MainLayout>
+      )}
+    </>
   );
 };
 

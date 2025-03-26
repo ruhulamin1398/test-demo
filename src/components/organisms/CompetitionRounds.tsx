@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Avatar,
@@ -22,7 +22,7 @@ import { ICompetition, IRound, RoundJudgementCriteriaEnum } from "@/interfaces";
 import {
   CompetitionUiModeEnum,
   setUiControlsRounds,
-} from "@/app/store/slices/competitionSlice";
+} from "@/store/slices/competitionSlice";
 import { red } from "@mui/material/colors";
 
 const CompetitionRounds: React.FC = () => {

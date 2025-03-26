@@ -8,7 +8,7 @@ import { LOGIN_MUTATION, REGISTER_MUTATION } from "@/graphql-client/auth";
 import { useRouter } from "next/navigation";
 import RegistrationForm from "./RegistrationForm";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/app/store/slices/authSlice";
+import { setUser } from "@/store/slices/authSlice";
 import { IUser } from "@/interfaces";
 import useNotification from "@/app/hooks/useNotification";
 import { handleGraphQLError } from "@/utils/errorHandling";

@@ -29,12 +29,12 @@ import {
   CheckCircleOutline,
   PublishedWithChangesOutlined,
 } from "@mui/icons-material";
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CompetitionUiModeEnum,
   setRoundInfo,
-} from "@/app/store/slices/competitionSlice";
+} from "@/store/slices/competitionSlice";
 import { ICompetition } from "@/interfaces";
 
 const RoundForm: React.FC = () => {

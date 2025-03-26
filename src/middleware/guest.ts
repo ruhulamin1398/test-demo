@@ -1,17 +1,13 @@
-import { RootState } from "@/app/store/store";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { NextRequest, NextResponse } from "next/server";
-import { useSelector } from "react-redux";
 
 export async function guestMiddleware(
   request: NextRequest
 ): Promise<void | NextResponse<unknown>> {
-  try {
-    const user = useSelector((state: RootState) => state.auth.user);
-    if (user) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-  } catch (_err) {
-    // Catch if any
-    console.log("guestMiddleware error", _err);
+  const session = await getServerSession(authOptions);
+  if (session) {
+    // ✅ Token is valid → Redirect logged-in users away from login pages
+    return NextResponse.redirect(new URL("/", request.url));
   }
 }
