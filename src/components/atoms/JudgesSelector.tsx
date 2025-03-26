@@ -54,7 +54,7 @@ export const JudgesSelector: React.FC<CustomAutocompleteProps> = ({
   // Debounced search handler
   const handleSearch = (value: string) => {
     if (value.length > 2) {
-      searchUsers({ variables: { filter: { username: value } } });
+      searchUsers({ variables: { filter: { name: value } } });
     }
   };
 

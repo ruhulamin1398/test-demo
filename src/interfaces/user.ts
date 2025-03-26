@@ -39,7 +39,7 @@ export interface PaginationInput {
 
 export interface UserFilterInput {
   isActive?: boolean;
-  username?: string;
+  name?: string;
   role?: string;
 }
 

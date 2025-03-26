@@ -15,7 +15,7 @@ export const CREATE_COMPETITION_ROUND = gql`
       status
       judges {
         id
-        username
+        name
         firstName
         lastName
       }
@@ -42,7 +42,7 @@ export const UPDATE_COMPETITION_ROUND = gql`
       status
       judges {
         id
-        username
+        name
         firstName
         lastName
       }

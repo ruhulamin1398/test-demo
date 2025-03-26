@@ -36,8 +36,8 @@ const Dashboard = () => {
 
   const columns: Column<IUser>[] = [
     {
-      id: "username" as keyof IUser,
-      label: "Username",
+      id: "name" as keyof IUser,
+      label: "Name",
       filterInput: { type: "text" },
     },
     {

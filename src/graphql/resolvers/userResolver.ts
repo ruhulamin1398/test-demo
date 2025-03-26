@@ -51,7 +51,7 @@ const resolvers = {
     ): Promise<UsersResponse> => {
       try {
         type FilterPropsType = {
-          username?: { $regex: string; $options: string };
+          name?: { $regex: string; $options: string };
           isActive?: boolean;
         };
         const { limit, page: currentPage } = page;
@@ -67,8 +67,8 @@ const resolvers = {
           if (filter.isActive !== undefined) {
             filterQuery.isActive = filter.isActive;
           }
-          if (filter.username) {
-            filterQuery.username = { $regex: filter.username, $options: "i" }; // Case-insensitive search
+          if (filter.name) {
+            filterQuery.name = { $regex: filter.name, $options: "i" }; // Case-insensitive search
           }
         }
 
@@ -216,6 +216,7 @@ const resolvers = {
         await setTokenCookie(userPlainObject);
         return { user: newUser };
       } catch (err) {
+        throw err;
         if (err instanceof GraphQLError) {
           throw err;
         }

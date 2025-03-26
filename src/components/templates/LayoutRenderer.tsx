@@ -18,14 +18,16 @@ interface LayoutRendererProps {
 
 const LayoutRenderer: React.FC<LayoutRendererProps> = ({ children }) => {
   const path = usePathname();
-  const dispatch = useDispatch();
-  const { data, loading } = useQuery(ME_QUERY);
+  // @TODO get user data from next auth 
+  // const dispatch = useDispatch();
+  // const { data, loading } = useQuery(ME_QUERY);
 
-  useEffect(() => {
-    if (!loading && data) {
-      dispatch(setUser(data.me));
-    }
-  }, [data, loading, dispatch]);
+  // useEffect(() => {
+  //   if (!loading && data) {
+    
+  //     dispatch(setUser(data.me));
+  //   }
+  // }, [data, loading, dispatch]);
 
   return (
     <SessionProvider>

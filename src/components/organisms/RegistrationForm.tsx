@@ -78,7 +78,7 @@ const RegistrationForm: React.FC = () => {
     _actions: FormikHelpers<FormValues>
   ) => {
     await register({
-      variables: { ...payload, username: payload.phoneNumber.number },
+      variables: { ...payload, name: payload.phoneNumber.number },
     });
   };
 

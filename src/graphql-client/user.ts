@@ -7,7 +7,7 @@ export const GET_USERS_QUERY = gql`
     getUsers(page: $page, filter: $filter) {
       users {
         id
-        username
+        name
         email
         firstName
         lastName
@@ -32,7 +32,7 @@ export interface GetUsersQueryVariables {
   };
   filter?: {
     isActive?: boolean;
-    username?: string;
+    name?: string;
     role?: string;
   };
 }
