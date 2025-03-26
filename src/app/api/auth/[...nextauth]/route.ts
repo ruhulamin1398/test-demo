@@ -109,6 +109,7 @@ export const authOptions = {
         session.user.email = token.email;
         session.user.image = token.picture;
         session.user = token;
+        session.role = token.role;
       }
       return session;
     },

@@ -4,7 +4,6 @@ import { resolvers } from "@/graphql/resolvers";
 import { typeDefs } from "@/graphql/types";
 import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
-import { verifyAuthenticationWithRefreshToken } from "@/app/lib/auth";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { IUser } from "@/interfaces";
@@ -54,11 +53,6 @@ const handler = startServerAndCreateNextHandler(
       const { req, res } = graphQlcontext;
       try {
         // @TODO: get user from next auth
-
-        // instead of this below line i want to set user from next auth session ;
-        // const user = await verifyAuthenticationWithRefreshToken();
-
-        // Get the user session from NextAuth
 
         const session = await getServerSession(req, res, authOptions);
         console.log(

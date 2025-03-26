@@ -1,13 +1,15 @@
-import { verifyAuthenticationWithRefreshToken } from "@/app/lib/auth";
+import { RootState } from "@/app/store/store";
 import { RoleEnum } from "@/interfaces";
 import { NextRequest, NextResponse } from "next/server";
+import { useSelector } from "react-redux";
 
 export async function adminMiddleware(
   request: NextRequest
 ): Promise<void | NextResponse<unknown>> {
   try {
-    // @TODO: get user from next auth 
-    const user = await verifyAuthenticationWithRefreshToken();
+    // @TODO: get user from next auth
+    const user = useSelector((state: RootState) => state.auth.user);
+
     if (!user || user.role !== RoleEnum.ADMIN) {
       return NextResponse.redirect(new URL("/", request.url));
     }
