@@ -25,7 +25,7 @@ import { RouterLink } from "@/routes/components";
 
 import { Iconify } from "@/components/iconify";
 import { Form, Field } from "@/components/hook-form";
- 
+
 import { FormHead } from "../components/form-head";
 import { LOGIN_MUTATION } from "@/graphql-client/auth";
 import { useMutation } from "@apollo/client";
@@ -35,7 +35,7 @@ import { setUser } from "@/app/store/slices/authSlice";
 import { handleGraphQLError } from "@/utils/errorHandling";
 import useNotification from "@/app/hooks/useNotification";
 import { FormSocials } from "../components/form-socials";
-import { FormDivider } from "../components/form-divider"; 
+import { FormDivider } from "../components/form-divider";
 import { useSession } from "next-auth/react";
 
 // ----------------------------------------------------------------------
@@ -92,20 +92,20 @@ export function SignInView() {
 
   useEffect(() => {
     if (status === "authenticated" && session?.user) {
-      // const sessionUser = session.user; 
-      // dispatch(setUser(sessionUser)); // ✅ Set user in Redux 
+      // const sessionUser = session.user;
+      // dispatch(setUser(sessionUser)); // ✅ Set user in Redux
       // router.push("/admin/dashboard"); // ✅ Redirect user
     }
   }, [session, status, dispatch, router]);
-  
+
   useEffect(() => {
     if (data?.login?.user) {
       const user = data.login.user;
       notify({ severity: "success", message: "Successfully logged in!" });
       dispatch(setUser(user)); // Assuming you use Redux to manage user state
       console.log("logged in user - user pass ", user);
-    
-      router.push("/admin/dashboard");
+
+      router.push("/");
     }
 
     if (error) {
@@ -181,7 +181,7 @@ export function SignInView() {
             {`Don’t have an account? `}
             <Link
               component={RouterLink}
-              href={paths.auth.jwt.signUp}
+              href={paths.auth.nextAuth.register}
               variant="subtitle2"
             >
               Get started
@@ -201,8 +201,8 @@ export function SignInView() {
         {renderForm()}
       </Form>
 
-            <FormDivider/>      
-            <FormSocials/>
+      <FormDivider />
+      <FormSocials />
     </>
   );
 }

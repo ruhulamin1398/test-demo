@@ -1,44 +1,58 @@
- 
 import NextAuth, { Account, User } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import TwitterProvider from "next-auth/providers/twitter";
 import { client } from "@/lib/apolloClient";
-import { SOCIAL_LOGIN_MUTATION } from "@/graphql-client/auth";  
+import { SOCIAL_LOGIN_MUTATION } from "@/graphql-client/auth";
 import { AuthProviderEnum } from "@/interfaces";
 import { JWT } from "next-auth/jwt";
-// Import Apollo Client for GraphQL mutation  
+// Import Apollo Client for GraphQL mutation
 interface PhoneNumberInput {
   countryCode: string;
   number: string;
 }
 
-
 export const authOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "940596571861-4mfet946ugp4k480gnml58v4td8oo94o.apps.googleusercontent.com",
-      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET || "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",
+      clientId:
+        process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
+        "940596571861-4mfet946ugp4k480gnml58v4td8oo94o.apps.googleusercontent.com",
+      clientSecret:
+        process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET ||
+        "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",
     }),
     GitHubProvider({
-      clientId: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID || "Ov23lik96gTaKmDVFFba",
-      clientSecret: process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET || "127cd7fef32da8132641f8e2275cd3fc461e63dd",
+      clientId:
+        process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID || "Ov23lik96gTaKmDVFFba",
+      clientSecret:
+        process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET ||
+        "127cd7fef32da8132641f8e2275cd3fc461e63dd",
     }),
     TwitterProvider({
-      clientId: process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID || "ZXR1TjVxamZDTzhiSHlxWW4tTVI6MTpjaQ",
-      clientSecret: process.env.NEXT_PUBLIC_TWITTER_CLIENT_SECRET || "aXp9R0qXac82bpfmPuvHLlPD6lqzi6yzfBO34pjsZl7wHWAB5x",
+      clientId:
+        process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID ||
+        "ZXR1TjVxamZDTzhiSHlxWW4tTVI6MTpjaQ",
+      clientSecret:
+        process.env.NEXT_PUBLIC_TWITTER_CLIENT_SECRET ||
+        "aXp9R0qXac82bpfmPuvHLlPD6lqzi6yzfBO34pjsZl7wHWAB5x",
       version: "2.0", // Twitter API v2 (for email access)
     }),
   ],
-  secret: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET || "1a99663db926903959c25fe59d333d61",
+  secret:
+    process.env.NEXT_PUBLIC_NEXTAUTH_SECRET ||
+    "1a99663db926903959c25fe59d333d61",
   callbacks: {
-
-    
-
-
     // The jwt callback is called whenever a token is created or updated.
-    async jwt({ token, account, user } : { token:JWT, account:Account, user:User}) {
- 
+    async jwt({
+      token,
+      account,
+      user,
+    }: {
+      token: JWT;
+      account: Account;
+      user: User;
+    }) {
       // When the user signs in with a provider, we get an account object.
       if (account && user) {
         // Extract id_token (or access_token) and additional user details
@@ -46,38 +60,37 @@ export const authOptions = {
         const email = user.email;
         // Optionally, parse the user's name into first and last names
         const [firstName = "", lastName = ""] = user.name?.split(" ") || [];
-        console.log("from route.js", token, account, {user});
+        console.log("from route.js", token, account, { user });
         console.log("from route.js user.id ", user.id);
-        
+
         const socialId = user.id;
-        const phoneNumber:PhoneNumberInput= {
-          countryCode:"+880",
-          number:"01852525225",
-        }
-       
+        const phoneNumber: PhoneNumberInput = {
+          countryCode: "+880",
+          number: "01852525225",
+        };
+
         try {
           console.log("idToken is ___ --__", idToken);
-          
+
           const authProvider: AuthProviderEnum = AuthProviderEnum.GOOGLE;
-          
-          const { data }  = await client.mutate({
+
+          const { data } = await client.mutate({
             mutation: SOCIAL_LOGIN_MUTATION,
             variables: {
               socialId: socialId,
-              email: email,  
+              email: email,
               firstName: firstName,
               lastName: lastName,
               phoneNumber: phoneNumber,
-              authProvider:authProvider,
-             
+              authProvider: authProvider,
             },
           });
 
           console.log(" social login data is ___", data);
 
-            const user = data?.socialLogin?.user; 
-                console.log("logged in user ", user);
-                
+          const user = data?.socialLogin?.user;
+          console.log("logged in user ", user);
+
           if (data?.socialLogin?.user) {
             token.user = data.socialLogin.user;
           }
@@ -86,9 +99,8 @@ export const authOptions = {
         }
       }
 
-
       return token;
-    }, 
+    },
     async session({ session, token }) {
       // Here we pass the token values to the session object so they are available client-side.
       if (session.user) {
@@ -96,6 +108,7 @@ export const authOptions = {
         session.user.name = token.name;
         session.user.email = token.email;
         session.user.image = token.picture;
+        session.user = token;
       }
       return session;
     },

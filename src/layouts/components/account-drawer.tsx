@@ -153,6 +153,14 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
           >
             {renderAvatar()}
 
+            <Typography
+              variant="body2"
+              sx={{ color: "text.secondary", mt: 0.5 }}
+              noWrap
+            >
+              #{data?.user.id}
+            </Typography>
+
             <Typography variant="subtitle1" noWrap sx={{ mt: 2 }}>
               {data?.name}
             </Typography>
