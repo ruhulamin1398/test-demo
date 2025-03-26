@@ -1,13 +1,18 @@
-import type { IconButtonProps } from '@mui/material/IconButton';
+import type { IconButtonProps } from "@mui/material/IconButton";
 
-import { m } from 'framer-motion';
+import { m } from "framer-motion";
 
-import NoSsr from '@mui/material/NoSsr';
-import Avatar from '@mui/material/Avatar';
-import SvgIcon from '@mui/material/SvgIcon';
-import IconButton from '@mui/material/IconButton';
+import NoSsr from "@mui/material/NoSsr";
+import Avatar from "@mui/material/Avatar";
+import SvgIcon from "@mui/material/SvgIcon";
+import IconButton from "@mui/material/IconButton";
 
-import { varTap, varHover, AnimateBorder, transitionTap } from '@/components/animate';
+import {
+  varTap,
+  varHover,
+  AnimateBorder,
+  transitionTap,
+} from "@/components/animate";
 
 // ----------------------------------------------------------------------
 
@@ -16,7 +21,12 @@ export type AccountButtonProps = IconButtonProps & {
   displayName: string;
 };
 
-export function AccountButton({ photoURL, displayName, sx, ...other }: AccountButtonProps) {
+export function AccountButton({
+  photoURL,
+  displayName,
+  sx,
+  ...other
+}: AccountButtonProps) {
   const renderFallback = () => (
     <Avatar
       sx={[
@@ -50,10 +60,14 @@ export function AccountButton({ photoURL, displayName, sx, ...other }: AccountBu
     >
       <NoSsr fallback={renderFallback()}>
         <AnimateBorder
-          sx={{ p: '3px', borderRadius: '50%', width: 40, height: 40 }}
+          sx={{ p: "3px", borderRadius: "50%", width: 40, height: 40 }}
           slotProps={{
-            primaryBorder: { size: 60, width: '1px', sx: { color: 'primary.main' } },
-            secondaryBorder: { sx: { color: 'warning.main' } },
+            primaryBorder: {
+              size: 60,
+              width: "1px",
+              sx: { color: "primary.main" },
+            },
+            secondaryBorder: { sx: { color: "warning.main" } },
           }}
         >
           <Avatar src={photoURL} alt={displayName} sx={{ width: 1, height: 1 }}>
