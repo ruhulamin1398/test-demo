@@ -94,7 +94,7 @@ export const navData: NavSectionProps["data"] = [
         children: [
           // { title: "Profile", path: paths.dashboard.user.root },
           // { title: "Cards", path: paths.dashboard.user.cards },
-          { title: "List", path: paths.dashboard.competition.list },
+          { title: "List", path: paths.dashboard.competition.root },
           // { title: "Create", path: paths.dashboard.user.new },
           // { title: "Edit", path: paths.dashboard.user.demo.edit },
           // { title: "Account", path: paths.dashboard.user.account },

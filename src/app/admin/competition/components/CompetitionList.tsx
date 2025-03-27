@@ -162,12 +162,13 @@ const CompetitionList: React.FC = () => {
           </TableHead>
           <TableBody>
             {data?.getCompetitions.competitions.map((item) => (
-              <TableRow key={item.id}>
+              <TableRow hover tabIndex={-1} key={item.id}>
                 <TableCell>
-                  <Link href={`/dashboard/competition/details/${item.id}`}>
+                  <Link href={`/admin/competition/details/${item.id}`}>
                     <Typography>{item.title}</Typography>
                   </Link>
                 </TableCell>
+
                 <TableCell>{item.description}</TableCell>
                 <TableCell align="right">
                   {formatDateToHumanReadableDate(item.startDate)}
