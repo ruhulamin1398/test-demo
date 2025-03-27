@@ -1,5 +1,4 @@
-import { SignUpView } from "@/auth/view/sign-up-view";
-import { AuthSplitLayout } from "@/layouts/auth-split";
+import { AccountLayout } from "@/sections/account/account-layout";
 
 // ----------------------------------------------------------------------
 
@@ -8,5 +7,5 @@ type Props = {
 };
 
 export default function Layout({ children }: Props) {
-  return <SignUpView />;
+  return <AccountLayout> {children}</AccountLayout>;
 }

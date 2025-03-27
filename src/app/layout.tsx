@@ -14,10 +14,13 @@ import { detectLanguage } from "@/locales/server";
 
 import type { Metadata } from "next";
 import "@/global.css";
-import { defaultSettings, SettingsProvider } from "@/components/settings";
+import {
+  SettingsDrawer,
+  defaultSettings,
+  SettingsProvider,
+} from "@/components/settings";
 
 import { CONFIG } from "@/global-config";
-import { AuthProvider } from "@/providers/AuthProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -69,13 +72,11 @@ export default async function RootLayout({
               defaultMode={themeConfig.defaultMode}
               modeStorageKey={themeConfig.modeStorageKey}
             >
-              <AuthProvider>
-                <ApolloClientProvider>
-                  <ReduxProvider>
-                    <LayoutRenderer>{children}</LayoutRenderer>
-                  </ReduxProvider>
-                </ApolloClientProvider>
-              </AuthProvider>
+              <ApolloClientProvider>
+                <ReduxProvider>
+                  <LayoutRenderer>{children}</LayoutRenderer>
+                </ReduxProvider>
+              </ApolloClientProvider>
             </ThemeProvider>
           </SettingsProvider>
         </AppRouterCacheProvider>

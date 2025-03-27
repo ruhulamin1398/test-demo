@@ -19,7 +19,7 @@ export type MiddlewareConfig = PathMiddlewareConfig[];
 // Define the middleware configuration for paths
 export const middlewareConfig: MiddlewareConfig = [
   {
-    matcher: "/dashboard",
+    matcher: "/admin",
     middlewares: [authMiddleware, adminMiddleware],
   },
 
