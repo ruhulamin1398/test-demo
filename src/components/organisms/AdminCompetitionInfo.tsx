@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import {
   Box,

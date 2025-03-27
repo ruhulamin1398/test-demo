@@ -36,7 +36,7 @@ import { CompetitionStatusEnum, ICompetition } from "@/interfaces";
 import {
   CompetitionUiModeEnum,
   setUiControlsBasicInfo,
-} from "@/app/store/slices/competitionSlice";
+} from "@/store/slices/competitionSlice";
 import { CustomModal } from "@/components/organisms/CustomDialog";
 import CustomPagination from "@/components/atoms/CustomPagination";
 import { useQuery } from "@apollo/client";

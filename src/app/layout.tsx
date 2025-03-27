@@ -1,7 +1,7 @@
 // src/app/layout.tsx
 import React from "react";
 import { ApolloClientProvider } from "@/graphql-client/Provider";
-import { ReduxProvider } from "@/app/store/ReduxProvider";
+import { ReduxProvider } from "@/providers/ReduxProvider";
 import LayoutRenderer from "@/components/templates/LayoutRenderer";
 
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";

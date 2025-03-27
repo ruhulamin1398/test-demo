@@ -15,7 +15,7 @@ import { IUser } from "@/interfaces";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { clearUser } from "@/app/store/slices/authSlice";
+import { clearUser } from "@/store/slices/authSlice";
 
 interface ProfileMenuProps {
   user: IUser;

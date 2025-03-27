@@ -1,4 +1,4 @@
-import NextAuth, { Account, User } from "next-auth";
+import NextAuth, { Account, AuthOptions, User } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import TwitterProvider from "next-auth/providers/twitter";
@@ -6,13 +6,17 @@ import { client } from "@/lib/apolloClient";
 import { SOCIAL_LOGIN_MUTATION } from "@/graphql-client/auth";
 import { AuthProviderEnum } from "@/interfaces";
 import { JWT } from "next-auth/jwt";
+import { AdapterUser } from "next-auth/adapters";
 // Import Apollo Client for GraphQL mutation
 interface PhoneNumberInput {
   countryCode: string;
   number: string;
 }
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     GoogleProvider({
       clientId:
@@ -50,8 +54,8 @@ export const authOptions = {
       user,
     }: {
       token: JWT;
-      account: Account;
-      user: User;
+      user: User | AdapterUser;
+      account: Account | null;
     }) {
       // When the user signs in with a provider, we get an account object.
       if (account && user) {
@@ -102,17 +106,25 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }) {
-      // Here we pass the token values to the session object so they are available client-side.
-      if (session.user) {
-        session.user.id = token.id;
-        session.user.name = token.name;
-        session.user.email = token.email;
-        session.user.image = token.picture;
-        session.user = token;
-        session.role = token.role;
+      const { user } = session;
+      if (user) {
+        const { id, name, email, picture, role } = token;
+        session.user = {
+          ...session.user,
+          id,
+          name,
+          email,
+          image: picture,
+          role,
+        };
       }
       return session;
     },
+  },
+  pages: {
+    signIn: "/auth/login",
+    error: "/error",
+    verifyRequest: "/auth/verify-request",
   },
 };
 

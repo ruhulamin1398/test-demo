@@ -1,8 +1,8 @@
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/store/store";
 import { Card, CardContent, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import FileUpload from "./FileUpload";
-import { updateCompetition } from "@/app/store/slices/competitionSlice";
+import { updateCompetition } from "@/store/slices/competitionSlice";
 
 const AdminCompetitionThumbnail: React.FC = () => {
   const dispatch = useDispatch();

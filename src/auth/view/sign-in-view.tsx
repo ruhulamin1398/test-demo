@@ -31,7 +31,7 @@ import { LOGIN_MUTATION } from "@/graphql-client/auth";
 import { useMutation } from "@apollo/client";
 import { useDispatch } from "react-redux";
 import { IUser } from "@/interfaces";
-import { setUser } from "@/app/store/slices/authSlice";
+import { setUser } from "@/store/slices/authSlice";
 import { handleGraphQLError } from "@/utils/errorHandling";
 import useNotification from "@/app/hooks/useNotification";
 import { FormSocials } from "../components/form-socials";

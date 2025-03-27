@@ -1,20 +1,23 @@
-import { RootState } from "@/app/store/store";
-import { NextRequest, NextResponse } from "next/server";
-import { useSelector } from "react-redux";
+import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
+import { NextRequest, NextFetchEvent, NextResponse } from "next/server";
+import { MiddlewareFactory } from "./middlewareConfig"; // Your existing middleware chaining setup
+import { getToken } from "next-auth/jwt";
 
-export async function authMiddleware(
-  request: NextRequest
-): Promise<void | NextResponse<unknown>> {
-  try {
-    const user = useSelector((state: RootState) => state.auth.user);
-    if (!user) {
-      return NextResponse.redirect(new URL("/auth/login", request.url));
+export const authMiddleware: MiddlewareFactory = (next) => {
+  return async (request: NextRequest, event: NextFetchEvent) => {
+    const token = await getToken({
+      req: request,
+      secret:
+        process.env.NEXT_PUBLIC_NEXTAUTH_SECRET ||
+        "1a99663db926903959c25fe59d333d61",
+    });
+    if (!token) {
+      const url = new URL(`/auth/login`, request.url);
+      url.searchParams.set("callbackUrl ", encodeURI(request.url));
+      return NextResponse.redirect(url);
     }
-  } catch (_err) {
-    // Catch if any
-    console.log("guestMiddleware error", _err);
-  }
-}
 
-// 01711111109 Asd@01711111109
-// 01678900000 01678900000@Asd
+    // Otherwise, continue to the next middleware
+    return next(request, event);
+  };
+};

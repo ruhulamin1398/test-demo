@@ -1,24 +1,27 @@
-import { RootState } from "@/app/store/store";
 import { RoleEnum } from "@/interfaces";
-import { NextRequest, NextResponse } from "next/server";
-import { useSelector } from "react-redux";
+import { NextRequest, NextResponse, NextFetchEvent } from "next/server";
+import { MiddlewareFactory } from "./middlewareConfig";
+import { getToken } from "next-auth/jwt";
 
-export async function adminMiddleware(
-  request: NextRequest
-): Promise<void | NextResponse<unknown>> {
-  try {
-    // @TODO: get user from next auth
-    const user = useSelector((state: RootState) => state.auth.user);
-
-    if (!user || user.role !== RoleEnum.ADMIN) {
+// Define the middleware factory function
+export const adminMiddleware: MiddlewareFactory = (next) => {
+  return async (request: NextRequest, event: NextFetchEvent) => {
+    try {
+      const token = await getToken({
+        req: request,
+        secret:
+          process.env.NEXT_PUBLIC_NEXTAUTH_SECRET ||
+          "1a99663db926903959c25fe59d333d61",
+      });
+      // @TODO: Check if the token is valid and the user is an admin
+      if (token && token.role === RoleEnum.ADMIN) {
+        return next(request, event);
+      }
+      // Redirect non-admin users to the home page
       return NextResponse.redirect(new URL("/", request.url));
+    } catch (error) {
+      // @TODO: Handle error when token is not valid
+      return NextResponse.next();
     }
-    const response = NextResponse.next();
-    response.headers.set("X-Is-Dashboard", "true");
-    console.log("Admin Middleware");
-    return response;
-  } catch (_err) {
-    // Catch if any
-    console.log("guestMiddleware error", _err);
-  }
-}
+  };
+};

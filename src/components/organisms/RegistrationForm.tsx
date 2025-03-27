@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Field, Form, FormikHelpers } from "formik";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/app/store/slices/authSlice";
+import { setUser } from "@/store/slices/authSlice";
 import * as Yup from "yup";
 import { TextField, Button, Box, Autocomplete } from "@mui/material";
 import Grid from "@mui/material/Grid2";

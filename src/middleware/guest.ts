@@ -1,17 +1,22 @@
-import { RootState } from "@/app/store/store";
-import { NextRequest, NextResponse } from "next/server";
-import { useSelector } from "react-redux";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
+import { MiddlewareFactory } from "./middlewareConfig";
+import { getToken } from "next-auth/jwt";
 
-export async function guestMiddleware(
-  request: NextRequest
-): Promise<void | NextResponse<unknown>> {
-  try {
-    const user = useSelector((state: RootState) => state.auth.user);
-    if (user) {
+// Define the middleware factory function
+export const guestMiddleware: MiddlewareFactory = (next) => {
+  return async (request: NextRequest, event: NextFetchEvent) => {
+    const token = await getToken({
+      req: request,
+      secret:
+        process.env.NEXT_PUBLIC_NEXTAUTH_SECRET ||
+        "1a99663db926903959c25fe59d333d61",
+    });
+    if (token) {
+      // ✅ Token is valid → Redirect logged-in users away from login pages
       return NextResponse.redirect(new URL("/", request.url));
     }
-  } catch (_err) {
-    // Catch if any
-    console.log("guestMiddleware error", _err);
-  }
-}
+    return next(request, event);
+  };
+};
