@@ -42,7 +42,7 @@ export type AccountDrawerProps = IconButtonProps & {
   }[];
 };
 
-export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
+export function AccountDrawer({ data = {}, sx, ...other }: AccountDrawerProps) {
   const pathname = usePathname();
 
   const { user } = useMockedUser();
@@ -158,7 +158,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
               sx={{ color: "text.secondary", mt: 0.5 }}
               noWrap
             >
-              #{data?.user.id}
+              #{data?.user?.id}
             </Typography>
 
             <Typography variant="subtitle1" noWrap sx={{ mt: 2 }}>

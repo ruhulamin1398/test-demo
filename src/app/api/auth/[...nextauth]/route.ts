@@ -14,6 +14,9 @@ interface PhoneNumberInput {
 }
 
 export const authOptions: AuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     GoogleProvider({
       clientId:
@@ -117,6 +120,11 @@ export const authOptions: AuthOptions = {
       }
       return session;
     },
+  },
+  pages: {
+    signIn: "/auth/login",
+    error: "/error",
+    verifyRequest: "/auth/verify-request",
   },
 };
 
