@@ -184,9 +184,7 @@ const resolvers = {
         // Check if the user exists with the social ID
         const existingUser = await User.findOne({ socialId });
         if (existingUser) {
-          const userPlainObject = existingUser.toObject();
-          // User already exists, log them in
-          return { user: userPlainObject };
+          return { user: existingUser };
         }
         const name = email.split("@")[0];
 
@@ -208,8 +206,10 @@ const resolvers = {
         // Save the new user to the database
         await newUser.save();
         const userPlainObject = newUser.toObject();
+        console.log("Spcoal login data", userPlainObject);
         return { user: userPlainObject };
       } catch (err) {
+        console.log("SOCIAL LOGIN ERROR", err);
         if (err instanceof GraphQLError) {
           throw err;
         }
