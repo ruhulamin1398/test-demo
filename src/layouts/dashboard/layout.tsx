@@ -46,6 +46,7 @@ import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { setUser } from "@/app/store/slices/authSlice";
 import { RootState } from "@/app/store/store";
+import { SignInButton } from "../components/sign-in-button";
 
 // ----------------------------------------------------------------------
 
@@ -169,10 +170,10 @@ export function DashboardLayout({
           )}
 
           {/** @slot Workspace popover */}
-          <WorkspacesPopover
+          {/* <WorkspacesPopover
             data={_workspaces}
             sx={{ color: "var(--layout-nav-text-primary-color)" }}
-          />
+          /> */}
         </>
       ),
       rightArea: (
@@ -184,7 +185,7 @@ export function DashboardLayout({
           }}
         >
           {/** @slot Searchbar */}
-          <Searchbar data={navData} />
+          {/* <Searchbar data={navData} /> */}
 
           {/** @slot Language popover */}
           <LanguagePopover data={allLangs} />
@@ -193,13 +194,13 @@ export function DashboardLayout({
           <NotificationsDrawer data={_notifications} />
 
           {/** @slot Contacts popover */}
-          <ContactsPopover data={_contacts} />
+          {/* <ContactsPopover data={_contacts} /> */}
 
           {/** @slot Settings button */}
-          <SettingsButton />
+          {/* <SettingsButton /> */}
 
+          {user ? <AccountDrawer data={user} /> : <SignInButton />}
           {/** @slot Account drawer */}
-          <AccountDrawer data={user} />
         </Box>
       ),
     };

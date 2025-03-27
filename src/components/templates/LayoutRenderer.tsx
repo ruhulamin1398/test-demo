@@ -18,27 +18,27 @@ interface LayoutRendererProps {
 
 const LayoutRenderer: React.FC<LayoutRendererProps> = ({ children }) => {
   const path = usePathname();
-  // @TODO get user data from next auth 
+  // @TODO get user data from next auth
   // const dispatch = useDispatch();
   // const { data, loading } = useQuery(ME_QUERY);
 
   // useEffect(() => {
   //   if (!loading && data) {
-    
+
   //     dispatch(setUser(data.me));
   //   }
   // }, [data, loading, dispatch]);
 
   return (
     <SessionProvider>
-    {path.startsWith("/auth") ? (
-      <AuthSplitLayout>{children}</AuthSplitLayout>
-    ) : path.startsWith("/admin") ? (
-      <DashboardLayout>{children}</DashboardLayout>
-    ) : (
-      <MainLayout>{children}</MainLayout>
-    )}
-  </SessionProvider>
+      {path.startsWith("/auth") ? (
+        <AuthSplitLayout>{children}</AuthSplitLayout>
+      ) : path.startsWith("/admin") ? (
+        <DashboardLayout>{children}</DashboardLayout>
+      ) : (
+        <MainLayout>{children}</MainLayout>
+      )}
+    </SessionProvider>
   );
 };
 

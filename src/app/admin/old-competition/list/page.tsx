@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 
 import { CONFIG } from "@/global-config";
 
-import { UserCardsView } from "@/sections/user/view";
+import { UserListView } from "@/sections/competition/view";
 
 // ----------------------------------------------------------------------
 
 export const metadata: Metadata = {
-  title: `User cards | Dashboard - ${CONFIG.appName}`,
+  title: `User list | Dashboard - ${CONFIG.appName}`,
 };
 
 export default function Page() {
-  return <UserCardsView />;
+  return <UserListView />;
 }
