@@ -53,21 +53,13 @@ const handler = startServerAndCreateNextHandler(
       const { req, res } = graphQlcontext;
       try {
         // @TODO: get user from next auth
-
         const session = await getServerSession(req, res, authOptions);
         console.log(
           "Session from NextAuth in GraphQL route:  ____________________________________",
           session
         );
-
         // Extract the user data
         const user = session?.user || null;
-
-        console.log(
-          " log form graphql __________________________________",
-          user
-        );
-
         return { req, user };
       } catch (_err) {
         return { req, user: null };
