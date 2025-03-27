@@ -19,7 +19,7 @@ export const adminMiddleware: MiddlewareFactory = (next) => {
       }
       // Redirect non-admin users to the home page
       return NextResponse.redirect(new URL("/", request.url));
-    } catch (error) {
+    } catch (_error) {
       // @TODO: Handle error when token is not valid
       return NextResponse.next();
     }

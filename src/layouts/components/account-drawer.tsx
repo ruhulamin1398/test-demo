@@ -1,34 +1,11 @@
 "use client";
 
 import type { IconButtonProps } from "@mui/material/IconButton";
-
-import { varAlpha } from "minimal-shared/utils";
 import { useBoolean } from "minimal-shared/hooks";
-
-import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
-import Avatar from "@mui/material/Avatar";
-import Drawer from "@mui/material/Drawer";
-import Tooltip from "@mui/material/Tooltip";
-import MenuList from "@mui/material/MenuList";
-import MenuItem from "@mui/material/MenuItem";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-
-import { paths } from "@/routes/paths";
-import { usePathname } from "@/routes/hooks";
-import { RouterLink } from "@/routes/components";
-
-import { _mock } from "@/_mock";
-
-import { Label } from "@/components/label";
+import { Box, Avatar, Drawer, Typography, IconButton } from "@mui/material";
 import { Iconify } from "@/components/iconify";
 import { Scrollbar } from "@/components/scrollbar";
 import { AnimateBorder } from "@/components/animate";
-
-import { useMockedUser } from "@/auth/hooks";
-
-import { UpgradeBlock } from "./nav-upgrade";
 import { AccountButton } from "./account-button";
 import { SignOutButton } from "./sign-out-button";
 import { useSelector } from "react-redux";
@@ -36,19 +13,8 @@ import { RootState } from "@/store/store";
 
 // ----------------------------------------------------------------------
 
-export type AccountDrawerProps = IconButtonProps & {
-  data?: {
-    name: string;
-    email: string;
-    image?: string;
-  }[];
-};
-
-export function AccountDrawer({ sx, ...other }: AccountDrawerProps) {
-  const pathname = usePathname();
-
+export function AccountDrawer({ sx, ...other }: IconButtonProps) {
   const user = useSelector((state: RootState) => state.auth.user);
-  console.log(" user data ___________________________________", user);
 
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
 
@@ -59,129 +25,84 @@ export function AccountDrawer({ sx, ...other }: AccountDrawerProps) {
         primaryBorder: { size: 120, sx: { color: "primary.main" } },
       }}
     >
-      <Avatar src={user?.image} alt={user?.name} sx={{ width: 1, height: 1 }}>
+      <Avatar
+        src={user?.profilePicture}
+        alt={user?.name}
+        sx={{ width: 1, height: 1 }}
+      >
         {user?.name?.charAt(0).toUpperCase()}
       </Avatar>
     </AnimateBorder>
   );
-
-  // const renderList = () => (
-  //   <MenuList
-  //     disablePadding
-  //     sx={[
-  //       (theme) => ({
-  //         py: 3,
-  //         px: 2.5,
-  //         borderTop: `dashed 1px ${theme.vars.palette.divider}`,
-  //         borderBottom: `dashed 1px ${theme.vars.palette.divider}`,
-  //         '& li': { p: 0 },
-  //       }),
-  //     ]}
-  //   >
-  //     {data.map((option) => {
-  //       return (
-  //         <MenuItem key={option}>
-  //           <Link
-  //             component={RouterLink}
-  //             href={option.label === 'Home' ? rootHref : option.href}
-  //             color="inherit"
-  //             underline="none"
-  //             onClick={onClose}
-  //             sx={{
-  //               p: 1,
-  //               width: 1,
-  //               display: 'flex',
-  //               typography: 'body2',
-  //               alignItems: 'center',
-  //               color: 'text.secondary',
-  //               '& svg': { width: 24, height: 24 },
-  //               '&:hover': { color: 'text.primary' },
-  //             }}
-  //           >
-  //             {option.icon}
-
-  //             <Box component="span" sx={{ ml: 2 }}>
-  //               {option.label === 'Home' ? rootLabel : option.label}
-  //             </Box>
-
-  //             {option.info && (
-  //               <Label color="error" sx={{ ml: 1 }}>
-  //                 {option.info}
-  //               </Label>
-  //             )}
-  //           </Link>
-  //         </MenuItem>
-  //       );
-  //     })}
-  //   </MenuList>
-  // );
-
   return (
     <>
-      <AccountButton
-        onClick={onOpen}
-        photoURL={data?.image}
-        displayName={user?.name}
-        sx={sx}
-        {...other}
-      />
-
-      <Drawer
-        open={open}
-        onClose={onClose}
-        anchor="right"
-        slotProps={{ backdrop: { invisible: true } }}
-        PaperProps={{ sx: { width: 320 } }}
-      >
-        <IconButton
-          onClick={onClose}
-          sx={{
-            top: 12,
-            left: 12,
-            zIndex: 9,
-            position: "absolute",
-          }}
-        >
-          <Iconify icon="mingcute:close-line" />
-        </IconButton>
-
-        <Scrollbar>
-          <Box
-            sx={{
-              pt: 8,
-              display: "flex",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
+      {user && (
+        <>
+          <AccountButton
+            onClick={onOpen}
+            photoURL={user?.profilePicture}
+            displayName={user?.name || ""}
+            sx={sx}
+            {...other}
+          />
+          <Drawer
+            open={open}
+            onClose={onClose}
+            anchor="right"
+            slotProps={{ backdrop: { invisible: true } }}
+            PaperProps={{ sx: { width: 320 } }}
           >
-            {renderAvatar()}
-
-            <Typography
-              variant="body2"
-              sx={{ color: "text.secondary", mt: 0.5 }}
-              noWrap
+            <IconButton
+              onClick={onClose}
+              sx={{
+                top: 12,
+                left: 12,
+                zIndex: 9,
+                position: "absolute",
+              }}
             >
-              {data?.user?.id}
-            </Typography>
+              <Iconify icon="mingcute:close-line" />
+            </IconButton>
 
-            <Typography variant="subtitle1" noWrap sx={{ mt: 2 }}>
-              {data?.name}
-            </Typography>
+            <Scrollbar>
+              <Box
+                sx={{
+                  pt: 8,
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
+                {renderAvatar()}
 
-            <Typography
-              variant="body2"
-              sx={{ color: "text.secondary", mt: 0.5 }}
-              noWrap
-            >
-              {data?.email}
-            </Typography>
-          </Box>
-        </Scrollbar>
+                <Typography
+                  variant="body2"
+                  sx={{ color: "text.secondary", mt: 0.5 }}
+                  noWrap
+                >
+                  {user.id}
+                </Typography>
 
-        <Box sx={{ p: 2.5 }}>
-          <SignOutButton onClose={onClose} />
-        </Box>
-      </Drawer>
+                <Typography variant="subtitle1" noWrap sx={{ mt: 2 }}>
+                  {user.name}
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  sx={{ color: "text.secondary", mt: 0.5 }}
+                  noWrap
+                >
+                  {user.email}
+                </Typography>
+              </Box>
+            </Scrollbar>
+
+            <Box sx={{ p: 2.5 }}>
+              <SignOutButton onClose={onClose} />
+            </Box>
+          </Drawer>
+        </>
+      )}
     </>
   );
 }
