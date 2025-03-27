@@ -65,17 +65,10 @@ export function MainLayout({
 
   const navData = slotProps?.nav?.data ?? mainNavData;
 
-  const dispatch = useDispatch();
-  const { data: session, status } = useSession();
-  useEffect(() => {
-    if (status != "loading" && session) {
-      dispatch(setUser(session.user));
-    }
-  }, [status, session, dispatch]);
-
   const renderHeader = () => {
     const user = useSelector((state: RootState) => state.auth.user);
-    console.log(user);
+    console.log("user in home page ", user);
+
     const headerSlots: HeaderSectionProps["slots"] = {
       topArea: (
         <Alert severity="info" sx={{ display: "none", borderRadius: 0 }}>
@@ -123,7 +116,7 @@ export function MainLayout({
             {/** @slot Sign in button */}
 
             {user ? (
-              <AccountDrawer data={user} />
+              <AccountDrawer />
             ) : (
               <>
                 <SignInButton />

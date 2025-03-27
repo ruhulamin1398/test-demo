@@ -31,6 +31,8 @@ import { useMockedUser } from "@/auth/hooks";
 import { UpgradeBlock } from "./nav-upgrade";
 import { AccountButton } from "./account-button";
 import { SignOutButton } from "./sign-out-button";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 // ----------------------------------------------------------------------
 
@@ -42,10 +44,11 @@ export type AccountDrawerProps = IconButtonProps & {
   }[];
 };
 
-export function AccountDrawer({ data = {}, sx, ...other }: AccountDrawerProps) {
+export function AccountDrawer({ sx, ...other }: AccountDrawerProps) {
   const pathname = usePathname();
 
-  const { user } = useMockedUser();
+  const user = useSelector((state: RootState) => state.auth.user);
+  console.log(" user data ___________________________________", user);
 
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
 
@@ -56,8 +59,8 @@ export function AccountDrawer({ data = {}, sx, ...other }: AccountDrawerProps) {
         primaryBorder: { size: 120, sx: { color: "primary.main" } },
       }}
     >
-      <Avatar src={data?.image} alt={data?.name} sx={{ width: 1, height: 1 }}>
-        {user?.displayName?.charAt(0).toUpperCase()}
+      <Avatar src={user?.image} alt={user?.name} sx={{ width: 1, height: 1 }}>
+        {user?.name?.charAt(0).toUpperCase()}
       </Avatar>
     </AnimateBorder>
   );
