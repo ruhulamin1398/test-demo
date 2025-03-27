@@ -29,13 +29,13 @@ import {
 } from "@mui/icons-material";
 import { competitionFormValidationSchema } from "@/utils/ypu-validation";
 import { OutlinedTextField } from "../atoms/OutlinedTextField";
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CompetitionUiModeEnum,
   setCompetition,
   setUiControlsBasicInfo,
-} from "@/app/store/slices/competitionSlice";
+} from "@/store/slices/competitionSlice";
 
 // Competition Form component
 const CompetitionForm = () => {

@@ -51,7 +51,7 @@ const resolvers = {
     ): Promise<UsersResponse> => {
       try {
         type FilterPropsType = {
-          username?: { $regex: string; $options: string };
+          name?: { $regex: string; $options: string };
           isActive?: boolean;
         };
         const { limit, page: currentPage } = page;
@@ -67,8 +67,8 @@ const resolvers = {
           if (filter.isActive !== undefined) {
             filterQuery.isActive = filter.isActive;
           }
-          if (filter.username) {
-            filterQuery.username = { $regex: filter.username, $options: "i" }; // Case-insensitive search
+          if (filter.name) {
+            filterQuery.name = { $regex: filter.name, $options: "i" }; // Case-insensitive search
           }
         }
 
@@ -184,27 +184,39 @@ const resolvers = {
         // Check if the user exists with the social ID
         const existingUser = await User.findOne({ socialId });
         if (existingUser) {
+          const userPlainObject = existingUser.toObject();
+          await setTokenCookie(userPlainObject);
           // User already exists, log them in
           return { user: existingUser };
+
+
         }
+        const name=  email.split("@")[0];
 
         // If user does not exist, create a new user
         const newUser = new User({
+          name,
           email,
+          password: "asdfsadfs1df54sa65543-099",
           firstName,
           lastName,
           phoneNumber,
-          socialId,
           authProvider,
+          socialId,
           isActive: true,
         });
 
+
+        console.log( " generated user is  ===== " , newUser);
+        
         // Save the new user to the database
         await newUser.save();
+        console.log( " saved user is  ===== " , newUser);
         const userPlainObject = newUser.toObject();
         await setTokenCookie(userPlainObject);
         return { user: newUser };
       } catch (err) {
+        throw err;
         if (err instanceof GraphQLError) {
           throw err;
         }

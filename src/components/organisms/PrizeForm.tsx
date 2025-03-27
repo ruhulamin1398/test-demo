@@ -11,12 +11,12 @@ import {
   CheckCircleOutline,
   PublishedWithChangesOutlined,
 } from "@mui/icons-material";
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CompetitionUiModeEnum,
   setUiControlsPrizes,
-} from "@/app/store/slices/competitionSlice";
+} from "@/store/slices/competitionSlice";
 import { IPrizesAndRewards } from "@/interfaces";
 import {
   CREATE_COMPETITION_PRIZE,

@@ -31,8 +31,8 @@ export const generateAccessToken = (user: IUser) => {
 };
 
 // Generate Refresh Token
-export const generateRefreshToken = (username: string) => {
-  return new SignJWT({ username })
+export const generateRefreshToken = (name: string) => {
+  return new SignJWT({ name })
     .setProtectedHeader({ alg: "HS256" })
     .setExpirationTime(REFRESH_TOKEN_EXPIRATION)
     .sign(new TextEncoder().encode(REFRESH_TOKEN_SECRET)); // TextEncoder is supported in Node.js v22
@@ -48,7 +48,7 @@ export const deleteTokenCookie = async () => {
 export const setTokenCookie = async (user: IUser) => {
   const cookieStore = await cookies();
   const accessToken = await generateAccessToken(user);
-  const refreshToken = await generateRefreshToken(user.username);
+  const refreshToken = await generateRefreshToken(user.name);
   cookieStore.set({
     name: "refresh_token",
     value: refreshToken,

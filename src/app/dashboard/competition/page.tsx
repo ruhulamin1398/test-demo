@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/store/store";
 import {
   Button,
   Card,
@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   CompetitionUiModeEnum,
   setUiControlsBasicInfo,
-} from "@/app/store/slices/competitionSlice";
+} from "@/store/slices/competitionSlice";
 import { AddOutlined, CancelOutlined } from "@mui/icons-material";
 import CompetitionForm from "@/components/organisms/CompetitionForm";
 import CompetitionList from "@/app/dashboard/competition/components/CompetitionList";

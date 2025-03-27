@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Avatar,
@@ -22,7 +22,7 @@ import { ICompetition, IRound, RoundJudgementCriteriaEnum } from "@/interfaces";
 import {
   CompetitionUiModeEnum,
   setUiControlsRounds,
-} from "@/app/store/slices/competitionSlice";
+} from "@/store/slices/competitionSlice";
 import { red } from "@mui/material/colors";
 
 const CompetitionRounds: React.FC = () => {
@@ -167,7 +167,7 @@ const CompetitionRounds: React.FC = () => {
                       {round.judges.map((judge) => (
                         <List
                           disablePadding
-                          key={judge.username}
+                          key={judge.name}
                           sx={{
                             width: "100%",
                             maxWidth: 360,
@@ -182,7 +182,7 @@ const CompetitionRounds: React.FC = () => {
                             </ListItemAvatar>
                             <ListItemText
                               primary={`${judge.firstName} ${judge.lastName}`}
-                              secondary={`${judge.username}`}
+                              secondary={`${judge.name}`}
                             />
                           </ListItem>
                         </List>

@@ -1,6 +1,6 @@
-import { kebabCase } from 'es-toolkit';
+import { kebabCase } from "es-toolkit";
 
-import { _id, _postTitles } from '@/_mock/assets';
+import { _id, _postTitles } from "@/_mock/assets";
 
 // ----------------------------------------------------------------------
 
@@ -9,31 +9,32 @@ const MOCK_ID = _id[1];
 const MOCK_TITLE = _postTitles[2];
 
 const ROOTS = {
-  AUTH: '/auth',
-  AUTH_DEMO: '/auth-demo',
-  DASHBOARD: '/dashboard',
+  AUTH: "/auth",
+  AUTH_DEMO: "/auth-demo",
+  DASHBOARD: "/dashboard",
 };
 
 // ----------------------------------------------------------------------
 
 export const paths = {
-  comingSoon: '/coming-soon',
-  maintenance: '/maintenance',
-  pricing: '/pricing',
-  payment: '/payment',
-  about: '/about-us',
-  contact: '/contact-us',
-  faqs: '/faqs',
-  page403: '/error/403',
-  page404: '/error/404',
-  page500: '/error/500',
-  components: '/components',
-  docs: 'https://docs.minimals.cc',
-  changelog: 'https://docs.minimals.cc/changelog',
-  zoneStore: 'https://mui.com/store/items/zone-landing-page/',
-  minimalStore: 'https://mui.com/store/items/minimal-dashboard/',
-  freeUI: 'https://mui.com/store/items/minimal-dashboard-free/',
-  figmaUrl: 'https://www.figma.com/design/cAPz4pYPtQEXivqe11EcDE/%5BPreview%5D-Minimal-Web.v6.0.0',
+  comingSoon: "/coming-soon",
+  maintenance: "/maintenance",
+  pricing: "/pricing",
+  payment: "/payment",
+  about: "/about-us",
+  contact: "/contact-us",
+  faqs: "/faqs",
+  page403: "/error/403",
+  page404: "/error/404",
+  page500: "/error/500",
+  components: "/components",
+  docs: "https://docs.minimals.cc",
+  changelog: "https://docs.minimals.cc/changelog",
+  zoneStore: "https://mui.com/store/items/zone-landing-page/",
+  minimalStore: "https://mui.com/store/items/minimal-dashboard/",
+  freeUI: "https://mui.com/store/items/minimal-dashboard-free/",
+  figmaUrl:
+    "https://www.figma.com/design/cAPz4pYPtQEXivqe11EcDE/%5BPreview%5D-Minimal-Web.v6.0.0",
   product: {
     root: `/product`,
     checkout: `/product/checkout`,
@@ -47,6 +48,10 @@ export const paths = {
   },
   // AUTH
   auth: {
+    nextAuth: {
+      signIn: `${ROOTS.AUTH}/login`,
+      register: `${ROOTS.AUTH}/register`,
+    },
     amplify: {
       signIn: `${ROOTS.AUTH}/amplify/sign-in`,
       verify: `${ROOTS.AUTH}/amplify/verify`,
@@ -54,7 +59,10 @@ export const paths = {
       updatePassword: `${ROOTS.AUTH}/amplify/update-password`,
       resetPassword: `${ROOTS.AUTH}/amplify/reset-password`,
     },
-    jwt: { signIn: `${ROOTS.AUTH}/jwt/sign-in`, signUp: `${ROOTS.AUTH}/jwt/sign-up` },
+    jwt: {
+      signIn: `${ROOTS.AUTH}/jwt/sign-in`,
+      signUp: `${ROOTS.AUTH}/jwt/sign-up`,
+    },
     firebase: {
       signIn: `${ROOTS.AUTH}/firebase/sign-in`,
       verify: `${ROOTS.AUTH}/firebase/verify`,
@@ -139,7 +147,8 @@ export const paths = {
       root: `${ROOTS.DASHBOARD}/post`,
       new: `${ROOTS.DASHBOARD}/post/new`,
       details: (title: string) => `${ROOTS.DASHBOARD}/post/${kebabCase(title)}`,
-      edit: (title: string) => `${ROOTS.DASHBOARD}/post/${kebabCase(title)}/edit`,
+      edit: (title: string) =>
+        `${ROOTS.DASHBOARD}/post/${kebabCase(title)}/edit`,
       demo: {
         details: `${ROOTS.DASHBOARD}/post/${kebabCase(MOCK_TITLE)}`,
         edit: `${ROOTS.DASHBOARD}/post/${kebabCase(MOCK_TITLE)}/edit`,

@@ -1,28 +1,41 @@
 // middleware.ts
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { middlewareConfig } from "@/middleware/middlewareConfig";
+import { stackMiddlewares } from "@/middleware/middleware-chaining";
 
 // The `middleware` function runs before any request handler and checks for relevant middleware
-export async function middleware(request: NextRequest): Promise<NextResponse> {
-  const url = request.nextUrl.pathname;
+export async function middleware(
+  request: NextRequest,
+  event: NextFetchEvent
+): Promise<NextResponse> {
+  try {
+    const pathname = request.nextUrl.pathname;
 
-  // Loop through all matchers in the middlewareConfig and apply the relevant middlewares
-  for (const { matcher, middlewares } of middlewareConfig) {
-    // Check if the URL path matches the current matcher pattern
-    if (url.startsWith(matcher)) {
-      // Apply each middleware function in the current path's middlewares list
-      for (const middlewareFn of middlewares) {
-        const result = await middlewareFn(request);
-        if (result) {
-          return result; // If a middleware returns a response, stop further processing
-        }
-      }
+    // Find the middleware configuration for the current path
+    const pathConfig = middlewareConfig.find((config) =>
+      pathname.startsWith(config.matcher)
+    );
+
+    // If there's no specific config for the path, return the default response.
+    if (!pathConfig) {
+      return NextResponse.next();
     }
-  }
 
-  // If no middleware handled the request, proceed with the default response
-  return NextResponse.next();
+    // Chain the middlewares for this specific path
+    const { middlewares } = pathConfig;
+    const middlewareFn = stackMiddlewares(middlewares);
+    const result = await middlewareFn(request, event);
+    if (result) {
+      return result instanceof NextResponse ? result : NextResponse.next(); // Ensure the result is a NextResponse
+    }
+
+    // If no middleware handled the request, proceed with the default response
+    return NextResponse.next();
+  } catch (error) {
+    console.error("Middleware Error", (error as Error).message);
+    return NextResponse.next();
+  }
 }
 
 export const config = {

@@ -1,64 +1,70 @@
-'use client';
+"use client";
 
-import { z as zod } from 'zod';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useBoolean } from 'minimal-shared/hooks';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { z as zod } from "zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useBoolean } from "minimal-shared/hooks";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import Alert from '@mui/material/Alert';
-import IconButton from '@mui/material/IconButton';
-import LoadingButton from '@mui/lab/LoadingButton';
-import InputAdornment from '@mui/material/InputAdornment';
+import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
+import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import LoadingButton from "@mui/lab/LoadingButton";
+import InputAdornment from "@mui/material/InputAdornment";
 
-import { paths } from '@/routes/paths';
-import { useRouter } from '@/routes/hooks';
-import { RouterLink } from '@/routes/components';
+import { paths } from "@/routes/paths";
+import { useRouter } from "@/routes/hooks";
+import { RouterLink } from "@/routes/components";
 
-import { Iconify } from '@/components/iconify';
-import { Form, Field } from '@/components/hook-form';
+import { Iconify } from "@/components/iconify";
+import { Form, Field } from "@/components/hook-form";
 
-import { signUp } from '../context/jwt';
-import { useAuthContext } from '../hooks';
-import { getErrorMessage } from '../utils';
-import { FormHead } from '../components/form-head';
-import { SignUpTerms } from '../components/sign-up-terms';
+// import { signUp } from '../context/jwt';
+// import { useAuthContext } from '../hooks';
+import { getErrorMessage } from "../utils";
+import { FormHead } from "../components/form-head";
+import { SignUpTerms } from "../components/sign-up-terms";
+import { FormSocials } from "../components/form-socials";
+import { FormDivider } from "../components/form-divider";
 
 // ----------------------------------------------------------------------
 
 export type SignUpSchemaType = zod.infer<typeof SignUpSchema>;
 
 export const SignUpSchema = zod.object({
-  firstName: zod.string().min(1, { message: 'First name is required!' }),
-  lastName: zod.string().min(1, { message: 'Last name is required!' }),
+  firstName: zod.string().min(1, { message: "First name is required!" }),
+  lastName: zod.string().min(1, { message: "Last name is required!" }),
   email: zod
     .string()
-    .min(1, { message: 'Email is required!' })
-    .email({ message: 'Email must be a valid email address!' }),
+    .min(1, { message: "Email is required!" })
+    .email({ message: "Email must be a valid email address!" }),
+  phone: zod
+    .string()
+    .email({ message: "Phone must be a valid phone address!" }),
   password: zod
     .string()
-    .min(1, { message: 'Password is required!' })
-    .min(6, { message: 'Password must be at least 6 characters!' }),
+    .min(1, { message: "Password is required!" })
+    .min(6, { message: "Password must be at least 6 characters!" }),
 });
 
 // ----------------------------------------------------------------------
 
-export function JwtSignUpView() {
+export function SignUpView() {
   const router = useRouter();
 
   const showPassword = useBoolean();
 
-  const { checkUserSession } = useAuthContext();
+  // const { checkUserSession } = useAuthContext();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const defaultValues: SignUpSchemaType = {
-    firstName: 'Hello',
-    lastName: 'Friend',
-    email: 'hello@gmail.com',
-    password: '@2Minimal',
+    firstName: "Hello",
+    lastName: "Friend",
+    email: "hello@gmail.com",
+    phone: "+8801000000000",
+    password: "@2Minimal",
   };
 
   const methods = useForm<SignUpSchemaType>({
@@ -72,27 +78,32 @@ export function JwtSignUpView() {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    try {
-      await signUp({
-        email: data.email,
-        password: data.password,
-        firstName: data.firstName,
-        lastName: data.lastName,
-      });
-      await checkUserSession?.();
-
-      router.refresh();
-    } catch (error) {
-      console.error(error);
-      const feedbackMessage = getErrorMessage(error);
-      setErrorMessage(feedbackMessage);
-    }
+    // try {
+    //   await signUp({
+    //     email: data.email,
+    //     password: data.password,
+    //     firstName: data.firstName,
+    //     lastName: data.lastName,
+    //   });
+    //   await checkUserSession?.();
+    //   router.refresh();
+    // } catch (error) {
+    //   console.error(error);
+    //   const feedbackMessage = getErrorMessage(error);
+    //   setErrorMessage(feedbackMessage);
+    // }
   });
 
+  // @TODO: make this workable with the backend
+
   const renderForm = () => (
-    <Box sx={{ gap: 3, display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ gap: 3, display: "flex", flexDirection: "column" }}>
       <Box
-        sx={{ display: 'flex', gap: { xs: 3, sm: 2 }, flexDirection: { xs: 'column', sm: 'row' } }}
+        sx={{
+          display: "flex",
+          gap: { xs: 3, sm: 2 },
+          flexDirection: { xs: "column", sm: "row" },
+        }}
       >
         <Field.Text
           name="firstName"
@@ -106,20 +117,35 @@ export function JwtSignUpView() {
         />
       </Box>
 
-      <Field.Text name="email" label="Email address" slotProps={{ inputLabel: { shrink: true } }} />
+      <Field.Text
+        name="phone"
+        label="Phone"
+        slotProps={{ inputLabel: { shrink: true } }}
+      />
+      <Field.Text
+        name="email"
+        label="Email address"
+        slotProps={{ inputLabel: { shrink: true } }}
+      />
 
       <Field.Text
         name="password"
         label="Password"
         placeholder="6+ characters"
-        type={showPassword.value ? 'text' : 'password'}
+        type={showPassword.value ? "text" : "password"}
         slotProps={{
           inputLabel: { shrink: true },
           input: {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton onClick={showPassword.onToggle} edge="end">
-                  <Iconify icon={showPassword.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                  <Iconify
+                    icon={
+                      showPassword.value
+                        ? "solar:eye-bold"
+                        : "solar:eye-closed-bold"
+                    }
+                  />
                 </IconButton>
               </InputAdornment>
             ),
@@ -148,12 +174,16 @@ export function JwtSignUpView() {
         description={
           <>
             {`Already have an account? `}
-            <Link component={RouterLink} href={paths.auth.jwt.signIn} variant="subtitle2">
+            <Link
+              component={RouterLink}
+              href={paths.auth.nextAuth.signIn}
+              variant="subtitle2"
+            >
               Get started
             </Link>
           </>
         }
-        sx={{ textAlign: { xs: 'center', md: 'left' } }}
+        sx={{ textAlign: { xs: "center", md: "left" } }}
       />
 
       {!!errorMessage && (
@@ -167,6 +197,8 @@ export function JwtSignUpView() {
       </Form>
 
       <SignUpTerms />
+      <FormDivider />
+      <FormSocials />
     </>
   );
 }

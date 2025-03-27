@@ -1,5 +1,5 @@
 "use client";
-import { clearUser } from "@/app/store/slices/authSlice";
+import { clearUser } from "@/store/slices/authSlice";
 import { LOGOUT_MUTATION } from "@/graphql-client/auth";
 import { IUser, RoleEnum } from "@/interfaces";
 import { useMutation } from "@apollo/client";

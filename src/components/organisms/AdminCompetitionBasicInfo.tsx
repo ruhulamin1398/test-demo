@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/store/store";
 import { CancelOutlined, EditOutlined } from "@mui/icons-material";
 import { Card, CardContent, CardHeader, IconButton } from "@mui/material";
 import { useMemo } from "react";
@@ -10,7 +10,7 @@ import AdminCompetitionInfo from "./AdminCompetitionInfo";
 import {
   CompetitionUiModeEnum,
   setUiControlsBasicInfo,
-} from "@/app/store/slices/competitionSlice";
+} from "@/store/slices/competitionSlice";
 
 const AdminCompetitionBasicInfo: React.FC = () => {
   const { competition } = useSelector((state: RootState) => state.competition);

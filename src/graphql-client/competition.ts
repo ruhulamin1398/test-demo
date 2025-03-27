@@ -60,7 +60,7 @@ export const UPDATE_COMPETITION = gql`
         status
         maxScore
         judges {
-          username
+          name
           firstName
           lastName
         }
@@ -116,7 +116,7 @@ export const GET_COMPETITION_QUERY = gql`
         status
         maxScore
         judges {
-          username
+          name
           firstName
           lastName
         }
@@ -166,7 +166,7 @@ export const GET_COMPETITIONS_QUERY = gql`
           status
           maxScore
           judges {
-            username
+            name
             firstName
             lastName
           }
@@ -193,7 +193,7 @@ export interface GetCompetitionsQueryVariables {
   };
   filter?: {
     isActive?: boolean;
-    username?: string;
+    name?: string;
     role?: string;
   };
 }

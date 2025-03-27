@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import MarkdownEditor from "./MarkdownEditor";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/store/store";
 import useNotification from "@/app/hooks/useNotification";
 import { UPDATE_COMPETITION_ELIGIBILITY } from "@/graphql-client/competition";
 import { useMutation } from "@apollo/client";
@@ -9,7 +9,7 @@ import { handleGraphQLError } from "@/utils/errorHandling";
 import {
   CompetitionUiModeEnum,
   setUiControlsEligibility,
-} from "@/app/store/slices/competitionSlice";
+} from "@/store/slices/competitionSlice";
 import { Backdrop, CircularProgress } from "@mui/material";
 
 const CompetitionEligibiliyForm: React.FC<{ id: string }> = ({ id }) => {
