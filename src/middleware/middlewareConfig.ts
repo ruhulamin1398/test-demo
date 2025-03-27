@@ -1,22 +1,16 @@
 // middlewareConfig.ts
 
-import withAuth from "next-auth/middleware";
+import { NextMiddleware } from "next/server";
 import { authMiddleware } from "./auth";
 import { adminMiddleware } from "./admin";
-import { NextRequest, NextResponse } from "next/server";
 import { guestMiddleware } from "./guest";
 
-// Define a type for the middleware handler function
-export type MiddlewareHandler = (
-  request: NextRequest
-) => Promise<NextResponse | void> | NextResponse | void;
-
-export type MiddlewareType = MiddlewareHandler | ReturnType<typeof withAuth>;
+export type MiddlewareFactory = (middleware: NextMiddleware) => NextMiddleware;
 
 // Define the type for each configuration object in the middlewareConfig
 export interface PathMiddlewareConfig {
   matcher: string; // Path pattern to match (e.g., /profile/*)
-  middlewares: MiddlewareType[]; // List of middlewares to apply for the matching path
+  middlewares: MiddlewareFactory[]; // List of middlewares to apply for the matching path
 }
 
 // Define the type for the middlewareConfig array
