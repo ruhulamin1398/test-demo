@@ -1,7 +1,5 @@
 import { RoleEnum } from "@/interfaces";
 import { NextRequest, NextResponse, NextFetchEvent } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { MiddlewareFactory } from "./middlewareConfig";
 import { getToken } from "next-auth/jwt";
 
@@ -15,6 +13,12 @@ export const adminMiddleware: MiddlewareFactory = (next) => {
           process.env.NEXT_PUBLIC_NEXTAUTH_SECRET ||
           "1a99663db926903959c25fe59d333d61",
       });
+      // @TODO: Check if the token is valid and the user is an admin
+      if (token && token.role === RoleEnum.ADMIN) {
+        return next(request, event);
+      }
+      // Redirect non-admin users to the home page
+      return NextResponse.redirect(new URL("/", request.url));
     } catch (error) {
       // @TODO: Handle error when token is not valid
       return NextResponse.next();

@@ -2,7 +2,7 @@
 
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { middlewareConfig } from "@/middleware/middlewareConfig";
-import { stackMiddlewares } from "./middleware/middleware-chaining";
+import { stackMiddlewares } from "@/middleware/middleware-chaining";
 
 // The `middleware` function runs before any request handler and checks for relevant middleware
 export async function middleware(
@@ -33,7 +33,7 @@ export async function middleware(
     // If no middleware handled the request, proceed with the default response
     return NextResponse.next();
   } catch (error) {
-    console.error("Middleware Error", error.message);
+    console.error("Middleware Error", (error as Error).message);
     return NextResponse.next();
   }
 }
