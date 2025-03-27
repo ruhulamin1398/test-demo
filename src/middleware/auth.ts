@@ -1,6 +1,5 @@
-import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
 import { NextRequest, NextFetchEvent, NextResponse } from "next/server";
-import { MiddlewareFactory } from "./middlewareConfig"; // Your existing middleware chaining setup
+import { MiddlewareFactory } from "./middleware.config"; // Your existing middleware chaining setup
 import { getToken } from "next-auth/jwt";
 
 export const authMiddleware: MiddlewareFactory = (next) => {

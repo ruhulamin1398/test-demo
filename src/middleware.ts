@@ -1,8 +1,8 @@
 // middleware.ts
 
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
-import { middlewareConfig } from "@/middleware/middlewareConfig";
-import { stackMiddlewares } from "@/middleware/middleware-chaining";
+import { middlewareConfig } from "@/middleware/middleware.config";
+import { stackMiddlewares } from "@/middleware/middleware.chaining";
 
 // The `middleware` function runs before any request handler and checks for relevant middleware
 export async function middleware(
