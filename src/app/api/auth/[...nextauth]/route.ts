@@ -59,14 +59,9 @@ export const authOptions: AuthOptions = {
     }) {
       // When the user signs in with a provider, we get an account object.
       if (account && user) {
-        // Extract id_token (or access_token) and additional user details
-        const idToken = account.id_token || account.access_token;
         const email = user.email;
         // Optionally, parse the user's name into first and last names
         const [firstName = "", lastName = ""] = user.name?.split(" ") || [];
-        console.log("from route.js", token, account, { user });
-        console.log("from route.js user.id ", user.id);
-
         const socialId = user.id;
         const phoneNumber: PhoneNumberInput = {
           countryCode: "+880",
@@ -74,10 +69,7 @@ export const authOptions: AuthOptions = {
         };
 
         try {
-          console.log("idToken is ___ --__", idToken);
-
           const authProvider: AuthProviderEnum = AuthProviderEnum.GOOGLE;
-
           const { data } = await client.mutate({
             mutation: SOCIAL_LOGIN_MUTATION,
             variables: {
