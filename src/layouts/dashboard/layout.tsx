@@ -44,9 +44,8 @@ import type { LayoutSectionProps } from "../core/layout-section";
 import { useDispatch, useSelector } from "react-redux";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
-import { setUser } from "@/app/store/slices/authSlice";
-import { RootState } from "@/app/store/store";
 import { SignInButton } from "../components/sign-in-button";
+import { RootState } from "@/store/store";
 
 // ----------------------------------------------------------------------
 
@@ -74,22 +73,6 @@ export function DashboardLayout({
 
   const settings = useSettingsContext();
 
-  const dispatch = useDispatch();
-  const { data: session, status } = useSession();
-  useEffect(() => {
-    if (status != "loading" && session) {
-      dispatch(setUser(session.user));
-    }
-  }, [status, session, dispatch]);
-
-  const user = useSelector((state: RootState) => state.auth.user);
-  console.log(user);
-
-  console.log(
-    " _____________________________________________________________________________________",
-    settings
-  );
-
   const navVars = dashboardNavColorVars(
     theme,
     settings.state.navColor,
@@ -105,6 +88,9 @@ export function DashboardLayout({
   const isNavVertical = isNavMini || settings.state.navLayout === "vertical";
 
   const renderHeader = () => {
+    const user = useSelector((state: RootState) => state.auth.user);
+    console.log("user in admin page ", user);
+
     const headerSlotProps: HeaderSectionProps["slotProps"] = {
       container: {
         maxWidth: false,
@@ -199,7 +185,7 @@ export function DashboardLayout({
           {/** @slot Settings button */}
           {/* <SettingsButton /> */}
 
-          {user ? <AccountDrawer data={user} /> : <SignInButton />}
+          {user ? <AccountDrawer /> : <SignInButton />}
           {/** @slot Account drawer */}
         </Box>
       ),
