@@ -1,15 +1,8 @@
 "use client";
-
 import type { Breakpoint } from "@mui/material/styles";
-
 import { useBoolean } from "minimal-shared/hooks";
-
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
-import Button from "@mui/material/Button";
-
-import { paths } from "@/routes/paths";
-
 import { Logo } from "@/components/logo";
 
 import { NavMobile } from "./nav/mobile";
@@ -32,13 +25,6 @@ import { AccountDrawer } from "../components/account-drawer";
 import { _account } from "../nav-config-account";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
-
-import { useDispatch } from "react-redux";
-import { setUser } from "@/store/slices/authSlice";
-
-// ----------------------------------------------------------------------
 
 type LayoutBaseProps = Pick<LayoutSectionProps, "sx" | "children" | "cssVars">;
 
@@ -62,13 +48,10 @@ export function MainLayout({
   layoutQuery = "md",
 }: MainLayoutProps) {
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
-
+  const user = useSelector((state: RootState) => state.auth.user);
   const navData = slotProps?.nav?.data ?? mainNavData;
-
+  console.log(user, "USER DATA");
   const renderHeader = () => {
-    const user = useSelector((state: RootState) => state.auth.user);
-    console.log("user in home page ", user);
-
     const headerSlots: HeaderSectionProps["slots"] = {
       topArea: (
         <Alert severity="info" sx={{ display: "none", borderRadius: 0 }}>
