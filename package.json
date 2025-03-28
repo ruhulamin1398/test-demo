@@ -80,8 +80,10 @@
     "slick-carousel": "^1.8.1",
     "sonner": "^2.0.1",
     "stylis-plugin-rtl": "^2.1.1",
+    "swr": "^2.3.3",
     "tsparticles": "^3.7.1",
     "uninstall": "^0.0.0",
+    "yet-another-react-lightbox": "^3.21.8",
     "yup": "^1.5.0",
     "zod": "^3.24.2"
   },

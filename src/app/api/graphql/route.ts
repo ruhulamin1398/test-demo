@@ -3,10 +3,9 @@ import { ApolloServer } from "@apollo/server";
 import { resolvers } from "@/graphql/resolvers";
 import { typeDefs } from "@/graphql/types";
 import mongoose from "mongoose";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
-import { IUser } from "@/interfaces";
 
 const uri =
   "mongodb+srv://nizamsuet:D0CK08AOW5YkS3O3@contesta-cluster.kbo45.mongodb.net/?retryWrites=true&w=majority&appName=contesta-cluster";
@@ -39,29 +38,17 @@ export const config = {
   },
 };
 
-export type GraphQLContext = {
-  req: NextApiRequest;
-  res?: NextApiResponse; // Make res optional as it might not always be present
-  user: any; // Use `any` or define a stricter user type if needed
-};
-
 // Typescript: req has the type NextRequest
 const handler = startServerAndCreateNextHandler(
   server as ApolloServer<object>,
   {
-    context: async (graphQlcontext): Promise<GraphQLContext> => {
-      const { req, res } = graphQlcontext;
+    context: async (req: NextApiRequest) => {
       try {
-        // @TODO: get user from next auth
-        const session = await getServerSession(req, res, authOptions);
-        console.log(
-          "Session from NextAuth in GraphQL route:  ____________________________________",
-          session
-        );
-        // Extract the user data
+        const session = await getServerSession(authOptions);
         const user = session?.user || null;
         return { req, user };
       } catch (_err) {
+        console.log(_err, "ERROR IN GRAPHQL HANDLER");
         return { req, user: null };
       }
     },

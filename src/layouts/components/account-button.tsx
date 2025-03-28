@@ -17,7 +17,7 @@ import {
 // ----------------------------------------------------------------------
 
 export type AccountButtonProps = IconButtonProps & {
-  photoURL: string;
+  photoURL?: string;
   displayName: string;
 };
 

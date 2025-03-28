@@ -11,12 +11,13 @@ const MOCK_TITLE = _postTitles[2];
 const ROOTS = {
   AUTH: "/auth",
   AUTH_DEMO: "/auth-demo",
-  DASHBOARD: "/dashboard",
+  DASHBOARD: "/admin",
 };
 
 // ----------------------------------------------------------------------
 
 export const paths = {
+  contest: "/contest",
   comingSoon: "/coming-soon",
   maintenance: "/maintenance",
   pricing: "/pricing",
@@ -122,6 +123,10 @@ export const paths = {
       account: `${ROOTS.DASHBOARD}/user/account`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/user/${id}/edit`,
       demo: { edit: `${ROOTS.DASHBOARD}/user/${MOCK_ID}/edit` },
+    },
+    competition: {
+      root: `${ROOTS.DASHBOARD}/competition`,
+      list: `${ROOTS.DASHBOARD}/competition/list`,
     },
     product: {
       root: `${ROOTS.DASHBOARD}/product`,

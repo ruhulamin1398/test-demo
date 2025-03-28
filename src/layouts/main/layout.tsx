@@ -1,20 +1,13 @@
 "use client";
-
 import type { Breakpoint } from "@mui/material/styles";
-
 import { useBoolean } from "minimal-shared/hooks";
-
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
-import Button from "@mui/material/Button";
-
-import { paths } from "@/routes/paths";
-
 import { Logo } from "@/components/logo";
 
 import { NavMobile } from "./nav/mobile";
 import { NavDesktop } from "./nav/desktop";
-import { Footer, HomeFooter } from "./footer";
+import { HomeFooter } from "./footer";
 import { MainSection } from "../core/main-section";
 import { MenuButton } from "../components/menu-button";
 import { LayoutSection } from "../core/layout-section";
@@ -32,13 +25,7 @@ import { AccountDrawer } from "../components/account-drawer";
 import { _account } from "../nav-config-account";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
-
-import { useDispatch } from "react-redux";
-import { setUser } from "@/store/slices/authSlice";
-
-// ----------------------------------------------------------------------
+import Footer from "@/components/organisms/Footer";
 
 type LayoutBaseProps = Pick<LayoutSectionProps, "sx" | "children" | "cssVars">;
 
@@ -62,20 +49,10 @@ export function MainLayout({
   layoutQuery = "md",
 }: MainLayoutProps) {
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
-
+  const user = useSelector((state: RootState) => state.auth.user);
   const navData = slotProps?.nav?.data ?? mainNavData;
 
-  const dispatch = useDispatch();
-  const { data: session, status } = useSession();
-  useEffect(() => {
-    if (status != "loading" && session) {
-      dispatch(setUser(session.user));
-    }
-  }, [status, session, dispatch]);
-
   const renderHeader = () => {
-    const user = useSelector((state: RootState) => state.auth.user);
-    console.log(user);
     const headerSlots: HeaderSectionProps["slots"] = {
       topArea: (
         <Alert severity="info" sx={{ display: "none", borderRadius: 0 }}>
@@ -118,12 +95,12 @@ export function MainLayout({
             }}
           >
             {/** @slot Settings button */}
-            <SettingsButton />
+            {/* <SettingsButton /> */}
 
             {/** @slot Sign in button */}
 
             {user ? (
-              <AccountDrawer data={user} />
+              <AccountDrawer />
             ) : (
               <>
                 <SignInButton />
@@ -162,8 +139,9 @@ export function MainLayout({
 
   const renderFooter = () => (
     <>
-      <HomeFooter sx={slotProps?.footer?.sx} />
-      <Footer sx={slotProps?.footer?.sx} layoutQuery={layoutQuery} />
+      {/* <HomeFooter sx={slotProps?.footer?.sx} /> */}
+      {/* <Footer sx={slotProps?.footer?.sx} layoutQuery={layoutQuery} /> */}
+      <Footer />
     </>
   );
 

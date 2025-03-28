@@ -36,7 +36,6 @@ import { handleGraphQLError } from "@/utils/errorHandling";
 import useNotification from "@/app/hooks/useNotification";
 import { FormSocials } from "../components/form-socials";
 import { FormDivider } from "../components/form-divider";
-import { useSession } from "next-auth/react";
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +57,6 @@ export const SignInSchema = zod.object({
 export function SignInView() {
   const { notify } = useNotification();
 
-  const { data: session, status } = useSession();
   const [login, { data, error, loading }] =
     useMutation<LoginResponse>(LOGIN_MUTATION);
   const router = useRouter();
@@ -89,14 +87,6 @@ export function SignInView() {
       variables: { name: "RuhulAmin", password },
     });
   });
-
-  useEffect(() => {
-    if (status === "authenticated" && session?.user) {
-      // const sessionUser = session.user;
-      // dispatch(setUser(sessionUser)); // ✅ Set user in Redux
-      // router.push("/admin/dashboard"); // ✅ Redirect user
-    }
-  }, [session, status, dispatch, router]);
 
   useEffect(() => {
     if (data?.login?.user) {

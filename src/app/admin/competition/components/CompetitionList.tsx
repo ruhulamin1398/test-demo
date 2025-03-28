@@ -1,9 +1,10 @@
 import { useDispatch } from "react-redux";
+
+import Table from "@mui/material/Table";
 import {
   Button,
   Box,
   Paper,
-  Table,
   TableBody,
   TableCell,
   TableContainer,
@@ -17,6 +18,19 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
+
+import {
+  useTable,
+  emptyRows,
+  rowInPage,
+  TableNoData,
+  getComparator,
+  TableEmptyRows,
+  TableHeadCustom,
+  TableSelectedAction,
+  TablePaginationCustom,
+} from "@/components/table";
+
 import { DeleteForeverOutlined } from "@mui/icons-material";
 import { CompetitionStatusEnum, ICompetition } from "@/interfaces";
 import {
@@ -37,6 +51,8 @@ import NoData from "@/components/atoms/NoData";
 import Link from "next/link";
 
 const CompetitionList: React.FC = () => {
+  const table = useTable();
+
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
   const { data, loading, error } = useQuery<
     GetCompetitionsQueryResponse,
@@ -129,7 +145,11 @@ const CompetitionList: React.FC = () => {
           },
         }}
       >
-        <Table stickyHeader sx={{ height: 650 }} aria-label="simple table">
+        <Table
+          stickyHeader
+          size={table.dense ? "small" : "medium"}
+          sx={{ minWidth: 960 }}
+        >
           <TableHead>
             <TableRow>
               <TableCell>Title</TableCell>
@@ -142,12 +162,13 @@ const CompetitionList: React.FC = () => {
           </TableHead>
           <TableBody>
             {data?.getCompetitions.competitions.map((item) => (
-              <TableRow key={item.id}>
+              <TableRow hover tabIndex={-1} key={item.id}>
                 <TableCell>
-                  <Link href={`/dashboard/competition/details/${item.id}`}>
+                  <Link href={`/admin/competition/details/${item.id}`}>
                     <Typography>{item.title}</Typography>
                   </Link>
                 </TableCell>
+
                 <TableCell>{item.description}</TableCell>
                 <TableCell align="right">
                   {formatDateToHumanReadableDate(item.startDate)}

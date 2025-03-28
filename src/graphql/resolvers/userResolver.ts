@@ -1,4 +1,3 @@
-import { deleteTokenCookie, setTokenCookie } from "@/app/lib/auth";
 import { getResolverErrorMessage } from "@/app/lib/utils";
 import {
   IUser,
@@ -24,6 +23,7 @@ const resolvers = {
       { req: _req, user }: { req: NextApiRequest; user: IUser | null }
     ) => {
       if (!user) {
+        // user fetch error
         throw new Error("Not authenticated");
       }
       try {
@@ -184,14 +184,9 @@ const resolvers = {
         // Check if the user exists with the social ID
         const existingUser = await User.findOne({ socialId });
         if (existingUser) {
-          const userPlainObject = existingUser.toObject();
-          await setTokenCookie(userPlainObject);
-          // User already exists, log them in
           return { user: existingUser };
-
-
         }
-        const name=  email.split("@")[0];
+        const name = email.split("@")[0];
 
         // If user does not exist, create a new user
         const newUser = new User({
@@ -206,17 +201,15 @@ const resolvers = {
           isActive: true,
         });
 
+        console.log(" generated user is  ===== ", newUser);
 
-        console.log( " generated user is  ===== " , newUser);
-        
         // Save the new user to the database
         await newUser.save();
-        console.log( " saved user is  ===== " , newUser);
         const userPlainObject = newUser.toObject();
-        await setTokenCookie(userPlainObject);
-        return { user: newUser };
+        console.log("Spcoal login data", userPlainObject);
+        return { user: userPlainObject };
       } catch (err) {
-        throw err;
+        console.log("SOCIAL LOGIN ERROR", err);
         if (err instanceof GraphQLError) {
           throw err;
         }
@@ -281,7 +274,6 @@ const resolvers = {
 
     // Logout user by deleting the token
     logout: async () => {
-      await deleteTokenCookie();
       return {
         success: true,
       };
