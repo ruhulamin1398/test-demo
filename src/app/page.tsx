@@ -11,14 +11,14 @@ export default async function HomePage() {
     <div>
       <HeroSection />
       {/* <CompetitionGrid /> */}
-      <ContestCategories/>
-      <FeaturedContests/>
+      <ContestCategories />
+      <FeaturedContests />
       {/* 
       <LeaderboardSuccess/>
       <SuccessStories/> */}
-      <BrowseContests/>
-      <HowItWorks/>
-      <ContestCTA/>
+      {/* <BrowseContests/> */}
+      {/* <HowItWorks /> */}
+      <ContestCTA />
     </div>
   );
 }
