@@ -16,7 +16,7 @@ export const navData: NavMainProps["data"] = [
   },
   {
     title: "Contests",
-    path: paths.components,
+    path: paths.contest,
     icon: <Iconify width={22} icon="solar:atom-bold-duotone" />,
   },
 ];

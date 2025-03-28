@@ -51,7 +51,7 @@ export function MainLayout({
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
   const user = useSelector((state: RootState) => state.auth.user);
   const navData = slotProps?.nav?.data ?? mainNavData;
-  console.log(user, "USER DATA");
+
   const renderHeader = () => {
     const headerSlots: HeaderSectionProps["slots"] = {
       topArea: (
