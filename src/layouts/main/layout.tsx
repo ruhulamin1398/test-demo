@@ -7,14 +7,13 @@ import { Logo } from "@/components/logo";
 
 import { NavMobile } from "./nav/mobile";
 import { NavDesktop } from "./nav/desktop";
-import { HomeFooter } from "./footer";
+import { Footer, HomeFooter } from "./footer";
 import { MainSection } from "../core/main-section";
 import { MenuButton } from "../components/menu-button";
 import { LayoutSection } from "../core/layout-section";
 import { HeaderSection } from "../core/header-section";
 import { navData as mainNavData } from "../nav-config-main";
 import { SignInButton } from "../components/sign-in-button";
-import { SettingsButton } from "../components/settings-button";
 
 import type { FooterProps } from "./footer";
 import type { NavMainProps } from "./nav/types";
@@ -25,7 +24,6 @@ import { AccountDrawer } from "../components/account-drawer";
 import { _account } from "../nav-config-account";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import Footer from "@/components/organisms/Footer";
 
 type LayoutBaseProps = Pick<LayoutSectionProps, "sx" | "children" | "cssVars">;
 
@@ -140,8 +138,10 @@ export function MainLayout({
   const renderFooter = () => (
     <>
       {/* <HomeFooter sx={slotProps?.footer?.sx} /> */}
-      {/* <Footer sx={slotProps?.footer?.sx} layoutQuery={layoutQuery} /> */}
-      <Footer />
+      <Footer
+        sx={{ backgroundColor: "#0B0E14", color: "#fff", py: 4 }}
+        layoutQuery={layoutQuery}
+      />
     </>
   );
 

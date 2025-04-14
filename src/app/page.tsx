@@ -1,24 +1,23 @@
+import { HomeContestCategories } from "@/sections/home/home-contest-categories";
+import { HomeFeaturedContest } from "@/sections/home/home-featured-contest";
+import { HomeHero } from "@/sections/home/home-hero";
+import { HomeHowItWorks } from "@/sections/home/home-how-it-works";
 import React from "react";
-import HeroSection from "@/components/organisms/HeroSection";
-import ContestCategories from "@/components/organisms/ContestCategories";
-import FeaturedContests from "@/components/organisms/FeaturedContests";
-import BrowseContests from "@/components/organisms/BrowseContests";
-import HowItWorks from "@/components/organisms/HowItWorks";
-import ContestCTA from "@/components/organisms/ContestCTA";
 
 export default async function HomePage() {
   return (
     <div>
-      <HeroSection />
-      {/* <CompetitionGrid /> */}
-      <ContestCategories />
-      <FeaturedContests />
-      {/* 
-      <LeaderboardSuccess/>
+      <HomeHero />
+
+      <HomeContestCategories />
+
+      <HomeFeaturedContest />
+
+      {/* <LeaderboardSuccess/>
       <SuccessStories/> */}
       {/* <BrowseContests/> */}
-      {/* <HowItWorks /> */}
-      <ContestCTA />
+      <HomeHowItWorks />
+      {/* <ContestCTA /> */}
     </div>
   );
 }
