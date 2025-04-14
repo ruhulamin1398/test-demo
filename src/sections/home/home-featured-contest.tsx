@@ -23,7 +23,7 @@ export function HomeFeaturedContest() {
       prize: "$5,000 Prize",
       status: "Ongoing",
       image: "/banner-back.jpg",
-      detailsHref: "/submission",
+      detailsHref: "competition/submission",
     },
     {
       id: 2,
@@ -32,7 +32,7 @@ export function HomeFeaturedContest() {
       prize: "$3,000 Prize",
       status: "Upcoming",
       image: "/banner-back.jpg",
-      detailsHref: "/submission",
+      detailsHref: "competition/submission",
     },
     {
       id: 3,
@@ -41,7 +41,7 @@ export function HomeFeaturedContest() {
       prize: "$2,000 Prize",
       status: "Ongoing",
       image: "/banner-back.jpg",
-      detailsHref: "/submission",
+      detailsHref: "competition/submission",
     },
     {
       id: 4,
@@ -50,7 +50,7 @@ export function HomeFeaturedContest() {
       prize: "$4,000 Prize",
       status: "Upcoming",
       image: "/banner-back.jpg",
-      detailsHref: "/submission",
+      detailsHref: "competition/submission",
     },
     {
       id: 5,
@@ -59,7 +59,7 @@ export function HomeFeaturedContest() {
       prize: "$6,000 Prize",
       status: "Ongoing",
       image: "/banner-back.jpg",
-      detailsHref: "/submission",
+      detailsHref: "competition/submission",
     },
   ];
 

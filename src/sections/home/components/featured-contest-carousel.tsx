@@ -7,7 +7,7 @@ import {
   CarouselArrowFloatButtons,
 } from "@/components/carousel";
 
-import { Button, Card, Fab, fabClasses, Stack, Tooltip } from "@mui/material";
+import { Button, Card, fabClasses, Stack, Tooltip } from "@mui/material";
 import Autoplay from "embla-carousel-autoplay";
 import { Image } from "@/components/image";
 import { IContestItem } from "@/types/contest";
@@ -18,14 +18,7 @@ import { RouterLink } from "@/routes/components";
 // ----------------------------------------------------------------------
 
 type Props = {
-  data: {
-    id: number;
-    title: string;
-    description: string;
-    prize: string;
-    status: string;
-    image: string;
-  }[];
+  data: IContestItem[];
 };
 
 export function FeaturedContestCarousel({ data }: Props) {
@@ -85,28 +78,6 @@ export function ContestItem({ contest }: ItemProps) {
 
   const renderImage = () => (
     <Box sx={{ position: "relative", p: 1 }}>
-      {!!status && (
-        <Fab
-          size="medium"
-          color="warning"
-          onClick={() => {}}
-          sx={[
-            (theme) => ({
-              right: 16,
-              zIndex: 9,
-              bottom: 16,
-              opacity: 0,
-              position: "absolute",
-              transform: "scale(0)",
-              transition: theme.transitions.create(["opacity", "transform"], {
-                easing: theme.transitions.easing.easeInOut,
-                duration: theme.transitions.duration.shorter,
-              }),
-            }),
-          ]}
-        ></Fab>
-      )}
-
       <Tooltip title={!status && "Out of stock"} placement="bottom-end">
         <Image
           alt={title}
