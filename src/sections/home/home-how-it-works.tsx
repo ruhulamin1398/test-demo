@@ -1,10 +1,10 @@
-"use client";
-
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
+import { m } from "framer-motion";
 import { Iconify } from "@/components/iconify";
 import { Container } from "@mui/material";
+import { varFade, MotionViewport } from "@/components/animate";
 
 // ----------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ const SUMMARY = [
 
 export function HomeHowItWorks() {
   return (
-    <Container sx={{ py: 2, textAlign: "center" }}>
+    <Container component={MotionViewport} sx={{ py: 2, textAlign: "center" }}>
       <Box
         sx={{
           alignItems: "center",
@@ -45,7 +45,27 @@ export function HomeHowItWorks() {
           },
         }}
       >
-        <Typography variant="h5">How It Works</Typography>
+        <m.div variants={varFade("inDown")}>
+          <Typography variant="overline" sx={{ color: "text.disabled" }}>
+            How It Works
+          </Typography>
+        </m.div>
+
+        <m.div variants={varFade("inUp")}>
+          <Typography variant="h2" sx={{ my: 3 }}>
+            Empower Your Creativity
+          </Typography>
+        </m.div>
+
+        <m.div variants={varFade("inUp")}>
+          <Typography
+            sx={{ mx: "auto", maxWidth: 640, color: "text.secondary" }}
+          >
+            Join our platform to showcase your talent, participate in exciting
+            contests, and connect with a community of like-minded creators. Let
+            your creativity shine and achieve recognition like never before.
+          </Typography>
+        </m.div>
       </Box>
 
       <Box
@@ -57,21 +77,23 @@ export function HomeHowItWorks() {
         }}
       >
         {SUMMARY.map((item) => (
-          <Box key={item.title} sx={{ textAlign: "center", px: 5 }}>
-            <Iconify
-              icon={item.icon}
-              width={32}
-              sx={{ color: "primary.main" }}
-            />
+          <m.div key={item.title} variants={varFade("inUp")}>
+            <Box key={item.title} sx={{ textAlign: "center", px: 5 }}>
+              <Iconify
+                icon={item.icon}
+                width={32}
+                sx={{ color: "primary.main" }}
+              />
 
-            <Typography variant="subtitle1" sx={{ mb: 1, mt: 2 }}>
-              {item.title}
-            </Typography>
+              <Typography variant="subtitle1" sx={{ mb: 1, mt: 2 }}>
+                {item.title}
+              </Typography>
 
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {item.description}
-            </Typography>
-          </Box>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                {item.description}
+              </Typography>
+            </Box>
+          </m.div>
         ))}
       </Box>
     </Container>

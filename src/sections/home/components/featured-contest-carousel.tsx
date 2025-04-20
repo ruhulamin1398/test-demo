@@ -7,13 +7,21 @@ import {
   CarouselArrowFloatButtons,
 } from "@/components/carousel";
 
-import { Button, Card, fabClasses, Stack, Tooltip } from "@mui/material";
+import {
+  Button,
+  Card,
+  Divider,
+  fabClasses,
+  Stack,
+  Tooltip,
+} from "@mui/material";
 import Autoplay from "embla-carousel-autoplay";
 import { Image } from "@/components/image";
 import { IContestItem } from "@/types/contest";
 
 import { Label } from "@/components/label";
 import { RouterLink } from "@/routes/components";
+import { Iconify } from "@/components/iconify";
 
 // ----------------------------------------------------------------------
 
@@ -82,7 +90,7 @@ export function ContestItem({ contest }: ItemProps) {
         <Image
           alt={title}
           src={image}
-          ratio="16/9"
+          ratio="1/1"
           sx={{
             borderRadius: 1.5,
             ...(!status && { opacity: 0.48, filter: "grayscale(1)" }),
@@ -103,9 +111,87 @@ export function ContestItem({ contest }: ItemProps) {
       >
         {title}
       </Link>
-      <Typography variant="body2" color="textSecondary">
-        {description}
-      </Typography>
+      <Box
+        sx={{
+          gap: 0.5,
+          display: "flex",
+          alignItems: "center",
+          color: "primary.main",
+          typography: "caption",
+        }}
+      >
+        <Iconify width={16} icon="solar:users-group-rounded-bold" />
+        12 Submissions
+      </Box>
+
+      <Box
+        sx={{
+          p: 0,
+          rowGap: 1.5,
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+        }}
+      >
+        {[
+          {
+            label: "Open for everyone",
+            icon: (
+              <Iconify
+                width={16}
+                icon="carbon:skill-level-basic"
+                sx={{ flexShrink: 0 }}
+              />
+            ),
+          },
+          {
+            label: "Ends in 2 days",
+            icon: (
+              <Iconify
+                width={16}
+                icon="solar:clock-circle-bold"
+                sx={{ flexShrink: 0 }}
+              />
+            ),
+          },
+          // {
+          //   label: "salary",
+          //   icon: (
+          //     <Iconify
+          //       width={16}
+          //       icon="solar:wad-of-money-bold"
+          //       sx={{ flexShrink: 0 }}
+          //     />
+          //   ),
+          // },
+          // {
+          //   label: "role",
+          //   icon: (
+          //     <Iconify
+          //       width={16}
+          //       icon="solar:user-rounded-bold"
+          //       sx={{ flexShrink: 0 }}
+          //     />
+          //   ),
+          // },
+        ].map((item) => (
+          <Box
+            key={item.label}
+            sx={{
+              gap: 0.5,
+              minWidth: 0,
+              flexShrink: 0,
+              display: "flex",
+              alignItems: "center",
+              color: "text.disabled",
+            }}
+          >
+            {item.icon}
+            <Typography variant="caption" noWrap>
+              {item.label}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -117,7 +203,7 @@ export function ContestItem({ contest }: ItemProps) {
           <Box component="span">{prize} </Box>
         </Box>
 
-        <Button color="secondary" variant="contained">
+        <Button color="primary" variant="contained">
           <Link
             component={RouterLink}
             href={detailsHref}

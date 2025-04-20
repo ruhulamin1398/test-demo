@@ -12,15 +12,16 @@ import {
   ScrollProgress,
   useScrollProgress,
 } from "@/components/animate/scroll-progress";
-import { HomeFeaturedContest } from "../home-featured-contest";
-import { HomeHowItWorks } from "../home-how-it-works";
-import { HomeHero } from "../home-hero";
-import { HomeVision } from "../Home-vision";
-import { HomeContestCategories } from "../home-contest-categories";
+import { CompetitionDetailsHero } from "../competition-details-hero";
+import Grid from "@mui/material/Grid2";
+import { Container } from "@mui/material";
+import { ContestSummaryOverview } from "../OverView";
+import { ContestDetailsContent } from "../competition-details-content";
+import { CompetitionSidebar } from "./competition-sidebar";
 
 // ----------------------------------------------------------------------
 
-export function HomeView() {
+export function SiingleCompetitionView() {
   const pageProgress = useScrollProgress();
 
   const { onBackToTop, isVisible } = useBackToTop("90%");
@@ -36,15 +37,26 @@ export function HomeView() {
       />
 
       <BackToTopButton isVisible={isVisible} onClick={onBackToTop} />
+      <CompetitionDetailsHero />
 
-      <HomeHero />
+      <Container sx={{ mt: 5 }}>
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 12, md: 12, lg: 12 }}>
+            <ContestSummaryOverview />
+          </Grid>
 
-      <HomeFeaturedContest />
+          <Grid size={{ xs: 12, md: 6, lg: 8 }}>
+            {/* //left side  */}
+            <Grid>
+              <ContestDetailsContent />
+            </Grid>
+          </Grid>
 
-      <HomeContestCategories />
-      <HomeFeaturedContest />
-      <HomeVision />
-      <HomeHowItWorks />
+          <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+            <CompetitionSidebar />
+          </Grid>
+        </Grid>
+      </Container>
     </>
   );
 }

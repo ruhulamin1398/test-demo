@@ -18,6 +18,7 @@ const ROOTS = {
 
 export const paths = {
   contest: "/contest",
+  competition: "/competition",
   comingSoon: "/coming-soon",
   maintenance: "/maintenance",
   pricing: "/pricing",

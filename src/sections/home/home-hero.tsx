@@ -1,129 +1,43 @@
-"use client";
-
 import type { BoxProps } from "@mui/material/Box";
 
-import type { Breakpoint } from "@mui/material/styles";
 import { m } from "framer-motion";
 
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
-import { useTheme } from "@mui/material/styles";
-import { CONFIG } from "src/global-config";
+import { CONFIG } from "@/global-config";
 
 import {
   varFade,
   AnimateText,
   MotionContainer,
   animateTextClasses,
-} from "src/components/animate";
-import { Button, Stack } from "@mui/material";
-import { paths } from "src/routes/paths";
+} from "@/components/animate";
+import { Button } from "@mui/material";
 
 // ----------------------------------------------------------------------
 
 export function HomeHero({ sx, ...other }: BoxProps) {
-  const theme = useTheme();
-
-  const smKey: Breakpoint = "sm";
-  const mdKey: Breakpoint = "md";
-  const lgKey: Breakpoint = "lg";
-
-  const renderHeading = () => (
-    <m.div>
-      <Box
-        component="h3"
-        sx={[
-          {
-            my: 0,
-            textAlign: "left",
-            maxWidth: 680,
-            display: "flex",
-            flexWrap: "wrap",
-            typography: "h3",
-            justifyContent: "center",
-            fontWeight: 700,
-            color: "white",
-            fontFamily: theme.typography.fontSecondaryFamily,
-            [theme.breakpoints.up(lgKey)]: {
-              fontSize: theme.typography.pxToRem(28),
-              lineHeight: "10px",
-            },
-          },
-        ]}
+  const renderActions = () => (
+    <Box sx={{ gap: 2, display: "flex", mt: 3 }}>
+      <Button
+        color="success"
+        variant="contained"
+        size="large"
+        sx={{ whiteSpace: "nowrap" }}
       >
-        <Box component="span" sx={{ width: 1, opacity: 1 }}>
-          Showcase Your Talent & Win Big!
-        </Box>
-      </Box>
-    </m.div>
-  );
+        Explore Contests
+      </Button>
 
-  const renderText = () => (
-    <m.div>
-      <Typography
-        variant="body2"
-        sx={{
-          mx: "auto",
-          color: "white",
-          [theme.breakpoints.up(smKey)]: { whiteSpace: "pre" },
-          [theme.breakpoints.up(lgKey)]: { fontSize: 16, lineHeight: "10px" },
-        }}
+      <Button
+        color="info"
+        variant="contained"
+        size="large"
+        sx={{ whiteSpace: "nowrap" }}
       >
-        {`TJoin top competitions, win prizes, and gain recognition in our global creative community.`}
-      </Typography>
-    </m.div>
-  );
-
-  const renderButtons = () => (
-    <Box
-      sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "left",
-        gap: { xs: 1.5, sm: 2 },
-      }}
-    >
-      <m.div>
-        <Button
-          color="inherit"
-          size="small"
-          variant="outlined"
-          target="_blank"
-          rel="noopener"
-          href={paths.figmaUrl}
-          sx={{
-            borderColor: "white",
-            color: "white",
-            borderRadius: "50px",
-            padding: "10px 20px",
-            fontWeight: 600,
-          }}
-        >
-          Explore Contests
-        </Button>
-      </m.div>
-
-      <m.div>
-        <Button
-          color="inherit"
-          size="small"
-          variant="outlined"
-          target="_blank"
-          rel="noopener"
-          href={paths.figmaUrl}
-          sx={{
-            borderColor: "white",
-            color: "white",
-            borderRadius: "50px",
-            padding: "10px 20px",
-            fontWeight: 600,
-          }}
-        >
-          Submit Entry
-        </Button>
-      </m.div>
+        Submit Entry
+      </Button>
     </Box>
   );
 
@@ -134,11 +48,11 @@ export function HomeHero({ sx, ...other }: BoxProps) {
         (theme) => ({
           ...theme.mixins.bgGradient({
             images: [
-              "linear-gradient(rgba(79, 70, 229, 0.7), rgba(79, 70, 229, 0.7))",
+              `url(${CONFIG.assetsDir}/assets/background/overlay.svg)`,
               `url(${CONFIG.assetsDir}/contest.png)`,
             ],
           }),
-          height: "90vh",
+          height: { md: 560 },
           py: { xs: 10, md: 0 },
           overflow: "hidden",
           position: "relative",
@@ -147,15 +61,7 @@ export function HomeHero({ sx, ...other }: BoxProps) {
       ]}
       {...other}
     >
-      <Container
-        component={MotionContainer}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          height: { md: 560 }, // or 100vh or whatever height you need
-          position: "relative",
-        }}
-      >
+      <Container component={MotionContainer}>
         <Box
           sx={{
             bottom: { md: 80 },
@@ -163,11 +69,38 @@ export function HomeHero({ sx, ...other }: BoxProps) {
             textAlign: { xs: "center", md: "unset" },
           }}
         >
-          <Stack spacing={3} sx={{ textAlign: "left" }}>
-            <m.div>{renderHeading()}</m.div>
-            <m.div>{renderText()}</m.div>
-            <m.div>{renderButtons()}</m.div>
-          </Stack>
+          <AnimateText
+            component="h1"
+            variant="h1"
+            textContent={["Showcase Your Talent", "& Win Big!"]}
+            variants={varFade("inRight", { distance: 24 })}
+            sx={{
+              color: "common.white",
+              [`& .${animateTextClasses.line}[data-index="0"]`]: {
+                [`& .${animateTextClasses.word}[data-index="0"]`]: {
+                  color: "primary.main",
+                },
+              },
+            }}
+          />
+
+          <m.div variants={varFade("inUp", { distance: 24 })}>
+            <Typography
+              variant="h5"
+              sx={{
+                mt: 3,
+                color: "common.white",
+                fontWeight: "fontWeightSemiBold",
+              }}
+            >
+              Join top competitions, win prizes, and gain recognition in our
+              global creative community.
+            </Typography>
+          </m.div>
+
+          <m.div variants={varFade("inUp", { distance: 24 })}>
+            {renderActions()}
+          </m.div>
         </Box>
       </Container>
     </Box>
