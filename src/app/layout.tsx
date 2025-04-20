@@ -21,6 +21,7 @@ import {
 } from "@/components/settings";
 
 import { CONFIG } from "@/global-config";
+import { MotionLazy } from "@/components/animate/motion-lazy";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -72,11 +73,13 @@ export default async function RootLayout({
               defaultMode={themeConfig.defaultMode}
               modeStorageKey={themeConfig.modeStorageKey}
             >
-              <ApolloClientProvider>
-                <ReduxProvider>
-                  <LayoutRenderer>{children}</LayoutRenderer>
-                </ReduxProvider>
-              </ApolloClientProvider>
+              <MotionLazy>
+                <ApolloClientProvider>
+                  <ReduxProvider>
+                    <LayoutRenderer>{children}</LayoutRenderer>
+                  </ReduxProvider>
+                </ApolloClientProvider>
+              </MotionLazy>
             </ThemeProvider>
           </SettingsProvider>
         </AppRouterCacheProvider>

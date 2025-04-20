@@ -1,7 +1,14 @@
 "use client";
 import React from "react";
 import Slider from "react-slick";
-import { Container, Box, Typography, Card, CardContent, IconButton } from "@mui/material";
+import {
+  Container,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  IconButton,
+} from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import CreateIcon from "@mui/icons-material/Create";
@@ -45,7 +52,7 @@ const contestData = [
     title: "Poetry Slams",
     description: "Express through poetry",
     count: "60 Contests",
-  }
+  },
 ];
 
 // Custom Arrow Components
