@@ -8,7 +8,7 @@ export default async function HomePage() {
     <div>
       <SiingleCompetitionView />
       {/* <ProfileHeroSection /> */}
-      <CompetitionDetail />
+      {/* <CompetitionDetail /> */}
     </div>
   );
 }

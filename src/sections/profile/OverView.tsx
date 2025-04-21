@@ -10,7 +10,7 @@ import { fNumber } from "@/utils/format-number";
 
 // ----------------------------------------------------------------------
 
-export function ContestSummaryOverview() {
+export function ProfileSummaryOverview() {
   return (
     <Card>
       <Box
@@ -19,24 +19,25 @@ export function ContestSummaryOverview() {
           display: "grid",
           gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(3, 1fr)" },
           bgcolor: "transparent",
+          mb: 3,
         }}
       >
-        <CourseWidgetSummary
-          title="Rounds Compelted"
-          total={2}
+        <ProfileWidgetSummary
+          title="Competition Attened"
+          total={50}
           icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
         />
 
-        <CourseWidgetSummary
-          title="Peoples Enrolled"
-          total={300}
+        <ProfileWidgetSummary
+          title="Competition Running"
+          total={50}
           color="success"
           icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-completed.svg`}
         />
 
-        <CourseWidgetSummary
-          title="Submissions"
-          total={500}
+        <ProfileWidgetSummary
+          title="Prizes Win"
+          total={100}
           color="secondary"
           icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-certificates.svg`}
         />
@@ -54,7 +55,7 @@ type Props = CardProps & {
   color?: PaletteColorKey;
 };
 
-export function CourseWidgetSummary({
+export function ProfileWidgetSummary({
   sx,
   icon,
   title,

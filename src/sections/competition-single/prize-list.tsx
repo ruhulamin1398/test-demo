@@ -7,9 +7,9 @@ import Card from "@mui/material/Card";
 import Avatar from "@mui/material/Avatar";
 import CardHeader from "@mui/material/CardHeader";
 
-import { fShortenNumber } from "src/utils/format-number";
+import { fShortenNumber } from "@/utils/format-number";
 
-import { Iconify } from "src/components/iconify";
+import { Iconify } from "@/components/iconify";
 import { CONFIG } from "@/global-config";
 
 // ----------------------------------------------------------------------

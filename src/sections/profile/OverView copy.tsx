@@ -10,7 +10,7 @@ import { fNumber } from "@/utils/format-number";
 
 // ----------------------------------------------------------------------
 
-export function ContestSummaryOverview() {
+export function ProfileSummaryOverview() {
   return (
     <Card>
       <Box
@@ -22,21 +22,21 @@ export function ContestSummaryOverview() {
         }}
       >
         <CourseWidgetSummary
-          title="Rounds Compelted"
-          total={2}
+          title="Competition Attened"
+          total={50}
           icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
         />
 
         <CourseWidgetSummary
-          title="Peoples Enrolled"
-          total={300}
+          title="Competition Running"
+          total={50}
           color="success"
           icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-completed.svg`}
         />
 
         <CourseWidgetSummary
-          title="Submissions"
-          total={500}
+          title="Prizes Win"
+          total={100}
           color="secondary"
           icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-certificates.svg`}
         />

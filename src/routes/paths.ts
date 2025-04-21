@@ -43,6 +43,9 @@ export const paths = {
     details: (id: string) => `/product/${id}`,
     demo: { details: `/product/${MOCK_ID}` },
   },
+  profile: {
+    root: `/profile`,
+  },
   post: {
     root: `/post`,
     details: (title: string) => `/post/${kebabCase(title)}`,

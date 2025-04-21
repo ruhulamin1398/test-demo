@@ -1,49 +1,13 @@
 import type { CardProps } from "@mui/material/Card";
+import type { PaletteColorKey } from "@/theme/core";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import { CONFIG } from "@/global-config";
-import { PaletteColorKey } from "@/theme";
-import { Typography } from "@mui/material";
-import { SvgColor } from "@/components/svg-color";
+import Typography from "@mui/material/Typography";
+
 import { fNumber } from "@/utils/format-number";
 
-// ----------------------------------------------------------------------
-
-export function ContestSummaryOverview() {
-  return (
-    <Card>
-      <Box
-        sx={{
-          gap: 3,
-          display: "grid",
-          gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(3, 1fr)" },
-          bgcolor: "transparent",
-        }}
-      >
-        <CourseWidgetSummary
-          title="Rounds Compelted"
-          total={2}
-          icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
-        />
-
-        <CourseWidgetSummary
-          title="Peoples Enrolled"
-          total={300}
-          color="success"
-          icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-completed.svg`}
-        />
-
-        <CourseWidgetSummary
-          title="Submissions"
-          total={500}
-          color="secondary"
-          icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-certificates.svg`}
-        />
-      </Box>
-    </Card>
-  );
-}
+import { SvgColor } from "@/components/svg-color";
 
 // ----------------------------------------------------------------------
 
@@ -54,7 +18,7 @@ type Props = CardProps & {
   color?: PaletteColorKey;
 };
 
-export function CourseWidgetSummary({
+export function UserWidgetSummary({
   sx,
   icon,
   title,

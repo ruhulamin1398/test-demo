@@ -12,16 +12,20 @@ import {
   ScrollProgress,
   useScrollProgress,
 } from "@/components/animate/scroll-progress";
-import { HomeFeaturedContest } from "../home-featured-contest";
-import { HomeHowItWorks } from "../home-how-it-works";
-import { HomeHero } from "../home-hero";
-import { HomeVision } from "../Home-vision";
-import { HomeContestCategories } from "../home-contest-categories";
+import Grid from "@mui/material/Grid2";
+import { Card, Container } from "@mui/material";
+import { ProfileSummaryOverview } from "../OverView";
+import { ProfileMainContent } from "../profile-main-content";
+import { CompetitionSidebar } from "./competition-sidebar";
+import { ProfilePageHero } from "../profile-page-hero";
+import { _userAbout } from "@/_mock";
+import { useMockedUser } from "@/auth/hooks";
 
 // ----------------------------------------------------------------------
 
-export function HomeView() {
+export function ProfileView() {
   const pageProgress = useScrollProgress();
+  const { user } = useMockedUser();
 
   const { onBackToTop, isVisible } = useBackToTop("90%");
 
@@ -37,13 +41,32 @@ export function HomeView() {
 
       <BackToTopButton isVisible={isVisible} onClick={onBackToTop} />
 
-      <HomeHero />
+      <Container sx={{ my: 5 }}>
+        <Card sx={{ mb: 3, height: 290 }}>
+          <ProfilePageHero
+            role={_userAbout.role}
+            name={user?.displayName}
+            avatarUrl={user?.photoURL}
+            coverUrl={_userAbout.coverUrl}
+          />
+        </Card>
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 12, md: 6, lg: 8 }}>
+            {/* //left side  */}
+            <Grid>
+              <Grid size={{ xs: 12, md: 12, lg: 12 }}>
+                <ProfileSummaryOverview />
+              </Grid>
+              <ProfileMainContent />
+            </Grid>
+          </Grid>
 
-      <HomeFeaturedContest />
-
-      <HomeContestCategories />
-      <HomeHowItWorks />
-      <HomeVision />
+          <Grid container spacing={3} size={{ xs: 12, md: 6, lg: 4 }}>
+            {/* // right side */}
+            <CompetitionSidebar />
+          </Grid>
+        </Grid>
+      </Container>
     </>
   );
 }
