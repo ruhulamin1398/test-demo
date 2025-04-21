@@ -1,5 +1,7 @@
 import type { CardProps } from "@mui/material/Card";
 
+import { m } from "framer-motion";
+
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { CONFIG } from "@/global-config";
@@ -7,42 +9,45 @@ import { PaletteColorKey } from "@/theme";
 import { Typography } from "@mui/material";
 import { SvgColor } from "@/components/svg-color";
 import { fNumber } from "@/utils/format-number";
+import { varFade } from "@/components/animate";
 
 // ----------------------------------------------------------------------
 
 export function ProfileSummaryOverview() {
   return (
-    <Card>
-      <Box
-        sx={{
-          gap: 3,
-          display: "grid",
-          gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(3, 1fr)" },
-          bgcolor: "transparent",
-          mb: 3,
-        }}
-      >
-        <ProfileWidgetSummary
-          title="Competition Attened"
-          total={50}
-          icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
-        />
+    <m.div variants={varFade("inUp")}>
+      <Card>
+        <Box
+          sx={{
+            gap: 3,
+            display: "grid",
+            gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(3, 1fr)" },
+            bgcolor: "transparent",
+            mb: 3,
+          }}
+        >
+          <ProfileWidgetSummary
+            title="Competition Attened"
+            total={50}
+            icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
+          />
 
-        <ProfileWidgetSummary
-          title="Competition Running"
-          total={50}
-          color="success"
-          icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-completed.svg`}
-        />
+          <ProfileWidgetSummary
+            title="Competition Running"
+            total={50}
+            color="success"
+            icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-completed.svg`}
+          />
 
-        <ProfileWidgetSummary
-          title="Prizes Win"
-          total={100}
-          color="secondary"
-          icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-certificates.svg`}
-        />
-      </Box>
-    </Card>
+          <ProfileWidgetSummary
+            title="Prizes Win"
+            total={100}
+            color="secondary"
+            icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-certificates.svg`}
+          />
+        </Box>
+      </Card>
+    </m.div>
   );
 }
 

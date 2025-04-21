@@ -1,8 +1,9 @@
 import Grid from "@mui/material/Grid2";
-import { CompetitionDeadlineReminders } from "../user-competition-deadline-reminders";
 import { Box, cardClasses, Tab, Tabs } from "@mui/material";
 import { usePathname, useSearchParams } from "next/navigation";
 import { RouterLink } from "@/routes/components";
+import { CompetitionDeadlineReminders } from "../user-competition-deadline-reminders";
+import { CompetitionRecentSubmissions } from "../user-competition-recentSubmissions";
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +41,49 @@ export function CompetitionSidebar() {
       totalTask: 7,
       currentTask: 5,
       reminderAt: "2 Days Left",
+    },
+  ];
+
+  const _recentSubmissions = [
+    {
+      id: 1,
+      title: "Photo Competition  round 2",
+      reminderAt: "50 minutes ago",
+    },
+    {
+      id: 2,
+      title: "Art Competition  round 1",
+      reminderAt: "1 Days ago",
+    },
+    {
+      id: 3,
+      title: "Photo Competition  round 2",
+      reminderAt: "2 Days ago",
+    },
+    {
+      id: 4,
+      title: "Photo Competition  round 2",
+      reminderAt: "2 Days ago",
+    },
+    {
+      id: 5,
+      title: "Photo Competition  round 2",
+      reminderAt: "2 Days ago",
+    },
+    {
+      id: 6,
+      title: "Photo Competition  round 2",
+      reminderAt: "2 Days ago",
+    },
+    {
+      id: 7,
+      title: "Photo Competition  round 2",
+      reminderAt: "2 Days ago",
+    },
+    {
+      id: 8,
+      title: "Photo Competition  round 2",
+      reminderAt: "2 Days ago",
     },
   ];
 
@@ -104,10 +148,18 @@ export function CompetitionSidebar() {
       </Box>
 
       <Grid size={12}>
-        <CompetitionDeadlineReminders
-          title="Upcoming Deadlines"
-          list={_coursesReminder}
-        />
+        {selectedTab === "" && (
+          <CompetitionDeadlineReminders
+            title="Upcoming Deadlines"
+            list={_coursesReminder}
+          />
+        )}
+        {selectedTab === "submissions" && (
+          <CompetitionRecentSubmissions
+            title="Upcoming Deadlines"
+            list={_recentSubmissions}
+          />
+        )}
       </Grid>
     </Box>
   );
