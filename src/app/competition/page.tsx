@@ -79,7 +79,7 @@ export default function CompetitionListView() {
 
       {noCompetition && renderNotFound()}
 
-      <CompetitionList competitions={competitions} loading />
+      <CompetitionList competitions={competitions} loading={loading} />
     </Container>
   );
 }
