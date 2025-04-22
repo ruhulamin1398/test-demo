@@ -2,8 +2,8 @@ import Grid from "@mui/material/Grid2";
 import { Box, cardClasses, Tab, Tabs } from "@mui/material";
 import { usePathname, useSearchParams } from "next/navigation";
 import { RouterLink } from "@/routes/components";
-import { CompetitionDeadlineReminders } from "../user-competition-deadline-reminders";
-import { CompetitionRecentSubmissions } from "../user-competition-recentSubmissions";
+import { CompetitionDeadlineReminders } from "../profile-competition-deadline-reminders";
+import { CompetitionRecentSubmissions } from "../profile-competition-recentSubmissions";
 
 // ----------------------------------------------------------------------
 

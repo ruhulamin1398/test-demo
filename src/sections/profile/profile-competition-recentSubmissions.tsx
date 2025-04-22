@@ -6,13 +6,6 @@ import { m } from "framer-motion";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import Card from "@mui/material/Card";
-import LinearProgress, {
-  linearProgressClasses,
-} from "@mui/material/LinearProgress";
-
-import { fPercent } from "@/utils/format-number";
-
-import { Iconify } from "@/components/iconify";
 import { Typography } from "@mui/material";
 import { paths } from "@/routes/paths";
 import { RouterLink } from "@/routes/components";

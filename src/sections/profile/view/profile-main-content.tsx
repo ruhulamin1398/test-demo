@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
 import { _coursesContinue, _coursesFeatured, _tours } from "@/_mock";
-import { RunningCompetitions } from "./running-competitions";
-import { CourseFeatured } from "./course-featured";
-import { CompletedCompetitions } from "./completed-competitions";
+import { RunningCompetitions } from "../running-competitions";
+import { CompletedCompetitions } from "../completed-competitions";
+import { CourseFeatured } from "../course-featured";
 
 // ----------------------------------------------------------------------
 
@@ -10,7 +10,7 @@ export function ProfileMainContent() {
   return (
     <>
       <Box>
-        <Box
+        {/* <Box
           sx={{
             gap: 3,
             display: "grid",
@@ -20,16 +20,16 @@ export function ProfileMainContent() {
               md: "repeat(2, 1fr)",
             },
           }}
-        >
-          <RunningCompetitions
-            title="Enrolled Competitions"
-            list={_coursesContinue}
-          />
-          <CompletedCompetitions
-            title="Completed Competitions"
-            list={_coursesContinue}
-          />
-        </Box>
+        > */}
+        <RunningCompetitions
+          title="Enrolled Competitions"
+          list={_coursesContinue}
+        />
+        <CompletedCompetitions
+          title="Completed Competitions"
+          list={_coursesContinue}
+        />
+        {/* </Box> */}
         <CourseFeatured
           title="Competitions You May Enroll"
           list={_coursesFeatured}

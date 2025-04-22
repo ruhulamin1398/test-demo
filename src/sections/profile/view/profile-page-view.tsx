@@ -1,29 +1,62 @@
 "use client";
-
 import type { FabProps } from "@mui/material/Fab";
 import type { UseBackToTopReturn } from "minimal-shared/hooks";
-
 import { useBackToTop } from "minimal-shared/hooks";
-
 import Fab from "@mui/material/Fab";
 import SvgIcon from "@mui/material/SvgIcon";
-
 import {
   ScrollProgress,
   useScrollProgress,
 } from "@/components/animate/scroll-progress";
-import Grid from "@mui/material/Grid2";
-import { Card, Container } from "@mui/material";
-import { ProfileSummaryOverview } from "../OverView";
-import { ProfileMainContent } from "../profile-main-content";
-import { CompetitionSidebar } from "./competition-sidebar";
+import { Box, Card, Container, Tab, Tabs } from "@mui/material";
 import { ProfilePageHero } from "../profile-page-hero";
 import { _userAbout } from "@/_mock";
 import { useMockedUser } from "@/auth/hooks";
+import { Iconify } from "@/components/iconify";
+import { usePathname, useSearchParams } from "next/navigation";
+import { RouterLink } from "@/routes/components";
+import { ProfileHomeTab } from "./profile-home-tab";
+import { ProfileAccountTab } from "./profile-account-tab";
+import { ProfileSecurityTab } from "./profile-security-tab";
 
 // ----------------------------------------------------------------------
 
+const NAV_ITEMS = [
+  {
+    value: "",
+    label: "Profile",
+    icon: <Iconify width={24} icon="solar:user-id-bold" />,
+  },
+  {
+    value: "account",
+    label: "Account",
+    icon: <Iconify width={24} icon="solar:user-bold" />,
+  },
+  {
+    value: "enrollments",
+    label: "Enrollments",
+    icon: <Iconify width={24} icon="solar:book-bold" />,
+  },
+
+  {
+    label: "Security",
+    value: "security",
+    icon: <Iconify width={24} icon="ic:round-vpn-key" />,
+  },
+];
+
+const createRedirectPath = (currentPath: string, query: string) => {
+  const queryString = new URLSearchParams({ [TAB_PARAM]: query }).toString();
+  return query ? `${currentPath}?${queryString}` : currentPath;
+};
+
+const TAB_PARAM = "profile-tab";
+
 export function ProfileView() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const selectedTab = searchParams.get(TAB_PARAM) ?? "";
+
   const pageProgress = useScrollProgress();
   const { user } = useMockedUser();
 
@@ -49,23 +82,37 @@ export function ProfileView() {
             avatarUrl={user?.photoURL}
             coverUrl={_userAbout.coverUrl}
           />
-        </Card>
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, md: 6, lg: 8 }}>
-            {/* //left side  */}
-            <Grid>
-              <Grid size={{ xs: 12, md: 12, lg: 12 }}>
-                <ProfileSummaryOverview />
-              </Grid>
-              <ProfileMainContent />
-            </Grid>
-          </Grid>
 
-          <Grid container spacing={3} size={{ xs: 12, md: 6, lg: 4 }}>
-            {/* // right side */}
-            <CompetitionSidebar />
-          </Grid>
-        </Grid>
+          <Box
+            sx={{
+              width: 1,
+              bottom: 0,
+              zIndex: 9,
+              px: { md: 3 },
+              display: "flex",
+              position: "absolute",
+              bgcolor: "background.paper",
+              justifyContent: { xs: "center", md: "flex-end" },
+            }}
+          >
+            <Tabs value={selectedTab}>
+              {NAV_ITEMS.map((tab) => (
+                <Tab
+                  component={RouterLink}
+                  key={tab.value}
+                  value={tab.value}
+                  icon={tab.icon}
+                  label={tab.label}
+                  href={createRedirectPath(pathname, tab.value)}
+                />
+              ))}
+            </Tabs>
+          </Box>
+        </Card>
+
+        {selectedTab === "" && <ProfileHomeTab />}
+        {selectedTab === "account" && <ProfileAccountTab />}
+        {selectedTab === "security" && <ProfileSecurityTab />}
       </Container>
     </>
   );
