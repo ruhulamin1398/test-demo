@@ -1,0 +1,107 @@
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import CreateIcon from "@mui/icons-material/Create";
+import PaletteIcon from "@mui/icons-material/Palette";
+
+export const contestList = [
+  {
+    id: 1,
+    title: "Nature Photography 2025 - Capture  Natural World",
+    description: "Capture the beauty of nature in its purest form.",
+    prize: "$5,000 Prize",
+    status: "Ongoing",
+    image: "/banner-back.jpg",
+    detailsHref: "competition/111",
+    totalEnroll: "1000",
+  },
+  {
+    id: 2,
+    title: "Digital Art Challenge - Unleash Your Masterpieces",
+    description: "Create the future through digital artistry.",
+    prize: "$3,000 Prize",
+    status: "Upcoming",
+    image: "/banner-back.jpg",
+    detailsHref: "competition/111",
+    totalEnroll: "1000",
+  },
+  {
+    id: 3,
+    title: "Creative Writing - Share Your Unique Stories with the World",
+    description: "Tell your story to the world.",
+    prize: "$2,000 Prize",
+    status: "Ongoing",
+    image: "/banner-back.jpg",
+    detailsHref: "competition/111",
+    totalEnroll: "1000",
+  },
+  {
+    id: 4,
+    title: "Music Composition - Compose   Masterpiece",
+    description: "Compose a masterpiece and showcase.",
+    prize: "$4,000 Prize",
+    status: "Upcoming",
+    image: "/banner-back.jpg",
+    detailsHref: "competition/111",
+    totalEnroll: "1000",
+  },
+  {
+    id: 5,
+    title: "Filmmaking Contest - Create a Captivating Short Film That Inspires",
+    description: "Create a short film that captivates the audience.",
+    prize: "$6,000 Prize",
+    status: "Ongoing",
+    image: "/banner-back.jpg",
+    detailsHref: "competition/111",
+    totalEnroll: "1000",
+  },
+];
+
+export const Featurecategories = [
+  {
+    id: 1,
+    title: "Coding Challenges",
+    icon: <EmojiEventsIcon fontSize="large" color="primary" />,
+    description: "lorem ipsum dolor sit amet consectetur adipiscing elit",
+    count: "85 Contests",
+    participants: "150 Participants",
+  },
+  {
+    id: 2,
+    title: "Writing Contests",
+    icon: <CreateIcon fontSize="large" color="secondary" />,
+    description: "lorem ipsum dolor sit amet consectetur adipiscing elit",
+    count: "95 Contests",
+    participants: "111 Participants",
+  },
+  {
+    id: 3,
+    title: "Design Competitions",
+    icon: <PaletteIcon fontSize="large" color="success" />,
+    description: "lorem ipsum dolor sit amet consectetur adipiscing elit",
+    count: "80 Contests",
+    participants: "300 Participants",
+  },
+  {
+    id: 4,
+    title: "Math Contests",
+    icon: <EmojiEventsIcon fontSize="large" color="primary" />,
+    description: "lorem ipsum dolor sit amet consectetur adipiscing elit",
+    count: "70 Contests",
+    participants: "200 Participants",
+  },
+  {
+    id: 5,
+    title: "Design Competitions",
+    icon: <PaletteIcon fontSize="large" color="success" />,
+    description: "lorem ipsum dolor sit amet consectetur adipiscing elit",
+    count: "80 Contests",
+    participants: "20 Participants",
+  },
+  {
+    id: 6,
+    title: "Math Contests",
+    icon: <EmojiEventsIcon fontSize="large" color="primary" />,
+    description: "lorem ipsum dolor sit amet consectetur adipiscing elit",
+    count: "70 Contests",
+    participants: "100 Participants",
+  },
+];

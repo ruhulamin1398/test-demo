@@ -2,9 +2,6 @@ import type { BoxProps } from "@mui/material/Box";
 import { m } from "framer-motion";
 import { varAlpha } from "minimal-shared/utils";
 
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import CreateIcon from "@mui/icons-material/Create";
-import PaletteIcon from "@mui/icons-material/Palette";
 import Box from "@mui/material/Box";
 import Masonry from "@mui/lab/Masonry";
 import Grid from "@mui/material/Grid2";
@@ -17,60 +14,9 @@ import { CONFIG } from "@/global-config";
 
 import { Iconify } from "@/components/iconify";
 import { varFade, MotionViewport } from "@/components/animate";
-import TextAlign from "@tiptap/extension-text-align";
-import { Button } from "@mui/material";
+import { Featurecategories } from "@/_mock/contest";
 
 // ----------------------------------------------------------------------
-const categories = [
-  {
-    id: 1,
-    title: "Coding Challenges",
-    icon: <EmojiEventsIcon fontSize="large" color="primary" />,
-    description: "lorem ipsum dolor sit amet consectetur adipiscing elit",
-    count: "85 Contests",
-    participants: "150 Participants",
-  },
-  {
-    id: 2,
-    title: "Writing Contests",
-    icon: <CreateIcon fontSize="large" color="secondary" />,
-    description: "lorem ipsum dolor sit amet consectetur adipiscing elit",
-    count: "95 Contests",
-    participants: "111 Participants",
-  },
-  {
-    id: 3,
-    title: "Design Competitions",
-    icon: <PaletteIcon fontSize="large" color="success" />,
-    description: "lorem ipsum dolor sit amet consectetur adipiscing elit",
-    count: "80 Contests",
-    participants: "300 Participants",
-  },
-  {
-    id: 4,
-    title: "Math Contests",
-    icon: <EmojiEventsIcon fontSize="large" color="primary" />,
-    description: "lorem ipsum dolor sit amet consectetur adipiscing elit",
-    count: "70 Contests",
-    participants: "200 Participants",
-  },
-  {
-    id: 5,
-    title: "Design Competitions",
-    icon: <PaletteIcon fontSize="large" color="success" />,
-    description: "lorem ipsum dolor sit amet consectetur adipiscing elit",
-    count: "80 Contests",
-    participants: "20 Participants",
-  },
-  {
-    id: 6,
-    title: "Math Contests",
-    icon: <EmojiEventsIcon fontSize="large" color="primary" />,
-    description: "lorem ipsum dolor sit amet consectetur adipiscing elit",
-    count: "70 Contests",
-    participants: "100 Participants",
-  },
-];
 
 export function HomeContestCategories({ sx, ...other }: BoxProps) {
   const renderDescription = () => (
@@ -116,7 +62,7 @@ export function HomeContestCategories({ sx, ...other }: BoxProps) {
       ]}
     >
       <Masonry spacing={3} columns={{ xs: 1, md: 2 }} sx={{ ml: 0 }}>
-        {categories.map((item) => (
+        {Featurecategories.map((item) => (
           <m.div key={item.id} variants={varFade("inUp")}>
             {/* <CategoryItem data={item} /> */}
 
@@ -127,11 +73,6 @@ export function HomeContestCategories({ sx, ...other }: BoxProps) {
                 img={<MotivationIllustration hideBackground />}
                 contestCount={item.count}
                 participants={item.participants}
-                action={
-                  <Button variant="contained" color="primary">
-                    View Now
-                  </Button>
-                }
               />
             </Grid>
           </m.div>
