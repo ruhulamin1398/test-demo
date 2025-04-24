@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { BoxProps } from "@mui/material/Box";
 
 import Box from "@mui/material/Box";
@@ -21,9 +22,15 @@ import { ICompetition } from "@/interfaces";
 
 type CardItemProps = BoxProps & {
   item: ICompetition;
+  handleEnrollment: (competitionId: string) => void;
 };
 
-export function SingleCompetitionCard({ item, sx, ...other }: CardItemProps) {
+export function SingleCompetitionCard({
+  item,
+  handleEnrollment,
+  sx,
+  ...other
+}: CardItemProps) {
   const renderImage = () => (
     <Box sx={{ px: 1, pt: 1 }}>
       <Image
@@ -103,7 +110,12 @@ export function SingleCompetitionCard({ item, sx, ...other }: CardItemProps) {
         color="inherit"
         underline="none"
       >
-        <Button color="primary" variant="contained" size="small">
+        <Button
+          color="primary"
+          variant="contained"
+          size="small"
+          onclick={handleEnrollment(item.id)}
+        >
           Join
         </Button>
       </Link>
@@ -111,29 +123,31 @@ export function SingleCompetitionCard({ item, sx, ...other }: CardItemProps) {
   );
 
   return (
-    <Card sx={[{ width: 1 }, ...(Array.isArray(sx) ? sx : [sx])]} {...other}>
-      {renderImage()}
+    <>
+      <Card sx={[{ width: 1 }, ...(Array.isArray(sx) ? sx : [sx])]} {...other}>
+        {renderImage()}
 
-      <Box sx={{ px: 2, py: 2.5 }}>
-        {renderLabels()}
+        <Box sx={{ px: 2, py: 2.5 }}>
+          {renderLabels()}
 
-        <Link
-          variant="subtitle2"
-          color="inherit"
-          underline="none"
-          href={item.detailsHref || "/no-link-found"}
-          sx={(theme) => ({
-            ...theme.mixins.maxLine({
-              line: 2,
-              persistent: theme.typography.subtitle2,
-            }),
-          })}
-        >
-          {item.title}
-        </Link>
+          <Link
+            variant="subtitle2"
+            color="inherit"
+            underline="none"
+            href={item.detailsHref || "/no-link-found"}
+            sx={(theme) => ({
+              ...theme.mixins.maxLine({
+                line: 2,
+                persistent: theme.typography.subtitle2,
+              }),
+            })}
+          >
+            {item.title}
+          </Link>
 
-        {renderFooter()}
-      </Box>
-    </Card>
+          {renderFooter()}
+        </Box>
+      </Card>
+    </>
   );
 }

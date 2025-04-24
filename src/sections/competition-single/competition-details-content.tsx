@@ -8,6 +8,9 @@ import Typography from "@mui/material/Typography";
 import { Iconify } from "@/components/iconify";
 import { _tours, TOUR_SERVICE_OPTIONS } from "@/_mock";
 import { Markdown } from "@/components/markdown";
+import { Card, CardProps } from "@mui/material";
+import { RoundDetailsCardData } from "@/_mock/contest";
+import { RoundDetails } from "@/interfaces";
 
 // ----------------------------------------------------------------------
 
@@ -158,15 +161,70 @@ export function ContestDetailsContent() {
     </>
   );
 
+  const renderRoundDetails = () => (
+    <>
+      <Box>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Round Details
+        </Typography>
+
+        <Box
+          sx={{
+            rowGap: 2,
+            columnGap: 2,
+            display: "grid",
+            gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(2, 1fr)" },
+          }}
+        >
+          {RoundDetailsCardData.map((round) => (
+            <RoundDetailsCard round={round} key={round.id} />
+          ))}
+        </Box>
+      </Box>
+    </>
+  );
+
   return (
     <>
       <Box>
         {renderHead()}
 
         <Divider sx={{ borderStyle: "dashed", mt: 5, mb: 2 }} />
+        {renderRoundDetails()}
+        <Divider sx={{ borderStyle: "dashed", mt: 5, mb: 2 }} />
 
         {renderContent()}
       </Box>
     </>
+  );
+}
+
+type Props = CardProps & {
+  round: RoundDetails;
+};
+
+export function RoundDetailsCard({ sx, round, ...other }: Props) {
+  return (
+    <Card
+      sx={[{ py: 3, pl: 3, pr: 2.5 }, ...(Array.isArray(sx) ? sx : [sx])]}
+      {...other}
+    >
+      <Box
+        sx={{
+          flexGrow: 1,
+          ...(round?.status !== "running" && { opacity: 0.5 }), // Apply opacity conditionally
+        }}
+      >
+        <Box sx={{ typography: "h6" }}>{round?.title}</Box>
+
+        <Typography
+          variant="body2"
+          component="div"
+          sx={{ color: "text.secondary" }}
+        >
+          {round?.description}
+        </Typography>
+      </Box>
+    </Card>
   );
 }

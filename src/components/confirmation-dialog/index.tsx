@@ -22,17 +22,17 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export type AlertDialogSlideProps = {
+export type EnrollmentConfirmationDialogProps = {
   onAgree: () => void;
   onDisagree: () => void;
   open: boolean;
 };
 
-export const AlertDialogSlide = ({
+export const EnrollmentConfirmationDialog = ({
   onAgree,
   onDisagree,
   open,
-}: AlertDialogSlideProps) => {
+}: EnrollmentConfirmationDialogProps) => {
   return (
     <Dialog
       open={open}
@@ -56,4 +56,4 @@ export const AlertDialogSlide = ({
   );
 };
 
-export default AlertDialogSlide;
+export default EnrollmentConfirmationDialog;

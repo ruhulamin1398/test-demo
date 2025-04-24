@@ -65,3 +65,11 @@ export interface CompetitionResponse {
 }
 
 export interface ICompetitionDocument extends ICompetition, Document {}
+
+export interface RoundDetails {
+  id: number;
+  title: string;
+  description: string;
+  status: string;
+  message: string;
+}

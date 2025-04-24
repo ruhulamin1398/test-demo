@@ -7,7 +7,9 @@ import {
   EnrolmentTypeEnum,
   SubmissionTypeEnum,
   ICompetition,
+  RoundDetails,
 } from "@/interfaces/competition";
+import { idID } from "@mui/material/locale";
 
 export const competitions: ICompetition[] = [
   {
@@ -251,5 +253,36 @@ export const Featurecategories = [
     description: "lorem ipsum dolor sit amet consectetur adipiscing elit",
     count: "70 Contests",
     participants: "100 Participants",
+  },
+];
+
+export const RoundDetailsCardData: RoundDetails[] = [
+  {
+    id: 1,
+    title: "Round 1 : Nature and Wildlife",
+    description: "Capture the beauty of nature in its purest form.",
+    status: "ended",
+    message: "Ended at 17th March 2024",
+  },
+  {
+    id: 2,
+    title: "Round 2 : Urban Landscapes",
+    description: "Explore the beauty of urban landscapes and architecture.",
+    status: "ended",
+    message: "Ended at 25th March 2024",
+  },
+  {
+    id: 3,
+    title: "Round 3 : Portrait Photography",
+    description: "Capture the essence of human emotions and expressions.",
+    status: "running",
+    message: "Ends in 2 days",
+  },
+  {
+    id: 4,
+    title: "Round 4 : Macro Photography",
+    description: "Discover the intricate details of the small world around us.",
+    status: "upcoming",
+    message: "Starts on 1st April 2024",
   },
 ];

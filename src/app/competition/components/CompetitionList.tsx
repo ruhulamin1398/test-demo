@@ -12,11 +12,13 @@ import { SingleCompetitionCard } from "@/sections/common/single-competition-card
 type Props = BoxProps & {
   loading?: boolean;
   competitions: ICompetition[];
+  handleEnrollment: (competitionId: string) => void;
 };
 
 export function CompetitionList({
   competitions,
   loading,
+  handleEnrollment,
   sx,
   ...other
 }: Props) {
@@ -30,7 +32,11 @@ export function CompetitionList({
       //   detailsHref={"add-path-later"}
       // />
 
-      <SingleCompetitionCard key={competition.id} item={competition} />
+      <SingleCompetitionCard
+        key={competition.id}
+        item={competition}
+        handleEnrollment={handleEnrollment}
+      />
     ));
 
   return (

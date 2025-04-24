@@ -5,28 +5,31 @@ import Grid from "@mui/material/Grid2";
 import { ContestDateTimeLine } from "../contest-date-timeline";
 import { EnrollmentCard } from "../enroll-contest";
 import { PrizeList } from "../prize-list";
+import { Box } from "@mui/material";
 
 // ----------------------------------------------------------------------
 
 export function CompetitionSidebar() {
   return (
     <>
-      <Grid size={12}>
-        <EnrollmentCard
-          price="TK 500"
-          title={`Winter Photography Competition \n Round 1`}
-          description="Praesent egestas tristique nibh. Duis lobortis massa imperdiet quam."
-        />
-      </Grid>
-      <Grid size={12}>
-        <PrizeList title="Prizes" list={constPrizeAmountList} />
-      </Grid>
-      <Grid size={12}>
-        <ContestDateTimeLine
-          title="Stages and timeLine "
-          list={ContestTimeLineData}
-        />
-      </Grid>
+      <Box sx={{ mb: 3 }}>
+        <Grid size={12}>
+          <EnrollmentCard
+            price="TK 500"
+            title={`Winter Photography Competition \n Round 1`}
+            description="Praesent egestas tristique nibh. Duis lobortis massa imperdiet quam."
+          />
+        </Grid>
+        <Grid size={12}>
+          <PrizeList title="Prizes" list={constPrizeAmountList} />
+        </Grid>
+        <Grid size={12}>
+          <ContestDateTimeLine
+            title="Stages and timeLine "
+            list={ContestTimeLineData}
+          />
+        </Grid>
+      </Box>
     </>
   );
 }

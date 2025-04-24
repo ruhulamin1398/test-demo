@@ -54,9 +54,9 @@ export function HomeFeaturedContestCarousel({
         slotProps={{ slide: { py: 3 } }}
         sx={{ px: 0.5 }}
       >
-        {list.map((item) => (
+        {/* {list.map((item) => (
           <SingleCompetitionCard key={item.id} item={item} />
-        ))}
+        ))} */}
       </Carousel>
       <CarouselArrowFloatButtons
         {...carousel.arrows}

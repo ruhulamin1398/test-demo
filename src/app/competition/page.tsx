@@ -19,12 +19,18 @@ import {
 import { ICompetition } from "@/interfaces";
 import { paths } from "@/routes/paths";
 import { CoompetitionSearch } from "./components/competition-search";
+import { EnrollmentConfirmationDialog } from "@/components/confirmation-dialog";
 
 // ----------------------------------------------------------------------
+type EnrollmentConfirmationDialogProps = {
+  competitionId?: string;
+};
 
 export default function CompetitionListView() {
   const [competitions, setCompetitions] = useState<ICompetition[]>([]);
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [openDialog, setOpenDialog] =
+    useState<EnrollmentConfirmationDialogProps>({});
   const { data, loading, error } = useQuery<
     GetCompetitionsQueryResponse,
     GetCompetitionsQueryVariables
@@ -43,6 +49,16 @@ export default function CompetitionListView() {
     }
   }, [data, loading, error]);
   const [sortBy, setSortBy] = useState("featured");
+
+  const handleOpenEnrollmentConfirmationDialog = (id: string) => {
+    setOpenDialog({
+      competitionId: id,
+    });
+  };
+  const handleCloseEnrollmentConfirmationDialog = () => {
+    setOpenDialog({});
+  };
+  const onAgreeEnrollment = () => {};
 
   const noCompetition = useMemo(() => {
     return !loading && data?.getCompetitions?.competitions.length === 0;
@@ -84,7 +100,16 @@ export default function CompetitionListView() {
 
       {noCompetition && renderNotFound()}
 
-      <CompetitionList competitions={competitions} loading={loading} />
+      <CompetitionList
+        competitions={competitions}
+        loading={loading}
+        handleEnrollment={handleOpenEnrollmentConfirmationDialog}
+      />
+      <EnrollmentConfirmationDialog
+        open={!!openDialog?.competitionId}
+        onAgree={onAgreeEnrollment}
+        onDisagree={handleCloseEnrollmentConfirmationDialog}
+      />
     </Container>
   );
 }
