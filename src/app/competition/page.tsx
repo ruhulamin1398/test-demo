@@ -7,7 +7,7 @@ import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
-import { EmptyContent } from "src/components/empty-content";
+import { EmptyContent } from "@/components/empty-content";
 import { CompetitionSort } from "./components/competition-sort";
 import { CompetitionList } from "./components/CompetitionList";
 import { useQuery } from "@apollo/client";
@@ -17,6 +17,8 @@ import {
   GetCompetitionsQueryVariables,
 } from "@/graphql-client/competition";
 import { ICompetition } from "@/interfaces";
+import { paths } from "@/routes/paths";
+import { CoompetitionSearch } from "./components/competition-search";
 
 // ----------------------------------------------------------------------
 
@@ -56,9 +58,9 @@ export default function CompetitionListView() {
         alignItems: { xs: "flex-end", sm: "center" },
       }}
     >
-      <Typography variant="h4" sx={{ my: { xs: 3, md: 5 } }}>
-        Competitions
-      </Typography>
+      <CoompetitionSearch
+        redirectPath={(id: string) => paths.product.details(id)}
+      />
 
       <Box sx={{ gap: 1, flexShrink: 0, display: "flex" }}>
         <CompetitionSort
@@ -73,6 +75,9 @@ export default function CompetitionListView() {
 
   return (
     <Container sx={{ mb: 15 }}>
+      <Typography variant="h4" sx={{ my: { xs: 3, md: 5 } }}>
+        Competitions
+      </Typography>
       <Stack spacing={2.5} sx={{ mb: { xs: 3, md: 5 } }}>
         {renderFilters()}
       </Stack>

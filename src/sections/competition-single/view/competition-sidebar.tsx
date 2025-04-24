@@ -11,17 +11,17 @@ import { PrizeList } from "../prize-list";
 export function CompetitionSidebar() {
   return (
     <>
-      <Grid>
+      <Grid size={12}>
         <EnrollmentCard
           price="TK 500"
           title={`Winter Photography Competition \n Round 1`}
           description="Praesent egestas tristique nibh. Duis lobortis massa imperdiet quam."
         />
       </Grid>
-      <Grid>
+      <Grid size={12}>
         <PrizeList title="Prizes" list={constPrizeAmountList} />
       </Grid>
-      <Grid>
+      <Grid size={12}>
         <ContestDateTimeLine
           title="Stages and timeLine "
           list={ContestTimeLineData}

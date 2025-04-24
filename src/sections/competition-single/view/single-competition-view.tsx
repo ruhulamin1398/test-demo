@@ -39,7 +39,7 @@ export function SiingleCompetitionView() {
       <BackToTopButton isVisible={isVisible} onClick={onBackToTop} />
       <CompetitionDetailsHero />
 
-      <Container sx={{ mt: 5 }}>
+      <Container sx={{ my: 5 }}>
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, md: 12, lg: 12 }}>
             <ContestSummaryOverview />
@@ -52,7 +52,7 @@ export function SiingleCompetitionView() {
             </Grid>
           </Grid>
 
-          <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+          <Grid container spacing={3} size={{ xs: 12, md: 6, lg: 4 }}>
             <CompetitionSidebar />
           </Grid>
         </Grid>

@@ -20,8 +20,8 @@ import AccordionSummary, {
   accordionSummaryClasses,
 } from "@mui/material/AccordionSummary";
 
-import { Iconify } from "src/components/iconify";
-import { varFade, MotionViewport } from "src/components/animate";
+import { Iconify } from "@/components/iconify";
+import { varFade, MotionViewport } from "@/components/animate";
 
 import { SectionTitle } from "./components/section-title";
 import {

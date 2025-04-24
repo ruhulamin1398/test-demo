@@ -4,6 +4,7 @@ export type IContestItem = {
   description: string;
   prize: string;
   status: string;
+  totalEnroll: string;
   image: string;
   detailsHref: string;
 };

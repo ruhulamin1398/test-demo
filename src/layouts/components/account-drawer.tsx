@@ -2,7 +2,14 @@
 
 import type { IconButtonProps } from "@mui/material/IconButton";
 import { useBoolean } from "minimal-shared/hooks";
-import { Box, Avatar, Drawer, Typography, IconButton } from "@mui/material";
+import {
+  Box,
+  Avatar,
+  Drawer,
+  Typography,
+  IconButton,
+  Link,
+} from "@mui/material";
 import { Iconify } from "@/components/iconify";
 import { Scrollbar } from "@/components/scrollbar";
 import { AnimateBorder } from "@/components/animate";
@@ -10,6 +17,8 @@ import { AccountButton } from "./account-button";
 import { SignOutButton } from "./sign-out-button";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { RouterLink } from "@/routes/components";
+import { paths } from "@/routes/paths";
 
 // ----------------------------------------------------------------------
 
@@ -25,13 +34,15 @@ export function AccountDrawer({ sx, ...other }: IconButtonProps) {
         primaryBorder: { size: 120, sx: { color: "primary.main" } },
       }}
     >
-      <Avatar
-        src={user?.profilePicture}
-        alt={user?.name}
-        sx={{ width: 1, height: 1 }}
-      >
-        {user?.name?.charAt(0).toUpperCase()}
-      </Avatar>
+      <Link component={RouterLink} href={paths.profile.root}>
+        <Avatar
+          src={user?.profilePicture}
+          alt={user?.name}
+          sx={{ width: 1, height: 1 }}
+        >
+          {user?.name?.charAt(0).toUpperCase()}
+        </Avatar>
+      </Link>
     </AnimateBorder>
   );
   return (
@@ -75,13 +86,15 @@ export function AccountDrawer({ sx, ...other }: IconButtonProps) {
               >
                 {renderAvatar()}
 
-                <Typography
-                  variant="body2"
-                  sx={{ color: "text.secondary", mt: 0.5 }}
-                  noWrap
-                >
-                  {user.id}
-                </Typography>
+                <Link component={RouterLink} href={paths.profile.root}>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "text.secondary", mt: 0.5 }}
+                    noWrap
+                  >
+                    {user.id}
+                  </Typography>
+                </Link>
 
                 <Typography variant="subtitle1" noWrap sx={{ mt: 2 }}>
                   {user.name}

@@ -18,6 +18,7 @@ export function ContestSummaryOverview() {
           gap: 3,
           display: "grid",
           gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(3, 1fr)" },
+          bgcolor: "transparent",
         }}
       >
         <CourseWidgetSummary

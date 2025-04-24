@@ -9,11 +9,11 @@ import Link, { linkClasses } from "@mui/material/Link";
 import InputAdornment from "@mui/material/InputAdornment";
 import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
 
-import { useRouter } from "src/routes/hooks";
-import { RouterLink } from "src/routes/components";
+import { useRouter } from "@/routes/hooks";
+import { RouterLink } from "@/routes/components";
 
-import { Iconify } from "src/components/iconify";
-import { SearchNotFound } from "src/components/search-not-found";
+import { Iconify } from "@/components/iconify";
+import { SearchNotFound } from "@/components/search-not-found";
 import { ISubmissionItem } from "@/types/submission";
 
 // ----------------------------------------------------------------------

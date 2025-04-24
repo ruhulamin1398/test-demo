@@ -30,7 +30,7 @@ const SUMMARY = [
 
 export function HomeHowItWorks() {
   return (
-    <Container component={MotionViewport} sx={{ py: 2, textAlign: "center" }}>
+    <Container component={MotionViewport} sx={{ py: 6, textAlign: "center" }}>
       <Box
         sx={{
           alignItems: "center",
@@ -45,15 +45,11 @@ export function HomeHowItWorks() {
           },
         }}
       >
-        <m.div variants={varFade("inDown")}>
-          <Typography variant="overline" sx={{ color: "text.disabled" }}>
-            How It Works
-          </Typography>
-        </m.div>
+        <m.div variants={varFade("inDown")}></m.div>
 
         <m.div variants={varFade("inUp")}>
           <Typography variant="h2" sx={{ my: 3 }}>
-            Empower Your Creativity
+            How It Works
           </Typography>
         </m.div>
 

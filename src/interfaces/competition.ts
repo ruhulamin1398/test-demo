@@ -44,6 +44,9 @@ export interface ICompetition {
   createdAt: string;
   updatedAt: string;
   status: CompetitionStatusEnum;
+  /////
+  totalPrizeMoney: number;
+  detailsHref: string;
 }
 
 export interface PaginationInput {
