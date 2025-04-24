@@ -15,6 +15,7 @@ import { CONFIG } from "@/global-config";
 import { Iconify } from "@/components/iconify";
 import { varFade, MotionViewport } from "@/components/animate";
 import { Featurecategories } from "@/_mock/contest";
+import { Button } from "@mui/material";
 
 // ----------------------------------------------------------------------
 
@@ -24,17 +25,8 @@ export function HomeContestCategories({ sx, ...other }: BoxProps) {
       sx={{ maxWidth: { md: 360 }, textAlign: { xs: "center", md: "unset" } }}
     >
       <m.div variants={varFade("inUp")}>
-        <Typography
-          variant="overline"
-          sx={{ color: "common.white", opacity: 0.48 }}
-        >
-          Testimonials
-        </Typography>
-      </m.div>
-
-      <m.div variants={varFade("inUp")}>
         <Typography variant="h2" sx={{ my: 3, color: "common.white" }}>
-          Features <br />
+          Contest <br />
           Categories
         </Typography>
       </m.div>

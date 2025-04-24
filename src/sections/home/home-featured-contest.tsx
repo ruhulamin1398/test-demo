@@ -3,12 +3,11 @@ import Typography from "@mui/material/Typography";
 
 import { _mock } from "@/_mock";
 import { Button, Container, Link } from "@mui/material";
-import { FeaturedContestCarousel } from "./components/old-featured-contest-carousel";
-
 import { Iconify } from "@/components/iconify";
 import { HomeFeaturedContestCarousel } from "./featured-contest-carousel";
-import { contestList } from "@/_mock/contest";
+
 import { RouterLink } from "@/routes/components";
+import { competitions } from "@/_mock/contest";
 
 // ----------------------------------------------------------------------
 
@@ -56,9 +55,8 @@ export function HomeFeaturedContest() {
         </Box>
         <HomeFeaturedContestCarousel
           title="Competitions You May Enroll"
-          list={contestList}
+          list={competitions}
         />
-        {/* <FeaturedContestCarousel data={contestList} /> */}
       </Box>
     </Container>
   );

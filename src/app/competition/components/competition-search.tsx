@@ -1,47 +1,59 @@
+import type { IProductItem } from "@/types/product";
 import type { Theme, SxProps } from "@mui/material/styles";
 
 import { useState, useCallback } from "react";
+import parse from "autosuggest-highlight/parse";
+import match from "autosuggest-highlight/match";
 import { useDebounce } from "minimal-shared/hooks";
 
 import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import Link, { linkClasses } from "@mui/material/Link";
 import InputAdornment from "@mui/material/InputAdornment";
-import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
+import Autocomplete, {
+  autocompleteClasses,
+  createFilterOptions,
+} from "@mui/material/Autocomplete";
 
 import { useRouter } from "@/routes/hooks";
 import { RouterLink } from "@/routes/components";
 
 import { Iconify } from "@/components/iconify";
 import { SearchNotFound } from "@/components/search-not-found";
-import { ISubmissionItem } from "@/types/submission";
+import { useSearchProducts } from "@/actions/product";
 
 // ----------------------------------------------------------------------
 
 type Props = {
   sx?: SxProps<Theme>;
-  redirectPath: (title: string) => string;
+  redirectPath: (id: string) => string;
 };
 
-export function SubmissionSearch({ redirectPath, sx }: Props) {
+export function CoompetitionSearch({ redirectPath, sx }: Props) {
   const router = useRouter();
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedItem, setSelectedItem] = useState<ISubmissionItem | null>(
-    null
-  );
+  const [selectedItem, setSelectedItem] = useState<IProductItem | null>(null);
 
   const debouncedQuery = useDebounce(searchQuery);
+  const { searchResults: options, searchLoading: loading } =
+    useSearchProducts(debouncedQuery);
 
   const handleChange = useCallback(
-    (item: ISubmissionItem | null) => {
+    (item: IProductItem | null) => {
       setSelectedItem(item);
       if (item) {
-        router.push(redirectPath(item.title));
+        router.push(redirectPath(item.id));
       }
     },
     [redirectPath, router]
   );
+
+  const filterOptions = createFilterOptions({
+    matchFrom: "any",
+    stringify: (option: IProductItem) => `${option.name} ${option.sku}`,
+  });
 
   const paperStyles: SxProps<Theme> = {
     width: 320,
@@ -63,12 +75,13 @@ export function SubmissionSearch({ redirectPath, sx }: Props) {
     <Autocomplete
       autoHighlight
       popupIcon={null}
-      loading={false}
-      options={[]}
+      loading={loading}
+      options={options}
       value={selectedItem}
+      filterOptions={filterOptions}
       onChange={(event, newValue) => handleChange(newValue)}
       onInputChange={(event, newValue) => setSearchQuery(newValue)}
-      getOptionLabel={(option) => option.title}
+      getOptionLabel={(option) => option.name}
       noOptionsText={<SearchNotFound query={debouncedQuery} />}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       slotProps={{ paper: { sx: paperStyles } }}
@@ -88,27 +101,37 @@ export function SubmissionSearch({ redirectPath, sx }: Props) {
                   />
                 </InputAdornment>
               ),
-              endAdornment: <>{params.InputProps.endAdornment}</>,
+              endAdornment: (
+                <>
+                  {loading ? (
+                    <Iconify
+                      icon="svg-spinners:8-dots-rotate"
+                      sx={{ mr: -3 }}
+                    />
+                  ) : null}
+                  {params.InputProps.endAdornment}
+                </>
+              ),
             },
           }}
         />
       )}
-      renderOption={(props, post, { inputValue }) => {
-        // const matches = match(post.title, inputValue);
-        // const parts = parse(post.title, matches);
+      renderOption={(props, product, { inputValue }) => {
+        const matches = match(product.name, inputValue);
+        const parts = parse(product.name, matches);
 
         return (
-          <li {...props} key={post.id}>
+          <li {...props} key={product.id}>
             <Link
               component={RouterLink}
-              href={redirectPath(post.title)}
+              href={redirectPath(product.id)}
               color="inherit"
               underline="none"
             >
               <Avatar
-                key={post.id}
-                alt={post.title}
-                src={post.coverUrl}
+                key={product.id}
+                alt={product.name}
+                src={product.coverUrl}
                 variant="rounded"
                 sx={{
                   width: 48,
@@ -119,7 +142,7 @@ export function SubmissionSearch({ redirectPath, sx }: Props) {
               />
 
               <div key={inputValue}>
-                {/* {parts.map((part, index) => (
+                {parts.map((part, index) => (
                   <Typography
                     key={index}
                     component="span"
@@ -133,7 +156,7 @@ export function SubmissionSearch({ redirectPath, sx }: Props) {
                   >
                     {part.text}
                   </Typography>
-                ))} */}
+                ))}
               </div>
             </Link>
           </li>

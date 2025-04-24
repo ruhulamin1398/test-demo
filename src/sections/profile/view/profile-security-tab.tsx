@@ -9,9 +9,9 @@ import IconButton from "@mui/material/IconButton";
 import LoadingButton from "@mui/lab/LoadingButton";
 import InputAdornment from "@mui/material/InputAdornment";
 
-import { toast } from "src/components/snackbar";
-import { Iconify } from "src/components/iconify";
-import { Form, Field } from "src/components/hook-form";
+import { toast } from "@/components/snackbar";
+import { Iconify } from "@/components/iconify";
+import { Form, Field } from "@/components/hook-form";
 
 // ----------------------------------------------------------------------
 

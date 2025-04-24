@@ -4,12 +4,12 @@ import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import { fabClasses } from "@mui/material/Fab";
 
-import { RouterLink } from "src/routes/components";
+import { RouterLink } from "@/routes/components";
 
-import { fCurrency } from "src/utils/format-number";
+import { fCurrency } from "@/utils/format-number";
 
-import { Label } from "src/components/label";
-import { Image } from "src/components/image";
+import { Label } from "@/components/label";
+import { Image } from "@/components/image";
 import { CompetitionStatusEnum, ICompetition } from "@/interfaces";
 
 // ----------------------------------------------------------------------

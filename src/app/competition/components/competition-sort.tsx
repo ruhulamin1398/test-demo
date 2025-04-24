@@ -5,8 +5,8 @@ import Button from "@mui/material/Button";
 import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 
-import { Iconify } from "src/components/iconify";
-import { CustomPopover } from "src/components/custom-popover";
+import { Iconify } from "@/components/iconify";
+import { CustomPopover } from "@/components/custom-popover";
 import { CompetitionStatusEnum } from "@/interfaces";
 
 // ----------------------------------------------------------------------
