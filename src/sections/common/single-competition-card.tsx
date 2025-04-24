@@ -2,7 +2,7 @@ import type { BoxProps } from "@mui/material/Box";
 
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
-import Card from "@mui/material/Card";
+import Card, { CardProps } from "@mui/material/Card";
 import Button from "@mui/material/Button";
 
 import { fShortenNumber } from "@/utils/format-number";
@@ -19,7 +19,7 @@ import { ICompetition } from "@/interfaces";
 
 // ----------------------------------------------------------------------
 
-type CardItemProps = BoxProps & {
+type CardItemProps = CardProps & {
   item: ICompetition;
 };
 
