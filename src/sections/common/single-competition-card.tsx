@@ -35,7 +35,7 @@ export function SingleCompetitionCard({
     </Box>
   );
 
-  const renderLabels = () => (
+  const renderBodyLabels = () => (
     <Box
       sx={{
         gap: 1,
@@ -108,13 +108,43 @@ export function SingleCompetitionCard({
     </Box>
   );
 
+  const renderLabels = () => (
+    <Box
+      sx={{
+        gap: 1,
+        top: 16,
+        zIndex: 9,
+        right: 40,
+        display: "flex",
+        position: "absolute",
+        alignItems: "center",
+      }}
+    >
+      <Label
+        variant="filled"
+        color={
+          item.status === "Active"
+            ? "primary"
+            : item.status === "Finished"
+            ? "info"
+            : item.status === "Draft"
+            ? "warning"
+            : "default"
+        }
+      >
+        {item.status}
+      </Label>
+    </Box>
+  );
+
   return (
     <>
       <Card sx={[{ width: 1 }, ...(Array.isArray(sx) ? sx : [sx])]} {...other}>
+        {renderLabels()}
         {renderImage()}
 
         <Box sx={{ px: 2, py: 2.5 }}>
-          {renderLabels()}
+          {renderBodyLabels()}
 
           <Link
             variant="subtitle2"
