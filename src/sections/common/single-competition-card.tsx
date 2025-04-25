@@ -1,6 +1,3 @@
-import { useState } from "react";
-import type { BoxProps } from "@mui/material/Box";
-
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import Card, { CardProps } from "@mui/material/Card";
@@ -114,7 +111,10 @@ export function SingleCompetitionCard({
           color="primary"
           variant="contained"
           size="small"
-          onclick={handleEnrollment(item.id)}
+          onClick={(e) => {
+            e.preventDefault();
+            handleEnrollment(item.id);
+          }}
         >
           Join
         </Button>
