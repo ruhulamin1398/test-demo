@@ -11,6 +11,7 @@ import { Markdown } from "@/components/markdown";
 import { Card, CardProps } from "@mui/material";
 import { RoundDetailsCardData } from "@/_mock/contest";
 import { RoundDetails } from "@/interfaces";
+import { Label } from "@/components/label";
 
 // ----------------------------------------------------------------------
 
@@ -204,6 +205,27 @@ type Props = CardProps & {
 };
 
 export function RoundDetailsCard({ sx, round, ...other }: Props) {
+  const renderLabels = () => (
+    <Box
+      sx={{
+        gap: 1,
+        top: 10,
+        zIndex: 9,
+        right: 15,
+        display: "flex",
+        position: "absolute",
+        alignItems: "center",
+      }}
+    >
+      <Label
+        variant="filled"
+        color={round.status === "running" ? "primary" : "default"}
+      >
+        {round.status}
+      </Label>
+    </Box>
+  );
+
   return (
     <Card
       sx={[{ py: 3, pl: 3, pr: 2.5 }, ...(Array.isArray(sx) ? sx : [sx])]}
@@ -215,7 +237,17 @@ export function RoundDetailsCard({ sx, round, ...other }: Props) {
           ...(round?.status !== "running" && { opacity: 0.5 }), // Apply opacity conditionally
         }}
       >
-        <Box sx={{ typography: "h6" }}>{round?.title}</Box>
+        {renderLabels()}
+        <Box sx={{ mt: 2 }}>
+          <Link
+            variant="h5"
+            color="inherit"
+            underline="none"
+            href="competition/rounds/1"
+          >
+            {round.title}
+          </Link>
+        </Box>
 
         <Typography
           variant="body2"

@@ -18,13 +18,16 @@ import { Container } from "@mui/material";
 import { ContestSummaryOverview } from "../OverView";
 import { ContestDetailsContent } from "../competition-details-content";
 import { CompetitionSidebar } from "./competition-sidebar";
+import { competitions } from "@/_mock/contest";
 
 // ----------------------------------------------------------------------
 
 export function SiingleCompetitionView() {
   const pageProgress = useScrollProgress();
-
   const { onBackToTop, isVisible } = useBackToTop("90%");
+  const competitionData = competitions.find(
+    (competition) => competition.id === "1"
+  );
 
   return (
     <>
@@ -37,7 +40,7 @@ export function SiingleCompetitionView() {
       />
 
       <BackToTopButton isVisible={isVisible} onClick={onBackToTop} />
-      <CompetitionDetailsHero />
+      <CompetitionDetailsHero competition={competitionData} />
 
       <Container sx={{ my: 5 }}>
         <Grid container spacing={3}>

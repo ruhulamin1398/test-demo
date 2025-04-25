@@ -16,10 +16,76 @@ import {
   animateTextClasses,
 } from "@/components/animate";
 import { Iconify } from "@/components/iconify";
+import { ICompetition } from "@/interfaces";
 
 // ----------------------------------------------------------------------
 
-export function CompetitionDetailsHero({ sx, ...other }: BoxProps) {
+type CompetitionDetailsHeroProps = BoxProps & {
+  competition: ICompetition;
+};
+
+export function CompetitionDetailsHero({
+  competition,
+  sx,
+  ...other
+}: CompetitionDetailsHeroProps) {
+  const renderCompetitionSummaryList = () => {
+    return (
+      <Box
+        component="ul"
+        sx={{
+          mt: 5,
+          display: "grid",
+          color: "common.white",
+          rowGap: { xs: 5, md: 0 },
+          columnGap: { xs: 2, md: 5 },
+          gridTemplateColumns: {
+            xs: "repeat(2, 1fr)",
+            md: "repeat(4, 1fr)",
+          },
+        }}
+      >
+        <li key={"Prize"}>
+          <m.div variants={varFade("inUp", { distance: 24 })}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                mb: 2,
+              }}
+            >
+              {/* First Column: Icon */}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: 48,
+                }}
+              >
+                <Iconify
+                  icon="mdi:currency-usd-circle"
+                  width={36}
+                  sx={{ color: "primary.main" }}
+                />
+              </Box>
+
+              {/* Second Column: Title and Value */}
+              <Box>
+                <Typography variant="h6" sx={{ mb: 0.5 }}>
+                  PRIZE MONEY
+                </Typography>
+                <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                  {competition.totalPrizeMoney || 500}
+                </Typography>
+              </Box>
+            </Box>
+          </m.div>
+        </li>
+      </Box>
+    );
+  };
   return (
     <Box
       component="section"
@@ -65,58 +131,7 @@ export function CompetitionDetailsHero({ sx, ...other }: BoxProps) {
               },
             }}
           />
-
-          <Box
-            component="ul"
-            sx={{
-              mt: 5,
-              display: "grid",
-              color: "common.white",
-              rowGap: { xs: 5, md: 0 },
-              columnGap: { xs: 2, md: 5 },
-              gridTemplateColumns: {
-                xs: "repeat(2, 1fr)",
-                md: "repeat(4, 1fr)",
-              },
-            }}
-          >
-            {CompetitionSummaryList.map((data) => (
-              <li key={data.title}>
-                <m.div variants={varFade("inUp", { distance: 24 })}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 2, // Space between columns
-                      mb: 2,
-                    }}
-                  >
-                    {/* First Column: Icon */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: 48, // Fixed width for the icon column
-                      }}
-                    >
-                      {data.icon}
-                    </Box>
-
-                    {/* Second Column: Title and Value */}
-                    <Box>
-                      <Typography variant="h6" sx={{ mb: 0.5 }}>
-                        {data.title}
-                      </Typography>
-                      <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                        {data.value}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </m.div>
-              </li>
-            ))}
-          </Box>
+          {renderCompetitionSummaryList()}
         </Box>
       </Container>
     </Box>
