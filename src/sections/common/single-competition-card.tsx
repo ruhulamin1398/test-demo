@@ -1,10 +1,4 @@
-import { useState } from "react";
-import type { BoxProps } from "@mui/material/Box";
-
-import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
 import Card, { CardProps } from "@mui/material/Card";
-import Button from "@mui/material/Button";
 
 import { fShortenNumber } from "@/utils/format-number";
 
@@ -12,8 +6,7 @@ import { Image } from "@/components/image";
 import { Iconify } from "@/components/iconify";
 import { Label, labelClasses } from "@/components/label";
 
-import { RouterLink } from "@/routes/components";
-import { IconButton } from "@mui/material";
+import { Box, Button, IconButton, Link } from "@mui/material";
 import { ICompetition } from "@/interfaces";
 
 // ----------------------------------------------------------------------
@@ -55,7 +48,7 @@ export function SingleCompetitionCard({
         },
       }}
     >
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1, gap: 0.5, display: "flex" }}>
         <Label
           startIcon={<Iconify width={12} icon="solar:clock-circle-outline" />}
         >
@@ -104,21 +97,14 @@ export function SingleCompetitionCard({
         ${item.totalPrizeMoney || 10000}
       </Box>
 
-      <Link
-        component={RouterLink}
-        href={item.detailsHref || "/competition/no-link-found"}
-        color="inherit"
-        underline="none"
+      <Button
+        color="primary"
+        variant="contained"
+        size="small"
+        onClick={() => handleEnrollment(item.id)}
       >
-        <Button
-          color="primary"
-          variant="contained"
-          size="small"
-          onclick={handleEnrollment(item.id)}
-        >
-          Join
-        </Button>
-      </Link>
+        Join
+      </Button>
     </Box>
   );
 
@@ -134,7 +120,7 @@ export function SingleCompetitionCard({
             variant="subtitle2"
             color="inherit"
             underline="none"
-            href={item.detailsHref || "/no-link-found"}
+            href={item.detailsHref || "competition/no-link-found"}
             sx={(theme) => ({
               ...theme.mixins.maxLine({
                 line: 2,

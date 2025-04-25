@@ -9,6 +9,8 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import { SingleCompetitionCard } from "../common/single-competition-card";
 import { ICompetition } from "@/interfaces";
+import { useCompetitionHandleEnrollmentDialog } from "@/actions/competitionHandleErollmentDialog";
+import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +25,13 @@ export function HomeFeaturedContestCarousel({
   sx,
   ...other
 }: Props) {
+  const {
+    openDialog,
+    handleOpenEnrollmentConfirmationDialog,
+    handleCloseEnrollmentConfirmationDialog,
+    onAgreeEnrollment,
+  } = useCompetitionHandleEnrollmentDialog();
+
   const carousel = useCarousel(
     {
       loop: true,
@@ -41,26 +50,28 @@ export function HomeFeaturedContestCarousel({
 
   return (
     <Box sx={{ mb: 3, paddingX: 3, position: "relative" }} {...other}>
-      {/* <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          {title}
-        </Typography>
-
-        <CarouselArrowBasicButtons {...carousel.arrows} />
-      </Box> */}
-
       <Carousel
         carousel={carousel}
         slotProps={{ slide: { py: 3 } }}
         sx={{ px: 0.5 }}
       >
-        {/* {list.map((item) => (
-          <SingleCompetitionCard key={item.id} item={item} />
-        ))} */}
+        {list.map((item) => (
+          <SingleCompetitionCard
+            key={item.id}
+            item={item}
+            handleEnrollment={handleOpenEnrollmentConfirmationDialog}
+          />
+        ))}
       </Carousel>
       <CarouselArrowFloatButtons
         {...carousel.arrows}
         options={carousel.options}
+      />
+
+      <EnrollmentConfirmationDialog
+        open={!!openDialog?.competitionId}
+        onAgree={onAgreeEnrollment}
+        onDisagree={handleCloseEnrollmentConfirmationDialog}
       />
     </Box>
   );
