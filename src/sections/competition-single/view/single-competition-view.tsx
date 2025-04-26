@@ -27,9 +27,6 @@ export function SiingleCompetitionView() {
   const { loading, competitionDetails } = useCompetitionDetailsQuery({});
   const pageProgress = useScrollProgress();
   const { onBackToTop, isVisible } = useBackToTop("90%");
-  const competitionData = competitions.find(
-    (competition) => competition.id === "1"
-  );
 
   return (
     <>

@@ -14,9 +14,11 @@ import { useFileUpload } from "@/app/hooks/useFileUpload";
 
 type Props = {
   competitionId: string;
+  title: string;
+  date: string;
 };
 
-const ContentSubmission = ({ competitionId }: Props) => {
+const ContentSubmission = ({ competitionId, title, date }: Props) => {
   const { uploadFile, isLoading, progress, error } = useFileUpload();
   const [file, setFile] = useState<File | string | null>(null);
   const handleDropSingleFile = useCallback((acceptedFiles: File[]) => {
@@ -43,10 +45,7 @@ const ContentSubmission = ({ competitionId }: Props) => {
   };
   return (
     <Card>
-      <CardHeader
-        title="Submit Your Content Before the Deadline"
-        subheader="September 14, 2026"
-      />
+      <CardHeader title={title} subheader={date} />
       <CardContent>
         <Upload
           value={file}

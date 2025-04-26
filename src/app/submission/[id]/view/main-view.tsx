@@ -16,7 +16,7 @@ const MainView = () => {
         <>
           {!loading && competitionDetails && (
             <>
-              <PageHeader />
+              <PageHeader title={competitionDetails.title} />
               <PageContent competition={competitionDetails} />
             </>
           )}

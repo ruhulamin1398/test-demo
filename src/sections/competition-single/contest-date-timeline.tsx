@@ -10,20 +10,18 @@ import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
+import { IRound } from "@/interfaces";
 
+import { useDate } from "@/hooks/use-date";
 // ----------------------------------------------------------------------
 
 type Props = {
   title?: string;
-  list: {
-    id: number;
-    title: string;
-    text: string;
-    date: string;
-  }[];
+  rounds: IRound[];
 };
 
-export function ContestDateTimeLine({ title, list }: Props) {
+export function ContestDateTimeLine({ title, rounds }: Props) {
+  console.log("___  rounds ___", rounds);
   return (
     <Timeline
       sx={{
@@ -32,11 +30,11 @@ export function ContestDateTimeLine({ title, list }: Props) {
         [`& .${timelineItemClasses.root}:before`]: { flex: 0, padding: 0 },
       }}
     >
-      {list.map((item, index) => (
+      {rounds.map((item, index) => (
         <Item
           key={item.title}
           item={item}
-          lastItem={index === list.length - 1}
+          lastItem={index === rounds.length - 1}
         />
       ))}
     </Timeline>
@@ -47,19 +45,20 @@ export function ContestDateTimeLine({ title, list }: Props) {
 
 type ItemProps = TimelineItemProps & {
   lastItem: boolean;
-  item: Props["list"][number];
+  item: IRound;
 };
 
 function Item({ item, lastItem, ...other }: ItemProps) {
+  const { formatDate } = useDate();
   return (
     <TimelineItem {...other}>
       <TimelineSeparator>
         <TimelineDot
           color={
-            (item.id === 4 && "primary") ||
-            (item.id === 1 && "success") ||
-            (item.id === 2 && "info") ||
-            (item.id === 3 && "warning") ||
+            (item.roundNumber === 4 && "primary") ||
+            (item.roundNumber === 1 && "success") ||
+            (item.roundNumber === 2 && "info") ||
+            (item.roundNumber === 3 && "warning") ||
             "error"
           }
         />
@@ -67,13 +66,17 @@ function Item({ item, lastItem, ...other }: ItemProps) {
       </TimelineSeparator>
 
       <TimelineContent>
-        <Typography variant="subtitle2">{item.date}</Typography>
-        <Typography variant="caption">{item.title}</Typography>
+        <Typography variant="subtitle2">
+          Round {item.roundNumber}: {item.title}
+        </Typography>
+        <Typography variant="caption" sx={{ color: "text.disabled" }}>
+          {formatDate(item.startDate)} - {formatDate(item.endDate)}
+        </Typography>
         <br />
 
-        <Typography variant="caption" sx={{ color: "text.disabled" }}>
-          {item.date}
-        </Typography>
+        {/* <Typography variant="caption" sx={{ color: "text.disabled" }}>
+          {"date2"}
+        </Typography> */}
       </TimelineContent>
     </TimelineItem>
   );

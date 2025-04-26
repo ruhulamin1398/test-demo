@@ -2,7 +2,7 @@
 import React from "react";
 import { Box, Container, Typography } from "@mui/material";
 import { varFade, AnimateText, animateTextClasses } from "@/components/animate";
-type Props = { title?: string; subtitle?: string };
+type Props = { title: string; subtitle?: string };
 
 const PageHeader = (props: Props) => {
   return (
@@ -10,7 +10,7 @@ const PageHeader = (props: Props) => {
       <AnimateText
         component="h1"
         variant="h4"
-        textContent={["Winter Photography Competition", "Round 1"]}
+        textContent={props?.title}
         variants={varFade("inUp", { distance: 24 })}
         sx={{
           [`& .${animateTextClasses.line}[data-index="0"]`]: {

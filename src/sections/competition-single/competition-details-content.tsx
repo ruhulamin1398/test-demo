@@ -16,9 +16,6 @@ import { Label } from "@/components/label";
 // ----------------------------------------------------------------------
 
 export function ContestDetailsContent() {
-  const currentTour = _tours.find(
-    (tour) => tour.id === "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1"
-  );
   const renderHead = () => (
     <>
       <Box sx={{ mt: 3, mb: 2, display: "flex" }}>

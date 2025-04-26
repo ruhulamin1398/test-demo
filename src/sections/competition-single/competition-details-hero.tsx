@@ -77,7 +77,7 @@ export function CompetitionDetailsHero({
                   PRIZE MONEY
                 </Typography>
                 <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                  {competition.totalPrizeMoney || 500}
+                  {500}
                 </Typography>
               </Box>
             </Box>
