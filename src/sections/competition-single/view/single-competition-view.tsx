@@ -18,40 +18,16 @@ import { Container } from "@mui/material";
 import { ContestSummaryOverview } from "../OverView";
 import { ContestDetailsContent } from "../competition-details-content";
 import { CompetitionSidebar } from "./competition-sidebar";
-import { Upload } from "@/components/upload";
-import { useCallback, useEffect, useState } from "react";
 import ContentSubmission from "@/components/content-submission";
-import { useParams } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { useQuery } from "@apollo/client";
-import { GET_COMPETITION_QUERY } from "@/graphql-client/competition";
 import { CompetitionDetailsSkeleton } from "./competition-details-skeleton";
-import { ICompetition } from "@/interfaces";
+import { useCompetitionDetailsQuery } from "@/hooks/use-competition-details";
 
 // ----------------------------------------------------------------------
 
 export function SiingleCompetitionView() {
-  const [competitionDetails, setCompetitionDetails] = useState<
-    ICompetition | undefined | null
-  >();
-  const searchParams = useParams();
-  const dispatch = useDispatch();
-  const { id } = searchParams;
-  const { data, loading, error } = useQuery(GET_COMPETITION_QUERY, {
-    variables: { id },
-    skip: !id, // Skip the query if `id` is not present
-  });
+  const { loading, competitionDetails } = useCompetitionDetailsQuery({});
   const pageProgress = useScrollProgress();
   const { onBackToTop, isVisible } = useBackToTop("90%");
-
-  useEffect(() => {
-    if (data?.getCompetition) {
-      setCompetitionDetails(data.getCompetition);
-    }
-    if (error) {
-      console.log("FETCH _ERROR", error);
-    }
-  }, [data, loading, error]);
 
   return (
     <>
@@ -72,7 +48,7 @@ export function SiingleCompetitionView() {
           <CompetitionDetailsHero />
           <Container sx={{ my: 5 }}>
             <ContentSubmission
-              competitionId={id as string}
+              competitionId={competitionDetails.id}
               competitionNameSubtitle={competitionDetails.title}
               competitionTitle="The title of the competition should display"
             />
