@@ -1,4 +1,4 @@
-import { IEnrolment } from "@/interfaces";
+import { IEnrolment, IUser } from "@/interfaces";
 import { Enrolment } from "@/models";
 
 const enrolmentResolver = {
@@ -20,23 +20,24 @@ const enrolmentResolver = {
       _: void,
       {
         competitionId,
-        userId,
-        mediaUrl,
-        submissionType,
       }: {
         competitionId: string;
-        userId: string;
-        mediaUrl: string;
-        submissionType: string;
-      }
+      },
+      { user }: { user: IUser | null }
     ): Promise<IEnrolment> => {
-      const enrolment = new Enrolment({
-        competitionId,
-        userId,
-        mediaUrl,
-        submissionType,
-      });
-      return enrolment.save();
+      if (!user) {
+        // user fetch error
+        throw new Error("Not authenticated");
+      }
+      try {
+        const enrolment = new Enrolment({
+          competitionId,
+          userId: user.id,
+        });
+        return enrolment.save();
+      } catch (_error: unknown) {
+        throw new Error("Something went wrong, we are looking into it.");
+      }
     },
     updateEnrolment: async (
       _: void,

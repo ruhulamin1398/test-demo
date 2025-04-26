@@ -13,8 +13,6 @@ export interface IEnrolment {
   competitionId: ICompetition;
   userId: IUser;
   enrolDate: Date; // ISO 8601 format date
-  mediaUrl: string;
-  submissionType: SubmissionTypeEnum;
   status: EnrolmentStatusEnum;
   createdAt: Date;
   updatedAt: Date;
