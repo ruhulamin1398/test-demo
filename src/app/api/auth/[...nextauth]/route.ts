@@ -4,7 +4,7 @@ import GitHubProvider from "next-auth/providers/github";
 import TwitterProvider from "next-auth/providers/twitter";
 import { client } from "@/lib/apolloClient";
 import { SOCIAL_LOGIN_MUTATION } from "@/graphql-client/auth";
-import { AuthProviderEnum } from "@/interfaces";
+import { AuthProviderEnum, IUser } from "@/interfaces";
 import { JWT } from "next-auth/jwt";
 import { AdapterUser } from "next-auth/adapters";
 // Import Apollo Client for GraphQL mutation
@@ -100,13 +100,14 @@ export const authOptions: AuthOptions = {
     async session({ session, token }) {
       const { user } = session;
       if (user) {
-        const { id, name, email, picture, role } = token;
+        const { user: tokenUser } = token;
+        if (!tokenUser) return session;
+        const { id, name, email, role } = tokenUser as IUser;
         session.user = {
           ...session.user,
           id,
           name,
           email,
-          image: picture,
           role,
         };
       }

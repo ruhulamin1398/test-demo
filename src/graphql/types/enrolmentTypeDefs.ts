@@ -1,14 +1,13 @@
 export const enrolmentTypeDefs = `#graphql
   type Enrolment {
     id: ID!
-    competitionId: ICompetition!
+    competitionId: Competition!
     userId: User!
     enrolDate: String!
     status: String!
     createdAt: String!
     updatedAt: String!
   }
-
   type Query {
     getEnrolments: [Enrolment]
     getEnrolment(id: ID!): Enrolment

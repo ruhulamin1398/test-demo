@@ -1,5 +1,6 @@
 import { IEnrolment, IUser } from "@/interfaces";
 import { Enrolment } from "@/models";
+import { GraphQLError } from "graphql";
 
 const enrolmentResolver = {
   Query: {
@@ -29,6 +30,14 @@ const enrolmentResolver = {
         // user fetch error
         throw new Error("Not authenticated");
       }
+      // Check if the email already exists
+      const alreadyEnrolled = await Enrolment.findOne({
+        competitionId,
+        userId: user.id,
+      });
+      if (alreadyEnrolled) {
+        throw new GraphQLError("You have already enrolled to this competition");
+      }
       try {
         const enrolment = new Enrolment({
           competitionId,
@@ -36,7 +45,7 @@ const enrolmentResolver = {
         });
         return enrolment.save();
       } catch (_error: unknown) {
-        throw new Error("Something went wrong, we are looking into it.");
+        throw new GraphQLError("Something went wrong, we are looking into it.");
       }
     },
     updateEnrolment: async (

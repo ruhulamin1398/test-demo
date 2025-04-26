@@ -45,6 +45,7 @@ const handler = startServerAndCreateNextHandler(
     context: async (req: NextApiRequest) => {
       try {
         const session = await getServerSession(authOptions);
+        console.log(session, "SESSION IN GRAPHQL HANDLER");
         const user = session?.user || null;
         return { req, user };
       } catch (_err) {
