@@ -6,7 +6,7 @@ import { CompetitionItem } from "./CompetitionItem";
 import { CompetitionItemSkeleton } from "./CompetitionItemSkeleton";
 import { ICompetition } from "@/interfaces";
 import { SingleCompetitionCard } from "@/sections/common/single-competition-card";
-import { useCompetitionHandleEnrollmentDialog } from "@/actions/competitionHandleErollmentDialog";
+import { useCompetitionHandleEnrollmentDialog } from "@/hooks/competitionHandleErollmentDialogHook";
 import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
 
 // ----------------------------------------------------------------------
