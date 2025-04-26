@@ -1,7 +1,7 @@
 export const enrolmentTypeDefs = `
   type Enrolment {
     id: ID!
-    competitionId: Competition!
+    competitionId: String!
     userId: User!
     enrolDate: String!
     status: String!
