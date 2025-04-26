@@ -9,7 +9,7 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import { SingleCompetitionCard } from "../common/single-competition-card";
 import { ICompetition } from "@/interfaces";
-import { useCompetitionHandleEnrollmentDialog } from "@/hooks/competitionHandleErollmentDialogHook";
+import { useCompetitionHandleEnrollmentDialog } from "@/app/hooks/competitionHandleErollmentDialogHook";
 import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
 
 // ----------------------------------------------------------------------

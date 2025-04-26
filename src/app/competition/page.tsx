@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import { EmptyContent } from "@/components/empty-content";
 import { CompetitionSort } from "./components/competition-sort";
 import { CompetitionList } from "./components/CompetitionList";
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import {
   GET_COMPETITIONS_QUERY,
   GetCompetitionsQueryResponse,
@@ -19,17 +19,10 @@ import {
 import { ICompetition } from "@/interfaces";
 import { paths } from "@/routes/paths";
 import { CoompetitionSearch } from "./components/competition-search";
-import { EnrollmentConfirmationDialog } from "@/components/confirmation-dialog";
-import { ENROLMENT_MUTATION } from "@/graphql-client/enrolment";
 
 // ----------------------------------------------------------------------
 
 export default function CompetitionListView() {
-  // GraphQL Mutation hooks
-  const [
-    createEnrollment,
-    { loading: createLoading, error: createError, data: enerolment },
-  ] = useMutation(ENROLMENT_MUTATION);
   const [competitions, setCompetitions] = useState<ICompetition[]>([]);
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
 
@@ -52,24 +45,6 @@ export default function CompetitionListView() {
     }
   }, [data, loading, error]);
   const [sortBy, setSortBy] = useState("featured");
-
-  const handleOpenEnrollmentConfirmationDialog = (id: string) => {
-    setOpenDialog({
-      competitionId: id,
-    });
-  };
-  const handleCloseEnrollmentConfirmationDialog = () => {
-    setOpenDialog({});
-  };
-  const onAgreeEnrollment = async () => {
-    if (openDialog?.competitionId)
-      await createEnrollment({
-        variables: {
-          competitionId: openDialog?.competitionId,
-        },
-      });
-    handleCloseEnrollmentConfirmationDialog();
-  };
 
   const noCompetition = useMemo(() => {
     return !loading && data?.getCompetitions?.competitions.length === 0;
