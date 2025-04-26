@@ -1,4 +1,13 @@
-import { Card, CardContent, CardHeader, Container } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Container,
+} from "@mui/material";
 import React, { useCallback, useState } from "react";
 import { Upload } from "../upload";
 import { useFileUpload } from "@/app/hooks/useFileUpload";
@@ -46,6 +55,17 @@ const ContentSubmission = (props: Props) => {
           onDelete={() => setFile(null)}
         />
       </CardContent>
+      <CardActions>
+        <Box
+          sx={{ px: 2, flex: 1, pb: 2 }}
+          display="flex"
+          justifyContent="flex-end"
+        >
+          <Button color="primary" variant="contained">
+            Submit
+          </Button>
+        </Box>
+      </CardActions>
     </Card>
   );
 };
