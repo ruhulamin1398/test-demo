@@ -24,6 +24,7 @@ import { AccountDrawer } from "../components/account-drawer";
 import { _account } from "../nav-config-account";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { SubmissionNotificationAlert } from "@/sections/common/submission-notification-alert";
 
 type LayoutBaseProps = Pick<LayoutSectionProps, "sx" | "children" | "cssVars">;
 
@@ -52,11 +53,7 @@ export function MainLayout({
 
   const renderHeader = () => {
     const headerSlots: HeaderSectionProps["slots"] = {
-      topArea: (
-        <Alert severity="info" sx={{ display: "none", borderRadius: 0 }}>
-          This is an info Alert.
-        </Alert>
-      ),
+      topArea: <SubmissionNotificationAlert />,
       leftArea: (
         <>
           {/** @slot Nav mobile */}
