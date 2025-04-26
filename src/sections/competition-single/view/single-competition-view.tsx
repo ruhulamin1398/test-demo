@@ -18,45 +18,83 @@ import { Container } from "@mui/material";
 import { ContestSummaryOverview } from "../OverView";
 import { ContestDetailsContent } from "../competition-details-content";
 import { CompetitionSidebar } from "./competition-sidebar";
+import { Upload } from "@/components/upload";
+import { useCallback, useEffect, useState } from "react";
+import ContentSubmission from "@/components/content-submission";
+import { useParams } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { useQuery } from "@apollo/client";
+import { GET_COMPETITION_QUERY } from "@/graphql-client/competition";
+import { CompetitionDetailsSkeleton } from "./competition-details-skeleton";
+import { ICompetition } from "@/interfaces";
 
 // ----------------------------------------------------------------------
 
 export function SiingleCompetitionView() {
+  const [competitionDetails, setCompetitionDetails] = useState<
+    ICompetition | undefined | null
+  >();
+  const searchParams = useParams();
+  const dispatch = useDispatch();
+  const { id } = searchParams;
+  const { data, loading, error } = useQuery(GET_COMPETITION_QUERY, {
+    variables: { id },
+    skip: !id, // Skip the query if `id` is not present
+  });
   const pageProgress = useScrollProgress();
-
   const { onBackToTop, isVisible } = useBackToTop("90%");
+
+  useEffect(() => {
+    if (data?.getCompetition) {
+      setCompetitionDetails(data.getCompetition);
+    }
+    if (error) {
+      console.log("FETCH _ERROR", error);
+    }
+  }, [data, loading, error]);
 
   return (
     <>
-      <ScrollProgress
-        variant="linear"
-        progress={pageProgress.scrollYProgress}
-        sx={[
-          (theme) => ({ position: "fixed", zIndex: theme.zIndex.appBar + 1 }),
-        ]}
-      />
+      {loading && <CompetitionDetailsSkeleton />}
+      {!loading && competitionDetails && (
+        <>
+          <ScrollProgress
+            variant="linear"
+            progress={pageProgress.scrollYProgress}
+            sx={[
+              (theme) => ({
+                position: "fixed",
+                zIndex: theme.zIndex.appBar + 1,
+              }),
+            ]}
+          />
+          <BackToTopButton isVisible={isVisible} onClick={onBackToTop} />
+          <CompetitionDetailsHero />
+          <Container sx={{ my: 5 }}>
+            <ContentSubmission
+              competitionId={id as string}
+              competitionNameSubtitle={competitionDetails.title}
+              competitionTitle="The title of the competition should display"
+            />
+            <Grid container spacing={3}>
+              <Grid size={{ xs: 12, md: 12, lg: 12 }}>
+                <ContestSummaryOverview />
+              </Grid>
 
-      <BackToTopButton isVisible={isVisible} onClick={onBackToTop} />
-      <CompetitionDetailsHero />
+              <Grid size={{ xs: 12, md: 6, lg: 8 }}>
+                {/* //left side  */}
+                <Grid>
+                  <ContestDetailsContent />
+                </Grid>
+              </Grid>
 
-      <Container sx={{ my: 5 }}>
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, md: 12, lg: 12 }}>
-            <ContestSummaryOverview />
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6, lg: 8 }}>
-            {/* //left side  */}
-            <Grid>
-              <ContestDetailsContent />
+              <Grid container spacing={3} size={{ xs: 12, md: 6, lg: 4 }}>
+                <CompetitionSidebar />
+              </Grid>
             </Grid>
-          </Grid>
-
-          <Grid container spacing={3} size={{ xs: 12, md: 6, lg: 4 }}>
-            <CompetitionSidebar />
-          </Grid>
-        </Grid>
-      </Container>
+          </Container>
+        </>
+      )}
     </>
   );
 }

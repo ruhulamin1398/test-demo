@@ -28,6 +28,7 @@ export function SingleCompetitionCard({
   sx,
   ...other
 }: CardItemProps) {
+  console.log(item);
   const renderImage = () => (
     <Box sx={{ px: 1, pt: 1 }}>
       <Image
@@ -103,7 +104,7 @@ export function SingleCompetitionCard({
 
       <Link
         component={RouterLink}
-        href={item.detailsHref || "/competition/no-link-found"}
+        href={item.detailsHref || `/competition/${item.id}`}
         color="inherit"
         underline="none"
       >
@@ -134,7 +135,7 @@ export function SingleCompetitionCard({
             variant="subtitle2"
             color="inherit"
             underline="none"
-            href={item.detailsHref || "/no-link-found"}
+            href={item.detailsHref || `/competition/${item.id}`}
             sx={(theme) => ({
               ...theme.mixins.maxLine({
                 line: 2,
