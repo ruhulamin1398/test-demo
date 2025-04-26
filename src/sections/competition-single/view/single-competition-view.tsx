@@ -18,11 +18,14 @@ import { Container } from "@mui/material";
 import { ContestSummaryOverview } from "../OverView";
 import { ContestDetailsContent } from "../competition-details-content";
 import { CompetitionSidebar } from "./competition-sidebar";
-import { competitions } from "@/_mock/contest";
+import ContentSubmission from "@/components/content-submission";
+import { CompetitionDetailsSkeleton } from "./competition-details-skeleton";
+import { useCompetitionDetailsQuery } from "@/hooks/use-competition-details";
 
 // ----------------------------------------------------------------------
 
 export function SiingleCompetitionView() {
+  const { loading, competitionDetails } = useCompetitionDetailsQuery({});
   const pageProgress = useScrollProgress();
   const { onBackToTop, isVisible } = useBackToTop("90%");
   const competitionData = competitions.find(
@@ -31,35 +34,46 @@ export function SiingleCompetitionView() {
 
   return (
     <>
-      <ScrollProgress
-        variant="linear"
-        progress={pageProgress.scrollYProgress}
-        sx={[
-          (theme) => ({ position: "fixed", zIndex: theme.zIndex.appBar + 1 }),
-        ]}
-      />
+      {loading && <CompetitionDetailsSkeleton />}
+      {!loading && competitionDetails && (
+        <>
+          <ScrollProgress
+            variant="linear"
+            progress={pageProgress.scrollYProgress}
+            sx={[
+              (theme) => ({
+                position: "fixed",
+                zIndex: theme.zIndex.appBar + 1,
+              }),
+            ]}
+          />
+          <BackToTopButton isVisible={isVisible} onClick={onBackToTop} />
+          <CompetitionDetailsHero />
+          <Container sx={{ my: 5 }}>
+            <ContentSubmission
+              competitionId={competitionDetails.id}
+              competitionNameSubtitle={competitionDetails.title}
+              competitionTitle="The title of the competition should display"
+            />
+            <Grid container spacing={3}>
+              <Grid size={{ xs: 12, md: 12, lg: 12 }}>
+                <ContestSummaryOverview />
+              </Grid>
 
-      <BackToTopButton isVisible={isVisible} onClick={onBackToTop} />
-      <CompetitionDetailsHero competition={competitionData} />
+              <Grid size={{ xs: 12, md: 6, lg: 8 }}>
+                {/* //left side  */}
+                <Grid>
+                  <ContestDetailsContent />
+                </Grid>
+              </Grid>
 
-      <Container sx={{ my: 5 }}>
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, md: 12, lg: 12 }}>
-            <ContestSummaryOverview />
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6, lg: 8 }}>
-            {/* //left side  */}
-            <Grid>
-              <ContestDetailsContent />
+              <Grid container spacing={3} size={{ xs: 12, md: 6, lg: 4 }}>
+                <CompetitionSidebar />
+              </Grid>
             </Grid>
-          </Grid>
-
-          <Grid container spacing={3} size={{ xs: 12, md: 6, lg: 4 }}>
-            <CompetitionSidebar />
-          </Grid>
-        </Grid>
-      </Container>
+          </Container>
+        </>
+      )}
     </>
   );
 }

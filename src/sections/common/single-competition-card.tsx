@@ -1,4 +1,7 @@
+import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
 import Card, { CardProps } from "@mui/material/Card";
+import Button from "@mui/material/Button";
 
 import { fShortenNumber } from "@/utils/format-number";
 
@@ -6,7 +9,8 @@ import { Image } from "@/components/image";
 import { Iconify } from "@/components/iconify";
 import { Label, labelClasses } from "@/components/label";
 
-import { Box, Button, IconButton, Link } from "@mui/material";
+import { RouterLink } from "@/routes/components";
+import { IconButton } from "@mui/material";
 import { ICompetition } from "@/interfaces";
 
 // ----------------------------------------------------------------------
@@ -24,6 +28,7 @@ export function SingleCompetitionCard({
   sx,
   ...other
 }: CardItemProps) {
+  console.log(item);
   const renderImage = () => (
     <Box sx={{ px: 1, pt: 1 }}>
       <Image
@@ -35,7 +40,7 @@ export function SingleCompetitionCard({
     </Box>
   );
 
-  const renderBodyLabels = () => (
+  const renderLabels = () => (
     <Box
       sx={{
         gap: 1,
@@ -48,7 +53,7 @@ export function SingleCompetitionCard({
         },
       }}
     >
-      <Box sx={{ flexGrow: 1, gap: 0.5, display: "flex" }}>
+      <Box sx={{ flexGrow: 1 }}>
         <Label
           startIcon={<Iconify width={12} icon="solar:clock-circle-outline" />}
         >
@@ -97,60 +102,40 @@ export function SingleCompetitionCard({
         ${item.totalPrizeMoney || 10000}
       </Box>
 
-      <Button
-        color="primary"
-        variant="contained"
-        size="small"
-        onClick={() => handleEnrollment(item.id)}
+      <Link
+        component={RouterLink}
+        href={item.detailsHref || `/competition/${item.id}`}
+        color="inherit"
+        underline="none"
       >
-        Join
-      </Button>
-    </Box>
-  );
-
-  const renderLabels = () => (
-    <Box
-      sx={{
-        gap: 1,
-        top: 16,
-        zIndex: 9,
-        right: 40,
-        display: "flex",
-        position: "absolute",
-        alignItems: "center",
-      }}
-    >
-      <Label
-        variant="filled"
-        color={
-          item.status === "Active"
-            ? "primary"
-            : item.status === "Finished"
-            ? "info"
-            : item.status === "Draft"
-            ? "warning"
-            : "default"
-        }
-      >
-        {item.status}
-      </Label>
+        <Button
+          color="primary"
+          variant="contained"
+          size="small"
+          onClick={(e) => {
+            e.preventDefault();
+            handleEnrollment(item.id);
+          }}
+        >
+          Join
+        </Button>
+      </Link>
     </Box>
   );
 
   return (
     <>
       <Card sx={[{ width: 1 }, ...(Array.isArray(sx) ? sx : [sx])]} {...other}>
-        {renderLabels()}
         {renderImage()}
 
         <Box sx={{ px: 2, py: 2.5 }}>
-          {renderBodyLabels()}
+          {renderLabels()}
 
           <Link
             variant="subtitle2"
             color="inherit"
             underline="none"
-            href={item.detailsHref || "competition/no-link-found"}
+            href={item.detailsHref || `/competition/${item.id}`}
             sx={(theme) => ({
               ...theme.mixins.maxLine({
                 line: 2,
