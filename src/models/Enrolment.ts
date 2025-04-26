@@ -18,7 +18,7 @@ const enrolmentSchema = new Schema<IEnrolmentDocument>(
       required: true,
     },
     enrolDate: { type: Date, default: Date.now },
-    mediaUrl: { type: String, required: true },
+    mediaUrl: { type: String, required: false },
     submissionType: { type: String, enum: ["photo", "video"], required: true },
     status: {
       type: String,

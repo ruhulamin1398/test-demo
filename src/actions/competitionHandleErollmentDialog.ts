@@ -23,6 +23,7 @@ export function useCompetitionHandleEnrollmentDialog() {
       "Enrollment confirmed for competition:",
       openDialog.competitionId
     );
+
     setOpenDialog({});
   };
 
