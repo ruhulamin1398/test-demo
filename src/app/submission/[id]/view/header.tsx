@@ -6,7 +6,7 @@ type Props = { title?: string; subtitle?: string };
 
 const PageHeader = (props: Props) => {
   return (
-    <Box>
+    <Box py={4}>
       <AnimateText
         component="h1"
         variant="h4"

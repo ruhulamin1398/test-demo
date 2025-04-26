@@ -4,13 +4,14 @@ import { MotionContainer } from "@/components/animate";
 import PageContent from "./content";
 import PageHeader from "./header";
 import useCompetitionDetailsQuery from "@/hooks/use-competition-details";
+import { SubmissionSkeleton } from "./submission-skeleton";
 
 const MainView = () => {
   const { loading, competitionDetails } = useCompetitionDetailsQuery({});
   return (
     <Container component={MotionContainer}>
       {loading ? (
-        <Typography>Loading...</Typography>
+        <SubmissionSkeleton />
       ) : (
         <>
           {!loading && competitionDetails && (

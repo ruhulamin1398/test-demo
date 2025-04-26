@@ -40,7 +40,7 @@ const constPrizeAmountList = [
   { id: 2, name: "Second Prize", amount: 500 },
   { id: 3, name: "Third Prize", amount: 500 },
 ];
-const ContestTimeLineData = [
+export const ContestTimeLineData = [
   {
     id: 1,
     title: "Final Round",

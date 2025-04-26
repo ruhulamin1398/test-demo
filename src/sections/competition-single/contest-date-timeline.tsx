@@ -25,25 +25,21 @@ type Props = {
 
 export function ContestDateTimeLine({ title, list }: Props) {
   return (
-    <Card>
-      <CardHeader title={title} />
-
-      <Timeline
-        sx={{
-          m: 0,
-          p: 3,
-          [`& .${timelineItemClasses.root}:before`]: { flex: 0, padding: 0 },
-        }}
-      >
-        {list.map((item, index) => (
-          <Item
-            key={item.title}
-            item={item}
-            lastItem={index === list.length - 1}
-          />
-        ))}
-      </Timeline>
-    </Card>
+    <Timeline
+      sx={{
+        m: 0,
+        p: 3,
+        [`& .${timelineItemClasses.root}:before`]: { flex: 0, padding: 0 },
+      }}
+    >
+      {list.map((item, index) => (
+        <Item
+          key={item.title}
+          item={item}
+          lastItem={index === list.length - 1}
+        />
+      ))}
+    </Timeline>
   );
 }
 

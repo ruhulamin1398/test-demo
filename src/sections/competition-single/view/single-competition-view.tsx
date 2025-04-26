@@ -18,7 +18,6 @@ import { Container } from "@mui/material";
 import { ContestSummaryOverview } from "../OverView";
 import { ContestDetailsContent } from "../competition-details-content";
 import { CompetitionSidebar } from "./competition-sidebar";
-import ContentSubmission from "@/components/content-submission";
 import { CompetitionDetailsSkeleton } from "./competition-details-skeleton";
 import { useCompetitionDetailsQuery } from "@/hooks/use-competition-details";
 
@@ -47,11 +46,6 @@ export function SiingleCompetitionView() {
           <BackToTopButton isVisible={isVisible} onClick={onBackToTop} />
           <CompetitionDetailsHero />
           <Container sx={{ my: 5 }}>
-            <ContentSubmission
-              competitionId={competitionDetails.id}
-              competitionNameSubtitle={competitionDetails.title}
-              competitionTitle="The title of the competition should display"
-            />
             <Grid container spacing={3}>
               <Grid size={{ xs: 12, md: 12, lg: 12 }}>
                 <ContestSummaryOverview />
