@@ -1,7 +1,7 @@
-export const enrolmentTypeDefs = `
+export const enrolmentTypeDefs = `#graphql
   type Enrolment {
     id: ID!
-    competitionId: String!
+    competitionId: ICompetition!
     userId: User!
     enrolDate: String!
     status: String!
