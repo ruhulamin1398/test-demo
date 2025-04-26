@@ -4,8 +4,6 @@ export const enrolmentTypeDefs = `
     competitionId: Competition!
     userId: User!
     enrolDate: String!
-    mediaUrl: String!
-    submissionType: String!
     status: String!
     createdAt: String!
     updatedAt: String!
@@ -19,15 +17,9 @@ export const enrolmentTypeDefs = `
   type Mutation {
     createEnrolment(
       competitionId: ID!
-      userId: ID!
-      mediaUrl: String!
-      submissionType: String!
     ): Enrolment
     updateEnrolment(
-      id: ID!
-      mediaUrl: String
-      submissionType: String
-      status: String
+      competitionId: ID!
     ): Enrolment
     deleteEnrolment(id: ID!): Enrolment
   }
