@@ -14,19 +14,18 @@ import { useFileUpload } from "@/app/hooks/useFileUpload";
 
 type Props = {
   competitionId: string;
-  competitionTitle: string;
-  competitionNameSubtitle: string;
 };
 
-const ContentSubmission = (props: Props) => {
+const ContentSubmission = ({ competitionId }: Props) => {
   const { uploadFile, isLoading, progress, error } = useFileUpload();
-  const { competitionId } = props;
   const [file, setFile] = useState<File | string | null>(null);
   const handleDropSingleFile = useCallback((acceptedFiles: File[]) => {
+    console.log(acceptedFiles);
     const newFile = acceptedFiles[0];
     setFile(newFile);
   }, []);
   const handleUpload = async () => {
+    console.log(!file, !competitionId);
     if (!file || !competitionId) return;
     try {
       const uploadbleContent = file as File;
@@ -45,8 +44,8 @@ const ContentSubmission = (props: Props) => {
   return (
     <Card>
       <CardHeader
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title="Submit Your Content Before the Deadline"
+        subheader="September 14, 2026"
       />
       <CardContent>
         <Upload
@@ -61,7 +60,12 @@ const ContentSubmission = (props: Props) => {
           display="flex"
           justifyContent="flex-end"
         >
-          <Button color="primary" variant="contained">
+          <Button
+            disabled={!competitionId || !file}
+            onClick={handleUpload}
+            color="primary"
+            variant="contained"
+          >
             Submit
           </Button>
         </Box>
