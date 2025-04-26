@@ -15,52 +15,9 @@ type SubmissionSkeletonProps = PaperProps & {
   itemCount?: number;
 };
 
-export function SubmissionSkeleton({
-  sx,
-  itemCount = 16,
-  ...other
-}: SubmissionSkeletonProps) {
-  return Array.from({ length: itemCount }, (_, index) => (
-    <Paper
-      key={index}
-      variant="outlined"
-      sx={[
-        () => ({
-          borderRadius: 2,
-        }),
-        ...(Array.isArray(sx) ? sx : [sx]),
-      ]}
-      {...other}
-    >
-      <Box sx={{ p: 1 }}>
-        <Skeleton sx={{ pt: "100%" }} />
-      </Box>
-
-      <Stack spacing={2} sx={{ p: 3, pt: 2 }}>
-        <Skeleton sx={{ width: 0.5, height: 16 }} />
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box sx={{ display: "flex" }}>
-            <Skeleton variant="circular" sx={{ width: 16, height: 16 }} />
-            <Skeleton variant="circular" sx={{ width: 16, height: 16 }} />
-            <Skeleton variant="circular" sx={{ width: 16, height: 16 }} />
-          </Box>
-
-          <Skeleton sx={{ width: 40, height: 16 }} />
-        </Box>
-      </Stack>
-    </Paper>
-  ));
-}
-
 // ----------------------------------------------------------------------
 
-export function ProductDetailsSkeleton({ ...other }: Grid2Props) {
+export function SubmissionSkeleton({ ...other }: Grid2Props) {
   return (
     <Grid container spacing={8} {...other}>
       <Grid size={{ xs: 12, md: 6, lg: 7 }}>
