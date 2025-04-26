@@ -6,20 +6,13 @@ type Props = { title?: string; subtitle?: string };
 
 const PageHeader = (props: Props) => {
   return (
-    <Box
-      sx={{
-        bottom: { md: 80 },
-        position: { md: "absolute" },
-        textAlign: { xs: "center", md: "unset" },
-      }}
-    >
+    <Box>
       <AnimateText
         component="h1"
-        variant="h1"
+        variant="h4"
         textContent={["Winter Photography Competition", "Round 1"]}
         variants={varFade("inUp", { distance: 24 })}
         sx={{
-          color: "common.white",
           [`& .${animateTextClasses.line}[data-index="0"]`]: {
             [`& .${animateTextClasses.word}[data-index="0"]`]: {
               color: "primary.main",
