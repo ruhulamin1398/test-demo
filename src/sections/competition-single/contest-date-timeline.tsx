@@ -1,11 +1,9 @@
 import type { CardProps } from "@mui/material/Card";
 import type { TimelineItemProps } from "@mui/lab/TimelineItem";
 
-import Card from "@mui/material/Card";
 import Timeline from "@mui/lab/Timeline";
 import TimelineDot from "@mui/lab/TimelineDot";
 import Typography from "@mui/material/Typography";
-import CardHeader from "@mui/material/CardHeader";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
@@ -13,6 +11,7 @@ import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
 import { IRound } from "@/interfaces";
 
 import { useDate } from "@/hooks/use-date";
+import { Box, CardHeader } from "@mui/material";
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -21,23 +20,25 @@ type Props = {
 };
 
 export function ContestDateTimeLine({ title, rounds }: Props) {
-  console.log("___  rounds ___", rounds);
   return (
-    <Timeline
-      sx={{
-        m: 0,
-        p: 3,
-        [`& .${timelineItemClasses.root}:before`]: { flex: 0, padding: 0 },
-      }}
-    >
-      {rounds.map((item, index) => (
-        <Item
-          key={item.title}
-          item={item}
-          lastItem={index === rounds.length - 1}
-        />
-      ))}
-    </Timeline>
+    <Box>
+      {title && <CardHeader title={title} />}
+      <Timeline
+        sx={{
+          m: 0,
+          p: 3,
+          [`& .${timelineItemClasses.root}:before`]: { flex: 0, padding: 0 },
+        }}
+      >
+        {rounds.map((item, index) => (
+          <Item
+            key={item.title}
+            item={item}
+            lastItem={index === rounds.length - 1}
+          />
+        ))}
+      </Timeline>
+    </Box>
   );
 }
 

@@ -45,7 +45,6 @@ export interface ICompetition {
   updatedAt: string;
   status: CompetitionStatusEnum;
   /////
-  totalPrizeMoney: number;
   detailsHref: string;
 }
 

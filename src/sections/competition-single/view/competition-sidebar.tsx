@@ -6,10 +6,14 @@ import { ContestDateTimeLine } from "../contest-date-timeline";
 import { EnrollmentCard } from "../enroll-contest";
 import { PrizeList } from "../prize-list";
 import { Box } from "@mui/material";
+import { ICompetition } from "@/interfaces";
 
 // ----------------------------------------------------------------------
+type Props = {
+  competition: ICompetition;
+};
 
-export function CompetitionSidebar() {
+export function CompetitionSidebar({ competition }: Props) {
   return (
     <>
       <Box sx={{ mb: 3 }}>
@@ -21,12 +25,12 @@ export function CompetitionSidebar() {
           />
         </Grid>
         <Grid size={12}>
-          <PrizeList title="Prizes" list={constPrizeAmountList} />
+          <PrizeList title="Prizes" prizes={competition.prizes} />
         </Grid>
         <Grid size={12}>
           <ContestDateTimeLine
             title="Stages and timeLine "
-            list={ContestTimeLineData}
+            rounds={competition.rounds}
           />
         </Grid>
       </Box>

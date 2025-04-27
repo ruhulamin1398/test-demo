@@ -17,6 +17,7 @@ import {
 } from "@/components/animate";
 import { Iconify } from "@/components/iconify";
 import { ICompetition } from "@/interfaces";
+import { useDate } from "@/hooks/use-date";
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +30,7 @@ export function CompetitionDetailsHero({
   sx,
   ...other
 }: CompetitionDetailsHeroProps) {
+  const { formatDate } = useDate();
   const renderCompetitionSummaryList = () => {
     return (
       <Box
@@ -45,44 +47,29 @@ export function CompetitionDetailsHero({
           },
         }}
       >
-        <li key={"Prize"}>
-          <m.div variants={varFade("inUp", { distance: 24 })}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                mb: 2,
-              }}
-            >
-              {/* First Column: Icon */}
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: 48,
-                }}
-              >
-                <Iconify
-                  icon="mdi:currency-usd-circle"
-                  width={36}
-                  sx={{ color: "primary.main" }}
-                />
-              </Box>
+        <CompetitionHeroCard
+          title="PRIZE MONEY"
+          value={`TK 5000`}
+          icon="mdi:currency-usd-circle"
+        />
 
-              {/* Second Column: Title and Value */}
-              <Box>
-                <Typography variant="h6" sx={{ mb: 0.5 }}>
-                  PRIZE MONEY
-                </Typography>
-                <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                  {500}
-                </Typography>
-              </Box>
-            </Box>
-          </m.div>
-        </li>
+        <CompetitionHeroCard
+          title="TimeLine"
+          value={`${formatDate(competition.startDate)} - ${formatDate(
+            competition.endDate
+          )}`}
+          icon="mdi:currency-usd-circle"
+        />
+        <CompetitionHeroCard
+          title="Enrolment Start At"
+          value={formatDate(competition.enrolmentDeadline.startDate)}
+          icon="mdi:currency-usd-circle"
+        />
+        <CompetitionHeroCard
+          title="Enrolment Ends At"
+          value={formatDate(competition.enrolmentDeadline.endDate)}
+          icon="mdi:currency-usd-circle"
+        />
       </Box>
     );
   };
@@ -97,7 +84,7 @@ export function CompetitionDetailsHero({
                 theme.vars.palette.grey["900Channel"],
                 0.8
               )}, ${varAlpha(theme.vars.palette.grey["900Channel"], 0.8)})`,
-              `url(${CONFIG.assetsDir}/assets/images/contact/hero.webp)`,
+              `url(${CONFIG.assetsDir}${competition.mediaUrl})`,
             ],
           }),
           overflow: "hidden",
@@ -139,50 +126,52 @@ export function CompetitionDetailsHero({
 }
 
 // ----------------------------------------------------------------------
+type CompetitionHeroCardProps = BoxProps & {
+  title: string;
+  value: string;
+  icon: string;
+};
 
-const CompetitionSummaryList = [
-  {
-    title: "PRIZE MONEY",
-    value: "TK 500000",
-    icon: (
-      <Iconify
-        icon="mdi:currency-usd-circle"
-        width={36}
-        sx={{ color: "primary.main" }}
-      />
-    ),
-  },
-  {
-    title: "TIMELINE",
-    value: "Jan 9, 2014 - Jan 31, 2014",
-    icon: (
-      <Iconify
-        icon="solar:calendar-date-bold"
-        width={36}
-        sx={{ color: "primary.main" }}
-      />
-    ),
-  },
-  {
-    title: "ENROLMENT OPEN FROM",
-    value: "Jan 9, 2014",
-    icon: (
-      <Iconify
-        icon="solar:clock-circle-bold"
-        width={36}
-        sx={{ color: "primary.main" }}
-      />
-    ),
-  },
-  {
-    title: "ENROLMENT ENDS AT",
-    value: "Jan 31, 2014",
-    icon: (
-      <Iconify
-        icon="solar:clock-circle-bold"
-        width={36}
-        sx={{ color: "primary.main" }}
-      />
-    ),
-  },
-];
+function CompetitionHeroCard({
+  title,
+  value,
+  icon,
+  sx,
+  ...other
+}: CompetitionHeroCardProps) {
+  return (
+    <li key={"Prize"}>
+      <m.div variants={varFade("inUp", { distance: 24 })}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+            mb: 2,
+          }}
+        >
+          {/* First Column: Icon */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: 48,
+            }}
+          >
+            <Iconify icon={icon} width={36} sx={{ color: "primary.main" }} />
+          </Box>
+
+          <Box>
+            <Typography variant="h6" sx={{ mb: 0.5 }}>
+              {title}
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+              {value}
+            </Typography>
+          </Box>
+        </Box>
+      </m.div>
+    </li>
+  );
+}

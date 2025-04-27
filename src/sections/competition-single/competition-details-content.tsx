@@ -6,21 +6,22 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 
 import { Iconify } from "@/components/iconify";
-import { _tours, TOUR_SERVICE_OPTIONS } from "@/_mock";
-import { Markdown } from "@/components/markdown";
 import { Card, CardProps } from "@mui/material";
-import { RoundDetailsCardData } from "@/_mock/contest";
-import { RoundDetails } from "@/interfaces";
+import { ICompetition, IRound, RoundDetails } from "@/interfaces";
 import { Label } from "@/components/label";
+import { Markdown } from "@/components/markdown";
 
 // ----------------------------------------------------------------------
+type Props = {
+  competition: ICompetition;
+};
 
-export function ContestDetailsContent() {
+export function ContestDetailsContent({ competition }: Props) {
   const renderHead = () => (
     <>
       <Box sx={{ mt: 3, mb: 2, display: "flex" }}>
         <Typography variant="h4" sx={{ flexGrow: 1 }}>
-          Winter Photography Competition
+          {competition.title}
         </Typography>
 
         <IconButton>
@@ -54,7 +55,7 @@ export function ContestDetailsContent() {
         >
           Eligibility :
         </Box>
-        Anyone can join
+        {competition?.eligibility}
       </Box>
 
       <Box
@@ -116,46 +117,7 @@ export function ContestDetailsContent() {
 
   const renderContent = () => (
     <>
-      <Markdown children={currentTour?.content} />
-
-      <Box>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          Services
-        </Typography>
-
-        <Box
-          sx={{
-            rowGap: 2,
-            display: "grid",
-            gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(2, 1fr)" },
-          }}
-        >
-          {TOUR_SERVICE_OPTIONS.map((service) => (
-            <Box
-              key={service.label}
-              sx={{
-                gap: 1,
-                display: "flex",
-                alignItems: "center",
-                ...(currentTour?.services.includes(service.label) && {
-                  color: "text.disabled",
-                }),
-              }}
-            >
-              <Iconify
-                icon="eva:checkmark-circle-2-outline"
-                sx={{
-                  color: "primary.main",
-                  ...(currentTour?.services.includes(service.label) && {
-                    color: "text.disabled",
-                  }),
-                }}
-              />
-              {service.label}
-            </Box>
-          ))}
-        </Box>
-      </Box>
+      <Markdown children={competition.description} />
     </>
   );
 
@@ -174,7 +136,7 @@ export function ContestDetailsContent() {
             gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(2, 1fr)" },
           }}
         >
-          {RoundDetailsCardData.map((round) => (
+          {competition.rounds.map((round) => (
             <RoundDetailsCard round={round} key={round.id} />
           ))}
         </Box>
@@ -198,7 +160,7 @@ export function ContestDetailsContent() {
 }
 
 type Props = CardProps & {
-  round: RoundDetails;
+  round: IRound;
 };
 
 export function RoundDetailsCard({ sx, round, ...other }: Props) {
@@ -216,7 +178,7 @@ export function RoundDetailsCard({ sx, round, ...other }: Props) {
     >
       <Label
         variant="filled"
-        color={round.status === "running" ? "primary" : "default"}
+        color={round.status === "Ongoing" ? "primary" : "default"}
       >
         {round.status}
       </Label>
@@ -231,7 +193,7 @@ export function RoundDetailsCard({ sx, round, ...other }: Props) {
       <Box
         sx={{
           flexGrow: 1,
-          ...(round?.status !== "running" && { opacity: 0.5 }), // Apply opacity conditionally
+          ...(round?.status !== "Ongoing" && { opacity: 0.5 }), // Apply opacity conditionally
         }}
       >
         {renderLabels()}
@@ -251,7 +213,10 @@ export function RoundDetailsCard({ sx, round, ...other }: Props) {
           component="div"
           sx={{ color: "text.secondary" }}
         >
-          {round?.description}
+          {round?.description
+            ? round.description.split(" ").slice(0, 20).join(" ") +
+              (round.description.split(" ").length > 20 ? "..." : "")
+            : ""}
         </Typography>
       </Box>
     </Card>
