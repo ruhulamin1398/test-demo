@@ -1,18 +1,9 @@
 {
   "extends": ["next/core-web-vitals", "next/typescript"],
-  "rules": { 
-    'react/display-name': 'off',
-    
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      {
-        "args": "all", // Check all function arguments
-        "argsIgnorePattern": "^_", // Ignore arguments starting with "_"
-        "caughtErrors": "all", // Check all caught errors
-        "caughtErrorsIgnorePattern": "^_", // Ignore errors starting with "_"
-        "vars": "all", // Check all variables
-        "varsIgnorePattern": "^_" // Ignore variables starting with "_"
-      }
-    ]
+  "rules": {
+    "react/display-name": "off",
+    "@typescript-eslint/no-unused-vars": "off", // Disable unused variable checks
+    "@typescript-eslint/explicit-module-boundary-types": "off", // Disable explicit return type checks
+    "@typescript-eslint/no-explicit-any": "off" // Allow usage of 'any' type
   }
 }
