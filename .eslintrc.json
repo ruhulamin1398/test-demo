@@ -1,12 +1,11 @@
 {
   "extends": ["next/core-web-vitals", "next/typescript"],
-  "rules": {
-     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-    'react/display-name': 'off',
+  "rules": { 
+    
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
-       
+       'react/display-name': 'off',
         "args": "all", // Check all function arguments
         "argsIgnorePattern": "^_", // Ignore arguments starting with "_"
         "caughtErrors": "all", // Check all caught errors
