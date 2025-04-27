@@ -11,19 +11,16 @@ import { fShortenNumber } from "@/utils/format-number";
 
 import { Iconify } from "@/components/iconify";
 import { CONFIG } from "@/global-config";
+import { IPrizesAndRewards } from "@/interfaces";
 
 // ----------------------------------------------------------------------
 
 type Props = CardProps & {
   title?: string;
-  list: {
-    id: string;
-    name: string;
-    amount: string;
-  }[];
+  prizes: IPrizesAndRewards[];
 };
 
-export function PrizeList({ title, list, sx, ...other }: Props) {
+export function PrizeList({ title, prizes, sx, ...other }: Props) {
   return (
     <Card sx={sx} {...other}>
       <CardHeader title={title} />
@@ -36,7 +33,7 @@ export function PrizeList({ title, list, sx, ...other }: Props) {
           flexDirection: "column",
         }}
       >
-        {list.map((item, index) => (
+        {prizes.map((item, index) => (
           <Item key={item.id} item={item} index={index} />
         ))}
       </Box>
@@ -48,7 +45,7 @@ export function PrizeList({ title, list, sx, ...other }: Props) {
 
 type ItemProps = BoxProps & {
   index: number;
-  item: Props["list"][number];
+  item: IPrizesAndRewards;
 };
 
 function Item({ item, index, sx, ...other }: ItemProps) {
@@ -86,25 +83,21 @@ function Item({ item, index, sx, ...other }: ItemProps) {
         <Iconify width={24} icon="solar:cup-star-bold" />
       </Box>
 
-      {/* Winner Name */}
       <Box flexGrow={1}>
         <Box sx={{ typography: "h5", color: "text.secondary" }}>
-          {item.name}
+          {item.title}
         </Box>
-      </Box>
-
-      {/* Prize Money */}
-      <Box
-        sx={{
-          typography: "h5", // Make the prize money prominent
-          color: "primary",
-          display: "flex",
-          alignItems: "center",
-          gap: 0.5,
-        }}
-      >
-        <Iconify icon="mdi:currency-usd-circle" width={24} />
-        {fShortenNumber(item.amount)}
+        <Box
+          sx={{
+            typography: "body2",
+            color: "text.secondary",
+            display: "flex",
+            alignItems: "center",
+            gap: 0.5,
+          }}
+        >
+          {item.rewards}
+        </Box>
       </Box>
     </Box>
   );

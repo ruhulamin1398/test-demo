@@ -8,6 +8,10 @@ import {
   DialogContent,
   DialogContentText,
   Slide,
+  FormControlLabel,
+  Checkbox,
+  Typography,
+  Link,
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 
@@ -41,11 +45,39 @@ export const EnrollmentConfirmationDialog = ({
       onClose={onDisagree}
       aria-describedby="alert-dialog-slide-description"
     >
-      <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+      <DialogTitle>{"Do you want to join the competition?"}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-slide-description">
-          Let Google help apps determine location. This means sending anonymous
-          location data to Google, even when no apps are running.
+          <Typography variant="body2" color="text.primary" component="span">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Non minima
+            cupiditate beatae animi odit consequuntur qui voluptatum iusto earum
+            culpa.
+          </Typography>
+
+          <FormControlLabel
+            disabled
+            label={
+              <Typography variant="body2" color="text.primary" component="span">
+                I agree to the{" "}
+                <Link
+                  href="/terms-and-conditions"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  terms and conditions
+                </Link>
+              </Typography>
+            }
+            control={
+              <Checkbox
+                size="medium"
+                defaultChecked
+                indeterminate
+                color="error"
+                inputProps={{ id: "color-disabled-indeterminate-checkbox" }}
+              />
+            }
+          />
         </DialogContentText>
       </DialogContent>
       <DialogActions>

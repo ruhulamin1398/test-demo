@@ -48,6 +48,7 @@ export const useFileUpload = (): UseFileUploadReturn => {
     if (payload) {
       Object.keys(payload).forEach((key) => {
         const value = payload[key];
+
         if (value instanceof File) {
           // If the payload value is a file, append it as a file
           formData.append(key, value);

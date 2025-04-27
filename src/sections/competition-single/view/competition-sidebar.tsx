@@ -6,27 +6,32 @@ import { ContestDateTimeLine } from "../contest-date-timeline";
 import { EnrollmentCard } from "../enroll-contest";
 import { PrizeList } from "../prize-list";
 import { Box } from "@mui/material";
+import { ICompetition } from "@/interfaces";
 
 // ----------------------------------------------------------------------
+type Props = {
+  competition: ICompetition;
+};
 
-export function CompetitionSidebar() {
+export function CompetitionSidebar({ competition }: Props) {
   return (
     <>
       <Box sx={{ mb: 3 }}>
         <Grid size={12}>
           <EnrollmentCard
-            price="TK 500"
-            title={`Winter Photography Competition \n Round 1`}
-            description="Praesent egestas tristique nibh. Duis lobortis massa imperdiet quam."
+            price={competition.price ? `${competition.price}` : "Free"}
+            title={competition.title}
+            description={competition.description}
+            competitionId={competition.id}
           />
         </Grid>
         <Grid size={12}>
-          <PrizeList title="Prizes" list={constPrizeAmountList} />
+          <PrizeList title="Prizes" prizes={competition.prizes} />
         </Grid>
         <Grid size={12}>
           <ContestDateTimeLine
             title="Stages and timeLine "
-            list={ContestTimeLineData}
+            rounds={competition.rounds}
           />
         </Grid>
       </Box>
@@ -35,44 +40,3 @@ export function CompetitionSidebar() {
 }
 
 // ----------------------------------------------------------------------
-const constPrizeAmountList = [
-  { id: 1, name: "First prize", amount: 500 },
-  { id: 2, name: "Second Prize", amount: 500 },
-  { id: 3, name: "Third Prize", amount: 500 },
-];
-export const ContestTimeLineData = [
-  {
-    id: 1,
-    title: "Final Round",
-    text: "Priliminary Round",
-    date: "01 jan 2024  - 31 jan 2024",
-  },
-  {
-    id: 2,
-    title: "Round 3",
-    text: "Priliminary Round",
-    date: "01 jan 2024  - 31 jan 2024",
-  },
-  {
-    id: 3,
-    title: "Round 2",
-    text: "Priliminary Round",
-    date: "01 jan 2024  - 31 jan 2024",
-  },
-  {
-    id: 4,
-    title: "Round 1",
-    text: "Priliminary Round",
-    date: "01 jan 2024  - 31 jan 2024",
-  },
-  {
-    id: 5,
-    title: "Round 0",
-    text: "Priliminary Round",
-    date: "01 jan 2024  - 31 jan 2024",
-  },
-];
-
-type BackToTopProps = FabProps & {
-  isVisible: UseBackToTopReturn["isVisible"];
-};
