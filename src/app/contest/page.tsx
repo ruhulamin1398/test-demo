@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 
 import { CONFIG } from "@/global-config";
 
-import { ProductShopView } from "@/sections/product/view";
 import { getProducts } from "@/actions/product-ssr";
 
 // ----------------------------------------------------------------------
