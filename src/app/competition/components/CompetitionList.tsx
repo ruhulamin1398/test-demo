@@ -6,22 +6,29 @@ import { CompetitionItem } from "./CompetitionItem";
 import { CompetitionItemSkeleton } from "./CompetitionItemSkeleton";
 import { ICompetition } from "@/interfaces";
 import { SingleCompetitionCard } from "@/sections/common/single-competition-card";
+import { useCompetitionHandleEnrollmentDialog } from "@/app/hooks/competitionHandleErollmentDialogHook";
+import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
 
 // ----------------------------------------------------------------------
 
 type Props = BoxProps & {
   loading?: boolean;
   competitions: ICompetition[];
-  handleEnrollment: (competitionId: string) => void;
 };
 
 export function CompetitionList({
   competitions,
   loading,
-  handleEnrollment,
   sx,
   ...other
 }: Props) {
+  const {
+    openDialog,
+    handleOpenEnrollmentConfirmationDialog,
+    handleCloseEnrollmentConfirmationDialog,
+    onAgreeEnrollment,
+  } = useCompetitionHandleEnrollmentDialog();
+
   const renderLoading = () => <CompetitionItemSkeleton />;
 
   const renderList = () =>
@@ -35,7 +42,7 @@ export function CompetitionList({
       <SingleCompetitionCard
         key={competition.id}
         item={competition}
-        handleEnrollment={handleEnrollment}
+        handleEnrollment={handleOpenEnrollmentConfirmationDialog}
       />
     ));
 
@@ -58,6 +65,11 @@ export function CompetitionList({
         {...other}
       >
         {loading ? renderLoading() : renderList()}
+        <EnrollmentConfirmationDialog
+          open={!!openDialog?.competitionId}
+          onAgree={onAgreeEnrollment}
+          onDisagree={handleCloseEnrollmentConfirmationDialog}
+        />
       </Box>
     </>
   );

@@ -9,7 +9,6 @@ import {
   ICompetition,
   RoundDetails,
 } from "@/interfaces/competition";
-import { idID } from "@mui/material/locale";
 
 export const competitions: ICompetition[] = [
   {

@@ -16,10 +16,63 @@ import {
   animateTextClasses,
 } from "@/components/animate";
 import { Iconify } from "@/components/iconify";
+import { ICompetition } from "@/interfaces";
+import { useDate } from "@/hooks/use-date";
 
 // ----------------------------------------------------------------------
 
-export function CompetitionDetailsHero({ sx, ...other }: BoxProps) {
+type CompetitionDetailsHeroProps = BoxProps & {
+  competition: ICompetition;
+};
+
+export function CompetitionDetailsHero({
+  competition,
+  sx,
+  ...other
+}: CompetitionDetailsHeroProps) {
+  const { formatDate } = useDate();
+  const renderCompetitionSummaryList = () => {
+    return (
+      <Box
+        component="ul"
+        sx={{
+          mt: 5,
+          display: "grid",
+          color: "common.white",
+          rowGap: { xs: 5, md: 0 },
+          columnGap: { xs: 2, md: 5 },
+          gridTemplateColumns: {
+            xs: "repeat(2, 1fr)",
+            md: "repeat(4, 1fr)",
+          },
+        }}
+      >
+        <CompetitionHeroCard
+          title="PRIZE MONEY"
+          value={`TK 5000`}
+          icon="mdi:currency-usd-circle"
+        />
+
+        <CompetitionHeroCard
+          title="TimeLine"
+          value={`${formatDate(competition.startDate)} - ${formatDate(
+            competition.endDate
+          )}`}
+          icon="mdi:currency-usd-circle"
+        />
+        <CompetitionHeroCard
+          title="Enrolment Start At"
+          value={formatDate(competition.enrolmentDeadline.startDate)}
+          icon="mdi:currency-usd-circle"
+        />
+        <CompetitionHeroCard
+          title="Enrolment Ends At"
+          value={formatDate(competition.enrolmentDeadline.endDate)}
+          icon="mdi:currency-usd-circle"
+        />
+      </Box>
+    );
+  };
   return (
     <Box
       component="section"
@@ -31,7 +84,7 @@ export function CompetitionDetailsHero({ sx, ...other }: BoxProps) {
                 theme.vars.palette.grey["900Channel"],
                 0.8
               )}, ${varAlpha(theme.vars.palette.grey["900Channel"], 0.8)})`,
-              `url(${CONFIG.assetsDir}/assets/images/contact/hero.webp)`,
+              `url(${CONFIG.assetsDir}${competition.mediaUrl})`,
             ],
           }),
           overflow: "hidden",
@@ -54,7 +107,7 @@ export function CompetitionDetailsHero({ sx, ...other }: BoxProps) {
           <AnimateText
             component="h1"
             variant="h1"
-            textContent={["Winter Photography Competition", "Round 1"]}
+            textContent={competition.title}
             variants={varFade("inUp", { distance: 24 })}
             sx={{
               color: "common.white",
@@ -65,58 +118,7 @@ export function CompetitionDetailsHero({ sx, ...other }: BoxProps) {
               },
             }}
           />
-
-          <Box
-            component="ul"
-            sx={{
-              mt: 5,
-              display: "grid",
-              color: "common.white",
-              rowGap: { xs: 5, md: 0 },
-              columnGap: { xs: 2, md: 5 },
-              gridTemplateColumns: {
-                xs: "repeat(2, 1fr)",
-                md: "repeat(4, 1fr)",
-              },
-            }}
-          >
-            {CompetitionSummaryList.map((data) => (
-              <li key={data.title}>
-                <m.div variants={varFade("inUp", { distance: 24 })}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 2, // Space between columns
-                      mb: 2,
-                    }}
-                  >
-                    {/* First Column: Icon */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: 48, // Fixed width for the icon column
-                      }}
-                    >
-                      {data.icon}
-                    </Box>
-
-                    {/* Second Column: Title and Value */}
-                    <Box>
-                      <Typography variant="h6" sx={{ mb: 0.5 }}>
-                        {data.title}
-                      </Typography>
-                      <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                        {data.value}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </m.div>
-              </li>
-            ))}
-          </Box>
+          {renderCompetitionSummaryList()}
         </Box>
       </Container>
     </Box>
@@ -124,50 +126,52 @@ export function CompetitionDetailsHero({ sx, ...other }: BoxProps) {
 }
 
 // ----------------------------------------------------------------------
+type CompetitionHeroCardProps = BoxProps & {
+  title: string;
+  value: string;
+  icon: string;
+};
 
-const CompetitionSummaryList = [
-  {
-    title: "PRIZE MONEY",
-    value: "TK 500000",
-    icon: (
-      <Iconify
-        icon="mdi:currency-usd-circle"
-        width={36}
-        sx={{ color: "primary.main" }}
-      />
-    ),
-  },
-  {
-    title: "TIMELINE",
-    value: "Jan 9, 2014 - Jan 31, 2014",
-    icon: (
-      <Iconify
-        icon="solar:calendar-date-bold"
-        width={36}
-        sx={{ color: "primary.main" }}
-      />
-    ),
-  },
-  {
-    title: "ENROLMENT OPEN FROM",
-    value: "Jan 9, 2014",
-    icon: (
-      <Iconify
-        icon="solar:clock-circle-bold"
-        width={36}
-        sx={{ color: "primary.main" }}
-      />
-    ),
-  },
-  {
-    title: "ENROLMENT ENDS AT",
-    value: "Jan 31, 2014",
-    icon: (
-      <Iconify
-        icon="solar:clock-circle-bold"
-        width={36}
-        sx={{ color: "primary.main" }}
-      />
-    ),
-  },
-];
+function CompetitionHeroCard({
+  title,
+  value,
+  icon,
+  sx,
+  ...other
+}: CompetitionHeroCardProps) {
+  return (
+    <li key={"Prize"}>
+      <m.div variants={varFade("inUp", { distance: 24 })}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+            mb: 2,
+          }}
+        >
+          {/* First Column: Icon */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: 48,
+            }}
+          >
+            <Iconify icon={icon} width={36} sx={{ color: "primary.main" }} />
+          </Box>
+
+          <Box>
+            <Typography variant="h6" sx={{ mb: 0.5 }}>
+              {title}
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+              {value}
+            </Typography>
+          </Box>
+        </Box>
+      </m.div>
+    </li>
+  );
+}
