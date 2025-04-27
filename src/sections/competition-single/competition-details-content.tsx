@@ -12,11 +12,13 @@ import { Label } from "@/components/label";
 import { Markdown } from "@/components/markdown";
 
 // ----------------------------------------------------------------------
-type Props = {
+type ContestDetailsContentProps = {
   competition: ICompetition;
 };
 
-export function ContestDetailsContent({ competition }: Props) {
+export function ContestDetailsContent({
+  competition,
+}: ContestDetailsContentProps) {
   const renderHead = () => (
     <>
       <Box sx={{ mt: 3, mb: 2, display: "flex" }}>

@@ -107,7 +107,7 @@ export function CompetitionDetailsHero({
           <AnimateText
             component="h1"
             variant="h1"
-            textContent={["Winter Photography Competition", "Round 1"]}
+            textContent={competition.title}
             variants={varFade("inUp", { distance: 24 })}
             sx={{
               color: "common.white",
