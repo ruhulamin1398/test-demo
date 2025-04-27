@@ -3,7 +3,6 @@ import ContentSubmission from "@/components/content-submission";
 import { Iconify } from "@/components/iconify";
 import { ICompetition } from "@/interfaces";
 import { ContestDateTimeLine } from "@/sections/competition-single/contest-date-timeline";
-import { ContestTimeLineData } from "@/sections/competition-single/view/competition-sidebar";
 import { Box, Grid2 as Grid, IconButton, Typography } from "@mui/material";
 import React from "react";
 

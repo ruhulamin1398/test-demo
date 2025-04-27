@@ -31,9 +31,14 @@ const ContentSubmission = ({ competitionId, title, date }: Props) => {
     if (!file || !competitionId) return;
     try {
       const uploadbleContent = file as File;
-      const response = await uploadFile(uploadbleContent, "/api/upload", {
-        competitionId: competitionId,
-      });
+      const response = await uploadFile(
+        uploadbleContent,
+        `/api/upload/competition-image`,
+        {
+          competitionId: competitionId,
+          roundId: "round123",
+        }
+      );
       if (response.data) {
         // TODO: Handle the uploaded image URL here if you want to display it after upload
       } else {
