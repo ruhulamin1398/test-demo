@@ -25,58 +25,28 @@ export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
-      credentials: {
-        firstName: { label: "First Name", type: "text" },
-        lastName: { label: "Last Name", type: "text" },
-        email: { label: "Email", type: "email" },
-        phone: { label: "Phone", type: "text" },
-        password: { label: "Password", type: "password" },
-        requestType: { label: "requestType", type: "text" },
-      },
-      async authorize(credentials) {
+      type: "credentials",
+      id: "credentials",
+      credentials: {},
+      async authorize(_credentials, req) {
+        const { email, password } = req.body as {
+          email: string;
+          password: string;
+        };
+        console.log("user credentials", req.body, email, password);
         try {
-          if (!credentials) {
-            throw new Error("Missing credentials");
-          }
+          const { data } = await client.mutate({
+            mutation: LOGIN_MUTATION,
+            variables: { username: email, password },
+          });
 
-          const { firstName, lastName, email, phone, password, requestType } =
-            credentials;
+          console.log("login data is ___________________", data);
 
-          if (requestType === "register") {
-            // Perform the registration
-            const { data } = await client.mutate({
-              mutation: REGISTER_MUTATION,
-              variables: {
-                name: firstName,
-                firstName,
-                email,
-                phoneNumber: { number: phone, countryCode: "+880" },
-                password,
-                lastName,
-              },
-            });
-            console.log("register data is ___________________", data);
-
-            if (data?.createUser?.user) {
-              return data.createUser.user;
-            } else {
-              throw new Error("Registration failed. Please try again.");
-            }
-          } else {
-            const { data } = await client.mutate({
-              mutation: LOGIN_MUTATION,
-              variables: { email, password },
-            });
-
-            if (data?.login?.user) {
-              return data.login.user;
-            }
-
-            throw new Error("Invalid email or password.");
+          if (data?.login?.user) {
+            return data.login.user;
           }
         } catch (error) {
-          console.error("Error during authentication:", error);
-          throw new Error("Authentication failed.");
+          throw error;
         }
       },
     }),
