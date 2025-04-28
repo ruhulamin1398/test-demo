@@ -50,26 +50,52 @@ export function HomeFeaturedContestCarousel({
     },
     [Autoplay({ playOnInit: true })]
   );
-  const renderLoading = () => <CompetitionItemSkeleton />;
+  const renderLoading = () => (
+    <Box
+      sx={[
+        () => ({
+          gap: 3,
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "repeat(1, 1fr)",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
+            lg: "repeat(4, 1fr)",
+          },
+        }),
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+      {...other}
+    >
+      <CompetitionItemSkeleton itemCount={3} />{" "}
+    </Box>
+  );
+  const renderList = () => {
+    return (
+      <>
+        <Carousel
+          carousel={carousel}
+          slotProps={{ slide: { py: 3 } }}
+          sx={{ px: 0.5 }}
+        >
+          {list.map((item) => (
+            <SingleCompetitionCard
+              key={item.id}
+              item={item}
+              handleEnrollment={handleOpenEnrollmentConfirmationDialog}
+            />
+          ))}
+        </Carousel>
+        <CarouselArrowFloatButtons
+          {...carousel.arrows}
+          options={carousel.options}
+        />
+      </>
+    );
+  };
   return (
     <Box sx={{ mb: 3, paddingX: 3, position: "relative" }} {...other}>
-      <Carousel
-        carousel={carousel}
-        slotProps={{ slide: { py: 3 } }}
-        sx={{ px: 0.5 }}
-      >
-        {list.map((item) => (
-          <SingleCompetitionCard
-            key={item.id}
-            item={item}
-            handleEnrollment={handleOpenEnrollmentConfirmationDialog}
-          />
-        ))}
-      </Carousel>
-      <CarouselArrowFloatButtons
-        {...carousel.arrows}
-        options={carousel.options}
-      />
+      {loading ? renderLoading() : renderList()}
 
       <EnrollmentConfirmationDialog
         open={!!openDialog?.competitionId}
