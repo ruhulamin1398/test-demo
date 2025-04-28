@@ -1,7 +1,7 @@
 "use client";
 
-import { z as zod } from "zod";
-import { useState } from "react";
+import { number, z as zod } from "zod";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useBoolean } from "minimal-shared/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,6 +27,12 @@ import { FormHead } from "../components/form-head";
 import { SignUpTerms } from "../components/sign-up-terms";
 import { FormSocials } from "../components/form-socials";
 import { FormDivider } from "../components/form-divider";
+import { useMutation } from "@apollo/client";
+import { REGISTER_MUTATION } from "@/graphql-client/auth";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/store/slices/authSlice";
+import { IUser } from "@/interfaces";
+import { count } from "console";
 
 // ----------------------------------------------------------------------
 
@@ -39,19 +45,36 @@ export const SignUpSchema = zod.object({
     .string()
     .min(1, { message: "Email is required!" })
     .email({ message: "Email must be a valid email address!" }),
-  phone: zod
-    .string()
-    .email({ message: "Phone must be a valid phone address!" }),
+  phone: zod.string(),
   password: zod
     .string()
     .min(1, { message: "Password is required!" })
     .min(6, { message: "Password must be at least 6 characters!" }),
 });
 
+interface RegisterResponse {
+  register: {
+    token: string;
+    user: IUser;
+  };
+}
+
 // ----------------------------------------------------------------------
 
 export function SignUpView() {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const [register, { data, loading, error }] =
+    useMutation<RegisterResponse>(REGISTER_MUTATION);
+
+  useEffect(() => {
+    if (data?.register?.user) {
+      const user = data.register.user;
+      dispatch(setUser(user)); // Assuming you use Redux to manage user state
+      router.push("/");
+    }
+    console.log("Hello Nizam inside useeffect", error);
+  }, [data, error, dispatch, router]);
 
   const showPassword = useBoolean();
 
@@ -78,20 +101,24 @@ export function SignUpView() {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    // try {
-    //   await signUp({
-    //     email: data.email,
-    //     password: data.password,
-    //     firstName: data.firstName,
-    //     lastName: data.lastName,
-    //   });
-    //   await checkUserSession?.();
-    //   router.refresh();
-    // } catch (error) {
-    //   console.error(error);
-    //   const feedbackMessage = getErrorMessage(error);
-    //   setErrorMessage(feedbackMessage);
-    // }
+    console.log(data);
+    try {
+      const { firstName, lastName, email, phone, password } = data;
+      await register({
+        variables: {
+          name: firstName,
+          firstName,
+          email,
+          phoneNumber: { number: phone, countryCode: "+880" },
+          password,
+          lastName,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      const feedbackMessage = getErrorMessage(error);
+      setErrorMessage(feedbackMessage);
+    }
   });
 
   // @TODO: make this workable with the backend
