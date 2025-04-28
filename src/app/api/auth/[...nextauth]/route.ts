@@ -1,9 +1,14 @@
 import NextAuth, { Account, AuthOptions, User } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import TwitterProvider from "next-auth/providers/twitter";
 import { client } from "@/lib/apolloClient";
-import { SOCIAL_LOGIN_MUTATION } from "@/graphql-client/auth";
+import {
+  LOGIN_MUTATION,
+  REGISTER_MUTATION,
+  SOCIAL_LOGIN_MUTATION,
+} from "@/graphql-client/auth";
 import { AuthProviderEnum, IUser } from "@/interfaces";
 import { JWT } from "next-auth/jwt";
 import { AdapterUser } from "next-auth/adapters";
@@ -18,6 +23,64 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
   },
   providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        firstName: { label: "First Name", type: "text" },
+        lastName: { label: "Last Name", type: "text" },
+        email: { label: "Email", type: "email" },
+        phone: { label: "Phone", type: "text" },
+        password: { label: "Password", type: "password" },
+        requestType: { label: "requestType", type: "text" },
+      },
+      async authorize(credentials) {
+        try {
+          if (!credentials) {
+            throw new Error("Missing credentials");
+          }
+
+          const { firstName, lastName, email, phone, password, requestType } =
+            credentials;
+
+          if (requestType === "register") {
+            // Perform the registration
+            const { data } = await client.mutate({
+              mutation: REGISTER_MUTATION,
+              variables: {
+                name: firstName,
+                firstName,
+                email,
+                phoneNumber: { number: phone, countryCode: "+880" },
+                password,
+                lastName,
+              },
+            });
+            console.log("register data is ___________________", data);
+
+            if (data?.createUser?.user) {
+              return data.createUser.user;
+            } else {
+              throw new Error("Registration failed. Please try again.");
+            }
+          } else {
+            const { data } = await client.mutate({
+              mutation: LOGIN_MUTATION,
+              variables: { email, password },
+            });
+
+            if (data?.login?.user) {
+              return data.login.user;
+            }
+
+            throw new Error("Invalid email or password.");
+          }
+        } catch (error) {
+          console.error("Error during authentication:", error);
+          throw new Error("Authentication failed.");
+        }
+      },
+    }),
+
     GoogleProvider({
       clientId:
         process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||

@@ -36,6 +36,7 @@ import { handleGraphQLError } from "@/utils/errorHandling";
 import useNotification from "@/app/hooks/useNotification";
 import { FormSocials } from "../components/form-socials";
 import { FormDivider } from "../components/form-divider";
+import { signIn } from "next-auth/react";
 
 // ----------------------------------------------------------------------
 
@@ -67,8 +68,8 @@ export function SignInView() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const defaultValues: SignInSchemaType = {
-    email: "demo@minimals.cc",
-    password: "123456",
+    email: "hello@gmail.com",
+    password: "@2Minimal",
   };
 
   const methods = useForm<SignInSchemaType>({
@@ -82,26 +83,40 @@ export function SignInView() {
   } = methods;
 
   const onSubmit = handleSubmit(async ({ email, password }) => {
-    console.log("handle submit data", data);
-    await login({
-      variables: { name: "RuhulAmin", password },
-    });
+    try {
+      const result = await signIn("credentials", {
+        redirect: true,
+        email,
+        password,
+        callbackUrl: "/",
+      });
+
+      if (result?.error) {
+        setErrorMessage(result.error);
+      } else {
+        notify({ severity: "success", message: "Successfully logged in!" });
+        router.push("/");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrorMessage("An unexpected error occurred. Please try again.");
+    }
   });
 
-  useEffect(() => {
-    if (data?.login?.user) {
-      const user = data.login.user;
-      notify({ severity: "success", message: "Successfully logged in!" });
-      dispatch(setUser(user)); // Assuming you use Redux to manage user state
-      console.log("logged in user - user pass ", user);
+  // useEffect(() => {
+  //   if (data?.login?.user) {
+  //     const user = data.login.user;
+  //     notify({ severity: "success", message: "Successfully logged in!" });
+  //     dispatch(setUser(user)); // Assuming you use Redux to manage user state
+  //     console.log("logged in user - user pass ", user);
 
-      router.push("/");
-    }
+  //     router.push("/");
+  //   }
 
-    if (error) {
-      setErrorMessage(handleGraphQLError(error));
-    }
-  }, [data, error, dispatch, router, notify]);
+  //   if (error) {
+  //     setErrorMessage(handleGraphQLError(error));
+  //   }
+  // }, [data, error, dispatch, router, notify]);
 
   const renderForm = () => (
     <Box sx={{ gap: 3, display: "flex", flexDirection: "column" }}>
