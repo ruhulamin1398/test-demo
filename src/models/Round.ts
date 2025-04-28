@@ -34,6 +34,8 @@ const roundSchema = new Schema<IRoundDocument>(
       ref: "Competition",
       required: true,
     },
+    submissionStartDate: { type: Date, required: false },
+    submissionEndDate: { type: Date, required: false },
   },
   { timestamps: true }
 );

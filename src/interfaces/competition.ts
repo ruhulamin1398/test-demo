@@ -44,8 +44,9 @@ export interface ICompetition {
   createdAt: string;
   updatedAt: string;
   status: CompetitionStatusEnum;
-  /////
-  detailsHref: string;
+  haveRoundWiseSubmission: boolean;
+  slug?: string;
+  activeRound?: IRound;
 }
 
 export interface PaginationInput {

@@ -97,6 +97,7 @@ const competitionResolver = {
           mediaUrl: string;
           submissionType: SubmissionTypeEnum;
           status: CompetitionStatusEnum;
+          haveRoundWiseSubmission: boolean;
         };
       }
     ): Promise<ICompetition> => {
@@ -111,6 +112,7 @@ const competitionResolver = {
           submissionType,
           enrolmentDeadline,
           status,
+          haveRoundWiseSubmission,
         } = input;
         const newCompetition = new Competition({
           title,
@@ -124,6 +126,7 @@ const competitionResolver = {
           enrolmentType,
           price,
           submissionType,
+          haveRoundWiseSubmission,
           status: status || CompetitionStatusEnum.DRAFT, // Default to DRAFT if not provided
         });
 
@@ -160,6 +163,7 @@ const competitionResolver = {
           mediaUrl: string;
           submissionType: SubmissionTypeEnum;
           status: CompetitionStatusEnum;
+          haveRoundWiseSubmission: boolean;
         };
         id: string;
       }
@@ -175,6 +179,7 @@ const competitionResolver = {
           submissionType,
           enrolmentDeadline,
           status,
+          haveRoundWiseSubmission,
         } = input;
         const competition = await Competition.findByIdAndUpdate(
           id,
@@ -190,6 +195,7 @@ const competitionResolver = {
             enrolmentType,
             price,
             submissionType,
+            haveRoundWiseSubmission,
             status: status || CompetitionStatusEnum.DRAFT, // Default to DRAFT if not provided
           },
           { new: true }

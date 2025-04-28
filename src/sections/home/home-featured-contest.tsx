@@ -7,7 +7,6 @@ import { Iconify } from "@/components/iconify";
 import { HomeFeaturedContestCarousel } from "./featured-contest-carousel";
 
 import { RouterLink } from "@/routes/components";
-import { competitions } from "@/_mock/contest";
 
 // ----------------------------------------------------------------------
 
