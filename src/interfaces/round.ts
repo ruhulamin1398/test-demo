@@ -30,6 +30,8 @@ export interface IRound {
   competition: ICompetition;
   createdAt: string;
   updatedAt: string;
+  submissionStartDate: Date;
+  submissionEndDate: Date;
 }
 
 export interface IRoundDocument extends IRound, Document {}
