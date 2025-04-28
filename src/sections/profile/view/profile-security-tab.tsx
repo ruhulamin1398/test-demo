@@ -12,6 +12,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { toast } from "@/components/snackbar";
 import { Iconify } from "@/components/iconify";
 import { Form, Field } from "@/components/hook-form";
+import { CardHeader } from "@mui/material";
 
 // ----------------------------------------------------------------------
 
@@ -75,12 +76,15 @@ export function ProfileSecurityTab() {
     <Form methods={methods} onSubmit={onSubmit}>
       <Card
         sx={{
-          p: 3,
+          px: 3,
+          pb: 3,
           gap: 3,
           display: "flex",
           flexDirection: "column",
         }}
       >
+        <CardHeader title="Change Password" />
+
         <Field.Text
           name="oldPassword"
           type={showPassword.value ? "text" : "password"}

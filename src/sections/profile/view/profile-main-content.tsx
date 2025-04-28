@@ -1,9 +1,7 @@
 import Box from "@mui/material/Box";
-import { _coursesContinue, _coursesFeatured, _tours } from "@/_mock";
-import { RunningCompetitions } from "../running-competitions";
-import { CompletedCompetitions } from "../completed-competitions";
-import { CourseFeatured } from "../course-featured";
-
+import { competitions } from "@/_mock/contest";
+import { ProfilePageCompetition } from "../profile-page-competitions";
+import { RunningCompetitions } from "../my-competiton-tab/my-competition-lit";
 // ----------------------------------------------------------------------
 
 export function ProfileMainContent() {
@@ -21,19 +19,17 @@ export function ProfileMainContent() {
             },
           }}
         > */}
-        <RunningCompetitions
-          title="Enrolled Competitions"
-          list={_coursesContinue}
-        />
-        <CompletedCompetitions
+        <ProfilePageCompetition title="Active Contests" list={competitions} />
+
+        {/* <CompletedCompetitions
           title="Completed Competitions"
           list={_coursesContinue}
-        />
+        /> */}
         {/* </Box> */}
-        <CourseFeatured
+        {/* <CourseFeatured
           title="Competitions You May Enroll"
           list={_coursesFeatured}
-        />
+        /> */}
       </Box>
     </>
   );

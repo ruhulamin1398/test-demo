@@ -49,41 +49,49 @@ export function CompetitionSidebar() {
       id: 1,
       title: "Photo Competition  round 2",
       reminderAt: "50 minutes ago",
+      status: "submitted",
     },
     {
       id: 2,
       title: "Art Competition  round 1",
       reminderAt: "1 Days ago",
+      status: "In Review",
     },
     {
       id: 3,
       title: "Photo Competition  round 2",
       reminderAt: "2 Days ago",
+      status: "Approved",
     },
     {
       id: 4,
       title: "Photo Competition  round 2",
       reminderAt: "2 Days ago",
+      status: "submitted",
     },
     {
       id: 5,
       title: "Photo Competition  round 2",
       reminderAt: "2 Days ago",
+      status: "Approved",
     },
     {
       id: 6,
       title: "Photo Competition  round 2",
       reminderAt: "2 Days ago",
+      status: "In Review",
     },
     {
       id: 7,
       title: "Photo Competition  round 2",
       reminderAt: "2 Days ago",
+      status: "submitted",
     },
     {
       id: 8,
       title: "Photo Competition  round 2",
       reminderAt: "2 Days ago",
+      status: "submitted",
     },
   ];
 
