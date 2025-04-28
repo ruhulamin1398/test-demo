@@ -7,20 +7,23 @@ import {
   CarouselArrowFloatButtons,
 } from "@/components/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import { SingleCompetitionCard } from "../common/single-competition-card";
 import { ICompetition } from "@/interfaces";
 import { useCompetitionHandleEnrollmentDialog } from "@/app/hooks/competitionHandleErollmentDialogHook";
 import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
+import { CompetitionItemSkeleton } from "@/app/competition/components/CompetitionItemSkeleton";
+import { SingleCompetitionCard } from "../common/single-competition-card";
 
 // ----------------------------------------------------------------------
 
 type Props = BoxProps & {
   title: string;
+  loading?: boolean;
   list: ICompetition[];
 };
 
 export function HomeFeaturedContestCarousel({
   title,
+  loading,
   list,
   sx,
   ...other
@@ -47,7 +50,7 @@ export function HomeFeaturedContestCarousel({
     },
     [Autoplay({ playOnInit: true })]
   );
-
+  const renderLoading = () => <CompetitionItemSkeleton />;
   return (
     <Box sx={{ mb: 3, paddingX: 3, position: "relative" }} {...other}>
       <Carousel
