@@ -64,18 +64,18 @@ interface RegisterResponse {
 
 export function SignUpView() {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const [register, { data, loading, error }] =
-    useMutation<RegisterResponse>(REGISTER_MUTATION);
+  // const dispatch = useDispatch();
+  // const [register, { data, loading, error }] =
+  //   useMutation<RegisterResponse>(REGISTER_MUTATION);
 
-  useEffect(() => {
-    if (data?.register?.user) {
-      const user = data.register.user;
-      dispatch(setUser(user)); // Assuming you use Redux to manage user state
-      router.push("/");
-    }
-    console.log("Hello Nizam inside useeffect", error);
-  }, [data, error, dispatch, router]);
+  // useEffect(() => {
+  //   if (data?.register?.user) {
+  //     const user = data.register.user;
+  //     dispatch(setUser(user)); // Assuming you use Redux to manage user state
+  //     router.push("/");
+  //   }
+  //   console.log("Hello Nizam inside useeffect", error);
+  // }, [data, error, dispatch, router]);
 
   const showPassword = useBoolean();
 
