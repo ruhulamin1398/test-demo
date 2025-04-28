@@ -6,6 +6,7 @@ import {
   IPrizesAndRewards,
 } from "@/interfaces/competition";
 import mongoose, { Schema } from "mongoose";
+import { boolean } from "zod";
 
 const PrizesAndRewardsSchema = new Schema<IPrizesAndRewards>({
   title: { type: String, required: true },
@@ -34,6 +35,7 @@ const competitionSchema = new Schema<ICompetitionDocument>(
       default: EnrolmentTypeEnum.FREE,
     },
     price: { type: Number, required: true, default: 0 },
+    haveRoundWiseSubmission: { type: Boolean, required: false, default: false },
     mediaUrl: { type: String },
     submissionType: {
       type: String,
@@ -44,6 +46,12 @@ const competitionSchema = new Schema<ICompetitionDocument>(
       type: String,
       enum: Object.values(CompetitionStatusEnum) as CompetitionStatusEnum[], // Explicit cast
       default: CompetitionStatusEnum.DRAFT,
+    },
+    slug: { type: String, required: false },
+    activeRound: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Round",
+      required: false,
     },
   },
   { timestamps: true }

@@ -6,33 +6,36 @@ import Link from "@mui/material/Link";
 import Card from "@mui/material/Card";
 import Avatar from "@mui/material/Avatar";
 import CardHeader from "@mui/material/CardHeader";
-import { LinearProgress, linearProgressClasses } from "@mui/material";
+import {
+  Button,
+  LinearProgress,
+  linearProgressClasses,
+  Pagination,
+  SxProps,
+  Theme,
+  Typography,
+} from "@mui/material";
 import { varAlpha } from "minimal-shared/utils";
+import { RouterLink } from "@/routes/components";
+import { Iconify } from "@/components/iconify";
+import { ICompetition } from "@/interfaces";
+import { ComponentBox } from "@/layouts/component-box";
 
 // ----------------------------------------------------------------------
 
-type Props = CardProps & {
-  title?: string;
-  subheader?: string;
-  list: {
-    id: string;
-    title: string;
-    coverUrl: string;
-    totalLesson: number;
-    currentLesson: number;
-  }[];
+const componentBoxStyles: SxProps<Theme> = {
+  flexDirection: "column",
 };
 
-export function RunningCompetitions({
-  title,
-  subheader,
-  list,
-  sx,
-  ...other
-}: Props) {
+type Props = CardProps & {
+  title?: string;
+  list: ICompetition[];
+};
+
+export function MyCompetitionList({ title, list, sx, ...other }: Props) {
   return (
     <Card sx={sx} {...other}>
-      <CardHeader title={title} subheader={subheader} />
+      <CardHeader title={title} />
 
       <Box
         sx={{
@@ -45,6 +48,15 @@ export function RunningCompetitions({
         {list.map((item) => (
           <Item key={item.id} item={item} />
         ))}
+
+        {/* <ComponentBox sx={componentBoxStyles}> */}
+        <Pagination
+          shape="rounded"
+          count={10}
+          variant="outlined"
+          sx={{ display: "flex", justifyContent: "flex-end" }}
+        />
+        {/* </ComponentBox> */}
       </Box>
     </Card>
   );
@@ -53,11 +65,11 @@ export function RunningCompetitions({
 // ----------------------------------------------------------------------
 
 type ItemProps = BoxProps & {
-  item: Props["list"][number];
+  item: ICompetition;
 };
 
 function Item({ item, sx, ...other }: ItemProps) {
-  const percent = (item.currentLesson / item.totalLesson) * 100;
+  const percent = 20;
 
   return (
     <Box
@@ -69,7 +81,7 @@ function Item({ item, sx, ...other }: ItemProps) {
     >
       <Avatar
         alt={item.title}
-        src={item.coverUrl}
+        src={item.mediaUrl}
         variant="rounded"
         sx={{ width: 56, height: 56 }}
       />
@@ -82,15 +94,31 @@ function Item({ item, sx, ...other }: ItemProps) {
           flexDirection: "column",
         }}
       >
-        <Link color="inherit" noWrap sx={{ mb: 0.5, typography: "subtitle2" }}>
+        <Link
+          color="inherit"
+          href={item.detailsHref}
+          noWrap
+          sx={{ mb: 0.5, typography: "subtitle2" }}
+        >
           {item.title}
         </Link>
-
+        <Box
+          sx={{
+            gap: 0.5,
+            display: "flex",
+            alignItems: "center",
+            typography: "caption",
+            color: "text.secondary",
+          }}
+        >
+          <Iconify width={16} icon="solar:calendar-date-bold" />
+          {"Ends in 2 days"}
+        </Box>
         {/* <Box
           component="span"
           sx={{ color: "text.secondary", typography: "caption" }}
         >
-          Task: {item.currentLesson}/{item.totalLesson}
+          Task: 5/3
         </Box> */}
 
         <Box
@@ -99,6 +127,7 @@ function Item({ item, sx, ...other }: ItemProps) {
             display: "flex",
             alignItems: "center",
             gap: 2,
+            my: 1,
           }}
         >
           <LinearProgress

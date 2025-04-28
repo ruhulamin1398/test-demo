@@ -18,13 +18,17 @@ import { RouterLink } from "@/routes/components";
 import { ProfileHomeTab } from "./profile-home-tab";
 import { ProfileAccountTab } from "./profile-account-tab";
 import { ProfileSecurityTab } from "./profile-security-tab";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { CONFIG } from "@/global-config";
+import { MyCompetitionsTab } from "./my-competitions-tab";
 
 // ----------------------------------------------------------------------
 
 const NAV_ITEMS = [
   {
     value: "",
-    label: "Profile",
+    label: "DashBoard",
     icon: <Iconify width={24} icon="solar:user-id-bold" />,
   },
   {
@@ -33,15 +37,9 @@ const NAV_ITEMS = [
     icon: <Iconify width={24} icon="solar:user-bold" />,
   },
   {
-    value: "enrollments",
-    label: "Enrollments",
+    value: "my-competitions",
+    label: "My Competitions",
     icon: <Iconify width={24} icon="solar:book-bold" />,
-  },
-
-  {
-    label: "Security",
-    value: "security",
-    icon: <Iconify width={24} icon="ic:round-vpn-key" />,
   },
 ];
 
@@ -56,9 +54,12 @@ export function ProfileView() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const selectedTab = searchParams.get(TAB_PARAM) ?? "";
-
   const pageProgress = useScrollProgress();
-  const { user } = useMockedUser();
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  console.log(" current user ", user, " ______________________");
+  //
+  // const { user } = useMockedUser();
 
   const { onBackToTop, isVisible } = useBackToTop("90%");
 
@@ -78,8 +79,11 @@ export function ProfileView() {
         <Card sx={{ mb: 3, height: 290 }}>
           <ProfilePageHero
             role={_userAbout.role}
-            name={user?.displayName}
-            avatarUrl={user?.photoURL}
+            name={`${user?.firstName} ${user?.lastName}`}
+            avatarUrl={
+              user?.profilePicture ??
+              `${CONFIG.assetsDir}/assets/images/mock/avatar/avatar-5.webp`
+            }
             coverUrl={_userAbout.coverUrl}
           />
 
@@ -112,7 +116,8 @@ export function ProfileView() {
 
         {selectedTab === "" && <ProfileHomeTab />}
         {selectedTab === "account" && <ProfileAccountTab />}
-        {selectedTab === "security" && <ProfileSecurityTab />}
+        {selectedTab === "submissions" && <ProfileAccountTab />}
+        {selectedTab === "my-competitions" && <MyCompetitionsTab />}
       </Container>
     </>
   );

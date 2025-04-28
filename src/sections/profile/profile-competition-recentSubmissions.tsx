@@ -14,13 +14,14 @@ import { varFade } from "@/components/animate";
 // ----------------------------------------------------------------------
 
 type Props = CardProps & {
-  title: string;
+  title?: string;
   list: {
     id: string;
     title: string;
     totalTask: number;
     currentTask: number;
     reminderAt: string;
+    status: string;
   }[];
 };
 
@@ -125,12 +126,7 @@ function Item({ item, sx, ...other }: CourseItemProps) {
                 gap: 2,
               }}
             >
-              <Box
-                component="span"
-                sx={{
-                  width: 50,
-                }}
-              >
+              <Box component="span">
                 <Typography variant="caption" color="text.secondary" noWrap>
                   {item.reminderAt}
                 </Typography>
@@ -139,14 +135,19 @@ function Item({ item, sx, ...other }: CourseItemProps) {
               <Box
                 component="span"
                 sx={{
-                  width: 50,
                   typography: "caption",
                   color: "text.secondary",
                   fontWeight: "fontWeightMedium",
                 }}
               >
-                <Link component={RouterLink} href={paths.profile.root}>
-                  View
+                <Link
+                  component={RouterLink}
+                  href={paths.profile.root}
+                  sx={{
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {item.status}
                 </Link>
               </Box>
             </Box>
