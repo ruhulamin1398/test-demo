@@ -33,6 +33,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "@/store/slices/authSlice";
 import { IUser } from "@/interfaces";
 import { count } from "console";
+import { signIn } from "next-auth/react";
 
 // ----------------------------------------------------------------------
 
@@ -104,16 +105,34 @@ export function SignUpView() {
     console.log(data);
     try {
       const { firstName, lastName, email, phone, password } = data;
-      await register({
-        variables: {
-          name: firstName,
-          firstName,
-          email,
-          phoneNumber: { number: phone, countryCode: "+880" },
-          password,
-          lastName,
-        },
+      const result = await signIn("credentials", {
+        redirect: true,
+        firstName,
+        lastName,
+        email,
+        phone,
+        password,
+        callbackUrl: "/",
+        requestType: "register",
       });
+
+      if (result?.error) {
+        console.error("Registration error:", result.error);
+        setErrorMessage(result.error);
+      } else {
+        console.log("Registration and login successful:", result);
+        router.push("/");
+      }
+      // await register({
+      //   variables: {
+      //     name: firstName,
+      //     firstName,
+      //     email,
+      //     phoneNumber: { number: phone, countryCode: "+880" },
+      //     password,
+      //     lastName,
+      //   },
+      // });
     } catch (error) {
       console.error(error);
       const feedbackMessage = getErrorMessage(error);
@@ -206,7 +225,7 @@ export function SignUpView() {
               href={paths.auth.nextAuth.signIn}
               variant="subtitle2"
             >
-              Get started
+              Log in now
             </Link>
           </>
         }

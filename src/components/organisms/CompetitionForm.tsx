@@ -147,6 +147,7 @@ const CompetitionForm = () => {
     mediaUrl: "",
     submissionType: "Photo",
     status: CompetitionStatusEnum.DRAFT,
+    haveRoundWiseSubmission: true,
   };
 
   const competitionValues = recordToModify
@@ -270,6 +271,23 @@ const CompetitionForm = () => {
                   />
                 </Grid>
               )}
+
+              {/* Have Round-Wise Submission */}
+              <Grid size={{ xs: 6, sm: 3 }}>
+                <Field
+                  label="Have Round-Wise Submission"
+                  name="haveRoundWiseSubmission"
+                  component={OutlinedTextField}
+                  select
+                >
+                  <MenuItem key="yes" value={true}>
+                    Yes
+                  </MenuItem>
+                  <MenuItem key="no" value={false}>
+                    No
+                  </MenuItem>
+                </Field>
+              </Grid>
 
               {/* Submission Type */}
               <Grid size={{ xs: 6, sm: 3 }}>
