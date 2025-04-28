@@ -33,7 +33,6 @@ export const authOptions: AuthOptions = {
           email: string;
           password: string;
         };
-        console.log("user credentials", req.body, email, password);
         try {
           const { data } = await client.mutate({
             mutation: LOGIN_MUTATION,
@@ -46,6 +45,7 @@ export const authOptions: AuthOptions = {
             return data.login.user;
           }
         } catch (error) {
+          console.log(error);
           throw error;
         }
       },
