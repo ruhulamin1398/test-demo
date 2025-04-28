@@ -6,6 +6,7 @@ import {
   UsersResponse,
 } from "@/interfaces";
 import { User } from "@/models"; // Assuming your model is exported from this path
+import { error } from "console";
 import { GraphQLError } from "graphql";
 import { NextApiRequest } from "next";
 
@@ -13,7 +14,6 @@ interface PhoneNumberInput {
   countryCode: string;
   number: string;
 }
-
 const resolvers = {
   Query: {
     // Fetch the current logged-in user (using the JWT token from cookies)
@@ -128,7 +128,6 @@ const resolvers = {
             },
           });
         }
-
         // Create a new user instance
         const newUser = new User({
           name,
@@ -138,13 +137,14 @@ const resolvers = {
           lastName,
           phoneNumber,
           isActive: true,
-          authProvider: "CUSTOM", // Set to CUSTOM for regular registration
+          authProvider: "custom", // Set to CUSTOM for regular registration
         });
-
-        // Save the new user to the database
         await newUser.save();
+        const userPlainObject = newUser.toObject();
+        console.log("userPlainObject===============", userPlainObject);
         return { user: newUser };
       } catch (err) {
+        console.log("Error while creating user", err);
         if (
           err instanceof GraphQLError &&
           err.extensions.code === "USER_ALREADY_EXISTS"
