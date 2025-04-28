@@ -17,6 +17,7 @@ import { toast } from "@/components/snackbar";
 import { Form, Field, schemaHelper } from "@/components/hook-form";
 
 import { useMockedUser } from "@/auth/hooks";
+import { ProfileSecurityTab } from "./profile-security-tab";
 
 // ----------------------------------------------------------------------
 
@@ -102,93 +103,96 @@ export function ProfileAccountTab() {
   });
 
   return (
-    <Form methods={methods} onSubmit={onSubmit}>
-      <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Card
-            sx={{
-              pt: 10,
-              pb: 5,
-              px: 3,
-              textAlign: "center",
-            }}
-          >
-            <Field.UploadAvatar
-              name="photoURL"
-              maxSize={3145728}
-              helperText={
-                <Typography
-                  variant="caption"
-                  sx={{
-                    mt: 3,
-                    mx: "auto",
-                    display: "block",
-                    textAlign: "center",
-                    color: "text.disabled",
-                  }}
-                >
-                  Allowed *.jpeg, *.jpg, *.png, *.gif
-                  <br /> max size of {fData(3145728)}
-                </Typography>
-              }
-            />
-
-            <Field.Switch
-              name="isPublic"
-              labelPlacement="start"
-              label="Public profile"
-              sx={{ mt: 5 }}
-            />
-
-            <Button variant="soft" color="error" sx={{ mt: 3 }}>
-              Delete user
-            </Button>
-          </Card>
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 8 }}>
-          <Card sx={{ p: 3 }}>
-            <Box
+    <>
+      <Form methods={methods} onSubmit={onSubmit}>
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Card
               sx={{
-                rowGap: 3,
-                columnGap: 2,
-                display: "grid",
-                gridTemplateColumns: {
-                  xs: "repeat(1, 1fr)",
-                  sm: "repeat(2, 1fr)",
-                },
+                pt: 10,
+                pb: 5,
+                px: 3,
+                textAlign: "center",
               }}
             >
-              <Field.Text name="displayName" label="Name" />
-              <Field.Text name="email" label="Email address" />
-              <Field.Phone name="phoneNumber" label="Phone number" />
-              <Field.Text name="address" label="Address" />
-
-              <Field.CountrySelect
-                name="country"
-                label="Country"
-                placeholder="Choose a country"
+              <Field.UploadAvatar
+                name="photoURL"
+                maxSize={3145728}
+                helperText={
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      mt: 3,
+                      mx: "auto",
+                      display: "block",
+                      textAlign: "center",
+                      color: "text.disabled",
+                    }}
+                  >
+                    Allowed *.jpeg, *.jpg, *.png, *.gif
+                    <br /> max size of {fData(3145728)}
+                  </Typography>
+                }
               />
 
-              <Field.Text name="state" label="State/region" />
-              <Field.Text name="city" label="City" />
-              <Field.Text name="zipCode" label="Zip/code" />
-            </Box>
+              <Field.Switch
+                name="isPublic"
+                labelPlacement="start"
+                label="Public profile"
+                sx={{ mt: 5 }}
+              />
 
-            <Stack spacing={3} sx={{ mt: 3, alignItems: "flex-end" }}>
-              <Field.Text name="about" multiline rows={4} label="About" />
+              <Button variant="soft" color="error" sx={{ mt: 3 }}>
+                Delete user
+              </Button>
+            </Card>
+          </Grid>
 
-              <LoadingButton
-                type="submit"
-                variant="contained"
-                loading={isSubmitting}
+          <Grid size={{ xs: 12, md: 8 }}>
+            <Card sx={{ p: 3, mb: 3 }}>
+              <Box
+                sx={{
+                  rowGap: 3,
+                  columnGap: 2,
+                  display: "grid",
+                  gridTemplateColumns: {
+                    xs: "repeat(1, 1fr)",
+                    sm: "repeat(2, 1fr)",
+                  },
+                }}
               >
-                Save changes
-              </LoadingButton>
-            </Stack>
-          </Card>
+                <Field.Text name="displayName" label="Name" />
+                <Field.Text name="email" label="Email address" />
+                <Field.Phone name="phoneNumber" label="Phone number" />
+                <Field.Text name="address" label="Address" />
+
+                <Field.CountrySelect
+                  name="country"
+                  label="Country"
+                  placeholder="Choose a country"
+                />
+
+                <Field.Text name="state" label="State/region" />
+                <Field.Text name="city" label="City" />
+                <Field.Text name="zipCode" label="Zip/code" />
+              </Box>
+
+              <Stack spacing={3} sx={{ mt: 3, alignItems: "flex-end" }}>
+                <Field.Text name="about" multiline rows={4} label="About" />
+
+                <LoadingButton
+                  type="submit"
+                  variant="contained"
+                  loading={isSubmitting}
+                >
+                  Save changes
+                </LoadingButton>
+              </Stack>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
-    </Form>
+      </Form>
+      <ProfileSecurityTab />
+    </>
   );
 }

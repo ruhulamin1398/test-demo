@@ -26,20 +26,20 @@ export function ProfileSummaryOverview() {
           }}
         >
           <ProfileWidgetSummary
-            title="Competition Attened"
+            title="Active Contests"
             total={50}
             icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
           />
 
           <ProfileWidgetSummary
-            title="Competition Running"
+            title="Total Submissions"
             total={50}
             color="success"
             icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-completed.svg`}
           />
 
           <ProfileWidgetSummary
-            title="Prizes Win"
+            title="Contest Wins"
             total={100}
             color="secondary"
             icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-certificates.svg`}
