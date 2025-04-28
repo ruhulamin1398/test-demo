@@ -1,9 +1,9 @@
-import type { BoxProps } from '@mui/material/Box';
+import type { BoxProps } from "@mui/material/Box";
 import { signIn } from "next-auth/react";
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 
-import { GithubIcon, GoogleIcon, TwitterIcon } from '@/assets/icons';
+import { GithubIcon, GoogleIcon, TwitterIcon } from "@/assets/icons";
 
 // ----------------------------------------------------------------------
 
@@ -13,30 +13,24 @@ type FormSocialsProps = BoxProps & {
   signInWithTwitter?: () => void;
 };
 
-export function FormSocials({
-  sx,
-  ...other
-}: FormSocialsProps) {
+export function FormSocials({ sx, ...other }: FormSocialsProps) {
   return (
     <Box
       sx={[
         () => ({
           gap: 1.5,
-          display: 'flex',
-          justifyContent: 'center',
+          display: "flex",
+          justifyContent: "center",
         }),
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
       {...other}
     >
-      <IconButton color="inherit" onClick={() => signIn("google",{callbackUrl:"/"})}>
+      <IconButton
+        color="inherit"
+        onClick={() => signIn("google", { callbackUrl: "/" })}
+      >
         <GoogleIcon width={22} />
-      </IconButton>
-      <IconButton color="inherit" onClick={() => signIn("github")}>
-        <GithubIcon width={22} />
-      </IconButton>
-      <IconButton color="inherit" onClick={() => signIn("twitter")}>
-        <TwitterIcon width={22} />
       </IconButton>
     </Box>
   );

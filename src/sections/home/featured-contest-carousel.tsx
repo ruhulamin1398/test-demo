@@ -67,7 +67,7 @@ export function HomeFeaturedContestCarousel({
       ]}
       {...other}
     >
-      <CompetitionItemSkeleton itemCount={3} />{" "}
+      <CompetitionItemSkeleton itemCount={4} />{" "}
     </Box>
   );
   const renderList = () => {
