@@ -20,7 +20,6 @@ const enrolmentSubmissionSchema = new mongoose.Schema(
       required: true,
     },
     submittedContnt: { type: String, required: false },
-
     score: { type: Number, default: 1 },
   },
   { timestamps: true }
