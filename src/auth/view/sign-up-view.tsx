@@ -105,15 +105,20 @@ export function SignUpView() {
     console.log(data);
     try {
       const { firstName, lastName, email, phone, password } = data;
+      const userData = await register({
+        variables: {
+          name: firstName,
+          firstName,
+          email,
+          phoneNumber: { number: phone, countryCode: "+880" },
+          password,
+          lastName,
+        },
+      });
       const result = await signIn("credentials", {
-        redirect: true,
-        firstName,
-        lastName,
+        redirect: false,
         email,
-        phone,
         password,
-        callbackUrl: "/",
-        requestType: "register",
       });
 
       if (result?.error) {
@@ -123,16 +128,6 @@ export function SignUpView() {
         console.log("Registration and login successful:", result);
         router.push("/");
       }
-      // await register({
-      //   variables: {
-      //     name: firstName,
-      //     firstName,
-      //     email,
-      //     phoneNumber: { number: phone, countryCode: "+880" },
-      //     password,
-      //     lastName,
-      //   },
-      // });
     } catch (error) {
       console.error(error);
       const feedbackMessage = getErrorMessage(error);

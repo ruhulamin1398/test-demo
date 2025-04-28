@@ -226,16 +226,19 @@ const resolvers = {
     login: async (
       _parent: unknown,
       {
-        email,
+        username,
         password,
       }: {
-        email: string;
+        username: string;
         password: string;
       }
     ) => {
+      console.log("HERE YOU Go!", { username, password });
       try {
-        const user = await User.findOne({ email }).select("+password");
-
+        const user = await User.findOne({ email: username }).select(
+          "+password"
+        );
+        console.log("Hey your data is", { email: username }, user);
         if (!user)
           throw new GraphQLError("Invalid email or password", {
             extensions: {

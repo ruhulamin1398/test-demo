@@ -25,58 +25,28 @@ export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
-      credentials: {
-        firstName: { label: "First Name", type: "text" },
-        lastName: { label: "Last Name", type: "text" },
-        email: { label: "Email", type: "email" },
-        phone: { label: "Phone", type: "text" },
-        password: { label: "Password", type: "password" },
-        requestType: { label: "requestType", type: "text" },
-      },
-      async authorize(credentials) {
+      type: "credentials",
+      id: "credentials",
+      credentials: {},
+      async authorize(_credentials, req) {
+        const { email, password } = req.body as {
+          email: string;
+          password: string;
+        };
         try {
-          if (!credentials) {
-            throw new Error("Missing credentials");
-          }
+          const { data } = await client.mutate({
+            mutation: LOGIN_MUTATION,
+            variables: { username: email, password },
+          });
 
-          const { firstName, lastName, email, phone, password, requestType } =
-            credentials;
+          console.log("login data is ___________________", data);
 
-          if (requestType === "register") {
-            // Perform the registration
-            const { data } = await client.mutate({
-              mutation: REGISTER_MUTATION,
-              variables: {
-                name: firstName,
-                firstName,
-                email,
-                phoneNumber: { number: phone, countryCode: "+880" },
-                password,
-                lastName,
-              },
-            });
-            console.log("register data is ___________________", data);
-
-            if (data?.createUser?.user) {
-              return data.createUser.user;
-            } else {
-              throw new Error("Registration failed. Please try again.");
-            }
-          } else {
-            const { data } = await client.mutate({
-              mutation: LOGIN_MUTATION,
-              variables: { email, password },
-            });
-
-            if (data?.login?.user) {
-              return data.login.user;
-            }
-
-            throw new Error("Invalid email or password.");
+          if (data?.login?.user) {
+            return data.login.user;
           }
         } catch (error) {
-          console.error("Error during authentication:", error);
-          throw new Error("Authentication failed.");
+          console.log(error);
+          throw error;
         }
       },
     }),
@@ -120,41 +90,45 @@ export const authOptions: AuthOptions = {
       user: User | AdapterUser;
       account: Account | null;
     }) {
+      console.log("token ", token, "user", user, "account ", account);
       // When the user signs in with a provider, we get an account object.
       if (account && user) {
-        const email = user.email;
-        // Optionally, parse the user's name into first and last names
-        const [firstName = "", lastName = ""] = user.name?.split(" ") || [];
-        const socialId = user.id;
-        const phoneNumber: PhoneNumberInput = {
-          countryCode: "+880",
-          number: "01852525225",
-        };
+        // Check if login was with a social provider (Google, GitHub, Twitter)
+        if (account.provider !== "credentials") {
+          console.log(
+            " Social login mutation called +++++++++++++++__________________________"
+          );
+          const email = user.email;
+          const [firstName = "", lastName = ""] = user.name?.split(" ") || [];
+          const socialId = user.id;
+          const phoneNumber: PhoneNumberInput = {
+            countryCode: "+880",
+            number: "01852525225",
+          };
 
-        try {
-          const authProvider: AuthProviderEnum = AuthProviderEnum.GOOGLE;
-          const { data } = await client.mutate({
-            mutation: SOCIAL_LOGIN_MUTATION,
-            variables: {
-              socialId: socialId,
-              email: email,
-              firstName: firstName,
-              lastName: lastName,
-              phoneNumber: phoneNumber,
-              authProvider: authProvider,
-            },
-          });
+          try {
+            const authProvider: AuthProviderEnum = AuthProviderEnum.GOOGLE; // You can map account.provider to AuthProviderEnum properly here
+            const { data } = await client.mutate({
+              mutation: SOCIAL_LOGIN_MUTATION,
+              variables: {
+                socialId: socialId,
+                email: email,
+                firstName: firstName,
+                lastName: lastName,
+                phoneNumber: phoneNumber,
+                authProvider: authProvider,
+              },
+            });
 
-          console.log(" social login data is ___", data);
-
-          const user = data?.socialLogin?.user;
-          console.log("logged in user ", token, user);
-
-          if (data?.socialLogin?.user) {
-            token.user = data.socialLogin.user;
+            if (data?.socialLogin?.user) {
+              token.user = data.socialLogin.user;
+            }
+          } catch (error) {
+            console.error("Error calling social login mutation:", error);
           }
-        } catch (error) {
-          console.error("Error calling social login mutation:", error);
+        } else {
+          // For credentials login, user info already handled in authorize()
+          token.user = user;
         }
       }
 
