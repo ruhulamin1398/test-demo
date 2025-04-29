@@ -26,22 +26,6 @@ export const authOptions: AuthOptions = {
         process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET ||
         "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",
     }),
-    GitHubProvider({
-      clientId:
-        process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID || "Ov23lik96gTaKmDVFFba",
-      clientSecret:
-        process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET ||
-        "127cd7fef32da8132641f8e2275cd3fc461e63dd",
-    }),
-    TwitterProvider({
-      clientId:
-        process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID ||
-        "ZXR1TjVxamZDTzhiSHlxWW4tTVI6MTpjaQ",
-      clientSecret:
-        process.env.NEXT_PUBLIC_TWITTER_CLIENT_SECRET ||
-        "aXp9R0qXac82bpfmPuvHLlPD6lqzi6yzfBO34pjsZl7wHWAB5x",
-      version: "2.0", // Twitter API v2 (for email access)
-    }),
   ],
   secret:
     process.env.NEXT_PUBLIC_NEXTAUTH_SECRET ||
