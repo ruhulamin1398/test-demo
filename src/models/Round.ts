@@ -27,6 +27,8 @@ const roundSchema = new Schema<IRoundDocument>(
       enum: Object.values(RoundStatusEnum) as RoundStatusEnum[], // Explicit cast
       default: RoundStatusEnum.UPCOMING,
     },
+
+    isActiveRound: { type: Boolean, required: false, default: false },
     enrollments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Enrolment" }],
     judges: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     competition: {

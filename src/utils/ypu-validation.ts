@@ -145,6 +145,42 @@ export const roundFormValidationSchema = ({
           return minValid && maxValid;
         }
       ),
+    submissionStartDate: Yup.date()
+      .required("Submission start date is required")
+      .test(
+        "submission-startdate-valid",
+        "Submission start date must be between round start and end date",
+        function (value) {
+          const { startDate, endDate } = this.parent;
+          const isAfterStartDate = dayjs(value).isSameOrAfter(
+            dayjs(startDate),
+            "day"
+          );
+          const isBeforeEndDate = dayjs(value).isSameOrBefore(
+            dayjs(endDate),
+            "day"
+          );
+          return isAfterStartDate && isBeforeEndDate;
+        }
+      ),
+    submissionEndDate: Yup.date()
+      .required("Submission end date is required")
+      .test(
+        "submission-enddate-valid",
+        "Submission end date must be between submission start date and round end date",
+        function (value) {
+          const { submissionStartDate, endDate } = this.parent;
+          const isAfterSubmissionStartDate = dayjs(value).isSameOrAfter(
+            dayjs(submissionStartDate),
+            "day"
+          );
+          const isBeforeEndDate = dayjs(value).isSameOrBefore(
+            dayjs(endDate),
+            "day"
+          );
+          return isAfterSubmissionStartDate && isBeforeEndDate;
+        }
+      ),
     judgementCriteria: Yup.string()
       .oneOf(
         Object.values(RoundJudgementCriteriaEnum),

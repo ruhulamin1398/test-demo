@@ -33,8 +33,11 @@ const roundResolver = {
           judgementCriteria: RoundJudgementCriteriaEnum;
           startDate: string;
           endDate: string;
+          submissionStartDate: string;
+          submissionEndDate: string;
           maxScore: number;
           status: RoundStatusEnum;
+          isActiveRound: boolean;
           judges: [];
           maxWinners: number;
         };
@@ -50,8 +53,11 @@ const roundResolver = {
           judgementCriteria,
           startDate,
           endDate,
+          submissionStartDate,
+          submissionEndDate,
           maxScore,
           status,
+          isActiveRound,
           maxWinners,
           judges = [],
         } = input;
@@ -63,11 +69,15 @@ const roundResolver = {
           judgementCriteria,
           startDate,
           endDate,
+          submissionStartDate,
+          submissionEndDate,
           maxScore: Number(maxScore),
+          isActiveRound,
           status,
           maxWinners: Number(maxWinners),
           judges,
         });
+        console.log(" new round ______++___", round);
         return await round.save();
       } catch (error) {
         const formattedError = getResolverErrorMessage(error);
@@ -93,8 +103,11 @@ const roundResolver = {
           judgementCriteria: RoundJudgementCriteriaEnum;
           startDate: string;
           endDate: string;
+          submissionStartDate: string;
+          submissionEndDate: string;
           maxScore: number;
           status: RoundStatusEnum;
+          isActiveRound: boolean;
           judges: [];
           maxWinners: number;
         };
@@ -108,8 +121,11 @@ const roundResolver = {
         judgementCriteria,
         startDate,
         endDate,
+        submissionStartDate,
+        submissionEndDate,
         maxScore,
         status,
+        isActiveRound,
         maxWinners,
         judges = [],
       } = input;
@@ -123,8 +139,11 @@ const roundResolver = {
           judgementCriteria,
           startDate,
           endDate,
+          submissionStartDate,
+          submissionEndDate,
           maxScore,
           status,
+          isActiveRound,
           maxWinners,
           judges,
         },

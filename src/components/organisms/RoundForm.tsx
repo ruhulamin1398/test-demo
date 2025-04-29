@@ -7,6 +7,8 @@ import {
   Box,
   MenuItem,
   CircularProgress,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import {
   IRound,
@@ -66,6 +68,7 @@ const RoundForm: React.FC = () => {
       maxWinners = 0,
       roundNumber = 1,
       judges = [],
+      isActiveRound = false,
     } = payloads;
     const jids = judges.map((item) => item.id);
     if (mode === CompetitionUiModeEnum.CREATE) {
@@ -77,6 +80,7 @@ const RoundForm: React.FC = () => {
             maxWinners: Number(maxWinners),
             competition: competition.id,
             roundNumber: Number(roundNumber || 0),
+            isActiveRound: isActiveRound,
             judges: jids,
           },
         },
@@ -92,6 +96,7 @@ const RoundForm: React.FC = () => {
             maxScore: Number(maxScore || 0),
             maxWinners: Number(maxWinners),
             roundNumber: Number(roundNumber || 0),
+            isActiveRound: isActiveRound,
             judges: jids,
           },
         },
@@ -128,10 +133,13 @@ const RoundForm: React.FC = () => {
     roundNumber: 1,
     startDate: formatDateForDatePicker(new Date()),
     endDate: formatDateForDatePicker(new Date()),
+    submissionStartDate: formatDateForDatePicker(new Date()),
+    submissionEndDate: formatDateForDatePicker(new Date()),
     judgementCriteria: RoundJudgementCriteriaEnum.JUDGE,
     maxScore: 100,
     maxWinners: 100,
     description: "",
+    isActiveRound: false,
     status: RoundStatusEnum.UPCOMING,
     judges: [] as string[],
   };
@@ -141,6 +149,12 @@ const RoundForm: React.FC = () => {
         ...recordToModify,
         startDate: formatDateForDatePicker(recordToModify.startDate),
         endDate: formatDateForDatePicker(recordToModify.endDate),
+        submissionStartDate: formatDateForDatePicker(
+          recordToModify.submissionStartDate
+        ),
+        submissionEndDate: formatDateForDatePicker(
+          recordToModify.submissionEndDate
+        ),
         judges: recordToModify.judges.map(({ id, firstName, lastName }) => ({
           id,
           label: `${firstName} ${lastName}`,
@@ -208,6 +222,20 @@ const RoundForm: React.FC = () => {
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <Field
+                name="submissionStartDate"
+                label="Submission Start Date"
+                component={CustomDatePicker}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+              <Field
+                name="submissionEndDate"
+                label="Submission End Date"
+                component={CustomDatePicker}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+              <Field
                 label={`Max ${
                   values.judgementCriteria === RoundJudgementCriteriaEnum.PUBLIC
                     ? "Vote"
@@ -238,6 +266,18 @@ const RoundForm: React.FC = () => {
                 component={OutlinedTextField}
               />
             </Grid>
+
+            <Grid size={{ xs: 12, sm: 6, md: 3 }} sx={{ py: 3 }}>
+              <Field name="isActiveRound">
+                {({ field }) => (
+                  <FormControlLabel
+                    control={<Checkbox {...field} checked={field.value} />}
+                    label="Is Active Round"
+                  />
+                )}
+              </Field>
+            </Grid>
+
             {values.judgementCriteria === RoundJudgementCriteriaEnum.JUDGE ? (
               <Grid size={{ xs: 12 }}>
                 <Field
