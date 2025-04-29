@@ -9,6 +9,8 @@ import {
 } from "@apollo/client";
 import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
 
+const isServer = typeof window === "undefined";
+
 // Create custom Apollo Link to set the required headers
 const customLink = new ApolloLink((operation, forward) => {
   // Set the operation name header
@@ -27,7 +29,7 @@ export const ApolloClientProvider = ({ children }: { children: ReactNode }) => {
     link: from([
       customLink, // Add custom link with headers
       createUploadLink({
-        uri: "/api/graphql",
+        uri: isServer ? process.env.GRAPHQL_API_URL_SERVER : "/api/graphql",
       }),
     ]),
     cache: new InMemoryCache(),
