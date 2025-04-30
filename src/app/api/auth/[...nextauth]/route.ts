@@ -34,12 +34,15 @@ export const authOptions: AuthOptions = {
           password: string;
         };
         try {
+          console.log(
+            "login data is ___________________",
+            { email, password },
+            process.env
+          );
           const { data } = await client.mutate({
             mutation: LOGIN_MUTATION,
             variables: { username: email, password },
           });
-
-          console.log("login data is ___________________", data);
 
           if (data?.login?.user) {
             return data.login.user;
