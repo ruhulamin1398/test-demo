@@ -5,9 +5,12 @@ import {
   ApolloLink,
   ApolloProvider,
   from,
+  HttpLink,
   InMemoryCache,
 } from "@apollo/client";
-import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
+import fetch from "cross-fetch";
+
+const isServer = typeof window === "undefined";
 
 // Create custom Apollo Link to set the required headers
 const customLink = new ApolloLink((operation, forward) => {
@@ -26,8 +29,11 @@ export const ApolloClientProvider = ({ children }: { children: ReactNode }) => {
   const client = new ApolloClient({
     link: from([
       customLink, // Add custom link with headers
-      createUploadLink({
-        uri: "/api/graphql",
+      new HttpLink({
+        uri: isServer
+          ? process.env.GRAPHQL_API_URL || "http://localhost:3000/api/graphql"
+          : "/api/graphql", // relative path for browser
+        fetch,
       }),
     ]),
     cache: new InMemoryCache(),
