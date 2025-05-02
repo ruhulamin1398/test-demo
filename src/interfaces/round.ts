@@ -11,6 +11,7 @@ export enum RoundStatusEnum {
 export enum RoundJudgementCriteriaEnum {
   PUBLIC = "Public",
   JUDGE = "Judge",
+  BOTH = "Both",
 }
 
 // IRound Interface

@@ -12,12 +12,11 @@ export const roundTypeDefs = `#graphql
     Pdf,
     Link,
   }
-
   enum RoundJudgementCriteriaEnum {
-    Public,
-    Judge,
-    Both,
-  }
+  Public,
+  Judge,
+  Both,
+}
   # Input type for creating a competition
   input CreateCompetitionRoundInput {
     competition: ID!
