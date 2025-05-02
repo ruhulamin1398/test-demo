@@ -7,8 +7,11 @@ export const competitionTypeDefs = `#graphql
   }
 
   enum SubmissionTypeEnum {
-    Photo
-    Video
+    Photo,
+    Video,
+    Audio,
+    Pdf,
+    Link,
   }
 
   enum EnrolmentTypeEnum {

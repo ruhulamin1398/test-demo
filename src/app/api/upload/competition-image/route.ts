@@ -3,7 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/app/lib/mongodb";
-import { Competition } from "@/models";
+import { Competition, Round } from "@/models";
 
 const absolutePath = "./public/uploads/competition-image";
 // const publicPath = "/public/uploads";
@@ -15,6 +15,33 @@ export const config = {
   },
 };
 
+const getRunningRoundId = async (competitionId: string) => {
+  try {
+    const competition = await Competition.findById(competitionId);
+    // console.log(" competition is ", competition);
+    if (!competition) {
+      throw new Error("Competition not found");
+    }
+
+    if (!competition.haveRoundWiseSubmission) {
+      return "default";
+    }
+
+    const activeRound = await Round.findOne({
+      competition: competitionId,
+      isActiveRound: true,
+    });
+
+    if (!activeRound) {
+      throw new Error("No Active round found");
+    }
+
+    return activeRound.id;
+  } catch (error) {
+    console.error("Error in getRunningRoundId:", error);
+    throw new Error("Failed to get running round ID");
+  }
+};
 export async function POST(req: NextRequest) {
   try {
     // Parse the form data using `req.formData()`
@@ -22,10 +49,10 @@ export async function POST(req: NextRequest) {
 
     // Extract the uploaded file and ID from formData
     const uploadedFile = formData.get("file");
-    const competitionId =
-      (formData.get("competitionId") as string) ?? "default";
-    const roundId = formData.get("roundId") as string;
-
+    const competitionId = formData.get("competitionId") as string;
+    if (!competitionId) {
+      throw new Error("No competition id provided ");
+    }
     // Validate file presence
     if (!uploadedFile || Array.isArray(uploadedFile)) {
       return NextResponse.json(
@@ -52,6 +79,8 @@ export async function POST(req: NextRequest) {
 
     // Prepare the file details
     const { name: originalFilename } = uploadedFile;
+
+    const roundId = await getRunningRoundId(competitionId);
 
     // Use the provided 'id' for a unique filename, or default to "default"
     const newFileName = `${competitionId || "default"}${path.extname(

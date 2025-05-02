@@ -6,7 +6,6 @@ import {
   IPrizesAndRewards,
 } from "@/interfaces/competition";
 import mongoose, { Schema } from "mongoose";
-import { boolean } from "zod";
 
 const PrizesAndRewardsSchema = new Schema<IPrizesAndRewards>({
   title: { type: String, required: true },
