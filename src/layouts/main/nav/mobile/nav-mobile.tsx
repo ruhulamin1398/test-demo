@@ -1,20 +1,23 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Drawer from '@mui/material/Drawer';
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Drawer from "@mui/material/Drawer";
 
-import { paths } from '@/routes/paths';
-import { usePathname } from '@/routes/hooks';
+import { paths } from "@/routes/paths";
+import { usePathname } from "@/routes/hooks";
 
-import { Logo } from '@/components/logo';
-import { Scrollbar } from '@/components/scrollbar';
+import { Logo } from "@/components/logo";
+import { Scrollbar } from "@/components/scrollbar";
 
-import { Nav, NavUl } from '../components';
-import { NavList } from './nav-mobile-list';
-import { SignInButton } from '../../../components/sign-in-button';
+import { Nav, NavUl } from "../components";
+import { NavList } from "./nav-mobile-list";
+import { SignInButton } from "../../../components/sign-in-button";
 
-import type { NavMainProps } from '../types';
+import type { NavMainProps } from "../types";
+import { AccountDrawer } from "@/layouts/components/account-drawer";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +32,7 @@ export type NavMobileProps = NavMainProps & {
 
 export function NavMobile({ data, open, onClose, slots, sx }: NavMobileProps) {
   const pathname = usePathname();
-
+  const user = useSelector((state: RootState) => state.auth.user);
   useEffect(() => {
     if (open) {
       onClose();
@@ -43,7 +46,11 @@ export function NavMobile({ data, open, onClose, slots, sx }: NavMobileProps) {
       onClose={onClose}
       PaperProps={{
         sx: [
-          { display: 'flex', flexDirection: 'column', width: 'var(--layout-nav-mobile-width)' },
+          {
+            display: "flex",
+            flexDirection: "column",
+            width: "var(--layout-nav-mobile-width)",
+          },
           ...(Array.isArray(sx) ? sx : [sx]),
         ],
       }}
@@ -51,7 +58,7 @@ export function NavMobile({ data, open, onClose, slots, sx }: NavMobileProps) {
       {slots?.topArea ?? (
         <Box
           sx={{
-            display: 'flex',
+            display: "flex",
             pt: 3,
             pb: 2,
             pl: 2.5,
@@ -65,9 +72,9 @@ export function NavMobile({ data, open, onClose, slots, sx }: NavMobileProps) {
         <Nav
           sx={{
             pb: 3,
-            display: 'flex',
-            flex: '1 1 auto',
-            flexDirection: 'column',
+            display: "flex",
+            flex: "1 1 auto",
+            flexDirection: "column",
           }}
         >
           <NavUl>
@@ -84,20 +91,17 @@ export function NavMobile({ data, open, onClose, slots, sx }: NavMobileProps) {
             py: 3,
             px: 2.5,
             gap: 1.5,
-            display: 'flex',
+            display: "flex",
           }}
         >
           <SignInButton fullWidth />
-
-          <Button
-            fullWidth
-            variant="contained"
-            rel="noopener"
-            target="_blank"
-            href={paths.minimalStore}
-          >
-            Purchase
-          </Button>
+          {user ? (
+            <AccountDrawer fullWidth />
+          ) : (
+            <>
+              <SignInButton fullWidth />
+            </>
+          )}
         </Box>
       )}
     </Drawer>

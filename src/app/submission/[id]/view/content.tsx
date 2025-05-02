@@ -29,7 +29,7 @@ const PageContent = ({ competition }: Props) => {
                 Important date and times
               </Typography>
             </Box>
-            <Box
+            {/* <Box
               sx={{
                 mb: 2,
                 gap: 0.5,
@@ -49,7 +49,7 @@ const PageContent = ({ competition }: Props) => {
                 Eligibility :
               </Box>
               {competition?.eligibility}
-            </Box>
+            </Box> */}
             <ContestDateTimeLine rounds={competition.rounds} />
           </>
         )}

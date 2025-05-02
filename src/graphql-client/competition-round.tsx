@@ -12,6 +12,7 @@ export const CREATE_COMPETITION_ROUND = gql`
       startDate
       submissionStartDate
       submissionEndDate
+      submissionType
       endDate
       maxScore
       status
@@ -41,6 +42,7 @@ export const UPDATE_COMPETITION_ROUND = gql`
       judgementCriteria
       startDate
       endDate
+      submissionType
       submissionStartDate
       submissionEndDate
       maxScore

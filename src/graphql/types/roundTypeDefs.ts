@@ -5,6 +5,11 @@ export const roundTypeDefs = `#graphql
     Upcoming,
   }
 
+  enum SubmissionTypeEnum {
+    Photo
+    Video
+  }
+
   enum RoundJudgementCriteriaEnum {
     Public,
     Judge,
@@ -18,6 +23,7 @@ export const roundTypeDefs = `#graphql
     judgementCriteria: RoundJudgementCriteriaEnum!
     startDate: String!
     endDate: String!
+    submissionType: SubmissionTypeEnum!
     submissionStartDate: String!
     submissionEndDate: String!
     
@@ -38,6 +44,7 @@ export const roundTypeDefs = `#graphql
     submissionStartDate: String!
     submissionEndDate: String!
     maxScore: Float!
+    submissionType: SubmissionTypeEnum!
     enrolledIds: [Enrolment]
     judges: [User]
     maxWinners: Int!

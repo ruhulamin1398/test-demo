@@ -1,6 +1,6 @@
 import { IEnrolment } from "@/interfaces/enrolment";
 import { IUser } from "@/interfaces/user";
-import { ICompetition } from "@/interfaces/competition";
+import { ICompetition, SubmissionTypeEnum } from "@/interfaces/competition";
 
 export enum RoundStatusEnum {
   COMPLETED = "Completed",
@@ -23,6 +23,8 @@ export interface IRound {
   submissionStartDate: Date; // Date as string (ISO 8601 format)
   submissionEndDate: Date; // Date as string (ISO 8601 format)
   judgementCriteria: RoundJudgementCriteriaEnum;
+
+  submissionType: SubmissionTypeEnum;
   maxScore: number;
   maxWinners: number;
   description: string;

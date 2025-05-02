@@ -37,7 +37,7 @@ import {
   CompetitionUiModeEnum,
   setRoundInfo,
 } from "@/store/slices/competitionSlice";
-import { ICompetition } from "@/interfaces";
+import { ICompetition, SubmissionTypeEnum } from "@/interfaces";
 
 const RoundForm: React.FC = () => {
   const dispatch = useDispatch();
@@ -141,6 +141,7 @@ const RoundForm: React.FC = () => {
     description: "",
     isActiveRound: false,
     status: RoundStatusEnum.UPCOMING,
+    submissionType: SubmissionTypeEnum.PHOTO,
     judges: [] as string[],
   };
 
@@ -159,6 +160,7 @@ const RoundForm: React.FC = () => {
           id,
           label: `${firstName} ${lastName}`,
         })),
+        submissionType: recordToModify.submissionType || "Photo",
       }
     : initialFormValues;
 
@@ -265,6 +267,22 @@ const RoundForm: React.FC = () => {
                 name="maxWinners"
                 component={OutlinedTextField}
               />
+            </Grid>
+
+            {/* Submission Type */}
+            <Grid size={{ xs: 6, sm: 3 }}>
+              <Field
+                label="Submission Type"
+                name="submissionType"
+                component={OutlinedTextField}
+                select
+              >
+                {Object.values(SubmissionTypeEnum).map((submissionType) => (
+                  <MenuItem key={submissionType} value={submissionType}>
+                    {submissionType}
+                  </MenuItem>
+                ))}
+              </Field>
             </Grid>
 
             <Grid size={{ xs: 12, sm: 6, md: 3 }} sx={{ py: 3 }}>

@@ -29,6 +29,16 @@ export const competitionFormValidationSchema = Yup.object({
   endDate: Yup.date()
     .required("End Date is required")
     .min(Yup.ref("startDate"), "End date must be on or after the start date"),
+
+  haveRoundWiseSubmission: Yup.boolean()
+    .notRequired()
+    .default(false)
+    .test(
+      "is-boolean",
+      "haveRoundWiseSubmission must be a boolean value",
+      (value) => typeof value === "boolean"
+    ),
+
   enrolmentDeadline: Yup.object({
     startDate: Yup.date()
       .required("Enrolment Start Date is required")
@@ -181,6 +191,11 @@ export const roundFormValidationSchema = ({
           return isAfterSubmissionStartDate && isBeforeEndDate;
         }
       ),
+
+    submissionType: Yup.string()
+      .oneOf(Object.values(SubmissionTypeEnum))
+      .required("Submission Type is required"),
+
     judgementCriteria: Yup.string()
       .oneOf(
         Object.values(RoundJudgementCriteriaEnum),

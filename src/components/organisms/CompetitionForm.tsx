@@ -163,6 +163,8 @@ const CompetitionForm = () => {
             recordToModify.enrolmentDeadline?.endDate
           ),
         },
+        haveRoundWiseSubmission:
+          recordToModify.haveRoundWiseSubmission ?? false,
       }
     : initialValues;
 
@@ -280,10 +282,10 @@ const CompetitionForm = () => {
                   component={OutlinedTextField}
                   select
                 >
-                  <MenuItem key="yes" value={true}>
+                  <MenuItem key={"yes"} value={true}>
                     Yes
                   </MenuItem>
-                  <MenuItem key="no" value={false}>
+                  <MenuItem key={"no"} value={false}>
                     No
                   </MenuItem>
                 </Field>

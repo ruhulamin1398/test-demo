@@ -3,6 +3,7 @@ import {
   IRound,
   RoundJudgementCriteriaEnum,
   RoundStatusEnum,
+  SubmissionTypeEnum,
 } from "@/interfaces";
 import { Enrolment, Round, User } from "@/models";
 import { GraphQLError } from "graphql";
@@ -35,6 +36,7 @@ const roundResolver = {
           endDate: string;
           submissionStartDate: string;
           submissionEndDate: string;
+          submissionType: SubmissionTypeEnum;
           maxScore: number;
           status: RoundStatusEnum;
           isActiveRound: boolean;
@@ -55,6 +57,7 @@ const roundResolver = {
           endDate,
           submissionStartDate,
           submissionEndDate,
+          submissionType,
           maxScore,
           status,
           isActiveRound,
@@ -71,6 +74,7 @@ const roundResolver = {
           endDate,
           submissionStartDate,
           submissionEndDate,
+          submissionType,
           maxScore: Number(maxScore),
           isActiveRound,
           status,
@@ -103,6 +107,7 @@ const roundResolver = {
           judgementCriteria: RoundJudgementCriteriaEnum;
           startDate: string;
           endDate: string;
+          submissionType: SubmissionTypeEnum;
           submissionStartDate: string;
           submissionEndDate: string;
           maxScore: number;
@@ -121,6 +126,7 @@ const roundResolver = {
         judgementCriteria,
         startDate,
         endDate,
+        submissionType,
         submissionStartDate,
         submissionEndDate,
         maxScore,
@@ -139,6 +145,7 @@ const roundResolver = {
           judgementCriteria,
           startDate,
           endDate,
+          submissionType,
           submissionStartDate,
           submissionEndDate,
           maxScore,
