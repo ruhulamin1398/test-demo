@@ -6,13 +6,17 @@ export const roundTypeDefs = `#graphql
   }
 
   enum SubmissionTypeEnum {
-    Photo
-    Video
+    Photo,
+    Video,
+    Audio,
+    Pdf,
+    Link,
   }
 
   enum RoundJudgementCriteriaEnum {
     Public,
     Judge,
+    Both,
   }
   # Input type for creating a competition
   input CreateCompetitionRoundInput {
