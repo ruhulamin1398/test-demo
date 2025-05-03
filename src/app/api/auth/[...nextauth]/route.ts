@@ -37,7 +37,8 @@ export const authOptions: AuthOptions = {
           console.log(
             "login data is ___________________",
             { email, password },
-            process.env
+            process.env.GRAPHQL_API_URL,
+            client
           );
           const { data } = await client.mutate({
             mutation: LOGIN_MUTATION,
