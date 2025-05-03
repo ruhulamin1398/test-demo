@@ -4,6 +4,7 @@ import roundResolver from "./roundResolver";
 import submissionScoreResolver from "./submissionScoreResolver";
 import userResolver from "./userResolver";
 import uploadResolver from "./uploadResolver";
+import categoryResolver from "./categoryResolver";
 
 export const resolvers = [
   competitionResolver,
@@ -12,4 +13,5 @@ export const resolvers = [
   submissionScoreResolver,
   userResolver,
   uploadResolver,
+  categoryResolver,
 ];
