@@ -32,6 +32,8 @@ import { REGISTER_MUTATION } from "@/graphql-client/auth";
 import { useDispatch } from "react-redux";
 import { IUser } from "@/interfaces";
 import { signIn } from "next-auth/react";
+import { getCookie } from "minimal-shared/utils";
+import { setUser } from "@/store/slices/authSlice";
 
 // ----------------------------------------------------------------------
 
@@ -52,7 +54,7 @@ export const SignUpSchema = zod.object({
 });
 
 interface RegisterResponse {
-  register: {
+  createUser: {
     token: string;
     user: IUser;
   };
@@ -61,6 +63,7 @@ interface RegisterResponse {
 // ----------------------------------------------------------------------
 
 export function SignUpView() {
+  const callbackUrl = getCookie<string>("next-auth.callback-url");
   const router = useRouter();
   const dispatch = useDispatch();
   const [register, { data, loading, error }] =
@@ -95,10 +98,9 @@ export function SignUpView() {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
     try {
       const { firstName, lastName, email, phone, password } = data;
-      const userData = await register({
+      const { data: userData } = await register({
         variables: {
           name: firstName,
           firstName,
@@ -118,8 +120,8 @@ export function SignUpView() {
         console.error("Registration error:", result.error);
         setErrorMessage(result.error);
       } else {
-        console.log("Registration and login successful:", result);
-        router.refresh;
+        dispatch(setUser(userData?.createUser.user || null));
+        window.location.href = callbackUrl || "/";
       }
     } catch (error) {
       console.error(error);

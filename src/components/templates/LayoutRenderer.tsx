@@ -1,26 +1,30 @@
 "use client";
 import React, { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useQuery } from "@apollo/client";
+import { ME_QUERY } from "@/graphql-client/auth";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/store/slices/authSlice";
 
 import { MainLayout } from "@/layouts/main";
 import { AuthSplitLayout } from "@/layouts/auth-split";
 import { DashboardLayout } from "@/layouts/dashboard";
-import { IUser } from "@/interfaces";
 
 interface LayoutRendererProps {
   children: React.ReactNode;
-  user: IUser | null;
 }
 
-const LayoutRenderer: React.FC<LayoutRendererProps> = ({ children, user }) => {
+const LayoutRenderer: React.FC<LayoutRendererProps> = ({ children }) => {
   const path = usePathname();
   // @TODO get user data from next auth
   const dispatch = useDispatch();
+  const { data, loading } = useQuery(ME_QUERY);
+
   useEffect(() => {
-    dispatch(setUser(user));
-  }, [user]);
+    if (!loading && data) {
+      dispatch(setUser(data.me));
+    }
+  }, [data, loading, dispatch]);
 
   return (
     <>
