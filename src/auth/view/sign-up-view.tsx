@@ -30,9 +30,7 @@ import { FormDivider } from "../components/form-divider";
 import { useMutation } from "@apollo/client";
 import { REGISTER_MUTATION } from "@/graphql-client/auth";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/store/slices/authSlice";
 import { IUser } from "@/interfaces";
-import { count } from "console";
 import { signIn } from "next-auth/react";
 
 // ----------------------------------------------------------------------
@@ -69,13 +67,8 @@ export function SignUpView() {
     useMutation<RegisterResponse>(REGISTER_MUTATION);
 
   useEffect(() => {
-    if (data?.register?.user) {
-      const user = data.register.user;
-      dispatch(setUser(user)); // Assuming you use Redux to manage user state
-      router.push("/");
-    }
     console.log("Hello Nizam inside useeffect", error);
-  }, [data, error, dispatch, router]);
+  }, [error]);
 
   const showPassword = useBoolean();
 
@@ -126,7 +119,7 @@ export function SignUpView() {
         setErrorMessage(result.error);
       } else {
         console.log("Registration and login successful:", result);
-        router.push("/");
+        router.refresh;
       }
     } catch (error) {
       console.error(error);

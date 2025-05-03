@@ -41,3 +41,5 @@ const createApolloClient = () => {
 };
 
 export const client = createApolloClient();
+
+// https://www.beejoyi.com/api/graphql

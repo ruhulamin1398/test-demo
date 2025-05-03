@@ -1,5 +1,6 @@
 // src/app/layout.tsx
 import React from "react";
+import { cookies } from "next/headers";
 import { ApolloClientProvider } from "@/graphql-client/Provider";
 import { ReduxProvider } from "@/providers/ReduxProvider";
 import LayoutRenderer from "@/components/templates/LayoutRenderer";
@@ -14,14 +15,13 @@ import { detectLanguage } from "@/locales/server";
 
 import type { Metadata } from "next";
 import "@/global.css";
-import {
-  SettingsDrawer,
-  defaultSettings,
-  SettingsProvider,
-} from "@/components/settings";
+import { defaultSettings, SettingsProvider } from "@/components/settings";
 
 import { CONFIG } from "@/global-config";
 import { MotionLazy } from "@/components/animate/motion-lazy";
+import { client } from "@/lib/apolloClient";
+import { ME_QUERY } from "@/graphql-client/auth";
+import { IUser } from "@/interfaces";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -50,10 +50,32 @@ async function getAppConfig() {
     };
   }
 }
+
+const getUser = async (): Promise<IUser | null> => {
+  try {
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get("next-auth.session-token");
+    const { data } = await client.query({
+      query: ME_QUERY,
+      context: {
+        headers: {
+          Cookie: `next-auth.session-token=${sessionCookie?.value}`, // Pass the cookies to the Apollo query
+        },
+      },
+    });
+    return data?.me || null;
+  } catch (_error) {
+    console.log(_error, "error in getting user");
+    return null;
+  }
+};
+
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const appConfig = await getAppConfig();
+
+  const user = await getUser();
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -76,7 +98,7 @@ export default async function RootLayout({
               <MotionLazy>
                 <ApolloClientProvider>
                   <ReduxProvider>
-                    <LayoutRenderer>{children}</LayoutRenderer>
+                    <LayoutRenderer user={user}>{children}</LayoutRenderer>
                   </ReduxProvider>
                 </ApolloClientProvider>
               </MotionLazy>
