@@ -39,6 +39,20 @@ import { setUser } from "@/store/slices/authSlice";
 
 export type SignUpSchemaType = zod.infer<typeof SignUpSchema>;
 
+const phoneNumberSchema = zod.string().refine(
+  (val) => {
+    // Check if length is 11 and contains only digits
+    const isValidLength = val.length === 11;
+    const isNumeric = /^\d{11}$/.test(val); // Only digits and exactly 11 digits
+    const validPrefix = /^(017|015|016|018|019|013)/.test(val); // Check for valid prefixes
+
+    return isValidLength && isNumeric && validPrefix;
+  },
+  {
+    message: "Invalid phone number.",
+  }
+);
+
 export const SignUpSchema = zod.object({
   firstName: zod.string().min(1, { message: "First name is required!" }),
   lastName: zod.string().min(1, { message: "Last name is required!" }),
@@ -46,7 +60,7 @@ export const SignUpSchema = zod.object({
     .string()
     .min(1, { message: "Email is required!" })
     .email({ message: "Email must be a valid email address!" }),
-  phone: zod.string(),
+  phone: phoneNumberSchema,
   password: zod
     .string()
     .min(1, { message: "Password is required!" })

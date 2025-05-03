@@ -37,16 +37,29 @@ import useNotification from "@/app/hooks/useNotification";
 import { FormSocials } from "../components/form-socials";
 import { FormDivider } from "../components/form-divider";
 import { signIn } from "next-auth/react";
+import { getCookie } from "minimal-shared/utils";
 
 // ----------------------------------------------------------------------
 
 export type SignInSchemaType = zod.infer<typeof SignInSchema>;
+const emailSchema = zod
+  .string()
+  .email({ message: "Email must be a valid email address!" });
+const phoneNumberSchema = zod.string().refine(
+  (val) => {
+    // Check if length is 11 and contains only digits
+    const isValidLength = val.length === 11;
+    const isNumeric = /^\d{11}$/.test(val); // Only digits and exactly 11 digits
+    const validPrefix = /^(017|015|016|018|019|013)/.test(val); // Check for valid prefixes
 
+    return isValidLength && isNumeric && validPrefix;
+  },
+  {
+    message: "Invalid phone number.",
+  }
+);
 export const SignInSchema = zod.object({
-  email: zod
-    .string()
-    .min(1, { message: "Email is required!" })
-    .email({ message: "Email must be a valid email address!" }),
+  email: zod.union([phoneNumberSchema, emailSchema]),
   password: zod
     .string()
     .min(1, { message: "Password is required!" })
@@ -56,27 +69,19 @@ export const SignInSchema = zod.object({
 // ----------------------------------------------------------------------
 
 export function SignInView() {
+  const [loading, setLoading] = useState(false);
   const { notify } = useNotification();
-
-  const [login, { data, error, loading }] =
-    useMutation<LoginResponse>(LOGIN_MUTATION);
-  const router = useRouter();
-  const dispatch = useDispatch();
-
+  const callbackUrl = getCookie<string>("next-auth.callback-url");
   const showPassword = useBoolean();
-
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
   const defaultValues: SignInSchemaType = {
     email: "hello@gmail.com",
     password: "@2Minimal",
   };
-
   const methods = useForm<SignInSchemaType>({
     resolver: zodResolver(SignInSchema),
     defaultValues,
   });
-
   const {
     handleSubmit,
     formState: { isSubmitting },
@@ -85,38 +90,24 @@ export function SignInView() {
   const onSubmit = handleSubmit(async ({ email, password }) => {
     try {
       const result = await signIn("credentials", {
-        redirect: true,
+        redirect: false,
         email,
         password,
-        callbackUrl: "/",
       });
 
       if (result?.error) {
         setErrorMessage(result.error);
       } else {
         notify({ severity: "success", message: "Successfully logged in!" });
-        router.push("/");
+        window.location.href = callbackUrl || "/";
       }
     } catch (error) {
       console.error("Login error:", error);
       setErrorMessage("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
     }
   });
-
-  // useEffect(() => {
-  //   if (data?.login?.user) {
-  //     const user = data.login.user;
-  //     notify({ severity: "success", message: "Successfully logged in!" });
-  //     dispatch(setUser(user)); // Assuming you use Redux to manage user state
-  //     console.log("logged in user - user pass ", user);
-
-  //     router.push("/");
-  //   }
-
-  //   if (error) {
-  //     setErrorMessage(handleGraphQLError(error));
-  //   }
-  // }, [data, error, dispatch, router, notify]);
 
   const renderForm = () => (
     <Box sx={{ gap: 3, display: "flex", flexDirection: "column" }}>
