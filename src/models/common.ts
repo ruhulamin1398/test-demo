@@ -38,6 +38,9 @@ export enum CompetitionStatusEnum {
 export enum SubmissionTypeEnum {
   PHOTO = "Photo",
   VIDEO = "Video",
+  AUDIO = "Audio",
+  PDF = "Pdf",
+  LINK = "Link",
 }
 
 export enum EnrolmentTypeEnum {

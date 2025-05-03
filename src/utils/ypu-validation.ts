@@ -29,6 +29,16 @@ export const competitionFormValidationSchema = Yup.object({
   endDate: Yup.date()
     .required("End Date is required")
     .min(Yup.ref("startDate"), "End date must be on or after the start date"),
+
+  haveRoundWiseSubmission: Yup.boolean()
+    .notRequired()
+    .default(false)
+    .test(
+      "is-boolean",
+      "haveRoundWiseSubmission must be a boolean value",
+      (value) => typeof value === "boolean"
+    ),
+
   enrolmentDeadline: Yup.object({
     startDate: Yup.date()
       .required("Enrolment Start Date is required")
@@ -145,6 +155,47 @@ export const roundFormValidationSchema = ({
           return minValid && maxValid;
         }
       ),
+    submissionStartDate: Yup.date()
+      .required("Submission start date is required")
+      .test(
+        "submission-startdate-valid",
+        "Submission start date must be between round start and end date",
+        function (value) {
+          const { startDate, endDate } = this.parent;
+          const isAfterStartDate = dayjs(value).isSameOrAfter(
+            dayjs(startDate),
+            "day"
+          );
+          const isBeforeEndDate = dayjs(value).isSameOrBefore(
+            dayjs(endDate),
+            "day"
+          );
+          return isAfterStartDate && isBeforeEndDate;
+        }
+      ),
+    submissionEndDate: Yup.date()
+      .required("Submission end date is required")
+      .test(
+        "submission-enddate-valid",
+        "Submission end date must be between submission start date and round end date",
+        function (value) {
+          const { submissionStartDate, endDate } = this.parent;
+          const isAfterSubmissionStartDate = dayjs(value).isSameOrAfter(
+            dayjs(submissionStartDate),
+            "day"
+          );
+          const isBeforeEndDate = dayjs(value).isSameOrBefore(
+            dayjs(endDate),
+            "day"
+          );
+          return isAfterSubmissionStartDate && isBeforeEndDate;
+        }
+      ),
+
+    submissionType: Yup.string()
+      .oneOf(Object.values(SubmissionTypeEnum))
+      .required("Submission Type is required"),
+
     judgementCriteria: Yup.string()
       .oneOf(
         Object.values(RoundJudgementCriteriaEnum),

@@ -36,7 +36,6 @@ const ContentSubmission = ({ competitionId, title, date }: Props) => {
         `/api/upload/competition-image`,
         {
           competitionId: competitionId,
-          roundId: "round123",
         }
       );
       if (response.data) {

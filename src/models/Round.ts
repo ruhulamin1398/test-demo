@@ -1,3 +1,4 @@
+import { SubmissionTypeEnum } from "@/interfaces";
 import {
   IRoundDocument,
   RoundJudgementCriteriaEnum,
@@ -27,12 +28,19 @@ const roundSchema = new Schema<IRoundDocument>(
       enum: Object.values(RoundStatusEnum) as RoundStatusEnum[], // Explicit cast
       default: RoundStatusEnum.UPCOMING,
     },
+
+    isActiveRound: { type: Boolean, required: false, default: false },
     enrollments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Enrolment" }],
     judges: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     competition: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Competition",
       required: true,
+    },
+    submissionType: {
+      type: String,
+      enum: Object.values(SubmissionTypeEnum) as SubmissionTypeEnum[], // Explicit cast
+      default: SubmissionTypeEnum.PHOTO,
     },
     submissionStartDate: { type: Date, required: false },
     submissionEndDate: { type: Date, required: false },
