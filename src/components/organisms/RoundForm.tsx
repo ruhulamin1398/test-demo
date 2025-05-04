@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import {
   Button,
   Grid2 as Grid,
@@ -9,6 +9,7 @@ import {
   CircularProgress,
   Checkbox,
   FormControlLabel,
+  CheckboxProps,
 } from "@mui/material";
 import {
   IRound,
@@ -304,7 +305,7 @@ const RoundForm: React.FC = () => {
 
             <Grid size={{ xs: 12, sm: 6, md: 3 }} sx={{ py: 3 }}>
               <Field name="isActiveRound">
-                {({ field }) => (
+                {({ field }: FieldProps) => (
                   <FormControlLabel
                     control={<Checkbox {...field} checked={field.value} />}
                     label="Is Active Round"
