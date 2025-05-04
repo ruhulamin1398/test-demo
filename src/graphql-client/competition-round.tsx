@@ -15,6 +15,7 @@ export const CREATE_COMPETITION_ROUND = gql`
       submissionType
       endDate
       maxScore
+      maxVote
       status
       isActiveRound
       judges {
@@ -46,6 +47,7 @@ export const UPDATE_COMPETITION_ROUND = gql`
       submissionStartDate
       submissionEndDate
       maxScore
+      maxVote
       status
       judges {
         id

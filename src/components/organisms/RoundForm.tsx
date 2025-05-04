@@ -64,6 +64,7 @@ const RoundForm: React.FC = () => {
       return;
     }
     const {
+      maxVote = 0,
       maxScore = 0,
       maxWinners = 0,
       roundNumber = 1,
@@ -77,6 +78,7 @@ const RoundForm: React.FC = () => {
           input: {
             ...payloads,
             maxScore: Number(maxScore || 0),
+            maxVote: Number(maxVote || 0),
             maxWinners: Number(maxWinners),
             competition: competition.id,
             roundNumber: Number(roundNumber || 0),
@@ -94,6 +96,7 @@ const RoundForm: React.FC = () => {
             ...updatedPayload,
             competition: competition.id,
             maxScore: Number(maxScore || 0),
+            maxVote: Number(maxVote || 0),
             maxWinners: Number(maxWinners),
             roundNumber: Number(roundNumber || 0),
             isActiveRound: isActiveRound,
@@ -136,7 +139,8 @@ const RoundForm: React.FC = () => {
     submissionStartDate: formatDateForDatePicker(new Date()),
     submissionEndDate: formatDateForDatePicker(new Date()),
     judgementCriteria: RoundJudgementCriteriaEnum.JUDGE,
-    maxScore: 100,
+    maxScore: 0,
+    maxVote: 0,
     maxWinners: 100,
     description: "",
     isActiveRound: false,
@@ -161,6 +165,9 @@ const RoundForm: React.FC = () => {
           label: `${firstName} ${lastName}`,
         })),
         submissionType: recordToModify.submissionType || "Photo",
+        maxScore: recordToModify.maxScore || 0,
+        maxVote: recordToModify.maxVote || 0,
+        maxWinners: recordToModify.maxWinners || 0,
       }
     : initialFormValues;
 
@@ -236,17 +243,27 @@ const RoundForm: React.FC = () => {
                 component={CustomDatePicker}
               />
             </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-              <Field
-                label={`Max ${
-                  values.judgementCriteria === RoundJudgementCriteriaEnum.PUBLIC
-                    ? "Vote"
-                    : "Score"
-                }`}
-                name="maxScore"
-                component={OutlinedTextField}
-              />
-            </Grid>
+            {values.judgementCriteria === RoundJudgementCriteriaEnum.PUBLIC ||
+            values.judgementCriteria === RoundJudgementCriteriaEnum.BOTH ? (
+              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                <Field
+                  label={"Max Vote"}
+                  name="maxVote"
+                  component={OutlinedTextField}
+                />
+              </Grid>
+            ) : null}
+            {values.judgementCriteria === RoundJudgementCriteriaEnum.JUDGE ||
+            values.judgementCriteria === RoundJudgementCriteriaEnum.BOTH ? (
+              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                <Field
+                  label={"Max Score"}
+                  name="maxScore"
+                  component={OutlinedTextField}
+                />
+              </Grid>
+            ) : null}
+
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <Field
                 label="Status"

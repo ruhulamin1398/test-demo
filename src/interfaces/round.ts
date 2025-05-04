@@ -27,6 +27,7 @@ export interface IRound {
 
   submissionType: SubmissionTypeEnum;
   maxScore: number;
+  maxVote: number;
   maxWinners: number;
   description: string;
   status: RoundStatusEnum;

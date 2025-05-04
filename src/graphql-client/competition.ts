@@ -27,6 +27,14 @@ export const CREATE_COMPETITION = gql`
         title
         judgementCriteria
         roundNumber
+        maxScore
+        maxVote
+        judges {
+          name
+          firstName
+          lastName
+        }
+        maxWinners
       }
     }
   }
@@ -59,6 +67,7 @@ export const UPDATE_COMPETITION = gql`
         roundNumber
         status
         maxScore
+        maxVote
         judges {
           name
           firstName
@@ -84,8 +93,6 @@ export const UPDATE_COMPETITION_ELIGIBILITY = gql`
     }
   }
 `;
-
-
 
 export const GET_COMPETITION_QUERY = gql`
   query GetCompetition($id: ID!) {
@@ -115,6 +122,7 @@ export const GET_COMPETITION_QUERY = gql`
         roundNumber
         status
         maxScore
+        maxVote
         judges {
           name
           firstName
@@ -165,6 +173,7 @@ export const GET_COMPETITIONS_QUERY = gql`
           roundNumber
           status
           maxScore
+          maxVote
           judges {
             name
             firstName

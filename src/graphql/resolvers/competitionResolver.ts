@@ -17,7 +17,9 @@ const competitionResolver = {
       _: void,
       { id }: { id: string }
     ): Promise<ICompetition | null> => {
-      return Competition.findById(id);
+      const competition = await Competition.findById(id);
+      console.log(competition);
+      return competition;
     },
     getCompetitions: async (
       _parent: unknown, // Parent object (could be null or previous result)

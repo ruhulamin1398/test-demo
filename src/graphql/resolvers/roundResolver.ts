@@ -38,6 +38,7 @@ const roundResolver = {
           submissionEndDate: string;
           submissionType: SubmissionTypeEnum;
           maxScore: number;
+          maxVote: number;
           status: RoundStatusEnum;
           isActiveRound: boolean;
           judges: [];
@@ -59,6 +60,7 @@ const roundResolver = {
           submissionEndDate,
           submissionType,
           maxScore,
+          maxVote,
           status,
           isActiveRound,
           maxWinners,
@@ -76,6 +78,7 @@ const roundResolver = {
           submissionEndDate,
           submissionType,
           maxScore: Number(maxScore),
+          maxVote: Number(maxVote),
           isActiveRound,
           status,
           maxWinners: Number(maxWinners),
@@ -111,6 +114,7 @@ const roundResolver = {
           submissionStartDate: string;
           submissionEndDate: string;
           maxScore: number;
+          maxVote: number;
           status: RoundStatusEnum;
           isActiveRound: boolean;
           judges: [];
@@ -130,12 +134,13 @@ const roundResolver = {
         submissionStartDate,
         submissionEndDate,
         maxScore,
+        maxVote,
         status,
         isActiveRound,
         maxWinners,
         judges = [],
       } = input;
-      return Round.findByIdAndUpdate(
+      return await Round.findByIdAndUpdate(
         id,
         {
           competition,
@@ -148,7 +153,8 @@ const roundResolver = {
           submissionType,
           submissionStartDate,
           submissionEndDate,
-          maxScore,
+          maxVote: Number(maxVote),
+          maxScore: Number(maxScore),
           status,
           isActiveRound,
           maxWinners,
