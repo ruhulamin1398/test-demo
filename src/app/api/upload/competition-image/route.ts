@@ -60,6 +60,26 @@ const getRunningRoundId = async ({
       if (currentDate > new Date(enrolmentDeadline)) {
         throw new Error("Enrolment deadline has passed");
       }
+      const round = await Round.findOne({
+        competition: competitionId,
+      });
+
+      if (!round) {
+        throw new Error("No round found");
+      }
+
+      // revert if alreay submitted 
+      const existingSubmission =  await EnrolmentSubmission.findOne({
+        roundId:round.id,
+        enrolId: enrolment.id,
+        userId,
+      });
+
+      if ( existingSubmission ) {
+        throw new Error("Already submitted");
+      }
+
+      return { roundId: round.id, enrolId: enrolment.id };
     }
 
     // get current active round
@@ -75,7 +95,15 @@ const getRunningRoundId = async ({
     if (currentDate > new Date(activeRound?.endDate)) {
       throw new Error("Enrolment deadline has passed");
     }
+    const existingSubmission =  await EnrolmentSubmission.findOne({
+      roundId:activeRound.id,
+      enrolId: enrolment.id,
+      userId,
+    });
 
+    if ( existingSubmission ) {
+      throw new Error("Already submitted");
+    }
     return { roundId: activeRound.id, enrolId: enrolment.id };
   } catch (error) {
     console.error("Error in getRunningRoundId:", error);
@@ -134,7 +162,7 @@ export async function POST(req: NextRequest) {
     // add unique id
     const uniqueId = uuidv4();
     const newFileName = `${uniqueId}${path.extname(originalFilename)}`;
-    let submittedContent = `${absolutePath}/${competitionId}`;
+    let submittedContentDir = `${absolutePath}/${competitionId}`;
     let uploadDir = path.resolve(`./public/${absolutePath}`, competitionId);
     if (roundId) {
       uploadDir = path.resolve(
@@ -142,7 +170,7 @@ export async function POST(req: NextRequest) {
         competitionId,
         roundId
       );
-      submittedContent += `/${roundId}`;
+      submittedContentDir += `/${roundId}`;
     }
     // Ensure the upload directory exists
     await fs.mkdir(uploadDir, { recursive: true });
@@ -155,12 +183,12 @@ export async function POST(req: NextRequest) {
     await fs.writeFile(newFilePath, fileBuffer);
 
     console.log(
-      "roundid , enrolId , userId  fileName submittedContent filePath  ",
+      "roundid , enrolId , userId  fileName submittedContentDir filePath  ",
       roundId,
       enrolId,
       session.user.id,
       newFileName,
-      submittedContent,
+      submittedContentDir,
       newFilePath
     );
     // Create a new EnrolmentSubmission document
@@ -168,7 +196,7 @@ export async function POST(req: NextRequest) {
       roundId,
       enrolId,
       userId: session.user.id,
-      submittedContent,
+      submittedContent: `${submittedContentDir}/${newFileName}`,
     });
     // Save the EnrolmentSubmission to the database
     await enrolmentSubmission.save();
