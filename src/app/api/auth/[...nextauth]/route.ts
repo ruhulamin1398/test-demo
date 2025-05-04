@@ -1,14 +1,8 @@
 import NextAuth, { Account, AuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import GitHubProvider from "next-auth/providers/github";
-import TwitterProvider from "next-auth/providers/twitter";
 import { client } from "@/lib/apolloClient";
-import {
-  LOGIN_MUTATION,
-  REGISTER_MUTATION,
-  SOCIAL_LOGIN_MUTATION,
-} from "@/graphql-client/auth";
+import { LOGIN_MUTATION, SOCIAL_LOGIN_MUTATION } from "@/graphql-client/auth";
 import { AuthProviderEnum, IUser } from "@/interfaces";
 import { JWT } from "next-auth/jwt";
 import { AdapterUser } from "next-auth/adapters";

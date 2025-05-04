@@ -70,10 +70,10 @@ export default async function RootLayout({
               defaultMode={themeConfig.defaultMode}
               modeStorageKey={themeConfig.modeStorageKey}
             >
+              <Snackbar />
               <MotionLazy>
                 <ApolloClientProvider>
                   <ReduxProvider>
-                    <Snackbar />
                     <LayoutRenderer>{children}</LayoutRenderer>
                   </ReduxProvider>
                 </ApolloClientProvider>
