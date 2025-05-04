@@ -202,12 +202,38 @@ export const roundFormValidationSchema = ({
         "Invalid judgement criteria"
       )
       .required("Judgement criteria is required"),
-    maxScore: Yup.number()
-      .required("Max score is required")
-      .positive("Must be a positive number"),
-    maxVote: Yup.number()
-      .required("Max score is required")
-      .positive("Must be a positive number"),
+    maxScore: Yup.number().test(
+      "maxScore-valid",
+      "Max score must be a positive number",
+      function (value) {
+        const scores = Number(value || 0);
+        const { judgementCriteria } = this.parent;
+        if (
+          judgementCriteria === RoundJudgementCriteriaEnum.JUDGE ||
+          judgementCriteria === RoundJudgementCriteriaEnum.BOTH
+        ) {
+          return scores > 0;
+        } else {
+          return scores === 0;
+        }
+      }
+    ),
+    maxVote: Yup.number().test(
+      "maxVote-valid",
+      "Max vote must be a positive number",
+      function (value) {
+        const votes = Number(value || 0);
+        const { judgementCriteria } = this.parent;
+        if (
+          judgementCriteria === RoundJudgementCriteriaEnum.PUBLIC ||
+          judgementCriteria === RoundJudgementCriteriaEnum.BOTH
+        ) {
+          return votes > 0;
+        } else {
+          return votes === 0;
+        }
+      }
+    ),
     description: Yup.string()
       .required("Description is required")
       .min(4, "Title should be minimum 4 characters."),
