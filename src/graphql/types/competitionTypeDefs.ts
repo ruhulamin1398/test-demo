@@ -57,7 +57,7 @@ export const competitionTypeDefs = `#graphql
     mediaUrl: String
     submissionType: SubmissionTypeEnum!
     status: CompetitionStatusEnum
-    haveRoundWiseSubmission: Boolean!
+    haveRoundWiseSubmission: Boolean
   }
 
   # User filter input
@@ -85,7 +85,7 @@ export const competitionTypeDefs = `#graphql
     createdAt: String
     updatedAt: String
     prizes: [Prize]
-    haveRoundWiseSubmission: Boolean!
+    haveRoundWiseSubmission: Boolean
   }
 
   # Paginated response for users

@@ -6,8 +6,10 @@ import {
   Grid2 as Grid,
   CircularProgress,
   Box,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import { useMutation } from "@apollo/client";
 import {
   CREATE_COMPETITION,
@@ -276,18 +278,13 @@ const CompetitionForm = () => {
 
               {/* Have Round-Wise Submission */}
               <Grid size={{ xs: 6, sm: 3 }}>
-                <Field
-                  label="Have Round-Wise Submission"
-                  name="haveRoundWiseSubmission"
-                  component={OutlinedTextField}
-                  select
-                >
-                  <MenuItem key={"yes"} value={true}>
-                    Yes
-                  </MenuItem>
-                  <MenuItem key={"no"} value={false}>
-                    No
-                  </MenuItem>
+                <Field name="haveRoundWiseSubmission">
+                  {({ field }: FieldProps) => (
+                    <FormControlLabel
+                      control={<Checkbox {...field} checked={field.value} />}
+                      label="Round Wise Submission"
+                    />
+                  )}
                 </Field>
               </Grid>
 

@@ -20,6 +20,7 @@ export const CREATE_COMPETITION = gql`
       mediaUrl
       submissionType
       status
+      haveRoundWiseSubmission
       rounds {
         id
         startDate
@@ -123,6 +124,7 @@ export const GET_COMPETITION_QUERY = gql`
         status
         maxScore
         maxVote
+        haveRoundWiseSubmission
         judges {
           name
           firstName
@@ -163,6 +165,7 @@ export const GET_COMPETITIONS_QUERY = gql`
         submissionType
         status
         eligibility
+        haveRoundWiseSubmission
         rounds {
           id
           startDate

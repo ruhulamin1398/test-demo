@@ -1,38 +1,15 @@
 "use client";
 import React from "react";
 import {
-  AppBar,
   Avatar,
   Box,
-  Button,
-  Card,
   CardContent,
   CardHeader,
   Container,
-  Divider,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   Card as MuiCard,
-  Paper,
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import PhotographyCompetitionTimeline from "./PhotographyCompetitionTimeline";
-import {
-  Beenhere,
-  BeenhereOutlined,
-  CalendarMonth,
-  FacebookOutlined,
-  Google,
-  HeartBroken,
-  Instagram,
-  Share,
-  Twitter,
-} from "@mui/icons-material";
-import { purple, red } from "@mui/material/colors";
 import StickyScrollableTabs from "./StickyScrollableTabs";
 import CompetitionSummary from "./CompetitionSummary";
 import CompetitionDetailSidebar from "./CompetitionDetailSidebar";

@@ -9,7 +9,6 @@ import {
   CircularProgress,
   Checkbox,
   FormControlLabel,
-  CheckboxProps,
 } from "@mui/material";
 import {
   IRound,
