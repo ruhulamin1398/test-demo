@@ -8,11 +8,12 @@ import {
   CardMedia,
   Container,
 } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Upload } from "../upload";
 import { useFileUpload } from "@/app/hooks/useFileUpload";
 import { ConfirmDialog } from "../custom-dialog";
 
+import { toast } from "@/components/snackbar";
 type Props = {
   competitionId: string;
   title: string;
@@ -22,24 +23,35 @@ type Props = {
 const ContentSubmission = ({ competitionId, title, date }: Props) => {
   const { uploadFile, isLoading, progress, error } = useFileUpload();
   const [file, setFile] = useState<File | string | null>(null);
- const [isOpenConfirmationDialog, setIsOpenConfirmationDialog] = useState(false);
-  
-const handleOpenDialog= ()=>{
-  setIsOpenConfirmationDialog(true);
-  console.log("open");
-} 
-const handleConfirmationDialog = async() => {
-  setIsOpenConfirmationDialog(false);
-  await handleUpload()
-    console.log("Confirmed");
+  const [isOpenConfirmationDialog, setIsOpenConfirmationDialog] =
+    useState(false);
+
+  useEffect(() => {
+    if (error) {
+      console.log("error", error);
+      toast.dismiss();
+      toast.error(error);
+    }
+    if (isLoading) {
+      toast.dismiss();
+      toast.loading("Uploading...");
+    }
+  }, [error, isLoading, progress]);
+
+  const handleOpenDialog = () => {
+    setIsOpenConfirmationDialog(true);
   };
+  const handleConfirmationDialog = async () => {
+    setIsOpenConfirmationDialog(false);
+    await handleUpload();
+  };
+
   const handleDropSingleFile = useCallback((acceptedFiles: File[]) => {
     console.log(acceptedFiles);
     const newFile = acceptedFiles[0];
     setFile(newFile);
   }, []);
   const handleUpload = async () => {
-
     console.log(!file, !competitionId);
     if (!file || !competitionId) return;
     try {
@@ -52,53 +64,65 @@ const handleConfirmationDialog = async() => {
         }
       );
       if (response.data) {
+        toast.dismiss();
+        console.log(response.data);
+        toast.success("Upload successful");
+        setFile(null);
         // TODO: Handle the uploaded image URL here if you want to display it after upload
       } else {
+        toast.dismiss();
+        console.log("Something went wrong");
         // TODO: Handle error
       }
     } catch (err) {
-      console.log(err);
+      console.log("err");
     }
   };
   return (
     <>
-    <Card>
-      <CardHeader title={title} subheader={date} />
-      <CardContent>
-        <Upload
-          value={file}
-          onDrop={handleDropSingleFile}
-          onDelete={() => setFile(null)}
-        />
-      </CardContent>
-      <CardActions>
-        <Box
-          sx={{ px: 2, flex: 1, pb: 2 }}
-          display="flex"
-          justifyContent="flex-end"
-        >
-          <Button
-            disabled={!competitionId || !file}
-            onClick={handleOpenDialog}
-            color="primary"
-            variant="contained"
-          >
-            Submit
-          </Button>
-        </Box>
-      </CardActions>
-    </Card>
-    <ConfirmDialog 
-    title={"Do you want to submit?"} 
-    open={isOpenConfirmationDialog}   
-    action={
-            <Button variant="contained" color="primary" onClick={handleConfirmationDialog}>
-              Confirm
-            </Button>
-          } 
-    onClose={()=>{setIsOpenConfirmationDialog(false)}}  
+      <Card>
+        <CardHeader title={title} subheader={date} />
+        <CardContent>
+          <Upload
+            value={file}
+            onDrop={handleDropSingleFile}
+            onDelete={() => setFile(null)}
           />
-  </>
+        </CardContent>
+        <CardActions>
+          <Box
+            sx={{ px: 2, flex: 1, pb: 2 }}
+            display="flex"
+            justifyContent="flex-end"
+          >
+            <Button
+              disabled={!competitionId || !file}
+              onClick={handleOpenDialog}
+              color="primary"
+              variant="contained"
+            >
+              Submit
+            </Button>
+          </Box>
+        </CardActions>
+      </Card>
+      <ConfirmDialog
+        title={"Do you want to submit?"}
+        open={isOpenConfirmationDialog}
+        action={
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleConfirmationDialog}
+          >
+            Confirm
+          </Button>
+        }
+        onClose={() => {
+          setIsOpenConfirmationDialog(false);
+        }}
+      />
+    </>
   );
 };
 

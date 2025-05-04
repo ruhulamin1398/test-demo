@@ -49,14 +49,14 @@ const getRunningRoundId = async ({
 
     /// if not roundwise submission  check enrolment deadline
     if (!haveRoundWiseSubmission) {
-      const enrolmentDeadline = competition.enrolmentDeadline?.endDate;
+      const enrolmentDeadline = competition.submission?.endDate;
 
       if (!enrolmentDeadline) {
         throw new Error(
           "Enrolment deadline does not exist for this competition"
         );
       }
-
+      // change the  time comparition, use dayjs
       if (currentDate > new Date(enrolmentDeadline)) {
         throw new Error("Enrolment deadline has passed");
       }
@@ -68,14 +68,14 @@ const getRunningRoundId = async ({
         throw new Error("No round found");
       }
 
-      // revert if alreay submitted 
-      const existingSubmission =  await EnrolmentSubmission.findOne({
-        roundId:round.id,
+      // revert if alreay submitted
+      const existingSubmission = await EnrolmentSubmission.findOne({
+        roundId: round.id,
         enrolId: enrolment.id,
         userId,
       });
 
-      if ( existingSubmission ) {
+      if (existingSubmission) {
         throw new Error("Already submitted");
       }
 
@@ -95,19 +95,23 @@ const getRunningRoundId = async ({
     if (currentDate > new Date(activeRound?.endDate)) {
       throw new Error("Enrolment deadline has passed");
     }
-    const existingSubmission =  await EnrolmentSubmission.findOne({
-      roundId:activeRound.id,
+    const existingSubmission = await EnrolmentSubmission.findOne({
+      roundId: activeRound.id,
       enrolId: enrolment.id,
       userId,
     });
 
-    if ( existingSubmission ) {
+    if (existingSubmission) {
       throw new Error("Already submitted");
     }
     return { roundId: activeRound.id, enrolId: enrolment.id };
   } catch (error) {
     console.error("Error in getRunningRoundId:", error);
-    throw new Error("Failed to get running round ID");
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Unknown error in getRunningRoundId"
+    );
   }
 };
 export async function POST(req: NextRequest) {
