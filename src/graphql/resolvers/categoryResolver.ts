@@ -1,11 +1,12 @@
 import { getResolverErrorMessage } from "@/app/lib/utils";
-import Category, { ICategoryDocument } from "@/models/Category";
+import { ICategory } from "@/interfaces/category";
+import Category from "@/models/Category";
 import { applyUpdates } from "@/utils/dynamic-input";
 import { IResolvers } from "@graphql-tools/utils";
 import { GraphQLError } from "graphql";
 
 const categoryUpdatableFields = ["name", "slug", "description"] as const;
-const mutableFields: (keyof ICategoryDocument)[] = [...categoryUpdatableFields];
+const mutableFields: (keyof ICategory)[] = [...categoryUpdatableFields];
 
 interface CreateCategoryInput {
   input: {
@@ -38,7 +39,7 @@ const categoryResolvers: IResolvers = {
     async createCategory(
       _: unknown,
       { input }: CreateCategoryInput
-    ): Promise<ICategoryDocument> {
+    ): Promise<ICategory> {
       try {
         const { name, description } = input;
         const category = new Category({ name, description });
@@ -56,7 +57,7 @@ const categoryResolvers: IResolvers = {
     async updateCategory(
       _: unknown,
       { input }: UpdateCategoryInput
-    ): Promise<ICategoryDocument> {
+    ): Promise<ICategory> {
       try {
         const category = await Category.findById(input.id);
         if (!category) {
@@ -67,7 +68,7 @@ const categoryResolvers: IResolvers = {
           });
         }
 
-        applyUpdates<ICategoryDocument>(category, input, mutableFields);
+        applyUpdates<ICategory>(category, input, mutableFields);
 
         return await category.save();
       } catch (error) {
@@ -111,14 +112,14 @@ const categoryResolvers: IResolvers = {
   },
 
   Query: {
-    async categories(): Promise<ICategoryDocument[]> {
+    async categories(): Promise<ICategory[]> {
       return await Category.find().sort({ createdAt: -1 });
     },
 
     async category(
       _: unknown,
       { id }: { id: string }
-    ): Promise<ICategoryDocument | null> {
+    ): Promise<ICategory | null> {
       return await Category.findById(id);
     },
   },

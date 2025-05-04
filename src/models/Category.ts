@@ -1,9 +1,7 @@
 // models/Category.ts
 
-import { ICategory } from "@/interfaces/category";
-import { Schema, model, Document } from "mongoose";
-
-export interface ICategoryDocument extends ICategory, Document {}
+import { ICategoryDocument } from "@/interfaces/category";
+import { Schema, model } from "mongoose";
 
 const CategorySchema: Schema = new Schema<ICategoryDocument>(
   {
