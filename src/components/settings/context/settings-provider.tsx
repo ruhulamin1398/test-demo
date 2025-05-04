@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { isEqual } from 'es-toolkit';
-import { getCookie, getStorage } from 'minimal-shared/utils';
-import { useMemo, useState, useEffect, useCallback } from 'react';
-import { useCookies, useLocalStorage } from 'minimal-shared/hooks';
+import { isEqual } from "es-toolkit";
+import { getCookie, getStorage } from "minimal-shared/utils";
+import { useMemo, useState, useEffect, useCallback } from "react";
+import { useCookies, useLocalStorage } from "minimal-shared/hooks";
 
-import { SettingsContext } from './settings-context';
-import { SETTINGS_STORAGE_KEY } from '../settings-config';
+import { SettingsContext } from "./settings-context";
+import { SETTINGS_STORAGE_KEY } from "../settings-config";
 
-import type { SettingsState, SettingsProviderProps } from '../types';
+import type { SettingsState, SettingsProviderProps } from "../types";
 
 // ----------------------------------------------------------------------
 
@@ -50,7 +50,10 @@ export function SettingsProvider({
 
     if (storedValue) {
       try {
-        if (!storedValue.version || storedValue.version !== defaultSettings.version) {
+        if (
+          !storedValue.version ||
+          storedValue.version !== defaultSettings.version
+        ) {
           onReset();
         }
       } catch {
@@ -71,8 +74,21 @@ export function SettingsProvider({
       setState,
       setField,
     }),
-    [canReset, onReset, openDrawer, onCloseDrawer, onToggleDrawer, state, setField, setState]
+    [
+      canReset,
+      onReset,
+      openDrawer,
+      onCloseDrawer,
+      onToggleDrawer,
+      state,
+      setField,
+      setState,
+    ]
   );
 
-  return <SettingsContext.Provider value={memoizedValue}>{children}</SettingsContext.Provider>;
+  return (
+    <SettingsContext.Provider value={memoizedValue}>
+      {children}
+    </SettingsContext.Provider>
+  );
 }

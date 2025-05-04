@@ -12,8 +12,11 @@ export const authMiddleware: MiddlewareFactory = (next) => {
     });
     if (!token) {
       const url = new URL(`/auth/login`, request.url);
-      url.searchParams.set("callbackUrl ", encodeURI(request.url));
-      return NextResponse.redirect(url);
+      const response = NextResponse.redirect(url);
+      response.cookies.set("next-auth.callback-url", request.nextUrl.href, {
+        path: "/",
+      });
+      return response;
     }
 
     // Otherwise, continue to the next middleware

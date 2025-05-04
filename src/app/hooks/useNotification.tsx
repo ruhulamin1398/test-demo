@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { toast, ToastOptions } from "react-toastify";
 import { Alert } from "@mui/material";
-import "react-toastify/dist/ReactToastify.css";
+// import "react-toastify/dist/ReactToastify.css";
 
 interface NotifyProps {
   severity: "success" | "error" | "info" | "warning";

@@ -14,11 +14,7 @@ import { detectLanguage } from "@/locales/server";
 
 import type { Metadata } from "next";
 import "@/global.css";
-import {
-  SettingsDrawer,
-  defaultSettings,
-  SettingsProvider,
-} from "@/components/settings";
+import { defaultSettings, SettingsProvider } from "@/components/settings";
 
 import { CONFIG } from "@/global-config";
 import { MotionLazy } from "@/components/animate/motion-lazy";
@@ -74,6 +70,7 @@ export default async function RootLayout({
               defaultMode={themeConfig.defaultMode}
               modeStorageKey={themeConfig.modeStorageKey}
             >
+              <Snackbar />
               <MotionLazy>
                 <ApolloClientProvider>
                   <ReduxProvider>

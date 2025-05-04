@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import Portal from '@mui/material/Portal';
+import Portal from "@mui/material/Portal";
 
-import { Iconify } from '../iconify';
-import { SnackbarRoot } from './styles';
-import { snackbarClasses } from './classes';
+import { Iconify } from "../iconify";
+import { SnackbarRoot } from "./styles";
+import { snackbarClasses } from "./classes";
 
 // ----------------------------------------------------------------------
 
@@ -12,6 +12,7 @@ export function Snackbar() {
   return (
     <Portal>
       <SnackbarRoot
+        duration={100000}
         expand
         gap={12}
         closeButton
@@ -42,12 +43,30 @@ export function Snackbar() {
         }}
         icons={{
           loading: <span className={snackbarClasses.loadingIcon} />,
-          info: <Iconify className={snackbarClasses.iconSvg} icon="solar:info-circle-bold" />,
-          success: <Iconify className={snackbarClasses.iconSvg} icon="solar:check-circle-bold" />,
-          warning: (
-            <Iconify className={snackbarClasses.iconSvg} icon="solar:danger-triangle-bold" />
+          info: (
+            <Iconify
+              className={snackbarClasses.iconSvg}
+              icon="solar:info-circle-bold"
+            />
           ),
-          error: <Iconify className={snackbarClasses.iconSvg} icon="solar:danger-bold" />,
+          success: (
+            <Iconify
+              className={snackbarClasses.iconSvg}
+              icon="solar:check-circle-bold"
+            />
+          ),
+          warning: (
+            <Iconify
+              className={snackbarClasses.iconSvg}
+              icon="solar:danger-triangle-bold"
+            />
+          ),
+          error: (
+            <Iconify
+              className={snackbarClasses.iconSvg}
+              icon="solar:danger-bold"
+            />
+          ),
         }}
       />
     </Portal>
