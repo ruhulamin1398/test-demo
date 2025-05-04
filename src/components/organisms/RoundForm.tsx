@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import {
   Button,
   Grid2 as Grid,
@@ -9,6 +9,7 @@ import {
   CircularProgress,
   Checkbox,
   FormControlLabel,
+  CheckboxProps,
 } from "@mui/material";
 import {
   IRound,
@@ -65,7 +66,6 @@ const RoundForm: React.FC = () => {
     }
     const {
       maxScore = 0,
-      maxVote = 0,
       maxWinners = 0,
       roundNumber = 1,
       judges = [],
@@ -139,8 +139,8 @@ const RoundForm: React.FC = () => {
     submissionStartDate: formatDateForDatePicker(new Date()),
     submissionEndDate: formatDateForDatePicker(new Date()),
     judgementCriteria: RoundJudgementCriteriaEnum.JUDGE,
-    maxScore: 100,
-    maxVote: 100,
+    maxScore: 0,
+    maxVote: 0,
     maxWinners: 100,
     description: "",
     isActiveRound: false,
@@ -165,6 +165,9 @@ const RoundForm: React.FC = () => {
           label: `${firstName} ${lastName}`,
         })),
         submissionType: recordToModify.submissionType || "Photo",
+        maxScore: recordToModify.maxScore || 0,
+        maxVote: recordToModify.maxVote || 0,
+        maxWinners: recordToModify.maxWinners || 0,
       }
     : initialFormValues;
 
@@ -240,28 +243,27 @@ const RoundForm: React.FC = () => {
                 component={CustomDatePicker}
               />
             </Grid>
-
-            {(values.judgementCriteria === RoundJudgementCriteriaEnum.PUBLIC ||
-              values.judgementCriteria === RoundJudgementCriteriaEnum.BOTH) && (
+            {values.judgementCriteria === RoundJudgementCriteriaEnum.PUBLIC ||
+            values.judgementCriteria === RoundJudgementCriteriaEnum.BOTH ? (
               <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                 <Field
-                  label={"Max  Vote"}
+                  label={"Max Vote"}
                   name="maxVote"
                   component={OutlinedTextField}
                 />
               </Grid>
-            )}
-
-            {(values.judgementCriteria === RoundJudgementCriteriaEnum.JUDGE ||
-              values.judgementCriteria === RoundJudgementCriteriaEnum.BOTH) && (
+            ) : null}
+            {values.judgementCriteria === RoundJudgementCriteriaEnum.JUDGE ||
+            values.judgementCriteria === RoundJudgementCriteriaEnum.BOTH ? (
               <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                 <Field
-                  label={"Max  Score"}
+                  label={"Max Score"}
                   name="maxScore"
                   component={OutlinedTextField}
                 />
               </Grid>
-            )}
+            ) : null}
+
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <Field
                 label="Status"
@@ -301,10 +303,14 @@ const RoundForm: React.FC = () => {
             </Grid>
 
             <Grid size={{ xs: 12, sm: 6, md: 3 }} sx={{ py: 3 }}>
-              <label style={{ display: "flex", alignItems: "center" }}>
-                <Field name="isActiveRound" type="checkbox" sx={{ mx: 2 }} />
-                Is Active Round
-              </label>
+              <Field name="isActiveRound">
+                {({ field }: FieldProps) => (
+                  <FormControlLabel
+                    control={<Checkbox {...field} checked={field.value} />}
+                    label="Is Active Round"
+                  />
+                )}
+              </Field>
             </Grid>
 
             {values.judgementCriteria === RoundJudgementCriteriaEnum.JUDGE ? (

@@ -140,7 +140,7 @@ const roundResolver = {
         maxWinners,
         judges = [],
       } = input;
-      return Round.findByIdAndUpdate(
+      return await Round.findByIdAndUpdate(
         id,
         {
           competition,

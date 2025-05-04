@@ -46,6 +46,7 @@ export const UPDATE_COMPETITION_ROUND = gql`
       submissionType
       submissionStartDate
       submissionEndDate
+      maxScore
       maxVote
       status
       judges {
