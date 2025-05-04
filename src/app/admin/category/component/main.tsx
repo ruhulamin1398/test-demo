@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Button, Paper, Table, TableBody, TableContainer } from "@mui/material";
 import {
   TableEmptyRows,
@@ -11,15 +11,19 @@ import { ICategory } from "@/interfaces/category";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   CREATE_CATEGORY,
+  DELETE_CATEGORY,
   GET_CATEGORIES,
   UPDATE_CATEGORY,
 } from "@/graphql-client/category";
 import { ConfirmDialog } from "@/components/custom-dialog";
 import { ActionTypes, CategoryTableRow } from "./categoryTableRow";
 import PageContainer from "./container";
-import CategoryForm from "./categoryForm";
+import CategoryForm, { CategorySchemaType } from "./categoryForm";
+import { handleGraphQLError } from "@/utils/errorHandling";
+import { toast } from "@/components/snackbar";
 
 const TABLE_HEAD: TableHeadCellProps[] = [
+  { id: "sl", label: "#SL" },
   { id: "name", label: "Name" },
   { id: "description", label: "Description" },
   { id: "action-buttons", label: "Actions", width: 88 },
@@ -28,18 +32,28 @@ const TABLE_HEAD: TableHeadCellProps[] = [
 type Props = {};
 
 const MainContent = (props: Props) => {
+  const [createOrUpdateError, setCreateOrUpdateError] = useState<string>();
   const [
     createCategory,
     { data: createdData, loading: createLoading, error: createError },
-  ] = useMutation(CREATE_CATEGORY);
+  ] = useMutation(CREATE_CATEGORY, {
+    refetchQueries: [{ query: GET_CATEGORIES }],
+    awaitRefetchQueries: true, // ensures query finishes before continuing
+  });
   const [
     updateCategory,
     { data: updatedData, loading: updateLoading, error: updateError },
-  ] = useMutation(UPDATE_CATEGORY);
+  ] = useMutation(UPDATE_CATEGORY, {
+    refetchQueries: [{ query: GET_CATEGORIES }],
+    awaitRefetchQueries: true, // ensures query finishes before continuing
+  });
   const [
     deleteCategory,
     { data: deletedData, loading: deleteLoading, error: deleteError },
-  ] = useMutation(UPDATE_CATEGORY);
+  ] = useMutation(DELETE_CATEGORY, {
+    refetchQueries: [{ query: GET_CATEGORIES }],
+    awaitRefetchQueries: true, // ensures query finishes before continuing
+  });
   const { data, loading, error } = useQuery(GET_CATEGORIES);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [selectedRow, setSelectedRow] = useState<{
@@ -47,8 +61,9 @@ const MainContent = (props: Props) => {
     action: ActionTypes;
   }>();
   useEffect(() => {
-    if (data && !loading && !error) {
-      setCategories(data.categories);
+    if (data?.categories && !loading && !error) {
+      console.log(data, "data");
+      setCategories([...data.categories]);
     }
   }, [data, loading, error]);
 
@@ -56,6 +71,7 @@ const MainContent = (props: Props) => {
     category: ICategory | undefined,
     action: ActionTypes
   ) => {
+    console.log({ data: category, action }, "selectedRow;");
     setSelectedRow({ data: category, action });
   };
 
@@ -63,23 +79,64 @@ const MainContent = (props: Props) => {
     setSelectedRow(undefined);
   };
 
-  const handConfirmDelete = () => {
+  const handConfirmDelete = async () => {
     if (selectedRow?.data) {
-      // Call the delete mutation here
-      // After successful deletion, update the categories state
-      setCategories((prev) =>
-        prev.filter((category) => category.id !== selectedRow.data?.id)
-      );
+      await deleteCategory({
+        variables: { id: selectedRow.data?.id },
+      });
+      toast.success("Delete success!");
       handleResetActions();
     }
   };
 
+  const handleSaveCategory = async ({
+    name,
+    description,
+  }: CategorySchemaType) => {
+    if (selectedRow?.action === "update" && selectedRow?.data) {
+      await updateCategory({
+        variables: { input: { id: selectedRow.data?.id, name, description } },
+      });
+      toast.success("Category created!");
+    } else {
+      await createCategory({ variables: { input: { name, description } } });
+      toast.success("Category updated!");
+    }
+    handleResetActions();
+  };
+
+  useEffect(() => {
+    if (createError) {
+      const message = handleGraphQLError(createError);
+      setCreateOrUpdateError(message);
+      console.log(message, createError, "createError");
+    }
+  }, [createdData, createError, createLoading]);
+
+  useEffect(() => {
+    if (updatedData) {
+      setCategories((prev) =>
+        prev.map((category) =>
+          category.id === updatedData.updateCategory.id
+            ? updatedData.updateCategory
+            : category
+        )
+      );
+    }
+  }, [updatedData]);
+  useEffect(() => {
+    if (deletedData) {
+      setCategories((prev) =>
+        prev.filter((category) => category.id !== deletedData.deleteCategory.id)
+      );
+    }
+  }, [deletedData]);
+
   return (
     <PageContainer onCreateCategory={handleActions}>
       <TableContainer component={Paper} elevation={1}>
-        <Table size={"small"} sx={{ minWidth: 960 }}>
+        <Table sx={{ minWidth: 960 }}>
           <TableHeadCustom headCells={TABLE_HEAD} />
-
           <TableBody>
             {categories.map((row, i) => (
               <CategoryTableRow
@@ -93,7 +150,7 @@ const MainContent = (props: Props) => {
             {categories.length > 0 && (
               <TableEmptyRows
                 height={56}
-                emptyRows={categories.length < 10 ? 10 - categories.length : 0}
+                emptyRows={categories.length < 7 ? 7 - categories.length : 0}
               />
             )}
 
@@ -118,30 +175,16 @@ const MainContent = (props: Props) => {
         }
       />
       <CategoryForm
-        open={!!selectedRow?.data && selectedRow.action === "update"}
+        open={
+          selectedRow?.action
+            ? ["create", "update"].includes(selectedRow?.action)
+            : false
+        }
         onClose={handleResetActions}
-        category={selectedRow?.data}
-        onSubmit={(category) => {
-          if (selectedRow?.action === "update") {
-            updateCategory({
-              variables: { id: selectedRow.data?.id, ...category },
-            });
-          } else {
-            createCategory({ variables: { ...category } });
-          }
-          handleResetActions();
-        }}
+        currentCategory={selectedRow?.data}
+        onSubmit={handleSaveCategory}
         loading={!!createLoading || !!updateLoading}
-        error={!!createError || !!updateError}
-        success={!!createdData || !!updatedData}
-        successMessage={
-          !!createdData
-            ? "Category created successfully"
-            : "Category updated successfully"
-        }
-        errorMessage={
-          !!createError ? "Error creating category" : "Error updating category"
-        }
+        error={createOrUpdateError}
       />
     </PageContainer>
   );

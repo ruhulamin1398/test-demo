@@ -18,6 +18,7 @@ import { defaultSettings, SettingsProvider } from "@/components/settings";
 
 import { CONFIG } from "@/global-config";
 import { MotionLazy } from "@/components/animate/motion-lazy";
+import { Snackbar } from "@/components/snackbar";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -72,6 +73,7 @@ export default async function RootLayout({
               <MotionLazy>
                 <ApolloClientProvider>
                   <ReduxProvider>
+                    <Snackbar />
                     <LayoutRenderer>{children}</LayoutRenderer>
                   </ReduxProvider>
                 </ApolloClientProvider>

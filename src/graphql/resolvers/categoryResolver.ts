@@ -11,7 +11,6 @@ const mutableFields: (keyof ICategory)[] = [...categoryUpdatableFields];
 interface CreateCategoryInput {
   input: {
     name: string;
-    slug: string;
     description?: string;
   };
 }

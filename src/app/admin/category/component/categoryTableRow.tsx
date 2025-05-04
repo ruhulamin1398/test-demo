@@ -30,11 +30,12 @@ export const CategoryTableRow = ({
         <TableCell sx={{ whiteSpace: "nowrap" }}>{row.name}</TableCell>
         <TableCell sx={{ whiteSpace: "nowrap" }}>{row.description}</TableCell>
         <TableCell>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Button
               variant="contained"
               startIcon={<Iconify icon="solar:pen-bold" />}
               onClick={() => onEditCategory(row, "update")}
+              size="small"
             >
               Edit
             </Button>
@@ -43,6 +44,7 @@ export const CategoryTableRow = ({
               startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
               onClick={() => onDeleteCategory(row, "delete")}
               sx={{ color: "error.main" }}
+              size="small"
             >
               Delete
             </Button>

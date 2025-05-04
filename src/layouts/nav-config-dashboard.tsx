@@ -113,6 +113,11 @@ export const navData: NavSectionProps["data"] = [
           // { title: "Account", path: paths.dashboard.user.account },
         ],
       },
+      {
+        title: "Category",
+        path: paths.dashboard.category.root,
+        icon: ICONS.user,
+      },
       // {
       //   title: "Product",
       //   path: paths.dashboard.product.root,

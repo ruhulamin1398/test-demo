@@ -17,12 +17,13 @@ import {
 import { toast } from "@/components/snackbar";
 import { Form, Field } from "@/components/hook-form";
 import { ICategory } from "@/interfaces/category";
+import { useEffect } from "react";
 
 // ----------------------------------------------------------------------
 
-export type UserQuickEditSchemaType = zod.infer<typeof UserQuickEditSchema>;
+export type CategorySchemaType = zod.infer<typeof CategorySchema>;
 
-export const UserQuickEditSchema = zod.object({
+export const CategorySchema = zod.object({
   name: zod.string().min(1, { message: "Name is required!" }),
   description: zod.string().optional(),
 });
@@ -33,17 +34,26 @@ type Props = {
   open: boolean;
   onClose: () => void;
   currentCategory?: ICategory;
+  onSubmit?: (data: CategorySchemaType) => void;
+  loading: boolean;
+  error?: string;
 };
 
-export const CategoryForm = ({ currentCategory, open, onClose }: Props) => {
-  const defaultValues: UserQuickEditSchemaType = {
+export const CategoryForm = ({
+  currentCategory,
+  open,
+  onClose,
+  onSubmit,
+  loading,
+}: Props) => {
+  const defaultValues: CategorySchemaType = {
     name: "",
     description: "",
   };
 
-  const methods = useForm<UserQuickEditSchemaType>({
+  const methods = useForm<CategorySchemaType>({
     mode: "all",
-    resolver: zodResolver(UserQuickEditSchema),
+    resolver: zodResolver(CategorySchema),
     defaultValues,
     values: currentCategory,
   });
@@ -54,26 +64,20 @@ export const CategoryForm = ({ currentCategory, open, onClose }: Props) => {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
-    const promise = new Promise((resolve) => setTimeout(resolve, 1000));
-
-    try {
-      reset();
-      onClose();
-
-      toast.promise(promise, {
-        loading: "Loading...",
-        success: "Update success!",
-        error: "Update error!",
-      });
-
-      await promise;
-
-      console.info("DATA", data);
-    } catch (error) {
-      console.error(error);
-    }
+  const onSubmitFormData = handleSubmit(async (data) => {
+    onSubmit?.(data);
   });
+
+  useEffect(() => {
+    if (currentCategory) {
+      reset({
+        name: currentCategory.name,
+        description: currentCategory.description,
+      });
+    } else {
+      reset(defaultValues);
+    }
+  }, [currentCategory, reset]);
 
   return (
     <Dialog
@@ -93,7 +97,7 @@ export const CategoryForm = ({ currentCategory, open, onClose }: Props) => {
         currentCategory ? "Update" : "Create"
       } Category`}</DialogTitle>
 
-      <Form methods={methods} onSubmit={onSubmit}>
+      <Form methods={methods} onSubmit={onSubmitFormData}>
         <DialogContent>
           <Box py={1}>
             <Field.Text name="name" label="Category name" />
@@ -116,7 +120,7 @@ export const CategoryForm = ({ currentCategory, open, onClose }: Props) => {
           <LoadingButton
             type="submit"
             variant="contained"
-            loading={isSubmitting}
+            loading={isSubmitting || loading}
           >
             {currentCategory ? "Update" : "Create"}
           </LoadingButton>

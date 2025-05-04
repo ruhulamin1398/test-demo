@@ -1,9 +1,8 @@
 // models/Category.ts
 
 import { ICategoryDocument } from "@/interfaces/category";
-import { Schema, model } from "mongoose";
-
-const CategorySchema: Schema = new Schema<ICategoryDocument>(
+import { Schema, model, models } from "mongoose";
+const categorySchema: Schema = new Schema<ICategoryDocument>(
   {
     name: {
       type: String,
@@ -13,8 +12,8 @@ const CategorySchema: Schema = new Schema<ICategoryDocument>(
     },
     slug: {
       type: String,
-      required: true,
-      unique: true,
+      required: false,
+      unique: false,
       lowercase: true,
       trim: true,
     },
@@ -28,6 +27,7 @@ const CategorySchema: Schema = new Schema<ICategoryDocument>(
   }
 );
 
-const Category = model<ICategoryDocument>("Category", CategorySchema);
+export const Category =
+  models.Category || model<ICategoryDocument>("Category", categorySchema);
 
 export default Category;
