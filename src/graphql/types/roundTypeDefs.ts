@@ -31,6 +31,7 @@ export const roundTypeDefs = `#graphql
     submissionEndDate: String!
     
     maxScore: Float!
+    maxVote: Float!
     status: RoundStatusEnum
     isActiveRound:Boolean!
     judges: [String!]
@@ -47,6 +48,7 @@ export const roundTypeDefs = `#graphql
     submissionStartDate: String!
     submissionEndDate: String!
     maxScore: Float!
+    maxVote: Float!
     submissionType: SubmissionTypeEnum!
     enrolledIds: [Enrolment]
     judges: [User]

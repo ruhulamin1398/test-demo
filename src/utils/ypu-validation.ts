@@ -205,6 +205,9 @@ export const roundFormValidationSchema = ({
     maxScore: Yup.number()
       .required("Max score is required")
       .positive("Must be a positive number"),
+    maxVote: Yup.number()
+      .required("Max score is required")
+      .positive("Must be a positive number"),
     description: Yup.string()
       .required("Description is required")
       .min(4, "Title should be minimum 4 characters."),
