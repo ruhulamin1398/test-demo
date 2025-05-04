@@ -11,6 +11,7 @@ import {
 import React, { useCallback, useState } from "react";
 import { Upload } from "../upload";
 import { useFileUpload } from "@/app/hooks/useFileUpload";
+import { ConfirmDialog } from "../custom-dialog";
 
 type Props = {
   competitionId: string;
@@ -21,12 +22,24 @@ type Props = {
 const ContentSubmission = ({ competitionId, title, date }: Props) => {
   const { uploadFile, isLoading, progress, error } = useFileUpload();
   const [file, setFile] = useState<File | string | null>(null);
+ const [isOpenConfirmationDialog, setIsOpenConfirmationDialog] = useState(false);
+  
+const handleOpenDialog= ()=>{
+  setIsOpenConfirmationDialog(true);
+  console.log("open");
+} 
+const handleConfirmationDialog = async() => {
+  setIsOpenConfirmationDialog(false);
+  await handleUpload()
+    console.log("Confirmed");
+  };
   const handleDropSingleFile = useCallback((acceptedFiles: File[]) => {
     console.log(acceptedFiles);
     const newFile = acceptedFiles[0];
     setFile(newFile);
   }, []);
   const handleUpload = async () => {
+
     console.log(!file, !competitionId);
     if (!file || !competitionId) return;
     try {
@@ -48,6 +61,7 @@ const ContentSubmission = ({ competitionId, title, date }: Props) => {
     }
   };
   return (
+    <>
     <Card>
       <CardHeader title={title} subheader={date} />
       <CardContent>
@@ -65,7 +79,7 @@ const ContentSubmission = ({ competitionId, title, date }: Props) => {
         >
           <Button
             disabled={!competitionId || !file}
-            onClick={handleUpload}
+            onClick={handleOpenDialog}
             color="primary"
             variant="contained"
           >
@@ -74,6 +88,17 @@ const ContentSubmission = ({ competitionId, title, date }: Props) => {
         </Box>
       </CardActions>
     </Card>
+    <ConfirmDialog 
+    title={"Do you want to submit?"} 
+    open={isOpenConfirmationDialog}   
+    action={
+            <Button variant="contained" color="primary" onClick={handleConfirmationDialog}>
+              Confirm
+            </Button>
+          } 
+    onClose={()=>{setIsOpenConfirmationDialog(false)}}  
+          />
+  </>
   );
 };
 
