@@ -38,6 +38,7 @@ import {
   setRoundInfo,
 } from "@/store/slices/competitionSlice";
 import { ICompetition, SubmissionTypeEnum } from "@/interfaces";
+import { toast } from "sonner";
 
 const RoundForm: React.FC = () => {
   const dispatch = useDispatch();
@@ -108,26 +109,19 @@ const RoundForm: React.FC = () => {
   };
   useEffect(() => {
     if (data?.createRound) {
-      notify({
-        severity: "success",
-        message: "Successfully created round information.",
-      });
-
+      toast.success("Successfully created round information.");
       dispatch(setRoundInfo(data.createRound));
     }
     if (updatedData?.updateRound) {
-      notify({
-        severity: "success",
-        message: "Successfully updated the round information.",
-      });
+      toast.success("Successfully updated round information.");
       dispatch(setRoundInfo(updatedData.updateRound));
     }
 
     if (createError) {
-      notify({ severity: "error", message: handleGraphQLError(createError) });
+      toast.success(handleGraphQLError(createError));
     }
     if (updateError) {
-      notify({ severity: "error", message: handleGraphQLError(updateError) });
+      toast.success(handleGraphQLError(updateError));
     }
   }, [data, updatedData, createError, updateError, notify]);
 
@@ -148,6 +142,8 @@ const RoundForm: React.FC = () => {
     submissionType: SubmissionTypeEnum.PHOTO,
     judges: [] as string[],
   };
+
+  console.log(recordToModify);
 
   const competitionRound = recordToModify
     ? {
@@ -313,7 +309,8 @@ const RoundForm: React.FC = () => {
               </Field>
             </Grid>
 
-            {values.judgementCriteria === RoundJudgementCriteriaEnum.JUDGE ? (
+            {values.judgementCriteria === RoundJudgementCriteriaEnum.JUDGE ||
+            values.judgementCriteria === RoundJudgementCriteriaEnum.BOTH ? (
               <Grid size={{ xs: 12 }}>
                 <Field
                   name="judges"

@@ -59,3 +59,12 @@ export const UPDATE_COMPETITION_ROUND = gql`
     }
   }
 `;
+
+export const DELETE_ROUND = gql`
+  mutation DeleteRound($id: ID!) {
+    deleteRound(id: $id) {
+      success
+      message
+    }
+  }
+`;

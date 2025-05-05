@@ -57,6 +57,8 @@ input UserFilterInput {
   isActive: Boolean
   email: String
   role: RoleEnum
+  phone: String
+  name: String
 }
 
 # Paginated response for users

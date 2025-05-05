@@ -36,6 +36,7 @@ export const CREATE_COMPETITION = gql`
           lastName
         }
         maxWinners
+        isActiveRound
       }
     }
   }
@@ -113,6 +114,7 @@ export const GET_COMPETITION_QUERY = gql`
       submissionType
       status
       eligibility
+      haveRoundWiseSubmission
       rounds {
         id
         startDate
@@ -124,13 +126,13 @@ export const GET_COMPETITION_QUERY = gql`
         status
         maxScore
         maxVote
-        haveRoundWiseSubmission
         judges {
           name
           firstName
           lastName
         }
         maxWinners
+        isActiveRound
       }
       prizes {
         id
@@ -183,6 +185,7 @@ export const GET_COMPETITIONS_QUERY = gql`
             lastName
           }
           maxWinners
+          isActiveRound
         }
         prizes {
           id

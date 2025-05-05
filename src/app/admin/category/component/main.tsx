@@ -21,7 +21,6 @@ import PageContainer from "./container";
 import CategoryForm, { CategorySchemaType } from "./categoryForm";
 import { handleGraphQLError } from "@/utils/errorHandling";
 import { toast } from "sonner";
-import { SnackbarView } from "./snakbarview";
 
 const TABLE_HEAD: TableHeadCellProps[] = [
   { id: "sl", label: "#SL" },
