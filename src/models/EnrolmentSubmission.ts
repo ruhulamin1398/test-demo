@@ -1,4 +1,4 @@
-import { ISubmissionScore } from "@/interfaces/submissionscore";
+import { IEnrolmentSubmission } from "@/interfaces/enrolmentSubmission";
 import mongoose from "mongoose";
 
 // enrolmentSubmissionSchema Model
@@ -27,7 +27,7 @@ const enrolmentSubmissionSchema = new mongoose.Schema(
 
 export const EnrolmentSubmission =
   mongoose.models.EnrolmentSubmission ||
-  mongoose.model<ISubmissionScore & Document>(
+  mongoose.model<IEnrolmentSubmission & Document>(
     "EnrolmentSubmission",
     enrolmentSubmissionSchema
   );
