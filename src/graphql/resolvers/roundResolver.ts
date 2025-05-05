@@ -7,7 +7,14 @@ import {
 } from "@/interfaces";
 import { Enrolment, Round, User } from "@/models";
 import { GraphQLError } from "graphql";
+interface DeleteRoundArgs {
+  id: string;
+}
 
+interface DeleteResponse {
+  success: boolean;
+  message?: string;
+}
 const roundResolver = {
   Query: {
     getRounds: async (): Promise<IRound[]> => {
@@ -164,10 +171,32 @@ const roundResolver = {
       );
     },
     deleteRound: async (
-      _: void,
-      { id }: { id: string }
-    ): Promise<IRound | null> => {
-      return Round.findByIdAndDelete(id);
+      _: unknown,
+      { id }: DeleteRoundArgs
+    ): Promise<DeleteResponse> => {
+      try {
+        const round = await Round.findById(id);
+        if (!round) {
+          throw new GraphQLError("Invalid round.", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+            },
+          });
+        }
+
+        await Round.findByIdAndDelete(id);
+        return {
+          success: true,
+          message: "Round deleted successfully.",
+        };
+      } catch (error) {
+        const formattedError = getResolverErrorMessage(error);
+        throw new GraphQLError(`${formattedError.message}`, {
+          extensions: {
+            code: formattedError.code,
+          },
+        });
+      }
     },
   },
   Round: {

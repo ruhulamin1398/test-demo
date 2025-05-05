@@ -68,6 +68,6 @@ export const roundTypeDefs = `#graphql
   type Mutation {
     createRound(input: CreateCompetitionRoundInput!): Round!
     updateRound(id: ID!, input: CreateCompetitionRoundInput!): Round!
-    deleteRound(id: ID!): Round
+    deleteRound(id: ID!): DeleteResponse
   }
 `;
