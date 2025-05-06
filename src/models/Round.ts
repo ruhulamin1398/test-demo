@@ -20,8 +20,8 @@ const roundSchema = new Schema<IRoundDocument>(
       ) as RoundJudgementCriteriaEnum[], // Explicit cast
       default: RoundJudgementCriteriaEnum.JUDGE,
     },
-    maxScore: { type: Number, required: true, default: 0 },
-    maxVote: { type: Number, required: true, default: 0 },
+    maxScore: { type: Number, default: 0 },
+    maxVote: { type: Number, default: 0 },
     maxWinners: { type: Number, required: true },
     description: { type: String, required: true },
     status: {

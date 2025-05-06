@@ -74,6 +74,7 @@ export default async function RootLayout({
               <MotionLazy>
                 <ApolloClientProvider>
                   <ReduxProvider>
+              <Snackbar />
                     <LayoutRenderer>{children}</LayoutRenderer>
                   </ReduxProvider>
                 </ApolloClientProvider>

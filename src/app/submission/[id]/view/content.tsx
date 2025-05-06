@@ -4,13 +4,13 @@ import { Iconify } from "@/components/iconify";
 import { ICompetition } from "@/interfaces";
 import { ContestDateTimeLine } from "@/sections/competition-single/contest-date-timeline";
 import { Box, Grid2 as Grid, IconButton, Typography } from "@mui/material";
-import React from "react";
 
 import { useDate } from "@/hooks/use-date";
 
 type Props = { competition: ICompetition };
 const PageContent = ({ competition }: Props) => {
   const { formatDate } = useDate();
+
   return (
     <Grid container spacing={{ xs: 3, md: 5, lg: 8 }}>
       <Grid size={{ xs: 12, md: 6, lg: 7 }}>

@@ -5,6 +5,7 @@ import { submissionScoreTypeDefs } from "./submissionScoreTypeDefs";
 import { userTypeDefs } from "./userTypedefs";
 import { uploadTpeDefs } from "./uploadTypeDefs";
 import { categoryTypeDefs } from "./categoryTypedefs";
+import { enrolmentSubmissionTypeDefs } from "./enrolmentSubmissionTypeDefs";
 
 export const typeDefs = [
   userTypeDefs,
@@ -12,6 +13,7 @@ export const typeDefs = [
   roundTypeDefs,
   enrolmentTypeDefs,
   submissionScoreTypeDefs,
+  enrolmentSubmissionTypeDefs,
   uploadTpeDefs,
   categoryTypeDefs,
 ];
