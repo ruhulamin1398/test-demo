@@ -50,6 +50,7 @@ export interface ICompetition {
   haveRoundWiseSubmission: boolean;
   slug?: string;
   activeRound?: IRound;
+  isEnrolled?: boolean;
 }
 
 export interface PaginationInput {

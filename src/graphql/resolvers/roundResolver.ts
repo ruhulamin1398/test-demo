@@ -201,7 +201,7 @@ const roundResolver = {
   },
   Round: {
     enrolledIds: async (round: IRound) => {
-      return Enrolment.find({ _id: { $in: round.enrollments } });
+      return Enrolment.find({ _id: { $in: round.enrolments } });
     },
     judges: async (round: IRound) => {
       return User.find({ _id: { $in: round.judges } });

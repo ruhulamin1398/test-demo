@@ -31,7 +31,7 @@ const roundSchema = new Schema<IRoundDocument>(
     },
 
     isActiveRound: { type: Boolean, required: false, default: false },
-    enrollments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Enrolment" }],
+    enrolments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Enrolment" }],
     judges: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     competition: {
       type: mongoose.Schema.Types.ObjectId,

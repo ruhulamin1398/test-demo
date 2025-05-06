@@ -8,7 +8,8 @@ import { Competition, Enrolment, Round } from "@/models";
 import { authOptions } from "../../auth/[...nextauth]/route";
 import { uuidv4 } from "minimal-shared/utils";
 import EnrolmentSubmission from "@/models/EnrolmentSubmission";
-
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
 const absolutePath = "/uploads/competition-image";
 // const publicPath = "/public/uploads";
 
@@ -26,12 +27,12 @@ const getRunningRoundId = async ({
   competitionId: string;
   userId: string;
 }) => {
-  // console.log(" competitionid user id", competitionId, userId);
+  dayjs.extend(isBetween);
   try {
     const competition = await Competition.findById(competitionId);
     // console.log(" competition is ", competition);
     if (!competition) {
-      throw new Error("Competition not found");
+      throw new Error("The specified competition does not exist.");
     }
 
     // check enrolment exist or not
@@ -41,31 +42,31 @@ const getRunningRoundId = async ({
     });
 
     if (!enrolment) {
-      throw new Error(" User not enroled");
+      throw new Error("You are not enrolled in this competition.");
     }
 
     const haveRoundWiseSubmission = competition.haveRoundWiseSubmission;
-    const currentDate = new Date();
 
     /// if not roundwise submission  check enrolment deadline
     if (!haveRoundWiseSubmission) {
-      const enrolmentDeadline = competition.submission?.endDate;
-
-      if (!enrolmentDeadline) {
+      const isDeadlineExist = dayjs().isBetween(
+        competition.submission?.startDate,
+        competition.submission?.endDate,
+        "day",
+        "[]"
+      ); // '[]' means inclusive
+      if (!isDeadlineExist) {
         throw new Error(
-          "Enrolment deadline does not exist for this competition"
+          "Submissions are only allowed during the submission period."
         );
       }
-      // change the  time comparition, use dayjs
-      if (currentDate > new Date(enrolmentDeadline)) {
-        throw new Error("Enrolment deadline has passed");
-      }
+
       const round = await Round.findOne({
         competition: competitionId,
       });
 
       if (!round) {
-        throw new Error("No round found");
+        throw new Error("No round is associated with this competition.");
       }
 
       // revert if alreay submitted
@@ -76,7 +77,7 @@ const getRunningRoundId = async ({
       });
 
       if (existingSubmission) {
-        throw new Error("Already submitted");
+        throw new Error("You have already submitted for this round.");
       }
 
       return { roundId: round.id, enrolId: enrolment.id };
@@ -89,12 +90,21 @@ const getRunningRoundId = async ({
     });
 
     if (!activeRound) {
-      throw new Error("No Active round found");
+      throw new Error("There is no active round for this competition.");
     }
     // check deadline
-    if (currentDate > new Date(activeRound?.endDate)) {
-      throw new Error("Enrolment deadline has passed");
+    const isDeadlineExist = dayjs().isBetween(
+      activeRound.submissionStartDate,
+      activeRound.submissionEndDate,
+      "day",
+      "[]"
+    ); // '[]' means inclusive
+    if (!isDeadlineExist) {
+      throw new Error(
+        "Submissions are only allowed during the submission period."
+      );
     }
+
     const existingSubmission = await EnrolmentSubmission.findOne({
       roundId: activeRound.id,
       enrolId: enrolment.id,
@@ -102,7 +112,7 @@ const getRunningRoundId = async ({
     });
 
     if (existingSubmission) {
-      throw new Error("Already submitted");
+      throw new Error("You have already submitted for this round.");
     }
     return { roundId: activeRound.id, enrolId: enrolment.id };
   } catch (error) {

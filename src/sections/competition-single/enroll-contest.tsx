@@ -6,8 +6,8 @@ import InputBase from "@mui/material/InputBase";
 import { Beenhere } from "@mui/icons-material";
 import { Iconify } from "@/components/iconify";
 import { Label, labelClasses } from "@/components/label";
-import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
-import { useCompetitionHandleEnrollmentDialog } from "@/app/hooks/competitionHandleErollmentDialogHook";
+import EnrolmentConfirmationDialog from "@/components/confirmation-dialog";
+import { useCompetitionHandleEnrolmentDialog } from "@/app/hooks/competitionHandleErolmentDialogHook";
 
 // ----------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ type Props = BoxProps & {
   description?: string;
 };
 
-export function EnrollmentCard({
+export function EnrolmentCard({
   competitionId,
   price,
   title,
@@ -28,10 +28,11 @@ export function EnrollmentCard({
 }: Props) {
   const {
     openDialog,
-    handleOpenEnrollmentConfirmationDialog,
-    handleCloseEnrollmentConfirmationDialog,
-    onAgreeEnrollment,
-  } = useCompetitionHandleEnrollmentDialog();
+    handleOpenEnrolmentConfirmationDialog,
+    handleCloseEnrolmentConfirmationDialog,
+    onAgreeEnrolment,
+    createLoading,
+  } = useCompetitionHandleEnrolmentDialog();
 
   return (
     <>
@@ -92,16 +93,17 @@ export function EnrollmentCard({
           color="primary"
           variant="contained"
           onClick={() => {
-            handleOpenEnrollmentConfirmationDialog(competitionId);
+            handleOpenEnrolmentConfirmationDialog(competitionId);
           }}
         >
           ENROLL NOW
         </Button>
       </Box>
-      <EnrollmentConfirmationDialog
+      <EnrolmentConfirmationDialog
         open={!!openDialog?.competitionId}
-        onAgree={onAgreeEnrollment}
-        onDisagree={handleCloseEnrollmentConfirmationDialog}
+        onAgree={onAgreeEnrolment}
+        onDisagree={handleCloseEnrolmentConfirmationDialog}
+        createLoading={createLoading}
       />
     </>
   );

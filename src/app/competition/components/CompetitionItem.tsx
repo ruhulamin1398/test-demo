@@ -21,10 +21,6 @@ type Props = {
 
 export function CompetitionItem({ detailsHref, competition }: Props) {
   const status = "Active";
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const enrollToCompetition = async () => {
-    // TODO: Implement enroll to competition logic
-  };
 
   const renderLabels = () => (
     <Box
