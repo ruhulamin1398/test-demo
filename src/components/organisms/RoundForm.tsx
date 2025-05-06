@@ -39,6 +39,7 @@ import {
 } from "@/store/slices/competitionSlice";
 import { ICompetition, SubmissionTypeEnum } from "@/interfaces";
 import { toast } from "sonner";
+import { GET_COMPETITION_QUERY } from "@/graphql-client/competition";
 
 const RoundForm: React.FC = () => {
   const dispatch = useDispatch();
@@ -49,13 +50,31 @@ const RoundForm: React.FC = () => {
   const { notify } = useNotification();
   // GraphQL Mutation hooks
   const [createRound, { loading: createLoading, error: createError, data }] =
-    useMutation(CREATE_COMPETITION_ROUND);
+    useMutation(CREATE_COMPETITION_ROUND, {
+      refetchQueries: [
+        {
+          query: GET_COMPETITION_QUERY,
+          variables: { id: competition?.id },
+        },
+      ],
+      awaitRefetchQueries: true, // ensures query finishes before continuing
+    });
   const [
     updateRound,
     { loading: updateLoading, error: updateError, data: updatedData },
-  ] = useMutation(UPDATE_COMPETITION_ROUND);
+  ] = useMutation(UPDATE_COMPETITION_ROUND, {
+    refetchQueries: [
+      {
+        query: GET_COMPETITION_QUERY,
+        variables: { id: competition?.id },
+      },
+    ],
+    awaitRefetchQueries: true, // ensures query finishes before continuing
+  });
 
   const handleSubmit = async (values: unknown) => {
+    console.log(values);
+    return;
     const payloads = values as IRound;
     if (competition === null) {
       notify({
