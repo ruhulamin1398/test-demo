@@ -21,9 +21,11 @@ import { useState } from "react";
 type CardItemProps = CardProps & {
   item: ICompetition;
   handleEnrolment: (competitionId: string) => void;
+  isEnrolled?: boolean;
 };
 
 export function SingleCompetitionCard({
+  isEnrolled = false,
   item,
   handleEnrolment,
   sx,
@@ -141,6 +143,7 @@ export function SingleCompetitionCard({
               e.preventDefault();
               handleEnrolment(item.id);
             }}
+            disabled={isEnrolled}
           >
             Join
           </Button>

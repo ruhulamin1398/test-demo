@@ -73,16 +73,7 @@ const RoundForm: React.FC = () => {
   });
 
   const handleSubmit = async (values: unknown) => {
-    console.log(values);
-    return;
     const payloads = values as IRound;
-    if (competition === null) {
-      notify({
-        severity: "error",
-        message: "Need to create competition first.",
-      });
-      return;
-    }
     const {
       maxScore = 0,
       maxVote = 0,
@@ -100,7 +91,6 @@ const RoundForm: React.FC = () => {
             maxScore: Number(maxScore || 0),
             maxVote: Number(maxVote || 0),
             maxWinners: Number(maxWinners),
-            competition: competition.id,
             roundNumber: Number(roundNumber || 0),
             isActiveRound: isActiveRound,
             judges: jids,
@@ -108,6 +98,13 @@ const RoundForm: React.FC = () => {
         },
       });
     } else {
+      if (competition === null) {
+        notify({
+          severity: "error",
+          message: "Need to create competition first.",
+        });
+        return;
+      }
       const { id, ...updatedPayload } = payloads;
       await updateRound({
         variables: {

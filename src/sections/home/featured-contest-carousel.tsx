@@ -8,7 +8,7 @@ import {
 } from "@/components/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { ICompetition } from "@/interfaces";
-import { useCompetitionHandleEnrolmentDialog } from "@/app/hooks/competitionHandleErolmentDialogHook";
+import { useEnrollment } from "@/app/hooks/useEnrollment";
 import EnrolmentConfirmationDialog from "@/components/confirmation-dialog";
 import { CompetitionItemSkeleton } from "@/app/competition/components/CompetitionItemSkeleton";
 import { SingleCompetitionCard } from "../common/single-competition-card";
@@ -34,7 +34,7 @@ export function HomeFeaturedContestCarousel({
     handleCloseEnrolmentConfirmationDialog,
     onAgreeEnrolment,
     createLoading,
-  } = useCompetitionHandleEnrolmentDialog();
+  } = useEnrollment();
 
   const carousel = useCarousel(
     {

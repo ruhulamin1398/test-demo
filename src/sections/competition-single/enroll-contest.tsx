@@ -7,7 +7,7 @@ import { Beenhere } from "@mui/icons-material";
 import { Iconify } from "@/components/iconify";
 import { Label, labelClasses } from "@/components/label";
 import EnrolmentConfirmationDialog from "@/components/confirmation-dialog";
-import { useCompetitionHandleEnrolmentDialog } from "@/app/hooks/competitionHandleErolmentDialogHook";
+import { useEnrollment } from "@/app/hooks/useEnrollment";
 
 // ----------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ export function EnrolmentCard({
     handleCloseEnrolmentConfirmationDialog,
     onAgreeEnrolment,
     createLoading,
-  } = useCompetitionHandleEnrolmentDialog();
+  } = useEnrollment();
 
   return (
     <>
