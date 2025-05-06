@@ -32,7 +32,7 @@ export interface IRound {
   description: string;
   status: RoundStatusEnum;
   isActiveRound: Boolean;
-  enrollments: IEnrolment[];
+  enrolments: IEnrolment[];
   judges: IUser[];
   competition: ICompetition;
   createdAt: string;

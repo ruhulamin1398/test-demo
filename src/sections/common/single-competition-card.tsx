@@ -19,12 +19,12 @@ import { ICompetition } from "@/interfaces";
 
 type CardItemProps = CardProps & {
   item: ICompetition;
-  handleEnrollment: (competitionId: string) => void;
+  handleEnrolment: (competitionId: string) => void;
 };
 
 export function SingleCompetitionCard({
   item,
-  handleEnrollment,
+  handleEnrolment,
   sx,
   ...other
 }: CardItemProps) {
@@ -114,7 +114,7 @@ export function SingleCompetitionCard({
           size="small"
           onClick={(e) => {
             e.preventDefault();
-            handleEnrollment(item.id);
+            handleEnrolment(item.id);
           }}
         >
           Join

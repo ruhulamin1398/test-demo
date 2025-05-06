@@ -17,8 +17,8 @@ import { RouterLink } from "@/routes/components";
 import { Iconify } from "@/components/iconify";
 import { ICompetition } from "@/interfaces";
 import { SingleCompetitionCard } from "../common/single-competition-card";
-import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
-import { useCompetitionHandleEnrollmentDialog } from "@/app/hooks/competitionHandleErollmentDialogHook";
+import EnrolmentConfirmationDialog from "@/components/confirmation-dialog";
+import { useCompetitionHandleEnrolmentDialog } from "@/app/hooks/competitionHandleErolmentDialogHook";
 
 // ----------------------------------------------------------------------
 
@@ -37,10 +37,11 @@ export function ProfilePageCompetition({
 }: Props) {
   const {
     openDialog,
-    handleOpenEnrollmentConfirmationDialog,
-    handleCloseEnrollmentConfirmationDialog,
-    onAgreeEnrollment,
-  } = useCompetitionHandleEnrollmentDialog();
+    handleOpenEnrolmentConfirmationDialog,
+    handleCloseEnrolmentConfirmationDialog,
+    onAgreeEnrolment,
+    createLoading,
+  } = useCompetitionHandleEnrolmentDialog();
 
   return (
     <>
@@ -87,15 +88,16 @@ export function ProfilePageCompetition({
             <SingleCompetitionCard
               key={item.id}
               item={item}
-              handleEnrollment={handleOpenEnrollmentConfirmationDialog}
+              handleEnrolment={handleOpenEnrolmentConfirmationDialog}
             />
           ))}
         </Box>
       </Card>
-      <EnrollmentConfirmationDialog
+      <EnrolmentConfirmationDialog
         open={!!openDialog?.competitionId}
-        onAgree={onAgreeEnrollment}
-        onDisagree={handleCloseEnrollmentConfirmationDialog}
+        onAgree={onAgreeEnrolment}
+        onDisagree={handleCloseEnrolmentConfirmationDialog}
+        createLoading={createLoading}
       />
     </>
   );
