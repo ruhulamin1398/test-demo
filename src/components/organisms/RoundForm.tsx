@@ -84,8 +84,8 @@ const RoundForm: React.FC = () => {
       return;
     }
     const {
-      maxVote = 0,
       maxScore = 0,
+      maxVote = 0,
       maxWinners = 0,
       roundNumber = 1,
       judges = [],

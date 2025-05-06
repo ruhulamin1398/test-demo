@@ -141,6 +141,7 @@ export const GET_COMPETITION_QUERY = gql`
         rewards
         title
       }
+      isEnrolled
     }
   }
 `;
@@ -194,6 +195,7 @@ export const GET_COMPETITIONS_QUERY = gql`
           rewards
           title
         }
+        isEnrolled
       }
       totalCount
     }

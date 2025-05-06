@@ -8,8 +8,8 @@ import {
 } from "@/components/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { ICompetition } from "@/interfaces";
-import { useCompetitionHandleEnrollmentDialog } from "@/app/hooks/competitionHandleErollmentDialogHook";
-import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
+import { useCompetitionHandleEnrolmentDialog } from "@/app/hooks/competitionHandleErolmentDialogHook";
+import EnrolmentConfirmationDialog from "@/components/confirmation-dialog";
 import { CompetitionItemSkeleton } from "@/app/competition/components/CompetitionItemSkeleton";
 import { SingleCompetitionCard } from "../common/single-competition-card";
 
@@ -30,10 +30,11 @@ export function HomeFeaturedContestCarousel({
 }: Props) {
   const {
     openDialog,
-    handleOpenEnrollmentConfirmationDialog,
-    handleCloseEnrollmentConfirmationDialog,
-    onAgreeEnrollment,
-  } = useCompetitionHandleEnrollmentDialog();
+    handleOpenEnrolmentConfirmationDialog,
+    handleCloseEnrolmentConfirmationDialog,
+    onAgreeEnrolment,
+    createLoading,
+  } = useCompetitionHandleEnrolmentDialog();
 
   const carousel = useCarousel(
     {
@@ -82,7 +83,7 @@ export function HomeFeaturedContestCarousel({
             <SingleCompetitionCard
               key={item.id}
               item={item}
-              handleEnrollment={handleOpenEnrollmentConfirmationDialog}
+              handleEnrolment={handleOpenEnrolmentConfirmationDialog}
             />
           ))}
         </Carousel>
@@ -97,10 +98,11 @@ export function HomeFeaturedContestCarousel({
     <Box sx={{ mb: 3, paddingX: 3, position: "relative" }} {...other}>
       {loading ? renderLoading() : renderList()}
 
-      <EnrollmentConfirmationDialog
+      <EnrolmentConfirmationDialog
         open={!!openDialog?.competitionId}
-        onAgree={onAgreeEnrollment}
-        onDisagree={handleCloseEnrollmentConfirmationDialog}
+        onAgree={onAgreeEnrolment}
+        onDisagree={handleCloseEnrolmentConfirmationDialog}
+        createLoading={createLoading}
       />
     </Box>
   );
