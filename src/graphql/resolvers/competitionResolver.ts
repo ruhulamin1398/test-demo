@@ -5,10 +5,11 @@ import {
   CompetitionStatusEnum,
   ICompetition,
   IPrizesAndRewards,
+  IUser,
   PaginationInput,
   SubmissionTypeEnum,
 } from "@/interfaces";
-import { Competition, Round } from "@/models";
+import { Competition, Enrolment, Round } from "@/models";
 import { GraphQLError } from "graphql";
 
 const competitionResolver = {
@@ -27,6 +28,7 @@ const competitionResolver = {
         page,
         filter,
       }: { page: PaginationInput; filter?: CompetitionFilterInput }, // Args with pagination and optional filter
+      { user }: { user: IUser | null },
       _context: unknown, // Context (e.g., for authentication)
       _info: unknown // Info about the query (e.g., field name, schema)
     ): Promise<CompetitionResponse> => {
@@ -60,11 +62,25 @@ const competitionResolver = {
         const totalCount = await Competition.countDocuments(filterQuery);
 
         // Fetch the paginated competitions
-        const competitions = await Competition.find(filterQuery)
+        let competitions = await Competition.find(filterQuery)
           .skip(skip)
           .limit(limit)
           .sort({ createdAt: -1 }); // Sort by creation date, newest first
+        // Update the isEnrolled field for each competition based on user enrolment
+        if (user) {
+          const enrolments = await Enrolment.find({ userId: user.id }).select(
+            "competitionId"
+          );
+          const enrolledCompetitionIds = enrolments.map((enrolment) =>
+            enrolment.competitionId.toString()
+          );
 
+          competitions.forEach((competition) => {
+            competition.isEnrolled = enrolledCompetitionIds.includes(
+              competition._id.toString()
+            );
+          });
+        }
         return {
           competitions,
           totalCount,

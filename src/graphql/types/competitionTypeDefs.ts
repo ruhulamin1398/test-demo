@@ -86,6 +86,7 @@ export const competitionTypeDefs = `#graphql
     updatedAt: String
     prizes: [Prize]
     haveRoundWiseSubmission: Boolean
+    isEnrolled:Boolean
   }
 
   # Paginated response for users
