@@ -66,21 +66,30 @@ const competitionResolver = {
           .skip(skip)
           .limit(limit)
           .sort({ createdAt: -1 }); // Sort by creation date, newest first
-        // Update the isEnrolled field for each competition based on user enrolment
-        if (user) {
-          const enrolments = await Enrolment.find({ userId: user.id }).select(
-            "competitionId"
-          );
-          const enrolledCompetitionIds = enrolments.map((enrolment) =>
-            enrolment.competitionId.toString()
-          );
 
-          competitions.forEach((competition) => {
-            competition.isEnrolled = enrolledCompetitionIds.includes(
-              competition._id.toString()
-            );
-          });
-        }
+        // Fetch enrolment counts for all competitions in a single query
+        const enrolmentCounts = await Enrolment.aggregate([
+          {
+            $group: {
+              _id: "$competitionId", // Group by competitionId
+              count: { $sum: 1 }, // Count the number of enrolments for each competition
+            },
+          },
+        ]);
+
+        console.log("enrolmentCounts ____________", enrolmentCounts);
+        // Create a map of competitionId to enrolment count for quick lookup
+        const enrolmentCountMap = enrolmentCounts.reduce((map, item) => {
+          map[item._id.toString()] = item.count;
+          return map;
+        }, {} as Record<string, number>);
+
+        console.log("enrolmentCountMap ____________", enrolmentCountMap);
+        competitions.forEach((c) => {
+          // @ts-ignore
+          c.enrolledUserCount = enrolmentCountMap[c._id.toString()] ?? 0;
+        });
+
         return {
           competitions,
           totalCount,
