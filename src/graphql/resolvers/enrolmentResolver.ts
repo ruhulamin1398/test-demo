@@ -54,7 +54,7 @@ const enrolmentResolver = {
       ); // '[]' means inclusive
       if (!isDeadlineExist) {
         throw new Error(
-          "Submissions are only allowed during the submission period."
+          "Enrolment are only allowed during the submission period."
         );
       }
 

@@ -120,6 +120,10 @@ export const GET_COMPETITION_QUERY = gql`
         startDate
         endDate
         title
+
+        submissionStartDate
+        submissionEndDate
+        submissionType
         description
         judgementCriteria
         roundNumber

@@ -89,8 +89,8 @@ const UploadSubmissionFile = ({
   };
   return (
     <>
-      <Card>
-        <CardHeader title={title} subheader={date} />
+      <Card sx={{ my: 2 }}>
+        {/* <CardHeader title={title} subheader={date} /> */}
         <CardContent>
           <Upload
             value={file}

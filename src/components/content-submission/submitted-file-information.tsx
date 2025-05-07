@@ -9,17 +9,19 @@ import {
   Container,
 } from "@mui/material";
 import { IEnrolmentSubmission } from "@/interfaces/enrolmentSubmission";
+import { useDate } from "@/hooks/use-date";
 type Props = {
   submission: IEnrolmentSubmission | null;
 };
 
 const SubmittedFileInformation = ({ submission }: Props) => {
+  const { formatDate } = useDate();
   return (
     <>
-      <Card>
+      <Card sx={{ my: 2 }}>
         <CardHeader
           title={"You have alerady Submitted at this round "}
-          subheader={`Submitted At: ${submission?.createdAt}`}
+          subheader={`Submitted At: ${formatDate(submission?.createdAt)}`}
         />
         <CardContent>
           <CardMedia
