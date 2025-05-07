@@ -123,6 +123,7 @@ export const ME_QUERY = gql`
       role
       authProvider
       socialId
+      enrollIds
     }
   }
 `;

@@ -44,6 +44,7 @@ type User {
   role: RoleEnum
   authProvider: AuthProviderEnum
   socialId: String
+  enrollIds: [ID!]
 }
 
 # Pagination input type

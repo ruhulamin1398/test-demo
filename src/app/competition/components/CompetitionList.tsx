@@ -6,8 +6,10 @@ import { CompetitionItem } from "./CompetitionItem";
 import { CompetitionItemSkeleton } from "./CompetitionItemSkeleton";
 import { ICompetition } from "@/interfaces";
 import { SingleCompetitionCard } from "@/sections/common/single-competition-card";
-import { useCompetitionHandleEnrolmentDialog } from "@/app/hooks/competitionHandleErolmentDialogHook";
+import { useEnrollment } from "@/app/hooks/useEnrollment";
 import EnrolmentConfirmationDialog from "@/components/confirmation-dialog";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 // ----------------------------------------------------------------------
 
@@ -18,17 +20,20 @@ type Props = BoxProps & {
 
 export function CompetitionList({
   competitions,
-  loading,
+  loading: fetchCompetitionsLoading,
   sx,
   ...other
 }: Props) {
+  const { enrollIds } = useSelector(
+    (state: RootState) => state.auth.competitionInfo
+  );
   const {
     openDialog,
     handleOpenEnrolmentConfirmationDialog,
     handleCloseEnrolmentConfirmationDialog,
     onAgreeEnrolment,
-    createLoading,
-  } = useCompetitionHandleEnrolmentDialog();
+    loading,
+  } = useEnrollment();
 
   const renderLoading = () => <CompetitionItemSkeleton />;
 
@@ -44,6 +49,7 @@ export function CompetitionList({
         key={competition.id}
         item={competition}
         handleEnrolment={handleOpenEnrolmentConfirmationDialog}
+        isEnrolled={enrollIds.includes(competition.id)}
       />
     ));
 
@@ -65,12 +71,12 @@ export function CompetitionList({
         ]}
         {...other}
       >
-        {loading ? renderLoading() : renderList()}
+        {fetchCompetitionsLoading ? renderLoading() : renderList()}
         <EnrolmentConfirmationDialog
           open={!!openDialog?.competitionId}
           onAgree={onAgreeEnrolment}
           onDisagree={handleCloseEnrolmentConfirmationDialog}
-          createLoading={createLoading}
+          createLoading={loading}
         />
       </Box>
     </>

@@ -4,18 +4,19 @@ import { useEffect, useState } from "react";
 import { toast } from "@/components/snackbar";
 
 import { handleGraphQLError } from "@/utils/errorHandling";
+import { useDispatch } from "react-redux";
+import { updateEnrollIds } from "@/store/slices/authSlice";
 
 type EnrolmentConfirmationDialogProps = {
   competitionId?: string;
 };
 
-export function useCompetitionHandleEnrolmentDialog() {
+export const useEnrollment = () => {
+  const dispatch = useDispatch();
   const [openDialog, setOpenDialog] =
     useState<EnrolmentConfirmationDialogProps>({});
-  const [
-    createEnrolment,
-    { loading: createLoading, error: createError, data: enerolment },
-  ] = useMutation(ENROLMENT_MUTATION);
+  const [createEnrolment, { loading, error, data }] =
+    useMutation(ENROLMENT_MUTATION);
 
   const handleOpenEnrolmentConfirmationDialog = (id: string) => {
     setOpenDialog({
@@ -27,37 +28,46 @@ export function useCompetitionHandleEnrolmentDialog() {
     setOpenDialog({});
   };
   const onAgreeEnrolment = async () => {
-    if (openDialog?.competitionId)
-      await createEnrolment({
+    if (openDialog?.competitionId) {
+      const response = await createEnrolment({
         variables: {
           competitionId: openDialog?.competitionId,
         },
       });
+      console.log(response);
+      if (response.data?.createEnrolment) {
+        const { competitionId } = response.data.createEnrolment;
+        dispatch(updateEnrollIds({ enrollId: competitionId }));
+        toast.dismiss();
+        toast.success("Enrolment successfull.");
+      }
+    }
+
     handleCloseEnrolmentConfirmationDialog();
   };
 
   useEffect(() => {
-    if (createLoading) {
+    if (loading) {
       toast.dismiss();
       toast.loading("Enrolment in progress.");
     }
-    if (enerolment) {
+    if (data && data.createEnrolment && !loading) {
       setOpenDialog({});
       toast.dismiss();
       toast.success("Enrolment successfull.");
     }
-    if (createError) {
+    if (error) {
       setOpenDialog({});
       toast.dismiss();
-      const errorMessage = handleGraphQLError(createError);
+      const errorMessage = handleGraphQLError(error);
       toast.error(errorMessage);
     }
-  }, [enerolment, createError, createLoading]);
+  }, [loading, data, error]);
   return {
     openDialog,
     handleOpenEnrolmentConfirmationDialog,
     handleCloseEnrolmentConfirmationDialog,
     onAgreeEnrolment,
-    createLoading,
+    loading,
   };
-}
+};

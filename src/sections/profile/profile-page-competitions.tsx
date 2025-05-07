@@ -18,7 +18,7 @@ import { Iconify } from "@/components/iconify";
 import { ICompetition } from "@/interfaces";
 import { SingleCompetitionCard } from "../common/single-competition-card";
 import EnrolmentConfirmationDialog from "@/components/confirmation-dialog";
-import { useCompetitionHandleEnrolmentDialog } from "@/app/hooks/competitionHandleErolmentDialogHook";
+import { useEnrollment } from "@/app/hooks/useEnrollment";
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ export function ProfilePageCompetition({
     handleCloseEnrolmentConfirmationDialog,
     onAgreeEnrolment,
     createLoading,
-  } = useCompetitionHandleEnrolmentDialog();
+  } = useEnrollment();
 
   return (
     <>

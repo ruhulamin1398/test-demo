@@ -39,6 +39,7 @@ import {
 } from "@/store/slices/competitionSlice";
 import { ICompetition, SubmissionTypeEnum } from "@/interfaces";
 import { toast } from "sonner";
+import { GET_COMPETITION_QUERY } from "@/graphql-client/competition";
 
 const RoundForm: React.FC = () => {
   const dispatch = useDispatch();
@@ -49,21 +50,30 @@ const RoundForm: React.FC = () => {
   const { notify } = useNotification();
   // GraphQL Mutation hooks
   const [createRound, { loading: createLoading, error: createError, data }] =
-    useMutation(CREATE_COMPETITION_ROUND);
+    useMutation(CREATE_COMPETITION_ROUND, {
+      refetchQueries: [
+        {
+          query: GET_COMPETITION_QUERY,
+          variables: { id: competition?.id },
+        },
+      ],
+      awaitRefetchQueries: true, // ensures query finishes before continuing
+    });
   const [
     updateRound,
     { loading: updateLoading, error: updateError, data: updatedData },
-  ] = useMutation(UPDATE_COMPETITION_ROUND);
+  ] = useMutation(UPDATE_COMPETITION_ROUND, {
+    refetchQueries: [
+      {
+        query: GET_COMPETITION_QUERY,
+        variables: { id: competition?.id },
+      },
+    ],
+    awaitRefetchQueries: true, // ensures query finishes before continuing
+  });
 
   const handleSubmit = async (values: unknown) => {
     const payloads = values as IRound;
-    if (competition === null) {
-      notify({
-        severity: "error",
-        message: "Need to create competition first.",
-      });
-      return;
-    }
     const {
       maxScore = 0,
       maxVote = 0,
@@ -81,7 +91,6 @@ const RoundForm: React.FC = () => {
             maxScore: Number(maxScore || 0),
             maxVote: Number(maxVote || 0),
             maxWinners: Number(maxWinners),
-            competition: competition.id,
             roundNumber: Number(roundNumber || 0),
             isActiveRound: isActiveRound,
             judges: jids,
@@ -89,6 +98,13 @@ const RoundForm: React.FC = () => {
         },
       });
     } else {
+      if (competition === null) {
+        notify({
+          severity: "error",
+          message: "Need to create competition first.",
+        });
+        return;
+      }
       const { id, ...updatedPayload } = payloads;
       await updateRound({
         variables: {
