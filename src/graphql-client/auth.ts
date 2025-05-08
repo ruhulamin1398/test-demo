@@ -124,6 +124,14 @@ export const ME_QUERY = gql`
       authProvider
       socialId
       enrollIds
+      submissions {
+        id
+        enrolId
+        roundId
+        score
+        submittedContent
+        createdAt
+      }
     }
   }
 `;

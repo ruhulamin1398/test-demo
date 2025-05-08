@@ -51,13 +51,13 @@ const ContentSubmission = ({
         "day",
         "[]"
       );
-    console.log(
-      "isDeadlineExist  _____",
-      activeRound?.submissionStartDate,
-      activeRound?.submissionEndDate,
-      Math.floor(new Date().getTime()),
-      isDeadlineExist
-    );
+    // console.log(
+    //   "isDeadlineExist  _____",
+    //   activeRound?.submissionStartDate,
+    //   activeRound?.submissionEndDate,
+    //   Math.floor(new Date().getTime()),
+    //   isDeadlineExist
+    // );
 
     return (
       <>

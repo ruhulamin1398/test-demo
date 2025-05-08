@@ -2,11 +2,11 @@ import { IUser } from "@/interfaces";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserSubmissions {
-  submissionId: string;
+  id: string;
   roundId: string;
-  submissionDate: Date;
-  submissionType: string;
-  submissionUrl: string;
+  createdAt: Date;
+  score: number;
+  submittedContent: string;
 }
 
 interface AuthState {

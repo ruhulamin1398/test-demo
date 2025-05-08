@@ -22,8 +22,14 @@ const LayoutRenderer: React.FC<LayoutRendererProps> = ({ children }) => {
 
   useEffect(() => {
     if (!loading && data) {
+      console.log("me data is ", data);
       dispatch(setUser(data.me));
-      dispatch(setCompetitionInfo({ enrollIds: data.me.enrollIds || [] }));
+      dispatch(
+        setCompetitionInfo({
+          enrollIds: data.me.enrollIds || [],
+          submissions: data.me.submissions || [],
+        })
+      );
     }
   }, [data, loading, dispatch]);
 

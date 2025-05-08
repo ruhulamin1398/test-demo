@@ -12,8 +12,7 @@ import { Label, labelClasses } from "@/components/label";
 import { RouterLink } from "@/routes/components";
 import { IconButton } from "@mui/material";
 import { ICompetition } from "@/interfaces";
-import { useState } from "react";
-import dayjs from "dayjs";
+import { useDate } from "@/hooks/use-date";
 
 // ----------------------------------------------------------------------
 
@@ -32,10 +31,7 @@ export function SingleCompetitionCard({
   sx,
   ...other
 }: CardItemProps) {
-  console.log(item);
-
-  const deadline = dayjs(Number(item.enrolmentDeadline.endDate));
-  const remainingHuman = dayjs().to(deadline);
+  const { HumanTimeDifferent } = useDate();
 
   const renderImage = () => (
     <Box sx={{ px: 1, pt: 1 }}>
@@ -66,7 +62,7 @@ export function SingleCompetitionCard({
           <Label
             startIcon={<Iconify width={12} icon="solar:clock-circle-outline" />}
           >
-            {remainingHuman}
+            {HumanTimeDifferent(Number(item.enrolmentDeadline.endDate))}
           </Label>
         )}
 

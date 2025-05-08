@@ -2,7 +2,7 @@ export const enrolmentSubmissionTypeDefs = `#graphql
   type EnrolmentSubmission {
     id: ID!
     enrolId: ID!
-    roundId: Round
+    roundId: ID
     userId: ID!
     score: Int!
     submittedContent: String!
@@ -21,14 +21,6 @@ export const enrolmentSubmissionTypeDefs = `#graphql
     Link,
   }
   
-  type Round {
-  id: ID!
-  title: String
-  submissionType: SubmissionTypeEnum!
-  startDate: String
-  endDate: String
-  submissionStartDate: String
-  submissionEndDate: String
-}
+ 
 
 `;
