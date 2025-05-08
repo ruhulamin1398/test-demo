@@ -43,3 +43,5 @@ export const formatDateForDatePicker = (
   // If the parsed date is valid, return the JavaScript Date object
   return parsedDate.isValid() ? parsedDate : dayjs();
 };
+
+// Time represents in minutes
