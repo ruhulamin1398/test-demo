@@ -10,16 +10,19 @@ import {
   SubmissionTypeEnum,
 } from "@/interfaces";
 import { Competition, Enrolment, Round } from "@/models";
+import EnrolmentSubmission from "@/models/EnrolmentSubmission";
 import { GraphQLError } from "graphql";
 
 const competitionResolver = {
   Query: {
     getCompetition: async (
       _: void,
-      { id }: { id: string }
+      { id }: { id: string },
+      { user }: { user: IUser | null }
     ): Promise<ICompetition | null> => {
       const competition = await Competition.findById(id);
       console.log(competition);
+
       return competition;
     },
     getCompetitions: async (
@@ -65,30 +68,10 @@ const competitionResolver = {
         let competitions = await Competition.find(filterQuery)
           .skip(skip)
           .limit(limit)
-          .sort({ createdAt: -1 }); // Sort by creation date, newest first
-
+          .sort({ createdAt: -1 })
+          .populate("enroledUserCount"); // Sort by creation date, newest first
+        console.log(competitions);
         // Fetch enrolment counts for all competitions in a single query
-        const enrolmentCounts = await Enrolment.aggregate([
-          {
-            $group: {
-              _id: "$competitionId", // Group by competitionId
-              count: { $sum: 1 }, // Count the number of enrolments for each competition
-            },
-          },
-        ]);
-
-        console.log("enrolmentCounts ____________", enrolmentCounts);
-        // Create a map of competitionId to enrolment count for quick lookup
-        const enrolmentCountMap = enrolmentCounts.reduce((map, item) => {
-          map[item._id.toString()] = item.count;
-          return map;
-        }, {} as Record<string, number>);
-
-        console.log("enrolmentCountMap ____________", enrolmentCountMap);
-        competitions.forEach((c) => {
-          // @ts-ignore
-          c.enrolledUserCount = enrolmentCountMap[c._id.toString()] ?? 0;
-        });
 
         return {
           competitions,
@@ -423,6 +406,20 @@ const competitionResolver = {
     rounds: async (competition: ICompetition) => {
       return await Round.find({ competition: competition.id });
     },
+    // mySubmissions: async (
+    //   competition: ICompetition,
+    //   _,
+    //   user: { user: IUser | null }
+    // ) => {
+    //   if (!user) {
+    //     return [];
+    //   }
+
+    //   return await EnrolmentSubmission.find({
+    //     competition: competition.id,
+    //     userId: user.id
+    //   });
+    // },
   },
 };
 

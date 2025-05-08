@@ -104,6 +104,15 @@ export const GET_COMPETITION_QUERY = gql`
       description
       startDate
       endDate
+      enroledUserCount
+      mySubmissions {
+        id
+        enrolId
+        roundId
+        score
+        submittedContent
+        createdAt
+      }
       enrolmentDeadline {
         startDate
         endDate
@@ -199,7 +208,6 @@ export const GET_COMPETITIONS_QUERY = gql`
           rewards
           title
         }
-        isEnrolled
       }
       totalCount
     }

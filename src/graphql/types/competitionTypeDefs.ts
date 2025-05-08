@@ -1,3 +1,4 @@
+import { IEnrolmentSubmission } from "@/interfaces/enrolmentSubmission";
 export const competitionTypeDefs = `#graphql
   # Enums for various competition-related values
   enum CompetitionStatusEnum {
@@ -88,6 +89,7 @@ export const competitionTypeDefs = `#graphql
     haveRoundWiseSubmission: Boolean
     isEnrolled:Boolean
     enroledUserCount:Int
+    mySubmissions:[EnrolmentSubmission]
   }
 
   # Paginated response for users

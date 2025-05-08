@@ -56,6 +56,19 @@ const competitionSchema = new Schema<ICompetitionDocument>(
   { timestamps: true }
 );
 
+competitionSchema
+  .virtual("enroledUserCount", {
+    ref: "Enrolment",
+    localField: "_id",
+    foreignField: "competitionId",
+    count: true, // This makes Mongoose return the count instead of documents
+  })
+  .get((value) => {
+    return value || 0;
+  });
+competitionSchema.set("toObject", { virtuals: true });
+competitionSchema.set("toJSON", { virtuals: true });
+
 export const Competition =
   mongoose.models.Competition ||
   mongoose.model<ICompetitionDocument>("Competition", competitionSchema);
