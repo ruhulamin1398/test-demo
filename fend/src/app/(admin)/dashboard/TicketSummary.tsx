@@ -231,10 +231,11 @@ export const TicketSummary = ({
           args: [
             lottery.lotteryId,
             totalTickets.length,
-            data?.originalUser?.referredBy?.address ,
+            data?.originalUser?.referredBy?.address || blockChainConfig.owner  ,
             stringArrayOfTickets
           ],
         });
+ 
 
         toast.dismiss();
         toast.loading("Ticket purchase in progress...", {

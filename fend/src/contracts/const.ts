@@ -11,7 +11,7 @@ const devAmoyConfig = {
   chainName: polygonAmoy,
   contractAddress: process.env.NEXT_PUBLIC_DEV_CONTRACT_ADDRESS,
   owner: "0x3ff88B69d1762AA444c85c30C4B0B795f9c48B59",
-  USDTaddress: "0x7722DA925D988533f825D13C353ee9A0085d347e",
+  USDTaddress: "0xe7aB779bC1fd78539491CcD8248c96D7C979E0d1",
   ProviderUrl: "https://rpc-amoy.polygon.technology",
   lotteryABI: lotteryABI.abi,
   erc20ABI: ERC20ABI,
