@@ -14,11 +14,11 @@ export const adminMiddleware: MiddlewareFactory = (next) => {
           "1a99663db926903959c25fe59d333d61",
       });
       // @TODO: Check if the token is valid and the user is an admin
-      // if (token && token.role === RoleEnum.ADMIN) {
-      return next(request, event);
-      // }
+      if (token && token.role === RoleEnum.ADMIN) {
+        return next(request, event);
+      }
       // Redirect non-admin users to the home page
-      // return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     } catch (_error) {
       // @TODO: Handle error when token is not valid
       return NextResponse.next();
