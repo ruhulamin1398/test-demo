@@ -1,14 +1,8 @@
 import NextAuth, { Account, AuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import GitHubProvider from "next-auth/providers/github";
-import TwitterProvider from "next-auth/providers/twitter";
 import { client } from "@/lib/apolloClient";
-import {
-  LOGIN_MUTATION,
-  REGISTER_MUTATION,
-  SOCIAL_LOGIN_MUTATION,
-} from "@/graphql-client/auth";
+import { LOGIN_MUTATION, SOCIAL_LOGIN_MUTATION } from "@/graphql-client/auth";
 import { AuthProviderEnum, IUser } from "@/interfaces";
 import { JWT } from "next-auth/jwt";
 import { AdapterUser } from "next-auth/adapters";
@@ -34,12 +28,16 @@ export const authOptions: AuthOptions = {
           password: string;
         };
         try {
+          console.log(
+            "login data is ___________________",
+            { email, password },
+            process.env.GRAPHQL_API_URL,
+            client
+          );
           const { data } = await client.mutate({
             mutation: LOGIN_MUTATION,
             variables: { username: email, password },
           });
-
-          console.log("login data is ___________________", data);
 
           if (data?.login?.user) {
             return data.login.user;
@@ -58,22 +56,6 @@ export const authOptions: AuthOptions = {
       clientSecret:
         process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET ||
         "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",
-    }),
-    GitHubProvider({
-      clientId:
-        process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID || "Ov23lik96gTaKmDVFFba",
-      clientSecret:
-        process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET ||
-        "127cd7fef32da8132641f8e2275cd3fc461e63dd",
-    }),
-    TwitterProvider({
-      clientId:
-        process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID ||
-        "ZXR1TjVxamZDTzhiSHlxWW4tTVI6MTpjaQ",
-      clientSecret:
-        process.env.NEXT_PUBLIC_TWITTER_CLIENT_SECRET ||
-        "aXp9R0qXac82bpfmPuvHLlPD6lqzi6yzfBO34pjsZl7wHWAB5x",
-      version: "2.0", // Twitter API v2 (for email access)
     }),
   ],
   secret:

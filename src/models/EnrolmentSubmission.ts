@@ -1,7 +1,7 @@
-import { ISubmissionScore } from "@/interfaces/submissionscore";
+import { IEnrolmentSubmission } from "@/interfaces/enrolmentSubmission";
 import mongoose from "mongoose";
 
-// SubmissionScore Model
+// enrolmentSubmissionSchema Model
 const enrolmentSubmissionSchema = new mongoose.Schema(
   {
     enrolId: {
@@ -19,17 +19,17 @@ const enrolmentSubmissionSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    submittedContnt: { type: String, required: false },
+    submittedContent: { type: String, required: false },
     score: { type: Number, default: 1 },
   },
   { timestamps: true }
 );
 
-export const SubmissionScore =
-  mongoose.models.SubmissionScore ||
-  mongoose.model<ISubmissionScore & Document>(
-    "SubmissionScore",
+export const EnrolmentSubmission =
+  mongoose.models.EnrolmentSubmission ||
+  mongoose.model<IEnrolmentSubmission & Document>(
+    "EnrolmentSubmission",
     enrolmentSubmissionSchema
   );
 
-export default SubmissionScore;
+export default EnrolmentSubmission;

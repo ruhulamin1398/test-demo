@@ -6,7 +6,6 @@ import {
   IPrizesAndRewards,
 } from "@/interfaces/competition";
 import mongoose, { Schema } from "mongoose";
-import { boolean } from "zod";
 
 const PrizesAndRewardsSchema = new Schema<IPrizesAndRewards>({
   title: { type: String, required: true },
@@ -56,6 +55,19 @@ const competitionSchema = new Schema<ICompetitionDocument>(
   },
   { timestamps: true }
 );
+
+competitionSchema
+  .virtual("enroledUserCount", {
+    ref: "Enrolment",
+    localField: "_id",
+    foreignField: "competitionId",
+    count: true, // This makes Mongoose return the count instead of documents
+  })
+  .get((value) => {
+    return value || 0;
+  });
+competitionSchema.set("toObject", { virtuals: true });
+competitionSchema.set("toJSON", { virtuals: true });
 
 export const Competition =
   mongoose.models.Competition ||

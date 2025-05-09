@@ -8,6 +8,9 @@ export enum CompetitionStatusEnum {
 export enum SubmissionTypeEnum {
   PHOTO = "Photo",
   VIDEO = "Video",
+  AUDIO = "Audio",
+  PDF = "Pdf",
+  LINK = "Link",
 }
 
 export enum EnrolmentTypeEnum {
@@ -47,6 +50,7 @@ export interface ICompetition {
   haveRoundWiseSubmission: boolean;
   slug?: string;
   activeRound?: IRound;
+  enroledUserCount?: number;
 }
 
 export interface PaginationInput {

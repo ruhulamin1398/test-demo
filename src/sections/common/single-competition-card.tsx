@@ -12,6 +12,7 @@ import { Label, labelClasses } from "@/components/label";
 import { RouterLink } from "@/routes/components";
 import { IconButton } from "@mui/material";
 import { ICompetition } from "@/interfaces";
+import { useDate } from "@/hooks/use-date";
 
 // ----------------------------------------------------------------------
 
@@ -19,16 +20,19 @@ import { ICompetition } from "@/interfaces";
 
 type CardItemProps = CardProps & {
   item: ICompetition;
-  handleEnrollment: (competitionId: string) => void;
+  handleEnrolment: (competitionId: string) => void;
+  isEnrolled?: boolean;
 };
 
 export function SingleCompetitionCard({
+  isEnrolled = false,
   item,
-  handleEnrollment,
+  handleEnrolment,
   sx,
   ...other
 }: CardItemProps) {
-  console.log(item);
+  const { HumanTimeDifferent } = useDate();
+
   const renderImage = () => (
     <Box sx={{ px: 1, pt: 1 }}>
       <Image
@@ -54,18 +58,21 @@ export function SingleCompetitionCard({
       }}
     >
       <Box sx={{ flexGrow: 1 }}>
-        <Label
-          startIcon={<Iconify width={12} icon="solar:clock-circle-outline" />}
-        >
-          1h 40m
-        </Label>
+        {!isEnrolled && (
+          <Label
+            startIcon={<Iconify width={12} icon="solar:clock-circle-outline" />}
+          >
+            {HumanTimeDifferent(Number(item.enrolmentDeadline.endDate))}
+          </Label>
+        )}
 
         <Label
+          sx={{ ml: 1 }}
           startIcon={
             <Iconify width={12} icon="solar:users-group-rounded-bold" />
           }
         >
-          {fShortenNumber(100)}
+          {fShortenNumber(item?.enroledUserCount)}
         </Label>
       </Box>
 
@@ -104,7 +111,7 @@ export function SingleCompetitionCard({
 
       <Link
         component={RouterLink}
-        href={item.detailsHref || `/competition/${item.id}`}
+        href={`/competition/${item.id}`}
         color="inherit"
         underline="none"
       >
@@ -114,8 +121,9 @@ export function SingleCompetitionCard({
           size="small"
           onClick={(e) => {
             e.preventDefault();
-            handleEnrollment(item.id);
+            handleEnrolment(item.id);
           }}
+          disabled={isEnrolled}
         >
           Join
         </Button>
@@ -135,7 +143,7 @@ export function SingleCompetitionCard({
             variant="subtitle2"
             color="inherit"
             underline="none"
-            href={item.detailsHref || `/competition/${item.id}`}
+            href={`/competition/${item.id}`}
             sx={(theme) => ({
               ...theme.mixins.maxLine({
                 line: 2,

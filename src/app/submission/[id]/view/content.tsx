@@ -1,22 +1,25 @@
 "use client";
 import ContentSubmission from "@/components/content-submission";
 import { Iconify } from "@/components/iconify";
-import { ICompetition } from "@/interfaces";
+import { ICompetition, IRound } from "@/interfaces";
 import { ContestDateTimeLine } from "@/sections/competition-single/contest-date-timeline";
 import { Box, Grid2 as Grid, IconButton, Typography } from "@mui/material";
-import React from "react";
 
 import { useDate } from "@/hooks/use-date";
 
 type Props = { competition: ICompetition };
 const PageContent = ({ competition }: Props) => {
   const { formatDate } = useDate();
+  const activeRound: IRound | undefined = competition.rounds.find(
+    (round) => round.isActiveRound
+  );
   return (
     <Grid container spacing={{ xs: 3, md: 5, lg: 8 }}>
       <Grid size={{ xs: 12, md: 6, lg: 7 }}>
         <ContentSubmission
           title={competition.title}
           date={formatDate(competition.enrolmentDeadline.endDate)}
+          activeRound={activeRound}
           competitionId={competition.id}
         />
       </Grid>
@@ -29,7 +32,7 @@ const PageContent = ({ competition }: Props) => {
                 Important date and times
               </Typography>
             </Box>
-            <Box
+            {/* <Box
               sx={{
                 mb: 2,
                 gap: 0.5,
@@ -49,7 +52,7 @@ const PageContent = ({ competition }: Props) => {
                 Eligibility :
               </Box>
               {competition?.eligibility}
-            </Box>
+            </Box> */}
             <ContestDateTimeLine rounds={competition.rounds} />
           </>
         )}

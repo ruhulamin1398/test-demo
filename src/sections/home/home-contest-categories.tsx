@@ -15,7 +15,8 @@ import { CONFIG } from "@/global-config";
 import { Iconify } from "@/components/iconify";
 import { varFade, MotionViewport } from "@/components/animate";
 import { Featurecategories } from "@/_mock/contest";
-import { Button } from "@mui/material";
+import { Button, Link } from "@mui/material";
+import { RouterLink } from "@/routes/components";
 
 // ----------------------------------------------------------------------
 
@@ -179,7 +180,14 @@ export function CateGoryItemCard({
     >
       <Box>
         <Typography variant="h4" sx={{ whiteSpace: "pre-line", mb: 1 }}>
-          {title}
+          <Link
+            component={RouterLink}
+            href={"/competition"}
+            color="inherit"
+            underline="none"
+          >
+            {title}
+          </Link>
         </Typography>
 
         <Typography

@@ -20,6 +20,7 @@ export const CREATE_COMPETITION = gql`
       mediaUrl
       submissionType
       status
+      haveRoundWiseSubmission
       rounds {
         id
         startDate
@@ -27,6 +28,15 @@ export const CREATE_COMPETITION = gql`
         title
         judgementCriteria
         roundNumber
+        maxScore
+        maxVote
+        judges {
+          name
+          firstName
+          lastName
+        }
+        maxWinners
+        isActiveRound
       }
     }
   }
@@ -59,6 +69,7 @@ export const UPDATE_COMPETITION = gql`
         roundNumber
         status
         maxScore
+        maxVote
         judges {
           name
           firstName
@@ -85,8 +96,6 @@ export const UPDATE_COMPETITION_ELIGIBILITY = gql`
   }
 `;
 
-
-
 export const GET_COMPETITION_QUERY = gql`
   query GetCompetition($id: ID!) {
     getCompetition(id: $id) {
@@ -95,6 +104,15 @@ export const GET_COMPETITION_QUERY = gql`
       description
       startDate
       endDate
+      enroledUserCount
+      mySubmissions {
+        id
+        enrolId
+        roundId
+        score
+        submittedContent
+        createdAt
+      }
       enrolmentDeadline {
         startDate
         endDate
@@ -105,22 +123,29 @@ export const GET_COMPETITION_QUERY = gql`
       submissionType
       status
       eligibility
+      haveRoundWiseSubmission
       rounds {
         id
         startDate
         endDate
         title
+
+        submissionStartDate
+        submissionEndDate
+        submissionType
         description
         judgementCriteria
         roundNumber
         status
         maxScore
+        maxVote
         judges {
           name
           firstName
           lastName
         }
         maxWinners
+        isActiveRound
       }
       prizes {
         id
@@ -145,6 +170,7 @@ export const GET_COMPETITIONS_QUERY = gql`
         description
         startDate
         endDate
+        enroledUserCount
         enrolmentDeadline {
           startDate
           endDate
@@ -155,6 +181,7 @@ export const GET_COMPETITIONS_QUERY = gql`
         submissionType
         status
         eligibility
+        haveRoundWiseSubmission
         rounds {
           id
           startDate
@@ -165,12 +192,14 @@ export const GET_COMPETITIONS_QUERY = gql`
           roundNumber
           status
           maxScore
+          maxVote
           judges {
             name
             firstName
             lastName
           }
           maxWinners
+          isActiveRound
         }
         prizes {
           id

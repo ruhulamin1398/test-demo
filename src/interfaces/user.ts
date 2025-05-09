@@ -30,6 +30,7 @@ export interface IUser {
   role: RoleEnum;
   isActive: boolean;
   updatedAt: Date;
+  elrollIds: string[]; // Array of competition IDs the user is enrolled in
 }
 
 export interface PaginationInput {

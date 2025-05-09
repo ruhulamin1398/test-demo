@@ -10,9 +10,14 @@ export const CREATE_COMPETITION_ROUND = gql`
       roundNumber
       judgementCriteria
       startDate
+      submissionStartDate
+      submissionEndDate
+      submissionType
       endDate
       maxScore
+      maxVote
       status
+      isActiveRound
       judges {
         id
         name
@@ -38,7 +43,11 @@ export const UPDATE_COMPETITION_ROUND = gql`
       judgementCriteria
       startDate
       endDate
+      submissionType
+      submissionStartDate
+      submissionEndDate
       maxScore
+      maxVote
       status
       judges {
         id
@@ -47,6 +56,15 @@ export const UPDATE_COMPETITION_ROUND = gql`
         lastName
       }
       maxWinners
+    }
+  }
+`;
+
+export const DELETE_ROUND = gql`
+  mutation DeleteRound($id: ID!) {
+    deleteRound(id: $id) {
+      success
+      message
     }
   }
 `;

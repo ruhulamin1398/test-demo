@@ -1,7 +1,9 @@
 import { IEnrolment, IUser } from "@/interfaces";
-import { Enrolment } from "@/models";
+import { Competition, Enrolment } from "@/models";
 import { GraphQLError } from "graphql";
 
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
 const enrolmentResolver = {
   Query: {
     getEnrolments: async (): Promise<IEnrolment[]> => {
@@ -38,6 +40,24 @@ const enrolmentResolver = {
       if (alreadyEnrolled) {
         throw new GraphQLError("You have already enrolled to this competition");
       }
+      const competition = await Competition.findById(competitionId);
+      if (!competition) {
+        throw new Error("The specified competition does not exist.");
+      }
+
+      dayjs.extend(isBetween);
+      const isDeadlineExist = dayjs().isBetween(
+        competition.enrolmentDeadline?.startDate,
+        competition.enrolmentDeadline?.endDate,
+        "day",
+        "[]"
+      ); // '[]' means inclusive
+      if (!isDeadlineExist) {
+        throw new Error(
+          "Enrolment are only allowed during the submission period."
+        );
+      }
+
       try {
         const enrolment = new Enrolment({
           competitionId,

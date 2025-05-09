@@ -66,5 +66,6 @@ const formatGraphQLError = (error: GraphQLFormattedError): string => {
     ? ` (Code: ${error.extensions.code})`
     : "";
   const path = error.path ? ` at ${error.path.join(" > ")}` : "";
-  return `${message}${code}${path}`.trim();
+  return `${message}`.trim();
+  // return `${message}${code}${path}`.trim();
 };

@@ -3,10 +3,18 @@ import {
   IRound,
   RoundJudgementCriteriaEnum,
   RoundStatusEnum,
+  SubmissionTypeEnum,
 } from "@/interfaces";
 import { Enrolment, Round, User } from "@/models";
 import { GraphQLError } from "graphql";
+interface DeleteRoundArgs {
+  id: string;
+}
 
+interface DeleteResponse {
+  success: boolean;
+  message?: string;
+}
 const roundResolver = {
   Query: {
     getRounds: async (): Promise<IRound[]> => {
@@ -33,8 +41,13 @@ const roundResolver = {
           judgementCriteria: RoundJudgementCriteriaEnum;
           startDate: string;
           endDate: string;
+          submissionStartDate: string;
+          submissionEndDate: string;
+          submissionType: SubmissionTypeEnum;
           maxScore: number;
+          maxVote: number;
           status: RoundStatusEnum;
+          isActiveRound: boolean;
           judges: [];
           maxWinners: number;
         };
@@ -50,8 +63,13 @@ const roundResolver = {
           judgementCriteria,
           startDate,
           endDate,
+          submissionStartDate,
+          submissionEndDate,
+          submissionType,
           maxScore,
+          maxVote,
           status,
+          isActiveRound,
           maxWinners,
           judges = [],
         } = input;
@@ -63,11 +81,17 @@ const roundResolver = {
           judgementCriteria,
           startDate,
           endDate,
+          submissionStartDate,
+          submissionEndDate,
+          submissionType,
           maxScore: Number(maxScore),
+          maxVote: Number(maxVote),
+          isActiveRound,
           status,
           maxWinners: Number(maxWinners),
           judges,
         });
+        console.log(" new round ______++___", round);
         return await round.save();
       } catch (error) {
         const formattedError = getResolverErrorMessage(error);
@@ -93,8 +117,13 @@ const roundResolver = {
           judgementCriteria: RoundJudgementCriteriaEnum;
           startDate: string;
           endDate: string;
+          submissionType: SubmissionTypeEnum;
+          submissionStartDate: string;
+          submissionEndDate: string;
           maxScore: number;
+          maxVote: number;
           status: RoundStatusEnum;
+          isActiveRound: boolean;
           judges: [];
           maxWinners: number;
         };
@@ -108,12 +137,17 @@ const roundResolver = {
         judgementCriteria,
         startDate,
         endDate,
+        submissionType,
+        submissionStartDate,
+        submissionEndDate,
         maxScore,
+        maxVote,
         status,
+        isActiveRound,
         maxWinners,
         judges = [],
       } = input;
-      return Round.findByIdAndUpdate(
+      return await Round.findByIdAndUpdate(
         id,
         {
           competition,
@@ -123,8 +157,13 @@ const roundResolver = {
           judgementCriteria,
           startDate,
           endDate,
+          submissionType,
+          submissionStartDate,
+          submissionEndDate,
           maxScore,
+          maxVote,
           status,
+          isActiveRound,
           maxWinners,
           judges,
         },
@@ -132,15 +171,37 @@ const roundResolver = {
       );
     },
     deleteRound: async (
-      _: void,
-      { id }: { id: string }
-    ): Promise<IRound | null> => {
-      return Round.findByIdAndDelete(id);
+      _: unknown,
+      { id }: DeleteRoundArgs
+    ): Promise<DeleteResponse> => {
+      try {
+        const round = await Round.findById(id);
+        if (!round) {
+          throw new GraphQLError("Invalid round.", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+            },
+          });
+        }
+
+        await Round.findByIdAndDelete(id);
+        return {
+          success: true,
+          message: "Round deleted successfully.",
+        };
+      } catch (error) {
+        const formattedError = getResolverErrorMessage(error);
+        throw new GraphQLError(`${formattedError.message}`, {
+          extensions: {
+            code: formattedError.code,
+          },
+        });
+      }
     },
   },
   Round: {
     enrolledIds: async (round: IRound) => {
-      return Enrolment.find({ _id: { $in: round.enrollments } });
+      return Enrolment.find({ _id: { $in: round.enrolments } });
     },
     judges: async (round: IRound) => {
       return User.find({ _id: { $in: round.judges } });

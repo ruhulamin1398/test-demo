@@ -6,6 +6,7 @@ import {
   Backdrop,
   Box,
   CircularProgress,
+  Container,
   Tab,
   Tabs,
 } from "@mui/material";
@@ -74,7 +75,7 @@ const CompetitionDetails = () => {
   }, [data, loading, dispatch, error, notify]);
 
   return (
-    <div>
+    <Container maxWidth="lg">
       <AppBar
         component="div"
         position="static"
@@ -94,7 +95,7 @@ const CompetitionDetails = () => {
           <Tab label="Thumbnail" {...a11yProps(4)} />
         </Tabs>
       </AppBar>
-      <Box p={2}>
+      <Box py={2}>
         {loading ? (
           <Backdrop
             sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
@@ -122,7 +123,7 @@ const CompetitionDetails = () => {
           </>
         )}
       </Box>
-    </div>
+    </Container>
   );
 };
 

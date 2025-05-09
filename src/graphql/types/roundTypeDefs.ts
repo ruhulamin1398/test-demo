@@ -5,10 +5,18 @@ export const roundTypeDefs = `#graphql
     Upcoming,
   }
 
-  enum RoundJudgementCriteriaEnum {
-    Public,
-    Judge,
+  enum SubmissionTypeEnum {
+    Photo,
+    Video,
+    Audio,
+    Pdf,
+    Link,
   }
+  enum RoundJudgementCriteriaEnum {
+  Public,
+  Judge,
+  Both,
+}
   # Input type for creating a competition
   input CreateCompetitionRoundInput {
     competition: ID!
@@ -18,8 +26,14 @@ export const roundTypeDefs = `#graphql
     judgementCriteria: RoundJudgementCriteriaEnum!
     startDate: String!
     endDate: String!
+    submissionType: SubmissionTypeEnum!
+    submissionStartDate: String!
+    submissionEndDate: String!
+    
     maxScore: Float!
+    maxVote: Float!
     status: RoundStatusEnum
+    isActiveRound:Boolean!
     judges: [String!]
     maxWinners: Int!
   }
@@ -31,12 +45,17 @@ export const roundTypeDefs = `#graphql
     judgementCriteria: String!
     startDate: String!
     endDate: String!
+    submissionStartDate: String!
+    submissionEndDate: String!
     maxScore: Float!
+    maxVote: Float!
+    submissionType: SubmissionTypeEnum!
     enrolledIds: [Enrolment]
     judges: [User]
     maxWinners: Int!
     competition: String!
     status: String!
+    isActiveRound:Boolean!
     createdAt: String!
     updatedAt: String!
   }
@@ -49,6 +68,6 @@ export const roundTypeDefs = `#graphql
   type Mutation {
     createRound(input: CreateCompetitionRoundInput!): Round!
     updateRound(id: ID!, input: CreateCompetitionRoundInput!): Round!
-    deleteRound(id: ID!): Round
+    deleteRound(id: ID!): DeleteResponse
   }
 `;

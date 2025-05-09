@@ -44,7 +44,10 @@ type User {
   role: RoleEnum
   authProvider: AuthProviderEnum
   socialId: String
+  enrollIds: [ID!]
+  submissions:[EnrolmentSubmission]
 }
+
 
 # Pagination input type
 input PaginationInput {
@@ -57,6 +60,8 @@ input UserFilterInput {
   isActive: Boolean
   email: String
   role: RoleEnum
+  phone: String
+  name: String
 }
 
 # Paginated response for users

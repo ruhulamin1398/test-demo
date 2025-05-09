@@ -30,14 +30,28 @@ import { FormDivider } from "../components/form-divider";
 import { useMutation } from "@apollo/client";
 import { REGISTER_MUTATION } from "@/graphql-client/auth";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/store/slices/authSlice";
 import { IUser } from "@/interfaces";
-import { count } from "console";
 import { signIn } from "next-auth/react";
+import { getCookie } from "minimal-shared/utils";
+import { setUser } from "@/store/slices/authSlice";
 
 // ----------------------------------------------------------------------
 
 export type SignUpSchemaType = zod.infer<typeof SignUpSchema>;
+
+const phoneNumberSchema = zod.string().refine(
+  (val) => {
+    // Check if length is 11 and contains only digits
+    const isValidLength = val.length === 11;
+    const isNumeric = /^\d{11}$/.test(val); // Only digits and exactly 11 digits
+    const validPrefix = /^(017|015|016|018|019|013)/.test(val); // Check for valid prefixes
+
+    return isValidLength && isNumeric && validPrefix;
+  },
+  {
+    message: "Invalid phone number.",
+  }
+);
 
 export const SignUpSchema = zod.object({
   firstName: zod.string().min(1, { message: "First name is required!" }),
@@ -46,7 +60,7 @@ export const SignUpSchema = zod.object({
     .string()
     .min(1, { message: "Email is required!" })
     .email({ message: "Email must be a valid email address!" }),
-  phone: zod.string(),
+  phone: phoneNumberSchema,
   password: zod
     .string()
     .min(1, { message: "Password is required!" })
@@ -54,7 +68,7 @@ export const SignUpSchema = zod.object({
 });
 
 interface RegisterResponse {
-  register: {
+  createUser: {
     token: string;
     user: IUser;
   };
@@ -63,19 +77,15 @@ interface RegisterResponse {
 // ----------------------------------------------------------------------
 
 export function SignUpView() {
+  const callbackUrl = getCookie<string>("next-auth.callback-url");
   const router = useRouter();
   const dispatch = useDispatch();
   const [register, { data, loading, error }] =
     useMutation<RegisterResponse>(REGISTER_MUTATION);
 
   useEffect(() => {
-    if (data?.register?.user) {
-      const user = data.register.user;
-      dispatch(setUser(user)); // Assuming you use Redux to manage user state
-      router.push("/");
-    }
     console.log("Hello Nizam inside useeffect", error);
-  }, [data, error, dispatch, router]);
+  }, [error]);
 
   const showPassword = useBoolean();
 
@@ -102,10 +112,9 @@ export function SignUpView() {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
     try {
       const { firstName, lastName, email, phone, password } = data;
-      const userData = await register({
+      const { data: userData } = await register({
         variables: {
           name: firstName,
           firstName,
@@ -125,8 +134,8 @@ export function SignUpView() {
         console.error("Registration error:", result.error);
         setErrorMessage(result.error);
       } else {
-        console.log("Registration and login successful:", result);
-        router.push("/");
+        dispatch(setUser(userData?.createUser.user || null));
+        window.location.href = callbackUrl || "/";
       }
     } catch (error) {
       console.error(error);

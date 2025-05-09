@@ -5,19 +5,25 @@ import {
   CompetitionStatusEnum,
   ICompetition,
   IPrizesAndRewards,
+  IUser,
   PaginationInput,
   SubmissionTypeEnum,
 } from "@/interfaces";
-import { Competition, Round } from "@/models";
+import { Competition, Enrolment, Round } from "@/models";
+import EnrolmentSubmission from "@/models/EnrolmentSubmission";
 import { GraphQLError } from "graphql";
 
 const competitionResolver = {
   Query: {
     getCompetition: async (
       _: void,
-      { id }: { id: string }
+      { id }: { id: string },
+      { user }: { user: IUser | null }
     ): Promise<ICompetition | null> => {
-      return Competition.findById(id);
+      const competition = await Competition.findById(id);
+      console.log(competition);
+
+      return competition;
     },
     getCompetitions: async (
       _parent: unknown, // Parent object (could be null or previous result)
@@ -25,6 +31,7 @@ const competitionResolver = {
         page,
         filter,
       }: { page: PaginationInput; filter?: CompetitionFilterInput }, // Args with pagination and optional filter
+      { user }: { user: IUser | null },
       _context: unknown, // Context (e.g., for authentication)
       _info: unknown // Info about the query (e.g., field name, schema)
     ): Promise<CompetitionResponse> => {
@@ -58,10 +65,13 @@ const competitionResolver = {
         const totalCount = await Competition.countDocuments(filterQuery);
 
         // Fetch the paginated competitions
-        const competitions = await Competition.find(filterQuery)
+        let competitions = await Competition.find(filterQuery)
           .skip(skip)
           .limit(limit)
-          .sort({ createdAt: -1 }); // Sort by creation date, newest first
+          .sort({ createdAt: -1 })
+          .populate("enroledUserCount"); // Sort by creation date, newest first
+        console.log(competitions);
+        // Fetch enrolment counts for all competitions in a single query
 
         return {
           competitions,
@@ -396,6 +406,20 @@ const competitionResolver = {
     rounds: async (competition: ICompetition) => {
       return await Round.find({ competition: competition.id });
     },
+    // mySubmissions: async (
+    //   competition: ICompetition,
+    //   _,
+    //   user: { user: IUser | null }
+    // ) => {
+    //   if (!user) {
+    //     return [];
+    //   }
+
+    //   return await EnrolmentSubmission.find({
+    //     competition: competition.id,
+    //     userId: user.id
+    //   });
+    // },
   },
 };
 

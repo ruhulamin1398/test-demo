@@ -123,6 +123,15 @@ export const ME_QUERY = gql`
       role
       authProvider
       socialId
+      enrollIds
+      submissions {
+        id
+        enrolId
+        roundId
+        score
+        submittedContent
+        createdAt
+      }
     }
   }
 `;

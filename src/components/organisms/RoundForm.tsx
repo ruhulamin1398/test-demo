@@ -1,12 +1,14 @@
 "use client";
 import React, { useEffect } from "react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import {
   Button,
   Grid2 as Grid,
   Box,
   MenuItem,
   CircularProgress,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import {
   IRound,
@@ -35,7 +37,9 @@ import {
   CompetitionUiModeEnum,
   setRoundInfo,
 } from "@/store/slices/competitionSlice";
-import { ICompetition } from "@/interfaces";
+import { ICompetition, SubmissionTypeEnum } from "@/interfaces";
+import { toast } from "sonner";
+import { GET_COMPETITION_QUERY } from "@/graphql-client/competition";
 
 const RoundForm: React.FC = () => {
   const dispatch = useDispatch();
@@ -46,26 +50,37 @@ const RoundForm: React.FC = () => {
   const { notify } = useNotification();
   // GraphQL Mutation hooks
   const [createRound, { loading: createLoading, error: createError, data }] =
-    useMutation(CREATE_COMPETITION_ROUND);
+    useMutation(CREATE_COMPETITION_ROUND, {
+      refetchQueries: [
+        {
+          query: GET_COMPETITION_QUERY,
+          variables: { id: competition?.id },
+        },
+      ],
+      awaitRefetchQueries: true, // ensures query finishes before continuing
+    });
   const [
     updateRound,
     { loading: updateLoading, error: updateError, data: updatedData },
-  ] = useMutation(UPDATE_COMPETITION_ROUND);
+  ] = useMutation(UPDATE_COMPETITION_ROUND, {
+    refetchQueries: [
+      {
+        query: GET_COMPETITION_QUERY,
+        variables: { id: competition?.id },
+      },
+    ],
+    awaitRefetchQueries: true, // ensures query finishes before continuing
+  });
 
   const handleSubmit = async (values: unknown) => {
     const payloads = values as IRound;
-    if (competition === null) {
-      notify({
-        severity: "error",
-        message: "Need to create competition first.",
-      });
-      return;
-    }
     const {
       maxScore = 0,
+      maxVote = 0,
       maxWinners = 0,
       roundNumber = 1,
       judges = [],
+      isActiveRound = false,
     } = payloads;
     const jids = judges.map((item) => item.id);
     if (mode === CompetitionUiModeEnum.CREATE) {
@@ -74,14 +89,22 @@ const RoundForm: React.FC = () => {
           input: {
             ...payloads,
             maxScore: Number(maxScore || 0),
+            maxVote: Number(maxVote || 0),
             maxWinners: Number(maxWinners),
-            competition: competition.id,
             roundNumber: Number(roundNumber || 0),
+            isActiveRound: isActiveRound,
             judges: jids,
           },
         },
       });
     } else {
+      if (competition === null) {
+        notify({
+          severity: "error",
+          message: "Need to create competition first.",
+        });
+        return;
+      }
       const { id, ...updatedPayload } = payloads;
       await updateRound({
         variables: {
@@ -90,8 +113,10 @@ const RoundForm: React.FC = () => {
             ...updatedPayload,
             competition: competition.id,
             maxScore: Number(maxScore || 0),
+            maxVote: Number(maxVote || 0),
             maxWinners: Number(maxWinners),
             roundNumber: Number(roundNumber || 0),
+            isActiveRound: isActiveRound,
             judges: jids,
           },
         },
@@ -100,26 +125,19 @@ const RoundForm: React.FC = () => {
   };
   useEffect(() => {
     if (data?.createRound) {
-      notify({
-        severity: "success",
-        message: "Successfully created round information.",
-      });
-
+      toast.success("Successfully created round information.");
       dispatch(setRoundInfo(data.createRound));
     }
     if (updatedData?.updateRound) {
-      notify({
-        severity: "success",
-        message: "Successfully updated the round information.",
-      });
+      toast.success("Successfully updated round information.");
       dispatch(setRoundInfo(updatedData.updateRound));
     }
 
     if (createError) {
-      notify({ severity: "error", message: handleGraphQLError(createError) });
+      toast.success(handleGraphQLError(createError));
     }
     if (updateError) {
-      notify({ severity: "error", message: handleGraphQLError(updateError) });
+      toast.success(handleGraphQLError(updateError));
     }
   }, [data, updatedData, createError, updateError, notify]);
 
@@ -128,23 +146,40 @@ const RoundForm: React.FC = () => {
     roundNumber: 1,
     startDate: formatDateForDatePicker(new Date()),
     endDate: formatDateForDatePicker(new Date()),
+    submissionStartDate: formatDateForDatePicker(new Date()),
+    submissionEndDate: formatDateForDatePicker(new Date()),
     judgementCriteria: RoundJudgementCriteriaEnum.JUDGE,
-    maxScore: 100,
+    maxScore: 0,
+    maxVote: 0,
     maxWinners: 100,
     description: "",
+    isActiveRound: false,
     status: RoundStatusEnum.UPCOMING,
+    submissionType: SubmissionTypeEnum.PHOTO,
     judges: [] as string[],
   };
+
+  console.log(recordToModify);
 
   const competitionRound = recordToModify
     ? {
         ...recordToModify,
         startDate: formatDateForDatePicker(recordToModify.startDate),
         endDate: formatDateForDatePicker(recordToModify.endDate),
+        submissionStartDate: formatDateForDatePicker(
+          recordToModify.submissionStartDate
+        ),
+        submissionEndDate: formatDateForDatePicker(
+          recordToModify.submissionEndDate
+        ),
         judges: recordToModify.judges.map(({ id, firstName, lastName }) => ({
           id,
           label: `${firstName} ${lastName}`,
         })),
+        submissionType: recordToModify.submissionType || "Photo",
+        maxScore: recordToModify.maxScore || 0,
+        maxVote: recordToModify.maxVote || 0,
+        maxWinners: recordToModify.maxWinners || 0,
       }
     : initialFormValues;
 
@@ -208,15 +243,39 @@ const RoundForm: React.FC = () => {
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <Field
-                label={`Max ${
-                  values.judgementCriteria === RoundJudgementCriteriaEnum.PUBLIC
-                    ? "Vote"
-                    : "Score"
-                }`}
-                name="maxScore"
-                component={OutlinedTextField}
+                name="submissionStartDate"
+                label="Submission Start Date"
+                component={CustomDatePicker}
               />
             </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+              <Field
+                name="submissionEndDate"
+                label="Submission End Date"
+                component={CustomDatePicker}
+              />
+            </Grid>
+            {values.judgementCriteria === RoundJudgementCriteriaEnum.PUBLIC ||
+            values.judgementCriteria === RoundJudgementCriteriaEnum.BOTH ? (
+              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                <Field
+                  label={"Max Vote"}
+                  name="maxVote"
+                  component={OutlinedTextField}
+                />
+              </Grid>
+            ) : null}
+            {values.judgementCriteria === RoundJudgementCriteriaEnum.JUDGE ||
+            values.judgementCriteria === RoundJudgementCriteriaEnum.BOTH ? (
+              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                <Field
+                  label={"Max Score"}
+                  name="maxScore"
+                  component={OutlinedTextField}
+                />
+              </Grid>
+            ) : null}
+
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <Field
                 label="Status"
@@ -238,7 +297,36 @@ const RoundForm: React.FC = () => {
                 component={OutlinedTextField}
               />
             </Grid>
-            {values.judgementCriteria === RoundJudgementCriteriaEnum.JUDGE ? (
+
+            {/* Submission Type */}
+            <Grid size={{ xs: 6, sm: 3 }}>
+              <Field
+                label="Submission Type"
+                name="submissionType"
+                component={OutlinedTextField}
+                select
+              >
+                {Object.values(SubmissionTypeEnum).map((submissionType) => (
+                  <MenuItem key={submissionType} value={submissionType}>
+                    {submissionType}
+                  </MenuItem>
+                ))}
+              </Field>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6, md: 3 }} sx={{ py: 3 }}>
+              <Field name="isActiveRound">
+                {({ field }: FieldProps) => (
+                  <FormControlLabel
+                    control={<Checkbox {...field} checked={field.value} />}
+                    label="Is Active Round"
+                  />
+                )}
+              </Field>
+            </Grid>
+
+            {values.judgementCriteria === RoundJudgementCriteriaEnum.JUDGE ||
+            values.judgementCriteria === RoundJudgementCriteriaEnum.BOTH ? (
               <Grid size={{ xs: 12 }}>
                 <Field
                   name="judges"

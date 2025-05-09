@@ -1,80 +1,102 @@
+import dayjs from "dayjs";
+import { useQuery } from "@apollo/client";
+import isBetween from "dayjs/plugin/isBetween";
+import { GET_ACTIVE_ROUND_SUBMISSION_QUERY } from "@/graphql-client/enrolment-submission";
+import { SubmissionUploadSkeleton } from "@/app/submission/[id]/view/submission-upload-skeleton";
 import {
   Box,
-  Button,
   Card,
-  CardActions,
   CardContent,
   CardHeader,
   CardMedia,
-  Container,
+  Link,
+  Stack,
 } from "@mui/material";
-import React, { useCallback, useState } from "react";
-import { Upload } from "../upload";
-import { useFileUpload } from "@/app/hooks/useFileUpload";
+import { ICompetition, IRound } from "@/interfaces";
+import { useDate } from "@/hooks/use-date";
+import RoundDetails from "./round-details";
+import UploadSubmissionFile from "./upload-content";
+import SubmittedFileInformation from "./submitted-file-information";
+import RoundNoDeadlineExist from "./round-no-deadline-exist";
+import NoActiveRoundFound from "./round-active-round-found";
 
 type Props = {
+  activeRound: IRound | undefined;
   competitionId: string;
   title: string;
   date: string;
 };
 
-const ContentSubmission = ({ competitionId, title, date }: Props) => {
-  const { uploadFile, isLoading, progress, error } = useFileUpload();
-  const [file, setFile] = useState<File | string | null>(null);
-  const handleDropSingleFile = useCallback((acceptedFiles: File[]) => {
-    console.log(acceptedFiles);
-    const newFile = acceptedFiles[0];
-    setFile(newFile);
-  }, []);
-  const handleUpload = async () => {
-    console.log(!file, !competitionId);
-    if (!file || !competitionId) return;
-    try {
-      const uploadbleContent = file as File;
-      const response = await uploadFile(
-        uploadbleContent,
-        `/api/upload/competition-image`,
-        {
-          competitionId: competitionId,
-          roundId: "round123",
-        }
-      );
-      if (response.data) {
-        // TODO: Handle the uploaded image URL here if you want to display it after upload
-      } else {
-        // TODO: Handle error
-      }
-    } catch (err) {
-      console.log(err);
+const ContentSubmission = ({
+  competitionId,
+  activeRound,
+  title,
+  date,
+}: Props) => {
+  const { data, loading, error, refetch } = useQuery(
+    GET_ACTIVE_ROUND_SUBMISSION_QUERY,
+    {
+      variables: { competitionId },
     }
+  );
+
+  const renderRoundSubmission = () => {
+    dayjs.extend(isBetween);
+    const isDeadlineExist =
+      activeRound?.submissionStartDate &&
+      activeRound?.submissionEndDate &&
+      dayjs().isBetween(
+        Number(activeRound.submissionStartDate),
+        Number(activeRound.submissionEndDate),
+        "day",
+        "[]"
+      );
+    // console.log(
+    //   "isDeadlineExist  _____",
+    //   activeRound?.submissionStartDate,
+    //   activeRound?.submissionEndDate,
+    //   Math.floor(new Date().getTime()),
+    //   isDeadlineExist
+    // );
+
+    return (
+      <>
+        {isDeadlineExist ? (
+          <>
+            {data?.GetActiveRoundSubmission != null ? (
+              <SubmittedFileInformation
+                submission={data.GetActiveRoundSubmission}
+              />
+            ) : (
+              <UploadSubmissionFile
+                competitionId={competitionId}
+                title={title}
+                date={date}
+                refetch={refetch}
+              />
+            )}
+          </>
+        ) : (
+          <RoundNoDeadlineExist round={activeRound || undefined} />
+        )}
+      </>
+    );
   };
+
   return (
-    <Card>
-      <CardHeader title={title} subheader={date} />
-      <CardContent>
-        <Upload
-          value={file}
-          onDrop={handleDropSingleFile}
-          onDelete={() => setFile(null)}
-        />
-      </CardContent>
-      <CardActions>
-        <Box
-          sx={{ px: 2, flex: 1, pb: 2 }}
-          display="flex"
-          justifyContent="flex-end"
-        >
-          <Button
-            disabled={!competitionId || !file}
-            onClick={handleUpload}
-            color="primary"
-            variant="contained"
-          >
-            Submit
-          </Button>
-        </Box>
-      </CardActions>
-    </Card>
+    <>
+      {loading && <SubmissionUploadSkeleton />}
+
+      {activeRound ? (
+        <>
+          <RoundDetails round={activeRound} />
+
+          {renderRoundSubmission()}
+        </>
+      ) : (
+        <NoActiveRoundFound />
+      )}
+    </>
   );
 };
 

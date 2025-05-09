@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useQuery } from "@apollo/client";
 import { ME_QUERY } from "@/graphql-client/auth";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/store/slices/authSlice";
+import { setCompetitionInfo, setUser } from "@/store/slices/authSlice";
 
 import { MainLayout } from "@/layouts/main";
 import { AuthSplitLayout } from "@/layouts/auth-split";
@@ -22,7 +22,14 @@ const LayoutRenderer: React.FC<LayoutRendererProps> = ({ children }) => {
 
   useEffect(() => {
     if (!loading && data) {
+      console.log("me data is ", data);
       dispatch(setUser(data.me));
+      dispatch(
+        setCompetitionInfo({
+          enrollIds: data.me.enrollIds || [],
+          submissions: data.me.submissions || [],
+        })
+      );
     }
   }, [data, loading, dispatch]);
 

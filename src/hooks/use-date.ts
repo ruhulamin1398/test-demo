@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const useDate = () => {
   const isValidDate = (date: any): boolean => {
     return date && !isNaN(new Date(Number(date)).getTime());
@@ -13,5 +15,10 @@ export const useDate = () => {
       : "Date not available";
   };
 
-  return { isValidDate, formatDate };
+  const HumanTimeDifferent = (endTime: Number) => {
+    const deadline = dayjs(Number(endTime));
+    return dayjs().to(deadline);
+  };
+
+  return { isValidDate, formatDate, HumanTimeDifferent };
 };

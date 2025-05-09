@@ -12,6 +12,7 @@ import {
   Checkbox,
   Typography,
   Link,
+  CircularProgress,
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 
@@ -26,17 +27,19 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export type EnrollmentConfirmationDialogProps = {
+export type EnrolmentConfirmationDialogProps = {
   onAgree: () => void;
   onDisagree: () => void;
   open: boolean;
+  createLoading?: boolean;
 };
 
-export const EnrollmentConfirmationDialog = ({
+export const EnrolmentConfirmationDialog = ({
   onAgree,
   onDisagree,
   open,
-}: EnrollmentConfirmationDialogProps) => {
+  createLoading,
+}: EnrolmentConfirmationDialogProps) => {
   return (
     <Dialog
       open={open}
@@ -81,11 +84,17 @@ export const EnrollmentConfirmationDialog = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onDisagree}>Disagree</Button>
-        <Button onClick={onAgree}>Agree</Button>
+        {createLoading ? (
+          <CircularProgress />
+        ) : (
+          <>
+            <Button onClick={onDisagree}>Disagree</Button>
+            <Button onClick={onAgree}>Agree</Button>{" "}
+          </>
+        )}
       </DialogActions>
     </Dialog>
   );
 };
 
-export default EnrollmentConfirmationDialog;
+export default EnrolmentConfirmationDialog;

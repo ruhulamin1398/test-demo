@@ -1,11 +1,16 @@
+import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 import fs from "fs/promises";
 import path from "path";
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/app/lib/mongodb";
-import { Competition } from "@/models";
-
-const absolutePath = "./public/uploads/competition-image";
+import { Competition, Enrolment, Round } from "@/models";
+import { authOptions } from "../../auth/[...nextauth]/route";
+import { uuidv4 } from "minimal-shared/utils";
+import EnrolmentSubmission from "@/models/EnrolmentSubmission";
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+const absolutePath = "/uploads/competition-image";
 // const publicPath = "/public/uploads";
 
 // Enable parsing of form data
@@ -15,6 +20,110 @@ export const config = {
   },
 };
 
+const getRunningRoundId = async ({
+  competitionId,
+  userId,
+}: {
+  competitionId: string;
+  userId: string;
+}) => {
+  dayjs.extend(isBetween);
+  try {
+    const competition = await Competition.findById(competitionId);
+    // console.log(" competition is ", competition);
+    if (!competition) {
+      throw new Error("The specified competition does not exist.");
+    }
+
+    // check enrolment exist or not
+    const enrolment = await Enrolment.findOne({
+      competitionId,
+      userId,
+    });
+
+    if (!enrolment) {
+      throw new Error("You are not enrolled in this competition.");
+    }
+
+    const haveRoundWiseSubmission = competition.haveRoundWiseSubmission;
+
+    /// if not roundwise submission  check enrolment deadline
+    if (!haveRoundWiseSubmission) {
+      const isDeadlineExist = dayjs().isBetween(
+        competition.submission?.startDate,
+        competition.submission?.endDate,
+        "day",
+        "[]"
+      ); // '[]' means inclusive
+      if (!isDeadlineExist) {
+        throw new Error(
+          "Submissions are only allowed during the submission period."
+        );
+      }
+
+      const round = await Round.findOne({
+        competition: competitionId,
+      });
+
+      if (!round) {
+        throw new Error("No round is associated with this competition.");
+      }
+
+      // revert if alreay submitted
+      const existingSubmission = await EnrolmentSubmission.findOne({
+        roundId: round.id,
+        enrolId: enrolment.id,
+        userId,
+      });
+
+      if (existingSubmission) {
+        throw new Error("You have already submitted for this round.");
+      }
+
+      return { roundId: round.id, enrolId: enrolment.id };
+    }
+
+    // get current active round
+    const activeRound = await Round.findOne({
+      competition: competitionId,
+      isActiveRound: true,
+    });
+
+    if (!activeRound) {
+      throw new Error("There is no active round for this competition.");
+    }
+    // check deadline
+    const isDeadlineExist = dayjs().isBetween(
+      activeRound.submissionStartDate,
+      activeRound.submissionEndDate,
+      "day",
+      "[]"
+    ); // '[]' means inclusive
+    if (!isDeadlineExist) {
+      throw new Error(
+        "Submissions are only allowed during the submission period."
+      );
+    }
+
+    const existingSubmission = await EnrolmentSubmission.findOne({
+      roundId: activeRound.id,
+      enrolId: enrolment.id,
+      userId,
+    });
+
+    if (existingSubmission) {
+      throw new Error("You have already submitted for this round.");
+    }
+    return { roundId: activeRound.id, enrolId: enrolment.id };
+  } catch (error) {
+    console.error("Error in getRunningRoundId:", error);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Unknown error in getRunningRoundId"
+    );
+  }
+};
 export async function POST(req: NextRequest) {
   try {
     // Parse the form data using `req.formData()`
@@ -22,10 +131,10 @@ export async function POST(req: NextRequest) {
 
     // Extract the uploaded file and ID from formData
     const uploadedFile = formData.get("file");
-    const competitionId =
-      (formData.get("competitionId") as string) ?? "default";
-    const roundId = formData.get("roundId") as string;
-
+    const competitionId = formData.get("competitionId") as string;
+    if (!competitionId) {
+      throw new Error("No competition id provided ");
+    }
     // Validate file presence
     if (!uploadedFile || Array.isArray(uploadedFile)) {
       return NextResponse.json(
@@ -50,18 +159,33 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // current user
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      throw new Error(" No user found ");
+    }
+
     // Prepare the file details
     const { name: originalFilename } = uploadedFile;
 
-    // Use the provided 'id' for a unique filename, or default to "default"
-    const newFileName = `${competitionId || "default"}${path.extname(
-      originalFilename
-    )}`;
-    let uploadDir = path.resolve(absolutePath, competitionId);
-    if (roundId) {
-      uploadDir = path.resolve(absolutePath, competitionId, roundId);
-    }
+    const { roundId, enrolId } = await getRunningRoundId({
+      competitionId,
+      userId: session?.user?.id,
+    });
 
+    // add unique id
+    const uniqueId = uuidv4();
+    const newFileName = `${uniqueId}${path.extname(originalFilename)}`;
+    let submittedContentDir = `${absolutePath}/${competitionId}`;
+    let uploadDir = path.resolve(`./public/${absolutePath}`, competitionId);
+    if (roundId) {
+      uploadDir = path.resolve(
+        `./public/${absolutePath}`,
+        competitionId,
+        roundId
+      );
+      submittedContentDir += `/${roundId}`;
+    }
     // Ensure the upload directory exists
     await fs.mkdir(uploadDir, { recursive: true });
 
@@ -71,23 +195,27 @@ export async function POST(req: NextRequest) {
     const fileBuffer = Buffer.from(await uploadedFile.arrayBuffer());
     await connectToDatabase();
     await fs.writeFile(newFilePath, fileBuffer);
-    // Update the Competition model with the new media URL
-    const updatedCompetition = await Competition.findById(competitionId);
-    //
-    // // const updatedCompetition = await Competition.findByIdAndUpdate(
-    //   competitionId,
-    //   { mediaUrl: "/uploads/competition-image/" + newFileName },
-    //   { new: true } // Return the updated document
-    // );
 
-    // if (!updatedCompetition) {
-    //   return NextResponse.json(
-    //     { message: "Competition could not found" },
-    //     { status: 404 }
-    //   );
-    // }
+    console.log(
+      "roundid , enrolId , userId  fileName submittedContentDir filePath  ",
+      roundId,
+      enrolId,
+      session.user.id,
+      newFileName,
+      submittedContentDir,
+      newFilePath
+    );
+    // Create a new EnrolmentSubmission document
+    const enrolmentSubmission = new EnrolmentSubmission({
+      roundId,
+      enrolId,
+      userId: session.user.id,
+      submittedContent: `${submittedContentDir}/${newFileName}`,
+    });
+    // Save the EnrolmentSubmission to the database
+    await enrolmentSubmission.save();
 
-    return NextResponse.json({ data: updatedCompetition }, { status: 200 });
+    return NextResponse.json({ data: enrolmentSubmission }, { status: 200 });
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";

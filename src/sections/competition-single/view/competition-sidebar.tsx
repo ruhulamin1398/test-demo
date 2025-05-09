@@ -3,10 +3,14 @@ import type { UseBackToTopReturn } from "minimal-shared/hooks";
 
 import Grid from "@mui/material/Grid2";
 import { ContestDateTimeLine } from "../contest-date-timeline";
-import { EnrollmentCard } from "../enroll-contest";
+import { EnrolmentCard } from "../enroll-contest";
 import { PrizeList } from "../prize-list";
 import { Box } from "@mui/material";
 import { ICompetition } from "@/interfaces";
+import { RootState } from "@/store/store";
+import { useSelector } from "react-redux";
+import { SubmissionCard } from "../Submission-card";
+import { CompetitionPageSubmissions } from "../competition-page-submissions";
 
 // ----------------------------------------------------------------------
 type Props = {
@@ -14,16 +18,40 @@ type Props = {
 };
 
 export function CompetitionSidebar({ competition }: Props) {
+  const { enrollIds } = useSelector(
+    (state: RootState) => state.auth.competitionInfo
+  );
+  const isEnrolled = enrollIds.includes(competition.id);
+
   return (
     <>
-      <Box sx={{ mb: 3 }}>
+      <Box
+        sx={{
+          mb: 3,
+          width: "100%",
+          gap: 3,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Grid size={12}>
-          <EnrollmentCard
-            price={competition.price ? `${competition.price}` : "Free"}
-            title={competition.title}
-            description={competition.description}
-            competitionId={competition.id}
-          />
+          {!isEnrolled ? (
+            <EnrolmentCard
+              price={competition.price ? `${competition.price}` : "Free"}
+              title={competition.title}
+              description={competition.description}
+              competitionId={competition.id}
+              deadlineEndDate={competition.enrolmentDeadline.endDate}
+            />
+          ) : (
+            <>
+              <SubmissionCard competition={competition} />
+              <CompetitionPageSubmissions
+                title="My Submissions"
+                competitionId={competition.id}
+              />
+            </>
+          )}
         </Grid>
         <Grid size={12}>
           <PrizeList title="Prizes" prizes={competition.prizes} />

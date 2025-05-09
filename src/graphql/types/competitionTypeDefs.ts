@@ -1,3 +1,4 @@
+import { IEnrolmentSubmission } from "@/interfaces/enrolmentSubmission";
 export const competitionTypeDefs = `#graphql
   # Enums for various competition-related values
   enum CompetitionStatusEnum {
@@ -7,8 +8,11 @@ export const competitionTypeDefs = `#graphql
   }
 
   enum SubmissionTypeEnum {
-    Photo
-    Video
+    Photo,
+    Video,
+    Audio,
+    Pdf,
+    Link,
   }
 
   enum EnrolmentTypeEnum {
@@ -54,7 +58,7 @@ export const competitionTypeDefs = `#graphql
     mediaUrl: String
     submissionType: SubmissionTypeEnum!
     status: CompetitionStatusEnum
-    haveRoundWiseSubmission: Boolean!
+    haveRoundWiseSubmission: Boolean
   }
 
   # User filter input
@@ -82,7 +86,10 @@ export const competitionTypeDefs = `#graphql
     createdAt: String
     updatedAt: String
     prizes: [Prize]
-    haveRoundWiseSubmission: Boolean!
+    haveRoundWiseSubmission: Boolean
+    isEnrolled:Boolean
+    enroledUserCount:Int
+    mySubmissions:[EnrolmentSubmission]
   }
 
   # Paginated response for users

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardContent,
   CardHeader,
@@ -14,18 +15,43 @@ import {
   ListItemAvatar,
   ListItemText,
   Stack,
-  Typography,
+  Table,
+  TableBody,
+  TableContainer,
 } from "@mui/material";
-import { EditNoteOutlined, Image } from "@mui/icons-material";
-import { formatDateToHumanReadableDate } from "@/utils/date";
 import { ICompetition, IRound, RoundJudgementCriteriaEnum } from "@/interfaces";
 import {
   CompetitionUiModeEnum,
   setUiControlsRounds,
 } from "@/store/slices/competitionSlice";
 import { red } from "@mui/material/colors";
+import {
+  TableEmptyRows,
+  TableHeadCellProps,
+  TableHeadCustom,
+  TableNoData,
+} from "../table";
+import RoundsTableRow from "@/app/admin/competition/details/[id]/RoundsTableRow";
+import { useEffect, useState } from "react";
+import { ConfirmDialog } from "../custom-dialog";
+import { useMutation } from "@apollo/client";
+import { DELETE_ROUND } from "@/graphql-client/competition-round";
+import { toast } from "sonner";
+import { handleGraphQLError } from "@/utils/errorHandling";
+
+const TABLE_HEAD: TableHeadCellProps[] = [
+  { id: "sl", label: "#SL" },
+  { id: "title", label: "Title" },
+  { id: "startDate", label: "Start Date" },
+  { id: "endDate", label: "endDate" },
+  { id: "judgementCriteria", label: "Judge by" },
+  { id: "action-buttons", label: "Actions", width: 88 },
+];
 
 const CompetitionRounds: React.FC = () => {
+  const [deleteRound, { loading, data, error }] = useMutation(DELETE_ROUND);
+  const [showDeleteConfirmationFor, setShowDeleteConfirmationFor] =
+    useState<string>();
   const competition = useSelector(
     (state: RootState) => state.competition.competition as ICompetition
   );
@@ -40,163 +66,76 @@ const CompetitionRounds: React.FC = () => {
     );
   };
 
+  const handleDeleteRound = (round: IRound) => {
+    setShowDeleteConfirmationFor(round.id);
+  };
+  const handleDeleteRoundConfirmation = async () => {
+    await deleteRound({
+      variables: { id: showDeleteConfirmationFor },
+    });
+    toast.success("Delete success!");
+    setShowDeleteConfirmationFor(undefined);
+  };
+  const handleDeleteRoundCancel = () => {
+    setShowDeleteConfirmationFor(undefined);
+  };
+
+  useEffect(() => {
+    if (!loading && data && data.deleteRound) {
+      toast.success("Delete success!");
+    }
+    if (!loading && error) {
+      toast.error(handleGraphQLError(error));
+    }
+  }, [data, error, loading]);
+
   return (
-    <Grid container spacing={2}>
-      {competition.rounds.map((round: IRound) => (
-        <Grid key={round.id} size={{ xs: 12, sm: 12 }}>
-          <Card>
-            <CardHeader
-              avatar={
-                <Avatar
-                  variant="rounded"
-                  sx={{ bgcolor: red[500] }}
-                  aria-label="recipe"
-                >
-                  {round.roundNumber}
-                </Avatar>
-              }
-              action={
-                <IconButton
-                  onClick={() => handleEnablingEditMode(round)}
-                  aria-label="settings"
-                >
-                  <EditNoteOutlined />
-                </IconButton>
-              }
-              title={round.title}
-              subheader={
-                <Grid container spacing={2}>
-                  <Grid>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 1,
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      <Typography
-                        component={"span"}
-                        sx={{ color: "text.secondary" }}
-                        variant="caption"
-                      >
-                        Start Date:
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        component={"span"}
-                        sx={{ fontWeight: "medium" }}
-                      >
-                        {formatDateToHumanReadableDate(round.startDate)}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 1,
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      <Typography
-                        variant="caption"
-                        component={"span"}
-                        sx={{ color: "text.secondary" }}
-                      >
-                        End Date:
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        component={"span"}
-                        sx={{ fontWeight: "medium" }}
-                      >
-                        {formatDateToHumanReadableDate(round.endDate)}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                </Grid>
-              }
-            />
-            <CardContent>
-              <Grid container spacing={2}>
-                <Grid size={{ xs: 12, sm: 12 }}>
-                  <Grid container spacing={0}>
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                      <Box>
-                        <ListItemText
-                          sx={{ p: 0 }}
-                          primary="Judgement criteria"
-                          secondary={round.judgementCriteria}
-                        />
-                      </Box>
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                      <Box>
-                        <ListItemText
-                          sx={{ p: 0 }}
-                          primary="Max number of winners"
-                          secondary={round.maxWinners}
-                        />
-                      </Box>
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                      <Box>
-                        <ListItemText
-                          sx={{ p: 0 }}
-                          primary="Max number of votes/scores"
-                          secondary={round.maxScore}
-                        />
-                      </Box>
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                      <Box>
-                        <ListItemText
-                          sx={{ p: 0 }}
-                          primary="Max number of winners"
-                          secondary={round.judgementCriteria}
-                        />
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                {round.judgementCriteria ===
-                RoundJudgementCriteriaEnum.JUDGE ? (
-                  <Box>
-                    <Typography variant="body1">Jusges</Typography>
-                    <Stack spacing={2} direction="row" sx={{ minWidth: 0 }}>
-                      {round.judges.map((judge) => (
-                        <List
-                          disablePadding
-                          key={judge.name}
-                          sx={{
-                            width: "100%",
-                            maxWidth: 360,
-                            bgcolor: "background.paper",
-                          }}
-                        >
-                          <ListItem disableGutters disablePadding>
-                            <ListItemAvatar>
-                              <Avatar>
-                                <Image />
-                              </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                              primary={`${judge.firstName} ${judge.lastName}`}
-                              secondary={`${judge.name}`}
-                            />
-                          </ListItem>
-                        </List>
-                      ))}
-                    </Stack>
-                  </Box>
-                ) : null}
-                <Grid size={{ xs: 12, sm: 12 }}></Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
-      ))}
-    </Grid>
+    <Box>
+      <TableContainer>
+        <Table sx={{ minWidth: 960 }}>
+          <TableHeadCustom headCells={TABLE_HEAD} />
+          <TableBody>
+            {competition.rounds.map((row: IRound, i: number) => (
+              <RoundsTableRow
+                key={row.id}
+                row={row}
+                onDeleteRound={handleDeleteRound}
+                onEditRound={handleEnablingEditMode}
+                index={i}
+              />
+            ))}
+            {competition.rounds.length > 0 && (
+              <TableEmptyRows
+                height={56}
+                emptyRows={
+                  competition.rounds.length < 7
+                    ? 7 - competition.rounds.length
+                    : 0
+                }
+              />
+            )}
+
+            <TableNoData notFound={competition.rounds.length === 0} />
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <ConfirmDialog
+        open={showDeleteConfirmationFor !== undefined}
+        onClose={handleDeleteRoundCancel}
+        title="Delete"
+        content="Are you sure want to delete?"
+        action={
+          <Button
+            disabled={!!loading}
+            variant="contained"
+            color="error"
+            onClick={handleDeleteRoundConfirmation}
+          >
+            Delete
+          </Button>
+        }
+      />
+    </Box>
   );
 };
 

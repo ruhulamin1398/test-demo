@@ -2,12 +2,13 @@ import type { BoxProps } from "@mui/material/Box";
 
 import Box from "@mui/material/Box";
 
-import { CompetitionItem } from "./CompetitionItem";
 import { CompetitionItemSkeleton } from "./CompetitionItemSkeleton";
 import { ICompetition } from "@/interfaces";
 import { SingleCompetitionCard } from "@/sections/common/single-competition-card";
-import { useCompetitionHandleEnrollmentDialog } from "@/app/hooks/competitionHandleErollmentDialogHook";
-import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
+import { useEnrollment } from "@/app/hooks/useEnrollment";
+import EnrolmentConfirmationDialog from "@/components/confirmation-dialog";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 // ----------------------------------------------------------------------
 
@@ -18,31 +19,30 @@ type Props = BoxProps & {
 
 export function CompetitionList({
   competitions,
-  loading,
+  loading: fetchCompetitionsLoading,
   sx,
   ...other
 }: Props) {
+  const { enrollIds } = useSelector(
+    (state: RootState) => state.auth.competitionInfo
+  );
   const {
     openDialog,
-    handleOpenEnrollmentConfirmationDialog,
-    handleCloseEnrollmentConfirmationDialog,
-    onAgreeEnrollment,
-  } = useCompetitionHandleEnrollmentDialog();
+    handleOpenEnrolmentConfirmationDialog,
+    handleCloseEnrolmentConfirmationDialog,
+    onAgreeEnrolment,
+    loading,
+  } = useEnrollment();
 
   const renderLoading = () => <CompetitionItemSkeleton />;
 
   const renderList = () =>
     competitions.map((competition) => (
-      // <CompetitionItem
-      //   key={competition.id}
-      //   competition={competition}
-      //   detailsHref={"add-path-later"}
-      // />
-
       <SingleCompetitionCard
         key={competition.id}
         item={competition}
-        handleEnrollment={handleOpenEnrollmentConfirmationDialog}
+        handleEnrolment={handleOpenEnrolmentConfirmationDialog}
+        isEnrolled={enrollIds.includes(competition.id)}
       />
     ));
 
@@ -64,11 +64,12 @@ export function CompetitionList({
         ]}
         {...other}
       >
-        {loading ? renderLoading() : renderList()}
-        <EnrollmentConfirmationDialog
+        {fetchCompetitionsLoading ? renderLoading() : renderList()}
+        <EnrolmentConfirmationDialog
           open={!!openDialog?.competitionId}
-          onAgree={onAgreeEnrollment}
-          onDisagree={handleCloseEnrollmentConfirmationDialog}
+          onAgree={onAgreeEnrolment}
+          onDisagree={handleCloseEnrolmentConfirmationDialog}
+          createLoading={loading}
         />
       </Box>
     </>
