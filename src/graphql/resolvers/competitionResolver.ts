@@ -406,20 +406,21 @@ const competitionResolver = {
     rounds: async (competition: ICompetition) => {
       return await Round.find({ competition: competition.id });
     },
-    // mySubmissions: async (
-    //   competition: ICompetition,
-    //   _,
-    //   user: { user: IUser | null }
-    // ) => {
-    //   if (!user) {
-    //     return [];
-    //   }
-
-    //   return await EnrolmentSubmission.find({
-    //     competition: competition.id,
-    //     userId: user.id
-    //   });
-    // },
+    mySubmission: async (
+      competition: ICompetition,
+      _: unknown,
+      { user }: { user: IUser | null }
+    ) => {
+      if (!user) return null;
+      const rounds = await Round.find({ competition: competition.id }).select(
+        "_id"
+      );
+      const submission = await EnrolmentSubmission.find({
+        userId: user.id,
+        roundId: { $in: rounds },
+      });
+      return submission;
+    },
   },
 };
 

@@ -15,7 +15,8 @@ import {
 } from "@/store/slices/competitionSlice";
 import CompetitionRounds from "./CompetitionRounds";
 import { AddOutlined, CancelOutlined } from "@mui/icons-material";
-import { RoundForm } from "@/app/admin/competition/components/forms/RoundForm";
+import RoundForm from "./RoundForm";
+// import { RoundForm } from "@/app/admin/competition/components/forms/RoundForm";
 
 const AdminCompetitionRounds: React.FC = () => {
   const { mode } = useSelector(

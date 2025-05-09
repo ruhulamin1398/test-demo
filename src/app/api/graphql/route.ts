@@ -17,10 +17,10 @@ const connectDB = async () => {
       console.log("✅ Already connected to the database.");
       return; // No need to connect again
     }
-    if (uri) {
-      await mongoose.connect(uri, { dbName: "contesta_app" });
-      console.log("🎉 connected to database successfully");
-    }
+    await mongoose.connect(process.env.MONGO_ATLAS_URL || uri, {
+      dbName: "contesta_app",
+    });
+    console.log("🎉 connected to database successfully");
   } catch (error) {
     console.error(error);
   }

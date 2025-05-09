@@ -105,13 +105,12 @@ export const GET_COMPETITION_QUERY = gql`
       startDate
       endDate
       enroledUserCount
-      mySubmissions {
+      mySubmission {
         id
-        enrolId
-        roundId
         score
         submittedContent
         createdAt
+        updatedAt
       }
       enrolmentDeadline {
         startDate
@@ -171,6 +170,13 @@ export const GET_COMPETITIONS_QUERY = gql`
         startDate
         endDate
         enroledUserCount
+        mySubmission {
+          id
+          score
+          submittedContent
+          createdAt
+          updatedAt
+        }
         enrolmentDeadline {
           startDate
           endDate
