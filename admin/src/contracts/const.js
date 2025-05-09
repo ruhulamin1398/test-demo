@@ -6,7 +6,7 @@ export const secretKey = "lottaverse2.0_by@oxwd3v";
 
 const devAmoyConfig = {
   contractAddress: process.env.REACT_APP_DEV_CONTRACT_ADDRESS, //smart contract address
-  owner: "0x3ff88B69d1762AA444c85c30C4B0B795f9c48B59",
+  owner: "0xBa926bE5738D978e6e1006f6bB66570FC4123064",
   USDTaddress: "0x7722DA925D988533f825D13C353ee9A0085d347e",
   lotteryABI: lotteryABI.abi,
   erc20ABI: ERC20ABI,

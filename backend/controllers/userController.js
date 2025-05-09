@@ -79,6 +79,7 @@ const mongoose = require("mongoose");
 
 exports.createUser = async (req, res) => {
   const session = await mongoose.startSession();
+  console.log("create user called");
   session.startTransaction();
   try {
     const { account, referredById } = req.body;
@@ -140,51 +141,55 @@ exports.createUser = async (req, res) => {
           }
         }
       }
-    } else if (!referredById && `${process.env.REFERRAL_ID}`) {
-      // If no referring user, set the referredBy to the default referral ID
-      newUser.referredBy = `${process.env.REFERRAL_ID}`;
-      newUser.level = 0;
+    }
 
-      const defaultReferrer = await User.findById(
-        `${process.env.REFERRAL_ID}`
-      ).session(session);
+    // else if (!referredById && `${process.env.REFERRAL_ID}`)
+    //   {
+    //   // If no referring user, set the referredBy to the default referral ID
+    //   newUser.referredBy = `${process.env.REFERRAL_ID}`;
+    //   newUser.level = 0;
 
-      if (defaultReferrer) {
-        // Add the new user to the default referrer's level 1
-        if (!defaultReferrer.level1.includes(newUser._id)) {
-          defaultReferrer.level1.push(newUser._id);
-          await defaultReferrer.save({ session });
-        }
+    //   const defaultReferrer = await User.findById(
+    //     `${process.env.REFERRAL_ID}`
+    //   ).session(session);
 
-        // Update levels for the default referrer up to 7 levels
-        let currentUser = defaultReferrer;
-        let currentLevel = 1;
+    //   if (defaultReferrer) {
+    //     // Add the new user to the default referrer's level 1
+    //     if (!defaultReferrer.level1.includes(newUser._id)) {
+    //       defaultReferrer.level1.push(newUser._id);
+    //       await defaultReferrer.save({ session });
+    //     }
 
-        while (currentUser && currentLevel < 8) {
-          const nextUser = await User.findById(currentUser.referredBy).session(
-            session
-          );
-          if (!nextUser) break;
+    //     // Update levels for the default referrer up to 7 levels
+    //     let currentUser = defaultReferrer;
+    //     let currentLevel = 1;
 
-          const levelKey = `level${currentLevel + 1}`;
+    //     while (currentUser && currentLevel < 8) {
+    //       const nextUser = await User.findById(currentUser.referredBy).session(
+    //         session
+    //       );
+    //       if (!nextUser) break;
 
-          // Only add the new user's ID to the next level if it's not already present
-          if (!nextUser[levelKey].includes(newUser._id)) {
-            nextUser[levelKey].push(newUser._id);
-            await nextUser.save({ session });
-          }
+    //       const levelKey = `level${currentLevel + 1}`;
 
-          // Move to the next user in the referral chain
-          currentUser = nextUser;
-          currentLevel++;
+    //       // Only add the new user's ID to the next level if it's not already present
+    //       if (!nextUser[levelKey].includes(newUser._id)) {
+    //         nextUser[levelKey].push(newUser._id);
+    //         await nextUser.save({ session });
+    //       }
 
-          // Stop once level 7 is reached
-          if (currentLevel === 7) {
-            break;
-          }
-        }
-      }
-    } else {
+    //       // Move to the next user in the referral chain
+    //       currentUser = nextUser;
+    //       currentLevel++;
+
+    //       // Stop once level 7 is reached
+    //       if (currentLevel === 7) {
+    //         break;
+    //       }
+    //     }
+    //   }
+    // }
+    else {
       newUser.level = 0;
     }
 
@@ -207,8 +212,6 @@ exports.createUser = async (req, res) => {
   }
 };
 
-
-
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
@@ -225,11 +228,9 @@ exports.getUserByAddress = async (req, res) => {
     const { address } = req.params;
     let { page, limit } = req.query;
 
-
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 50000000;
 
-     
     const user = await User.aggregate([
       {
         $match: {
@@ -285,12 +286,13 @@ exports.getUserByAddress = async (req, res) => {
     ]);
 
     const originalUser = await User.findOne({ address: address })
-    .populate({
-      path: "referredBy",  
-      select: "_id address" 
-    })
-    .select("_id referredBy referralLink address userType userStatus jackpotFund leaderboardBonus premiumBonus usdtBalance totalPurchase expiryDate");
-  
+      .populate({
+        path: "referredBy",
+        select: "_id address",
+      })
+      .select(
+        "_id referredBy referralLink address userType userStatus jackpotFund leaderboardBonus premiumBonus usdtBalance totalPurchase expiryDate"
+      );
 
     if (!originalUser) {
       return res.status(404).json({ message: "User not found" });
@@ -336,19 +338,24 @@ exports.getUserByAddress = async (req, res) => {
 
             // Add the referralCommission to the total for the level and overall total
             if (referredUser.referralCommission) {
-              const formattedCommission = parseFloat(referredUser.referralCommission).toFixed(4);
-              levelStats[levelKey].referralCommission += parseFloat(formattedCommission);
+              const formattedCommission = parseFloat(
+                referredUser.referralCommission
+              ).toFixed(4);
+              levelStats[levelKey].referralCommission +=
+                parseFloat(formattedCommission);
               totalReferralCommission += parseFloat(formattedCommission);
             }
 
             // Add ticket counts
             if (referredUser.totalTickets) {
               if (referredUser.totalTickets.easy) {
-                levelStats[levelKey].tickets.easy += referredUser.totalTickets.easy;
+                levelStats[levelKey].tickets.easy +=
+                  referredUser.totalTickets.easy;
                 totalTickets.easy += referredUser.totalTickets.easy;
               }
               if (referredUser.totalTickets.super) {
-                levelStats[levelKey].tickets.super += referredUser.totalTickets.super;
+                levelStats[levelKey].tickets.super +=
+                  referredUser.totalTickets.super;
                 totalTickets.super += referredUser.totalTickets.super;
               }
             }
@@ -363,9 +370,10 @@ exports.getUserByAddress = async (req, res) => {
       });
 
       // Sort all referred users by createdAt
-      allReferredUsers.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      allReferredUsers.sort(
+        (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+      );
     }
-
 
     const totalReferredUsers = allReferredUsers.length;
     const skip = (page - 1) * limit;
@@ -375,11 +383,10 @@ exports.getUserByAddress = async (req, res) => {
 
     const totalEarnings = Number(
       originalUser.jackpotFund +
-      totalReferralCommission +
-      originalUser.leaderboardBonus +
-      originalUser.premiumBonus
+        totalReferralCommission +
+        originalUser.leaderboardBonus +
+        originalUser.premiumBonus
     );
-
 
     res.status(200).json({
       originalUser,
@@ -400,7 +407,6 @@ exports.getUserByAddress = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 // Update a user by ID
 exports.updateUser = async (req, res) => {

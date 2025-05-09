@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const { Contract, JsonRpcProvider } = require("ethers");
-const { contractAddress, fujiProviderUrl } = require("../const/address");
 const lottaverseABI = require("../const/lottaverse.json");
 const Lottery = require("../models/lottery");
 const Purchase = require("../models/purchase");
@@ -42,8 +41,10 @@ exports.purchase = async (req, res) => {
 
       // if (existingUser.expiryDate < new Date()) {
       //   existingUser.userStatus = "inactive";
-      // } 
-      existingUser.expiryDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1)); 
+      // }
+      existingUser.expiryDate = new Date(
+        currentDate.setMonth(currentDate.getMonth() + 1)
+      );
       existingUser.userStatus = "active";
       await existingUser.save({ session });
     }
