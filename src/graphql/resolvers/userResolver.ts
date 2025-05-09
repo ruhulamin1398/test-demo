@@ -6,6 +6,7 @@ import {
   UsersResponse,
 } from "@/interfaces";
 import { Enrolment, User } from "@/models"; // Assuming your model is exported from this path
+import EnrolmentSubmission from "@/models/EnrolmentSubmission";
 import { GraphQLError } from "graphql";
 import { NextApiRequest } from "next";
 

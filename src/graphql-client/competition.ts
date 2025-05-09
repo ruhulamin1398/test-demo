@@ -122,6 +122,7 @@ export const GET_COMPETITION_QUERY = gql`
       status
       eligibility
       haveRoundWiseSubmission
+      enroledUserCount
       rounds {
         id
         startDate
