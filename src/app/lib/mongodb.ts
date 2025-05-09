@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 // const MONGODB_URI = process.env.MONGODB_URI || "your_mongodb_connection_string";
 const MONGODB_URI =
+  process.env.MONGO_ATLAS_URL ||
   "mongodb+srv://nizamsuet:D0CK08AOW5YkS3O3@contesta-cluster.kbo45.mongodb.net/?retryWrites=true&w=majority&appName=contesta-cluster";
 
 if (!MONGODB_URI) {
