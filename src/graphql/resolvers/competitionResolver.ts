@@ -10,6 +10,7 @@ import {
   SubmissionTypeEnum,
 } from "@/interfaces";
 import { Competition, Enrolment, Round } from "@/models";
+import EnrolmentSubmission from "@/models/EnrolmentSubmission";
 import { GraphQLError } from "graphql";
 
 const competitionResolver = {
@@ -413,6 +414,21 @@ const competitionResolver = {
   Competition: {
     rounds: async (competition: ICompetition) => {
       return await Round.find({ competition: competition.id });
+    },
+    mySubmission: async (
+      competition: ICompetition,
+      _: unknown,
+      { user }: { user: IUser | null }
+    ) => {
+      if (!user) return null;
+      const rounds = await Round.find({ competition: competition.id }).select(
+        "_id"
+      );
+      const submission = await EnrolmentSubmission.find({
+        userId: user.id,
+        roundId: { $in: rounds },
+      });
+      return submission;
     },
   },
 };

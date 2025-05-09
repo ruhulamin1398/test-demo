@@ -104,6 +104,13 @@ export const GET_COMPETITION_QUERY = gql`
       description
       startDate
       endDate
+      mySubmission {
+        id
+        score
+        submittedContent
+        createdAt
+        updatedAt
+      }
       enrolmentDeadline {
         startDate
         endDate
