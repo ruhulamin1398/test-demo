@@ -45,6 +45,9 @@ export const paths = {
   },
   profile: {
     root: `/profile`,
+    account: `/profile?profile-tab=account`,
+    submissions: `/profile?profile-tab=submissions`,
+    myCompetitions: `/profile?profile-tab=my-competitions`,
   },
   post: {
     root: `/post`,

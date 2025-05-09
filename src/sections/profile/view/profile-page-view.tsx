@@ -31,15 +31,16 @@ const NAV_ITEMS = [
     label: "DashBoard",
     icon: <Iconify width={24} icon="solar:user-id-bold" />,
   },
-  {
-    value: "account",
-    label: "Account",
-    icon: <Iconify width={24} icon="solar:user-bold" />,
-  },
+
   {
     value: "my-competitions",
     label: "My Competitions",
     icon: <Iconify width={24} icon="solar:book-bold" />,
+  },
+  {
+    value: "account",
+    label: "Account settings",
+    icon: <Iconify width={24} icon="solar:user-bold" />,
   },
 ];
 
