@@ -104,6 +104,7 @@ export const GET_COMPETITION_QUERY = gql`
       description
       startDate
       endDate
+      enroledUserCount
       mySubmission {
         id
         score
@@ -170,6 +171,13 @@ export const GET_COMPETITIONS_QUERY = gql`
         startDate
         endDate
         enroledUserCount
+        mySubmission {
+          id
+          score
+          submittedContent
+          createdAt
+          updatedAt
+        }
         enrolmentDeadline {
           startDate
           endDate
