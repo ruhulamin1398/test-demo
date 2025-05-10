@@ -1,7 +1,4 @@
-import type { BoxProps } from "@mui/material/Box";
 import type { CardProps } from "@mui/material/Card";
-
-import { varAlpha } from "minimal-shared/utils";
 
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
@@ -9,31 +6,75 @@ import Card from "@mui/material/Card";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
-
 import { RouterLink } from "@/routes/components";
-
-import { fDate } from "@/utils/format-time";
-import { fShortenNumber } from "@/utils/format-number";
-
 import { AvatarShape } from "@/assets/illustrations";
-
 import { Image } from "@/components/image";
 import { Iconify } from "@/components/iconify";
-import { ISubmissionItem } from "@/types/submission";
+import { ISubmissions } from "@/_mock/data";
+import { Button } from "@mui/material";
+import { Label } from "@/components/label";
 
 // ----------------------------------------------------------------------
 
 type PostItemProps = CardProps & {
-  item: ISubmissionItem;
-  detailsHref: string;
+  item: ISubmissions;
 };
 
-export function SubmissionItem({
-  item,
-  detailsHref,
-  sx,
-  ...other
-}: PostItemProps) {
+export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
+  const renderFooter = () => (
+    <Box
+      sx={{
+        mt: 2.5,
+        gap: 0.5,
+        display: "flex",
+        justifyContent: "space-between",
+      }}
+    >
+      <Box
+        component="span"
+        sx={{
+          flexGrow: 1,
+          display: "flex",
+          alignItems: "center", // Align icon and text inline
+          gap: 1, // Space between the icon and text
+          typography: "subtitle1",
+        }}
+      >
+        <Iconify icon="mdi:heart" width={20} style={{ color: "red" }} />
+        {item.vote}
+      </Box>
+
+      <Button
+        color="primary"
+        variant="contained"
+        size="small"
+        onClick={(e) => {
+          e.preventDefault();
+        }}
+      >
+        Vote
+      </Button>
+    </Box>
+  );
+
+  const renderLabels = () => (
+    <Box
+      sx={{
+        gap: 1,
+        top: 16,
+        zIndex: 9,
+        right: 16,
+        display: "flex",
+        position: "absolute",
+        alignItems: "center",
+      }}
+    >
+      <Label variant="filled" color="info">
+        {item.category?.name}
+      </Label>
+    </Box>
+  );
+
   return (
     <Card sx={sx} {...other}>
       <Box sx={{ position: "relative" }}>
@@ -47,10 +88,9 @@ export function SubmissionItem({
             position: "absolute",
           }}
         />
-
         <Avatar
-          alt={item.author}
-          src={item.author.avatarUrl}
+          alt={item?.user?.id}
+          src={item?.user?.profilePicture}
           sx={{
             left: 24,
             zIndex: 9,
@@ -59,21 +99,16 @@ export function SubmissionItem({
           }}
         />
 
-        <Image alt={item.title} src={item.image} ratio="4/3" />
+        <Image alt={item.title} src={item.submittedContent} ratio="4/3" />
       </Box>
-
+      {renderLabels()}
       <CardContent sx={{ pt: 6 }}>
-        <Typography
-          variant="caption"
-          component="div"
-          sx={{ mb: 1, color: "text.disabled" }}
-        >
-          {fDate(item.createdAt)}
+        <Typography variant="caption" sx={{ color: "#FFD700" }}>
+          {item.competition?.title}
         </Typography>
-
         <Link
           component={RouterLink}
-          href={detailsHref}
+          href={item.id}
           color="inherit"
           variant="subtitle2"
           sx={(theme) => ({
@@ -85,99 +120,26 @@ export function SubmissionItem({
         >
           {item.title}
         </Link>
-
-        <InfoBlock
-          totalViews={item.totalViews}
-          totalShares={item.totalShares}
-          totalComments={item.totalComments}
-        />
-      </CardContent>
-    </Card>
-  );
-}
-
-// ----------------------------------------------------------------------
-
-type PostItemLatestProps = {
-  item: ISubmissionItem;
-  index: number;
-  detailsHref: string;
-};
-
-export function PostItemLatest({
-  item,
-  index,
-  detailsHref,
-}: PostItemLatestProps) {
-  const itemSmall = index === 1 || index === 2;
-
-  return (
-    <Card>
-      <Avatar
-        alt={item.author}
-        src={item.author.avatarUrl}
-        sx={{
-          top: 24,
-          left: 24,
-          zIndex: 9,
-          position: "absolute",
-        }}
-      />
-
-      <Image
-        alt={item.title}
-        src={item.coverUrl}
-        ratio="4/3"
-        sx={{ height: 360 }}
-        slotProps={{
-          overlay: {
-            sx: (theme) => ({
-              bgcolor: varAlpha(theme.vars.palette.grey["900Channel"], 0.64),
-            }),
-          },
-        }}
-      />
-
-      <CardContent
-        sx={{
-          width: 1,
-          zIndex: 9,
-          bottom: 0,
-          position: "absolute",
-          color: "common.white",
-        }}
-      >
         <Typography
           variant="caption"
           component="div"
-          sx={{ mb: 1, opacity: 0.64 }}
-        >
-          {fDate(item.createdAt)}
-        </Typography>
-
-        <Link
-          component={RouterLink}
-          href={detailsHref}
-          color="inherit"
-          variant={postSmall ? "subtitle2" : "h5"}
           sx={(theme) => ({
             ...theme.mixins.maxLine({
-              line: 2,
-              persistent: postSmall
-                ? theme.typography.subtitle2
-                : theme.typography.h5,
+              line: 1,
+              persistent: theme.typography.body2,
             }),
+            color: "text.disabled",
           })}
         >
-          {item.title}
-        </Link>
+          {item.description}
+        </Typography>
 
-        <InfoBlock
-          totalViews={item.totalViews}
-          totalShares={item.totalShares}
-          totalComments={item.totalComments}
-          sx={{ opacity: 0.64, color: "common.white" }}
-        />
+        {/* <InfoBlock
+          totalViews={item.vote}
+          totalShares={item.vote}
+          totalComments={item.vote}
+        /> */}
+        {renderFooter()}
       </CardContent>
     </Card>
   );
@@ -185,45 +147,45 @@ export function PostItemLatest({
 
 // ----------------------------------------------------------------------
 
-type InfoBlockProps = BoxProps &
-  Pick<ISubmissionItem, "totalViews" | "totalShares" | "totalComments">;
+// type InfoBlockProps = BoxProps &
+//   Pick<ISubmissions, "totalViews" | "totalShares" | "totalComments">;
 
-function InfoBlock({
-  sx,
-  totalViews,
-  totalShares,
-  totalComments,
-  ...other
-}: InfoBlockProps) {
-  return (
-    <Box
-      sx={[
-        () => ({
-          mt: 3,
-          gap: 1.5,
-          display: "flex",
-          typography: "caption",
-          color: "text.disabled",
-          justifyContent: "flex-end",
-        }),
-        ...(Array.isArray(sx) ? sx : [sx]),
-      ]}
-      {...other}
-    >
-      <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
-        <Iconify width={16} icon="eva:message-circle-fill" />
-        {fShortenNumber(totalComments)}
-      </Box>
+// function InfoBlock({
+//   sx,
+//   totalViews,
+//   totalShares,
+//   totalComments,
+//   ...other
+// }: InfoBlockProps) {
+//   return (
+//     <Box
+//       sx={[
+//         () => ({
+//           mt: 3,
+//           gap: 1.5,
+//           display: "flex",
+//           typography: "caption",
+//           color: "text.disabled",
+//           justifyContent: "flex-end",
+//         }),
+//         ...(Array.isArray(sx) ? sx : [sx]),
+//       ]}
+//       {...other}
+//     >
+//       <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
+//         <Iconify width={16} icon="eva:message-circle-fill" />
+//         {fShortenNumber(totalComments)}
+//       </Box>
 
-      <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
-        <Iconify width={16} icon="solar:eye-bold" />
-        {fShortenNumber(totalViews)}
-      </Box>
+//       <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
+//         <Iconify width={16} icon="solar:eye-bold" />
+//         {fShortenNumber(totalViews)}
+//       </Box>
 
-      <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
-        <Iconify width={16} icon="solar:share-bold" />
-        {fShortenNumber(totalShares)}
-      </Box>
-    </Box>
-  );
-}
+//       <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
+//         <Iconify width={16} icon="solar:share-bold" />
+//         {fShortenNumber(totalShares)}
+//       </Box>
+//     </Box>
+//   );
+// }

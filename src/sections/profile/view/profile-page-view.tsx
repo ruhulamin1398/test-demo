@@ -17,7 +17,6 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { RouterLink } from "@/routes/components";
 import { ProfileHomeTab } from "./profile-home-tab";
 import { ProfileAccountTab } from "./profile-account-tab";
-import { ProfileSecurityTab } from "./profile-security-tab";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { CONFIG } from "@/global-config";
@@ -58,8 +57,6 @@ export function ProfileView() {
   const pageProgress = useScrollProgress();
   const user = useSelector((state: RootState) => state.auth.user);
 
-  // console.log(" current user ", user, " ______________________");
-
   const { onBackToTop, isVisible } = useBackToTop("90%");
 
   return (
@@ -77,11 +74,11 @@ export function ProfileView() {
       <Container sx={{ my: 5 }}>
         <Card sx={{ mb: 3, height: 290 }}>
           <ProfilePageHero
-            role={_userAbout.role}
+            role={user?.role || " "}
             name={`${user?.firstName} ${user?.lastName}`}
             avatarUrl={
               user?.profilePicture ??
-              `${CONFIG.assetsDir}/assets/images/mock/avatar/avatar-5.webp`
+              `${CONFIG.assetsDir}/assets/images/mock/avatar/avatar-2.webp`
             }
             coverUrl={_userAbout.coverUrl}
           />

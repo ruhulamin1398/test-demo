@@ -4,7 +4,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { RouterLink } from "@/routes/components";
 import { CompetitionDeadlineReminders } from "../profile-competition-deadline-reminders";
 import { CompetitionRecentSubmissions } from "../profile-competition-recentSubmissions";
-import { CoursesReminder, MyRecentSubmissions } from "@/_mock/data";
+import { mockCoursesReminder, mockMyRecentSubmissions } from "@/_mock/data";
 
 // ----------------------------------------------------------------------
 
@@ -78,13 +78,13 @@ export function ProfileSidebar() {
         {selectedTab === "" && (
           <CompetitionDeadlineReminders
             title="Upcoming Deadlines"
-            list={CoursesReminder}
+            list={mockCoursesReminder}
           />
         )}
         {selectedTab === "submissions" && (
           <CompetitionRecentSubmissions
             title="Upcoming Deadlines"
-            list={MyRecentSubmissions}
+            list={mockMyRecentSubmissions}
           />
         )}
       </Grid>
