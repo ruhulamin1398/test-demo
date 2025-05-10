@@ -4,96 +4,15 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { RouterLink } from "@/routes/components";
 import { CompetitionDeadlineReminders } from "../profile-competition-deadline-reminders";
 import { CompetitionRecentSubmissions } from "../profile-competition-recentSubmissions";
+import { CoursesReminder, MyRecentSubmissions } from "@/_mock/data";
 
 // ----------------------------------------------------------------------
 
-export function CompetitionSidebar() {
+export function ProfileSidebar() {
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
   const selectedTab = searchParams.get("tab") ?? "";
-
-  const _coursesReminder = [
-    {
-      id: 1,
-      title: "Photo Competition  round 2",
-      totalTask: 12,
-      currentTask: 5,
-      reminderAt: "2 Days Left",
-    },
-    {
-      id: 2,
-      title: "Art Competition  round 1",
-      totalTask: 12,
-      currentTask: 5,
-      reminderAt: "2 Days Left",
-    },
-    {
-      id: 3,
-      title: "Photo Competition  round 2",
-      totalTask: 6,
-      currentTask: 5,
-      reminderAt: "2 Days Left",
-    },
-    {
-      id: 4,
-      title: "Photo Competition  round 2",
-      totalTask: 7,
-      currentTask: 5,
-      reminderAt: "2 Days Left",
-    },
-  ];
-
-  const _recentSubmissions = [
-    {
-      id: 1,
-      title: "Photo Competition  round 2",
-      reminderAt: "50 minutes ago",
-      status: "submitted",
-    },
-    {
-      id: 2,
-      title: "Art Competition  round 1",
-      reminderAt: "1 Days ago",
-      status: "In Review",
-    },
-    {
-      id: 3,
-      title: "Photo Competition  round 2",
-      reminderAt: "2 Days ago",
-      status: "Approved",
-    },
-    {
-      id: 4,
-      title: "Photo Competition  round 2",
-      reminderAt: "2 Days ago",
-      status: "submitted",
-    },
-    {
-      id: 5,
-      title: "Photo Competition  round 2",
-      reminderAt: "2 Days ago",
-      status: "Approved",
-    },
-    {
-      id: 6,
-      title: "Photo Competition  round 2",
-      reminderAt: "2 Days ago",
-      status: "In Review",
-    },
-    {
-      id: 7,
-      title: "Photo Competition  round 2",
-      reminderAt: "2 Days ago",
-      status: "submitted",
-    },
-    {
-      id: 8,
-      title: "Photo Competition  round 2",
-      reminderAt: "2 Days ago",
-      status: "submitted",
-    },
-  ];
 
   const createRedirectPath = (currentPath: string, query: string) => {
     const queryString = new URLSearchParams({ ["tab"]: query }).toString();
@@ -159,13 +78,13 @@ export function CompetitionSidebar() {
         {selectedTab === "" && (
           <CompetitionDeadlineReminders
             title="Upcoming Deadlines"
-            list={_coursesReminder}
+            list={CoursesReminder}
           />
         )}
         {selectedTab === "submissions" && (
           <CompetitionRecentSubmissions
             title="Upcoming Deadlines"
-            list={_recentSubmissions}
+            list={MyRecentSubmissions}
           />
         )}
       </Grid>

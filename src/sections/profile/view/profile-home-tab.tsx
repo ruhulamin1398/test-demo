@@ -1,7 +1,7 @@
 import { _coursesContinue, _coursesFeatured, _tours } from "@/_mock";
 import Grid from "@mui/material/Grid2";
 import { ProfileSummaryOverview } from "../OverView";
-import { CompetitionSidebar } from "./competition-sidebar";
+import { ProfileSidebar } from "./profile-sidebar";
 import { ProfileMainContent } from "./profile-main-content";
 
 // ----------------------------------------------------------------------
@@ -22,7 +22,7 @@ export function ProfileHomeTab() {
 
         <Grid container spacing={3} size={{ xs: 12, md: 6, lg: 4 }}>
           {/* // right side */}
-          <CompetitionSidebar />
+          <ProfileSidebar />
         </Grid>
       </Grid>
     </>

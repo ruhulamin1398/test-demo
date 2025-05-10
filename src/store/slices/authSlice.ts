@@ -7,6 +7,7 @@ interface UserSubmissions {
   createdAt: Date;
   score: number;
   submittedContent: string;
+  title: string; //@h this may be round title, not fuctional
 }
 
 interface AuthState {

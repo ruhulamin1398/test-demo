@@ -43,7 +43,9 @@ export function CompetitionPageSubmissions({
         {submissions.map((item, index) => (
           <Item
             key={item.roundId}
-            item={item}
+            id={item.roundId}
+            title={item.title}
+            createdAt={item.createdAt}
             sx={[
               (theme) => ({
                 color: [
@@ -64,16 +66,12 @@ export function CompetitionPageSubmissions({
 // ----------------------------------------------------------------------
 
 type CourseItemProps = BoxProps & {
-  item: {
-    enrolId: string;
-    roundId: string;
-    score: number;
-    submittedContent: string;
-    createdAt: string;
-  };
+  id: string;
+  title: string;
+  createdAt: Date;
 };
 
-function Item({ item, sx, ...other }: CourseItemProps) {
+function Item({ id, title, createdAt, sx, ...other }: CourseItemProps) {
   const { HumanTimeDifferent } = useDate();
   return (
     <m.div variants={varFade("inUp")}>
@@ -108,18 +106,18 @@ function Item({ item, sx, ...other }: CourseItemProps) {
             noWrap
             sx={{ color: "text.primary" }}
           >
-            Round1
+            {title}
           </Link>
 
           <Link
             component={RouterLink}
-            href={item.submittedContent}
+            href={id}
             sx={{
               whiteSpace: "nowrap",
               typography: "body2",
             }}
           >
-            {HumanTimeDifferent(Number(item.createdAt))}
+            {HumanTimeDifferent(Number(createdAt))}
           </Link>
         </Box>
       </Box>

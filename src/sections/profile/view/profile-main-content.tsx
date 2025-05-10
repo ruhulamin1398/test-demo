@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import { competitions } from "@/_mock/contest";
 import { ProfilePageCompetition } from "../profile-page-competitions";
-import { RunningCompetitions } from "../my-competiton-tab/my-competition-lit";
+import { MyCompetitionList } from "../my-competiton-tab/my-competition-lit";
 // ----------------------------------------------------------------------
 
 export function ProfileMainContent() {
@@ -19,6 +19,12 @@ export function ProfileMainContent() {
             },
           }}
         > */}
+
+        <MyCompetitionList
+          title="My running competitions"
+          list={competitions}
+        />
+
         <ProfilePageCompetition title="Active Contests" list={competitions} />
 
         {/* <CompletedCompetitions

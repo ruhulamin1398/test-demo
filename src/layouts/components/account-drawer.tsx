@@ -144,12 +144,6 @@ export function AccountDrawer({ sx, ...other }: IconButtonProps) {
               <Box component="span" sx={{ ml: 2 }}>
                 {option.label === "Home" ? rootLabel : option.label}
               </Box>
-
-              {option.info && (
-                <Label color="error" sx={{ ml: 1 }}>
-                  {option.info}
-                </Label>
-              )}
             </Link>
           </MenuItem>
         );

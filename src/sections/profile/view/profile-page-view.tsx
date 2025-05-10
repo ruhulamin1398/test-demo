@@ -58,9 +58,7 @@ export function ProfileView() {
   const pageProgress = useScrollProgress();
   const user = useSelector((state: RootState) => state.auth.user);
 
-  console.log(" current user ", user, " ______________________");
-  //
-  // const { user } = useMockedUser();
+  // console.log(" current user ", user, " ______________________");
 
   const { onBackToTop, isVisible } = useBackToTop("90%");
 

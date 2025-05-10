@@ -16,68 +16,42 @@ import { fData } from "@/utils/format-number";
 import { toast } from "@/components/snackbar";
 import { Form, Field, schemaHelper } from "@/components/hook-form";
 
-import { useMockedUser } from "@/auth/hooks";
 import { ProfileSecurityTab } from "./profile-security-tab";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 // ----------------------------------------------------------------------
 
 export type UpdateUserSchemaType = zod.infer<typeof UpdateUserSchema>;
 
 export const UpdateUserSchema = zod.object({
-  displayName: zod.string().min(1, { message: "Name is required!" }),
+  firstName: zod.string().min(1, { message: "First Name is required!" }),
+  lastName: zod.string().min(1, { message: "Last Name is required!" }),
   email: zod
     .string()
     .min(1, { message: "Email is required!" })
     .email({ message: "Email must be a valid email address!" }),
-  photoURL: schemaHelper.file({ message: "Avatar is required!" }),
-  phoneNumber: schemaHelper.phoneNumber({ isValid: isValidPhoneNumber }),
-  country: schemaHelper.nullableInput(
-    zod.string().min(1, { message: "Country is required!" }),
-    {
-      // message for null value
-      message: "Country is required!",
-    }
-  ),
-  address: zod.string().min(1, { message: "Address is required!" }),
-  state: zod.string().min(1, { message: "State is required!" }),
-  city: zod.string().min(1, { message: "City is required!" }),
-  zipCode: zod.string().min(1, { message: "Zip code is required!" }),
-  about: zod.string().min(1, { message: "About is required!" }),
-  // Not required
-  isPublic: zod.boolean(),
+  profilePicture: schemaHelper.file({ message: "Avatar is required!" }),
+  // phoneNumber: schemaHelper.phoneNumber({ isValid: isValidPhoneNumber }),
 });
 
 // ----------------------------------------------------------------------
 
 export function ProfileAccountTab() {
-  const { user } = useMockedUser();
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const currentUser: UpdateUserSchemaType = {
-    displayName: user?.displayName,
-    email: user?.email,
-    photoURL: user?.photoURL,
-    phoneNumber: user?.phoneNumber,
-    country: user?.country,
-    address: user?.address,
-    state: user?.state,
-    city: user?.city,
-    zipCode: user?.zipCode,
-    about: user?.about,
-    isPublic: user?.isPublic,
+    firstName: user?.firstName || "firstName",
+    lastName: user?.lastName || "lastName",
+    email: user?.email || "user@user.com",
+    profilePicture: user?.profilePicture || "",
   };
 
   const defaultValues: UpdateUserSchemaType = {
-    displayName: "",
+    firstName: "",
+    lastName: "",
     email: "",
-    photoURL: null,
-    phoneNumber: "",
-    country: null,
-    address: "",
-    state: "",
-    city: "",
-    zipCode: "",
-    about: "",
-    isPublic: false,
+    profilePicture: null,
   };
 
   const methods = useForm<UpdateUserSchemaType>({
@@ -116,7 +90,7 @@ export function ProfileAccountTab() {
               }}
             >
               <Field.UploadAvatar
-                name="photoURL"
+                name="profilePicture"
                 maxSize={3145728}
                 helperText={
                   <Typography
@@ -133,13 +107,6 @@ export function ProfileAccountTab() {
                     <br /> max size of {fData(3145728)}
                   </Typography>
                 }
-              />
-
-              <Field.Switch
-                name="isPublic"
-                labelPlacement="start"
-                label="Public profile"
-                sx={{ mt: 5 }}
               />
 
               <Button variant="soft" color="error" sx={{ mt: 3 }}>
@@ -161,25 +128,12 @@ export function ProfileAccountTab() {
                   },
                 }}
               >
-                <Field.Text name="displayName" label="Name" />
+                <Field.Text name="firstName" label="First Name" />
+                <Field.Text name="lastName" label="Last Name" />
                 <Field.Text name="email" label="Email address" />
-                <Field.Phone name="phoneNumber" label="Phone number" />
-                <Field.Text name="address" label="Address" />
-
-                <Field.CountrySelect
-                  name="country"
-                  label="Country"
-                  placeholder="Choose a country"
-                />
-
-                <Field.Text name="state" label="State/region" />
-                <Field.Text name="city" label="City" />
-                <Field.Text name="zipCode" label="Zip/code" />
               </Box>
 
               <Stack spacing={3} sx={{ mt: 3, alignItems: "flex-end" }}>
-                <Field.Text name="about" multiline rows={4} label="About" />
-
                 <LoadingButton
                   type="submit"
                   variant="contained"
