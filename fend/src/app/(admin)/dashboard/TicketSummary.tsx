@@ -3,7 +3,7 @@
 import React, { useRef, useState } from "react";
 import { ChevronLeft, Trash2, User } from "lucide-react";
 import { useAccount } from "wagmi";
-import { writeContract, waitForTransaction } from '@wagmi/core'
+import { writeContract, waitForTransaction } from "@wagmi/core";
 import { wagmiConfig } from "@/config";
 import { ethers, solidityPackedKeccak256 } from "ethers";
 import { toast } from "react-toastify";
@@ -14,7 +14,7 @@ import { Lottery } from "@/types";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { blockChainConfig } from "@/contracts/const";
 import { useGetSingleUserDetailsQuery } from "@/redux/api/all-api/users";
-import { useCreatePurchaseMutation } from "@/redux/api/all-api/lottery"; 
+import { useCreatePurchaseMutation } from "@/redux/api/all-api/lottery";
 type TaxType = {
   lotteryType: string;
   lottery: number[];
@@ -41,8 +41,7 @@ export const TicketSummary = ({
   ...props
 }: Props) => {
   const dialogRef = useRef<HTMLButtonElement | null>(null);
-  const [runningPurhase, setRunningPurchase] = useState<Boolean>(false)
-
+  const [runningPurhase, setRunningPurchase] = useState<Boolean>(false);
 
   const ticketPrice = lottery.price;
   const ticketHashes: string[] = [];
@@ -73,7 +72,6 @@ export const TicketSummary = ({
   //   hash: ticketPurchaseHash,
   // });
 
-
   totalTickets.forEach((ticket) => {
     const formattedTicket: string = ticket.map((num) => num.toString().padStart(2, "0")).join("");
 
@@ -87,9 +85,7 @@ export const TicketSummary = ({
     ticketHashes.push(ticketBytes);
   });
 
-
   // const completePurchase = async (type: number) => {
-
 
   //   try {
   //     buyTicket({
@@ -112,21 +108,20 @@ export const TicketSummary = ({
 
   //   }
 
-
-
   // };
 
   const SendToDb = async () => {
     toast.dismiss();
     toast.success("Ticket purchased successfully", {
-      position: "top-left", theme: "colored"
+      position: "top-left",
+      theme: "colored",
     });
     // console.log("called                       .......................... db");
     const dbData = {
       _id: lottery._id,
       buyer: account.address,
       amount: totalTickets.length,
-      referral: data?.originalUser?.referredBy?.address,
+      referral: data?.originalUser?.referredBy?.address || blockChainConfig.owner,
       price: lottery.price,
       lotteryType: lottery.lotteryType.toLowerCase(),
       tax,
@@ -137,16 +132,12 @@ export const TicketSummary = ({
     if (response.message === "Ticket purchased successfully") {
       setRunningPurchase(false);
 
-
-
       setIsNextStep(false);
       // console.log("ticket send to DB successfull");
       dialogRef.current?.click();
       totalTickets = [];
       setTotalTickets([]);
-
     } else {
-
       // toast.dismiss();
       // toast.success("Ticket purchased successfully", {
       //   position: "top-left",theme: "colored"
@@ -154,22 +145,12 @@ export const TicketSummary = ({
     }
   };
 
-
-
-
- 
-
-
   const purchaseTicket = async (type: number) => {
-
-
     if (account?.address && account?.isConnected) {
-
-
-
+      await SendToDb();
 
       try {
-        // Step 1: Approve USDT  
+        // Step 1: Approve USDT
 
         // Step 2: Calculate the amount to approve
         const amount = Number(lottery.price) * 1000000 * totalTickets.length;
@@ -178,17 +159,15 @@ export const TicketSummary = ({
         const usdtContract = new ethers.Contract(
           blockChainConfig.USDTaddress,
           blockChainConfig.erc20ABI,
-          blockChainConfig.provider
+          blockChainConfig.provider,
         );
 
         const allowedAmount = await usdtContract.allowance(
           account.address,
-          blockChainConfig.contractAddress
+          blockChainConfig.contractAddress,
         );
 
         if (allowedAmount < amount) {
-
-
           // Step 1: Approve USDT
 
           const approveTx = await writeContract(wagmiConfig, {
@@ -197,7 +176,7 @@ export const TicketSummary = ({
             functionName: "approve",
             args: [blockChainConfig.contractAddress, amount],
           });
-``
+          ``;
 
           console.log("Approve transaction sent:");
 
@@ -214,28 +193,26 @@ export const TicketSummary = ({
           if (!approveReceipt.status) {
             toast.dismiss();
             toast.error("approved failed", {
-              position: "top-left", theme: "colored"
+              position: "top-left",
+              theme: "colored",
             });
             throw new Error("Approval transaction failed");
-            
           }
-          console.log("USDT approved successfully!")
-
+          console.log("USDT approved successfully!");
         }
- 
-         // Step 2: Purchase Tickets
-         const purchaseTx = await writeContract(wagmiConfig, {
+
+        // Step 2: Purchase Tickets
+        const purchaseTx = await writeContract(wagmiConfig, {
           abi: blockChainConfig.lotteryABI,
           address: blockChainConfig.contractAddress as `0x${string}`,
           functionName: "purchaseTicket",
           args: [
             lottery.lotteryId,
             totalTickets.length,
-            data?.originalUser?.referredBy?.address || blockChainConfig.owner  ,
-            stringArrayOfTickets
+            data?.originalUser?.referredBy?.address || blockChainConfig.owner,
+            stringArrayOfTickets,
           ],
         });
- 
 
         toast.dismiss();
         toast.loading("Ticket purchase in progress...", {
@@ -251,31 +228,24 @@ export const TicketSummary = ({
         if (!purchaseReceipt.status) {
           toast.dismiss();
           toast.error("Ticket purchase transaction failed", {
-            position: "top-left", theme: "colored"
+            position: "top-left",
+            theme: "colored",
           });
 
           // throw new Error("Ticket purchase transaction failed");
         } else {
-          await  SendToDb();
+          await SendToDb();
         }
-    
-
       } catch (err) {
-        console.log("error is ", err)
+        console.log("error is ", err);
         toast.dismiss();
         toast.error("Something went wrong.", {
-          position: "top-left", theme: "colored"
+          position: "top-left",
+          theme: "colored",
         });
       }
     }
-
-
-
   };
-
-
-
-
 
   // console.log("usdtApprovalHash: ", usdtApprovalHash, "error: ", usdtApprovalErr)
   // console.log("LotteverseHash: ", ticketPurchaseHash, "error: ", buyTicketsErr)
