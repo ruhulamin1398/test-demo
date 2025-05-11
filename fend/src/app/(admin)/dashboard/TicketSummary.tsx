@@ -147,8 +147,6 @@ export const TicketSummary = ({
 
   const purchaseTicket = async (type: number) => {
     if (account?.address && account?.isConnected) {
-      await SendToDb();
-
       try {
         // Step 1: Approve USDT
 
