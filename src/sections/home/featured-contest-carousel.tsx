@@ -17,13 +17,13 @@ import { SingleCompetitionCard } from "../common/single-competition-card";
 
 type Props = BoxProps & {
   title: string;
-  loading?: boolean;
+  isLoading?: boolean;
   list: ICompetition[];
 };
 
 export function HomeFeaturedContestCarousel({
   title,
-  loading,
+  isLoading,
   list,
   sx,
   ...other
@@ -33,7 +33,7 @@ export function HomeFeaturedContestCarousel({
     handleOpenEnrolmentConfirmationDialog,
     handleCloseEnrolmentConfirmationDialog,
     onAgreeEnrolment,
-    createLoading,
+    loading,
   } = useEnrollment();
 
   const carousel = useCarousel(
@@ -102,7 +102,7 @@ export function HomeFeaturedContestCarousel({
         open={!!openDialog?.competitionId}
         onAgree={onAgreeEnrolment}
         onDisagree={handleCloseEnrolmentConfirmationDialog}
-        createLoading={createLoading}
+        createLoading={isLoading}
       />
     </Box>
   );

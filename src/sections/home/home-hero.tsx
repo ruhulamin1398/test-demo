@@ -30,14 +30,14 @@ export function HomeHero({ sx, ...other }: BoxProps) {
         Explore Contests
       </Button>
 
-      <Button
+      {/* <Button
         color="info"
         variant="contained"
         size="large"
         sx={{ whiteSpace: "nowrap" }}
       >
         Submit Entry
-      </Button>
+      </Button> */}
     </Box>
   );
 

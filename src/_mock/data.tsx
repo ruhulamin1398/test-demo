@@ -1,5 +1,8 @@
+import { Iconify } from "../components/iconify/iconify";
+import { ICategory } from "../interfaces/category";
 import { IEnrolment, IUser } from "@/interfaces";
 import { _mock } from "./_mock";
+import { ReactNode } from "react";
 
 export const SUBMISSION_SORT_TIME_OPTIONS = [
   { value: "latest", label: "Latest" },
@@ -559,5 +562,58 @@ export const mockSubmissions: ISubmissions[] = [
     vote: 110,
     createdAt: new Date("2025-05-06T16:00:00Z"),
     submittedContent: _mock.image.cover(20),
+  },
+];
+
+export const mockCategoyList: ICategory[] = [
+  {
+    id: "607c35a6f1d2c12e8c8b4587",
+    name: "Natural",
+    slug: "/nature",
+  },
+  {
+    id: "607c35a6f1d2c12e8c8b4588",
+    name: "Portrait",
+    slug: "/portrait",
+  },
+  {
+    id: "607c35a6f1d2c12e8c8b4589",
+    name: "Landscape",
+    slug: "/landscape",
+  },
+  {
+    id: "607c35a6f1d2c12e8c8b4590",
+    name: "Wildlife",
+    slug: "/wildlife",
+  },
+  {
+    id: "607c35a6f1d2c12e8c8b4591",
+    name: "Street",
+    slug: "/street",
+  },
+  {
+    id: "607c35a6f1d2c12e8c8b4592",
+    name: "Macro",
+    slug: "/macro",
+  },
+  {
+    id: "607c35a6f1d2c12e8c8b4593",
+    name: "Black & White",
+    slug: "/black-white",
+  },
+  {
+    id: "607c35a6f1d2c12e8c8b4594",
+    name: "Abstract",
+    slug: "/abstract",
+  },
+  {
+    id: "607c35a6f1d2c12e8c8b4595",
+    name: "Travel",
+    slug: "/travel",
+  },
+  {
+    id: "607c35a6f1d2c12e8c8b4596",
+    name: "Sports",
+    slug: "/sports",
   },
 ];
