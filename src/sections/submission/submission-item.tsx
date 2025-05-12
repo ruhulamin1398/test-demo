@@ -10,7 +10,7 @@ import { RouterLink } from "@/routes/components";
 import { AvatarShape } from "@/assets/illustrations";
 import { Image } from "@/components/image";
 import { Iconify } from "@/components/iconify";
-import { ISubmissions } from "@/_mock/data";
+import { ISubmissions, mockMyVottedSubmissionsIds } from "@/_mock/data";
 import { Button } from "@mui/material";
 import { Label } from "@/components/label";
 import { fShortenNumber } from "@/utils/format-number";
@@ -22,13 +22,14 @@ type PostItemProps = CardProps & {
 };
 
 export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
+  const alreadyVoted = mockMyVottedSubmissionsIds.includes(item.id);
   const renderFooter = () => (
     <Box
       sx={{
         mt: 2.5,
         gap: 0.5,
         display: "flex",
-        justifyContent: "space-between",
+        justifyContent: "flex-end",
       }}
     >
       {/* <Box
@@ -46,14 +47,14 @@ export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
       </Box> */}
 
       <Button
-        color="primary"
+        color={alreadyVoted ? "error" : "primary"}
         variant="contained"
         size="small"
         onClick={(e) => {
           e.preventDefault();
         }}
       >
-        Vote
+        {alreadyVoted ? "Unvote" : "Vote"}
       </Button>
     </Box>
   );
@@ -129,7 +130,7 @@ export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
   );
   const renderContent = () => (
     <CardContent sx={{ pt: 2 }}>
-      <Typography variant="caption" sx={{ color: "#FFD700" }}>
+      <Typography variant="caption" color="primary">
         {item.competition?.title}
       </Typography>
       <Link
