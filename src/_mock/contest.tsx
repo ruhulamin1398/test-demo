@@ -40,8 +40,7 @@ export const competitions: ICompetition[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     status: CompetitionStatusEnum.ACTIVE,
-    totalPrizeMoney: 5000,
-    detailsHref: "/competition/1",
+    haveRoundWiseSubmission: false,
   },
   {
     id: "2",
@@ -72,8 +71,7 @@ export const competitions: ICompetition[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     status: CompetitionStatusEnum.ACTIVE,
-    totalPrizeMoney: 3000,
-    detailsHref: "/competition/2",
+    haveRoundWiseSubmission: false,
   },
   {
     id: "3",
@@ -104,8 +102,7 @@ export const competitions: ICompetition[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     status: CompetitionStatusEnum.ACTIVE,
-    totalPrizeMoney: 2000,
-    detailsHref: "/competition/3",
+    haveRoundWiseSubmission: false,
   },
   {
     id: "4",
@@ -136,8 +133,7 @@ export const competitions: ICompetition[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     status: CompetitionStatusEnum.ACTIVE,
-    totalPrizeMoney: 4000,
-    detailsHref: "/competition/4",
+    haveRoundWiseSubmission: false,
   },
   {
     id: "5",
@@ -168,8 +164,7 @@ export const competitions: ICompetition[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     status: CompetitionStatusEnum.ACTIVE,
-    totalPrizeMoney: 6000,
-    detailsHref: "/competition/5",
+    haveRoundWiseSubmission: false,
   },
   {
     id: "6",
@@ -199,8 +194,7 @@ export const competitions: ICompetition[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     status: CompetitionStatusEnum.ACTIVE,
-    totalPrizeMoney: 7000,
-    detailsHref: "/competition/6",
+    haveRoundWiseSubmission: false,
   },
 ];
 

@@ -1,6 +1,13 @@
 import { Iconify } from "../components/iconify/iconify";
 import { ICategory } from "../interfaces/category";
-import { IEnrolment, IUser } from "@/interfaces";
+import {
+  CompetitionStatusEnum,
+  EnrolmentTypeEnum,
+  ICompetition,
+  IEnrolment,
+  IUser,
+  SubmissionTypeEnum,
+} from "@/interfaces";
 import { _mock } from "./_mock";
 import { ReactNode } from "react";
 
@@ -617,3 +624,34 @@ export const mockCategoyList: ICategory[] = [
     slug: "/sports",
   },
 ];
+
+export const mockMissingSubmission: ICompetition = {
+  id: "607c35a6f1d2c12e8c8b4596",
+  title: "Robotics Challenge - Showcase Your Innovative Robotics Creations",
+  description: "Showcase your innovative robotics creations.",
+  eligibility: "Open to all",
+  startDate: new Date("2025-10-01"),
+  endDate: new Date("2025-10-15"),
+  enrolmentDeadline: {
+    startDate: new Date("2025-09-01"),
+    endDate: new Date("2025-09-30"),
+  },
+  prizes: [
+    {
+      id: "6",
+      title: "First Prize",
+      position: 1,
+      totalAwardws: 1,
+      rewards: "$7,000",
+    },
+  ],
+  rounds: [],
+  enrolmentType: EnrolmentTypeEnum.FREE,
+  price: 0,
+  mediaUrl: "/banner-back.jpg",
+  submissionType: SubmissionTypeEnum.VIDEO,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  status: CompetitionStatusEnum.ACTIVE,
+  haveRoundWiseSubmission: false,
+};
