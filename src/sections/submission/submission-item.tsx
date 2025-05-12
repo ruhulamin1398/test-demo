@@ -1,6 +1,6 @@
 import type { CardProps } from "@mui/material/Card";
 
-import Box from "@mui/material/Box";
+import Box, { BoxProps } from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import Card from "@mui/material/Card";
 import Avatar from "@mui/material/Avatar";
@@ -13,6 +13,7 @@ import { Iconify } from "@/components/iconify";
 import { ISubmissions } from "@/_mock/data";
 import { Button } from "@mui/material";
 import { Label } from "@/components/label";
+import { fShortenNumber } from "@/utils/format-number";
 
 // ----------------------------------------------------------------------
 
@@ -30,7 +31,7 @@ export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
         justifyContent: "space-between",
       }}
     >
-      <Box
+      {/* <Box
         component="span"
         sx={{
           flexGrow: 1,
@@ -42,7 +43,7 @@ export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
       >
         <Iconify icon="mdi:heart" width={20} style={{ color: "red" }} />
         {item.vote}
-      </Box>
+      </Box> */}
 
       <Button
         color="primary"
@@ -74,118 +75,105 @@ export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
       </Label>
     </Box>
   );
+  const renderHeader = () => (
+    <Box sx={{ position: "relative" }}>
+      <AvatarShape
+        sx={{
+          left: 0,
+          zIndex: 9,
+          width: 88,
+          height: 36,
+          bottom: -16,
+          position: "absolute",
+        }}
+      />
+      <Avatar
+        alt={item?.user?.id}
+        src={item?.user?.profilePicture}
+        sx={{
+          left: 24,
+          zIndex: 9,
+          bottom: -24,
+          position: "absolute",
+        }}
+      />
+
+      <Image alt={item.title} src={item.submittedContent} ratio="4/3" />
+    </Box>
+  );
+  const renderInfoBlock = () => (
+    <Box
+      sx={[
+        () => ({
+          mt: 2,
+          mx: 2,
+          gap: 1.5,
+          display: "flex",
+          typography: "caption",
+          color: "text.disabled",
+          justifyContent: "flex-end",
+        }),
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+      {...other}
+    >
+      <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
+        <Iconify width={16} icon="mdi:heart" style={{ color: "red" }} />
+        {fShortenNumber(item.vote)}
+      </Box>
+
+      <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
+        <Iconify width={16} icon="solar:share-bold" color="primary" />
+      </Box>
+    </Box>
+  );
+  const renderContent = () => (
+    <CardContent sx={{ pt: 2 }}>
+      <Typography variant="caption" sx={{ color: "#FFD700" }}>
+        {item.competition?.title}
+      </Typography>
+      <Link
+        component={RouterLink}
+        href={item.id}
+        color="inherit"
+        variant="subtitle2"
+        sx={(theme) => ({
+          ...theme.mixins.maxLine({
+            line: 2,
+            persistent: theme.typography.subtitle2,
+          }),
+        })}
+      >
+        {item.title}
+      </Link>
+      <Typography
+        variant="caption"
+        component="div"
+        sx={(theme) => ({
+          ...theme.mixins.maxLine({
+            line: 1,
+            persistent: theme.typography.body2,
+          }),
+          color: "text.disabled",
+        })}
+      >
+        {item.description}
+      </Typography>
+
+      {renderFooter()}
+    </CardContent>
+  );
 
   return (
     <Card sx={sx} {...other}>
-      <Box sx={{ position: "relative" }}>
-        <AvatarShape
-          sx={{
-            left: 0,
-            zIndex: 9,
-            width: 88,
-            height: 36,
-            bottom: -16,
-            position: "absolute",
-          }}
-        />
-        <Avatar
-          alt={item?.user?.id}
-          src={item?.user?.profilePicture}
-          sx={{
-            left: 24,
-            zIndex: 9,
-            bottom: -24,
-            position: "absolute",
-          }}
-        />
+      {renderHeader()}
 
-        <Image alt={item.title} src={item.submittedContent} ratio="4/3" />
-      </Box>
       {renderLabels()}
-      <CardContent sx={{ pt: 6 }}>
-        <Typography variant="caption" sx={{ color: "#FFD700" }}>
-          {item.competition?.title}
-        </Typography>
-        <Link
-          component={RouterLink}
-          href={item.id}
-          color="inherit"
-          variant="subtitle2"
-          sx={(theme) => ({
-            ...theme.mixins.maxLine({
-              line: 2,
-              persistent: theme.typography.subtitle2,
-            }),
-          })}
-        >
-          {item.title}
-        </Link>
-        <Typography
-          variant="caption"
-          component="div"
-          sx={(theme) => ({
-            ...theme.mixins.maxLine({
-              line: 1,
-              persistent: theme.typography.body2,
-            }),
-            color: "text.disabled",
-          })}
-        >
-          {item.description}
-        </Typography>
+      {renderInfoBlock()}
 
-        {/* <InfoBlock
-          totalViews={item.vote}
-          totalShares={item.vote}
-          totalComments={item.vote}
-        /> */}
-        {renderFooter()}
-      </CardContent>
+      {renderContent()}
     </Card>
   );
 }
 
 // ----------------------------------------------------------------------
-
-// type InfoBlockProps = BoxProps &
-//   Pick<ISubmissions, "totalViews" | "totalShares" | "totalComments">;
-
-// function InfoBlock({
-//   sx,
-//   totalViews,
-//   totalShares,
-//   totalComments,
-//   ...other
-// }: InfoBlockProps) {
-//   return (
-//     <Box
-//       sx={[
-//         () => ({
-//           mt: 3,
-//           gap: 1.5,
-//           display: "flex",
-//           typography: "caption",
-//           color: "text.disabled",
-//           justifyContent: "flex-end",
-//         }),
-//         ...(Array.isArray(sx) ? sx : [sx]),
-//       ]}
-//       {...other}
-//     >
-//       <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
-//         <Iconify width={16} icon="eva:message-circle-fill" />
-//         {fShortenNumber(totalComments)}
-//       </Box>
-
-//       <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
-//         <Iconify width={16} icon="solar:eye-bold" />
-//         {fShortenNumber(totalViews)}
-//       </Box>
-
-//       <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
-//         <Iconify width={16} icon="solar:share-bold" />
-//         {fShortenNumber(totalShares)}
-//       </Box>
-//     </Box>
-//   );
-// }

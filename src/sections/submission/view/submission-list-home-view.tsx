@@ -15,6 +15,7 @@ import {
   ISubmissions,
   SUBMISSION_FILTER_CATEGORY_OPTIONS,
   SUBMISSION_FILTER_CONTEST_OPTIONS,
+  SUBMISSION_FILTER_ROUND_OPTIONS,
   SUBMISSION_SORT_TIME_OPTIONS,
 } from "@/_mock/data";
 
@@ -27,6 +28,7 @@ type Props = {
 export function SubmissionHomeView({ submissions }: Props) {
   const [filterByCategory, setFilterByCategory] = useState("All Categories");
   const [filterByContest, setFilterByContest] = useState("All Contest");
+  const [filterByRound, setFilterByRound] = useState("All Round");
   const [sortByTime, setSortByTime] = useState("latest");
 
   return (
@@ -52,21 +54,37 @@ export function SubmissionHomeView({ submissions }: Props) {
           redirectPath={(title: string) => paths.post.details(title)}
         />
 
-        <SubmissionSort
-          sort={filterByContest}
-          onSort={(newValue: string) => setFilterByContest(newValue)}
-          sortOptions={SUBMISSION_FILTER_CONTEST_OPTIONS}
-        />
-        <SubmissionSort
-          sort={filterByCategory}
-          onSort={(newValue: string) => setFilterByCategory(newValue)}
-          sortOptions={SUBMISSION_FILTER_CATEGORY_OPTIONS}
-        />
-        <SubmissionSort
-          sort={sortByTime}
-          onSort={(newValue: string) => setSortByTime(newValue)}
-          sortOptions={SUBMISSION_SORT_TIME_OPTIONS}
-        />
+        <Box
+          sx={[
+            () => ({
+              gap: 3,
+              display: "flex",
+              justifyContent: "space-between",
+              flexDirection: { xs: "row", sm: "row" },
+            }),
+          ]}
+        >
+          <SubmissionSort
+            sort={filterByRound}
+            onSort={(newValue: string) => setFilterByRound(newValue)}
+            sortOptions={SUBMISSION_FILTER_ROUND_OPTIONS}
+          />
+          <SubmissionSort
+            sort={filterByContest}
+            onSort={(newValue: string) => setFilterByContest(newValue)}
+            sortOptions={SUBMISSION_FILTER_CONTEST_OPTIONS}
+          />
+          <SubmissionSort
+            sort={filterByCategory}
+            onSort={(newValue: string) => setFilterByCategory(newValue)}
+            sortOptions={SUBMISSION_FILTER_CATEGORY_OPTIONS}
+          />
+          <SubmissionSort
+            sort={sortByTime}
+            onSort={(newValue: string) => setSortByTime(newValue)}
+            sortOptions={SUBMISSION_SORT_TIME_OPTIONS}
+          />
+        </Box>
       </Box>
 
       <SubmissionList data={submissions} />

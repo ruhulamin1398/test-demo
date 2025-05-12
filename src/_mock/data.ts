@@ -16,6 +16,11 @@ export const SUBMISSION_FILTER_CONTEST_OPTIONS = [
   { value: "popular", label: "Portrait of a Smile" },
   { value: "oldest", label: "Waves Crashing on Rocks" },
 ];
+export const SUBMISSION_FILTER_ROUND_OPTIONS = [
+  { value: "latest", label: "Round 1" },
+  { value: "popular", label: "Round 2 " },
+  { value: "oldest", label: "Round 3" },
+];
 
 export interface IDeadlineReminder {
   id: string;
