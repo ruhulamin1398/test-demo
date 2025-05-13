@@ -10,19 +10,28 @@ import { RouterLink } from "@/routes/components";
 import { AvatarShape } from "@/assets/illustrations";
 import { Image } from "@/components/image";
 import { Iconify } from "@/components/iconify";
-import { ISubmissions, mockMyVottedSubmissionsIds } from "@/_mock/data";
+import { ISubmissionData, mockMyVottedSubmissionsIds } from "@/_mock/data";
 import { Button } from "@mui/material";
 import { Label } from "@/components/label";
 import { fShortenNumber } from "@/utils/format-number";
+import CompetitionSubmissionPopUp from "./submission-popup";
+import { useEffect, useState } from "react";
 
 // ----------------------------------------------------------------------
 
 type PostItemProps = CardProps & {
-  item: ISubmissions;
+  item: ISubmissionData;
 };
 
 export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
   const alreadyVoted = mockMyVottedSubmissionsIds.includes(item.id);
+  const [currentSubmission, setCurrentSubmission] =
+    useState<ISubmissionData | null>(null);
+
+  const handleDialogClose = () => {
+    setCurrentSubmission(null);
+  };
+
   const renderFooter = () => (
     <Box
       sx={{
@@ -133,9 +142,7 @@ export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
       <Typography variant="caption" color="primary">
         {item.competition?.title}
       </Typography>
-      <Link
-        component={RouterLink}
-        href={item.id}
+      <Typography
         color="inherit"
         variant="subtitle2"
         sx={(theme) => ({
@@ -144,9 +151,13 @@ export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
             persistent: theme.typography.subtitle2,
           }),
         })}
+        onClick={(e) => {
+          e.preventDefault();
+          setCurrentSubmission(item);
+        }}
       >
         {item.title}
-      </Link>
+      </Typography>
       <Typography
         variant="caption"
         component="div"
@@ -166,14 +177,20 @@ export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
   );
 
   return (
-    <Card sx={sx} {...other}>
-      {renderHeader()}
+    <>
+      <Card sx={sx} {...other}>
+        {renderHeader()}
 
-      {renderLabels()}
-      {renderInfoBlock()}
+        {renderLabels()}
+        {renderInfoBlock()}
 
-      {renderContent()}
-    </Card>
+        {renderContent()}
+      </Card>
+      <CompetitionSubmissionPopUp
+        handleDialogClose={handleDialogClose}
+        submission={currentSubmission}
+      />
+    </>
   );
 }
 

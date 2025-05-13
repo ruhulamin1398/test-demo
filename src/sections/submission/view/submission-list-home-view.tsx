@@ -12,7 +12,7 @@ import { SubmissionList } from "../submission-list";
 import { SubmissionSort } from "../submission-sort";
 import { SubmissionSearch } from "../submission-search";
 import {
-  ISubmissions,
+  ISubmissionData,
   SUBMISSION_FILTER_CATEGORY_OPTIONS,
   SUBMISSION_FILTER_CONTEST_OPTIONS,
   SUBMISSION_FILTER_ROUND_OPTIONS,
@@ -22,7 +22,7 @@ import {
 // ----------------------------------------------------------------------
 
 type Props = {
-  submissions: ISubmissions[];
+  submissions: ISubmissionData[];
 };
 
 export function SubmissionHomeView({ submissions }: Props) {
@@ -95,7 +95,7 @@ export function SubmissionHomeView({ submissions }: Props) {
 // ----------------------------------------------------------------------
 
 type ApplyFilterProps = {
-  inputData: ISubmissions[];
+  inputData: ISubmissionData[];
   sortBy: string;
 };
 

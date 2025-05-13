@@ -1,10 +1,11 @@
-import type { DialogProps } from '@mui/material/Dialog';
+import type { DialogProps } from "@mui/material/Dialog";
 
 // ----------------------------------------------------------------------
 
-export type ConfirmDialogProps = Omit<DialogProps, 'title' | 'content'> & {
+export type ConfirmDialogProps = Omit<DialogProps, "title" | "content"> & {
   onClose: () => void;
   title: React.ReactNode;
   action: React.ReactNode;
   content?: React.ReactNode;
+  closeText?: React.ReactNode;
 };

@@ -70,7 +70,7 @@ export const mockCoursesReminder: IDeadlineReminder[] = [
   },
 ];
 
-export interface ISubmissions {
+export interface ISubmissionData {
   id: string;
   title?: string;
   description?: string;
@@ -95,7 +95,7 @@ export interface ISubmissions {
   createdAt?: Date;
 }
 
-export const mockMyRecentSubmissions: ISubmissions[] = [
+export const mockMyRecentSubmissions: ISubmissionData[] = [
   {
     id: "1",
     createdAt: new Date("2025-05-10T12:00:00Z"),
@@ -164,7 +164,7 @@ export const mockMyVottedSubmissionsIds: string[] = [
   "607c35a6f1d2c12e8c8b4580", // The Beauty of Simplicity
 ];
 
-export const mockSubmissions: ISubmissions[] = [
+export const mockSubmissions: ISubmissionData[] = [
   {
     id: "607c35a6f1d2c12e8c8b4567",
     title: "Sunset Over the Ocean View with Vibrant Colors",

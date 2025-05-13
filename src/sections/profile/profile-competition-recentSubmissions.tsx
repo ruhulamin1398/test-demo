@@ -10,14 +10,14 @@ import { Typography } from "@mui/material";
 import { paths } from "@/routes/paths";
 import { RouterLink } from "@/routes/components";
 import { varFade } from "@/components/animate";
-import { ISubmissions } from "@/_mock/data";
+import { ISubmissionData } from "@/_mock/data";
 import { useDate } from "@/hooks/use-date";
 
 // ----------------------------------------------------------------------
 
 type Props = CardProps & {
   title?: string;
-  list: ISubmissions[];
+  list: ISubmissionData[];
 };
 
 export function CompetitionRecentSubmissions({

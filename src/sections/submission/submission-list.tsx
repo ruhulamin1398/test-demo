@@ -9,12 +9,12 @@ import { Iconify } from "@/components/iconify";
 
 import { SubmissionItemSkeleton } from "./submission-skeleton";
 import { SubmissionItem } from "./submission-item";
-import { ISubmissions } from "@/_mock/data";
+import { ISubmissionData } from "@/_mock/data";
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  data: ISubmissions[];
+  data: ISubmissionData[];
   loading?: boolean;
 };
 

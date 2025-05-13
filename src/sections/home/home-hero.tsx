@@ -26,7 +26,7 @@ export function HomeHero({ sx, ...other }: BoxProps) {
         display: "flex",
         mt: 3,
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: { xs: "center", md: "start" },
       }}
     >
       <Button
