@@ -4,15 +4,33 @@ import ERC20ABI from "./ERC20ABI.json";
 import { polygon, polygonAmoy } from "wagmi/chains";
 
 import { JsonRpcProvider } from "ethers";
- 
+
 export const secretKey = "lottaverse2.0_by@oxwd3v";
 // settings for amoy
 const devAmoyConfig = {
   chainName: polygonAmoy,
   contractAddress: process.env.NEXT_PUBLIC_DEV_CONTRACT_ADDRESS,
   owner: "0x3ff88B69d1762AA444c85c30C4B0B795f9c48B59",
+  USDTaddress: "0xe7aB779bC1fd78539491CcD8248c96D7C979E0d1",
+  ProviderUrl: "https://polygon-amoy.infura.io/v3/276f8cf7af2341738b0fd12245ffd948",
+  lotteryABI: lotteryABI.abi,
+  erc20ABI: ERC20ABI.abi,
+  decimals: 1e6,
+  chainId: 8002,
+  provider: new JsonRpcProvider(
+    "https://polygon-amoy.infura.io/v3/276f8cf7af2341738b0fd12245ffd948",
+    {
+      chainId: 8002,
+      name: "polygon-amoy",
+    },
+  ),
+};
+const devMainnet = {
+  chainName: polygonAmoy,
+  contractAddress: process.env.NEXT_PUBLIC_DEV_CONTRACT_ADDRESS,
+  owner: "0x3ff88B69d1762AA444c85c30C4B0B795f9c48B59",
   USDTaddress: "0x73A2c399a5B2419A9e963C440c3c6D9C528B562B",
-  ProviderUrl: "https://rpc-amoy.polygon.technology",
+  ProviderUrl: "https://polygon-mainnet.infura.io/v3/276f8cf7af2341738b0fd12245ffd948",
   lotteryABI: lotteryABI.abi,
   erc20ABI: ERC20ABI,
   decimals: 1e6,
@@ -22,7 +40,7 @@ const devAmoyConfig = {
     {
       chainId: 137,
       name: "polygon-mainnet",
-    }
+    },
   ),
 };
 const polygonConfig = {
@@ -49,6 +67,9 @@ const getBlockchainConfig = () => {
   if (environment == "dev") {
     console.log("dev Environment ", devAmoyConfig);
     return devAmoyConfig;
+  } else if (environment == "dev-mainnet") {
+    console.log("dev Environment ", devMainnet);
+    return devMainnet;
   } else {
     // console.log("prod Environment ", polygonConfig)
     return polygonConfig;
