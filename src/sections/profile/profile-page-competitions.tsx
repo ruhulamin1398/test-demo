@@ -40,7 +40,7 @@ export function ProfilePageCompetition({
     handleOpenEnrolmentConfirmationDialog,
     handleCloseEnrolmentConfirmationDialog,
     onAgreeEnrolment,
-    createLoading,
+    loading,
   } = useEnrollment();
 
   return (
@@ -81,7 +81,7 @@ export function ProfilePageCompetition({
             p: 3,
             gap: 3,
             display: "flex",
-            flexDirection: "row",
+            flexDirection: { xs: "column", md: "row" },
           }}
         >
           {list.slice(1, 4).map((item) => (
@@ -97,7 +97,7 @@ export function ProfilePageCompetition({
         open={!!openDialog?.competitionId}
         onAgree={onAgreeEnrolment}
         onDisagree={handleCloseEnrolmentConfirmationDialog}
-        createLoading={createLoading}
+        createLoading={loading}
       />
     </>
   );

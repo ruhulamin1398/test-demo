@@ -20,7 +20,15 @@ import { Button } from "@mui/material";
 
 export function HomeHero({ sx, ...other }: BoxProps) {
   const renderActions = () => (
-    <Box sx={{ gap: 2, display: "flex", mt: 3 }}>
+    <Box
+      sx={{
+        gap: 2,
+        display: "flex",
+        mt: 3,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Button
         color="success"
         variant="contained"
