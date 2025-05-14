@@ -21,7 +21,7 @@ export function CompetitionSidebar({ competition }: Props) {
   const { enrollIds } = useSelector(
     (state: RootState) => state.auth.competitionInfo
   );
-  const isEnrolled = enrollIds.includes(competition.id);
+  const isEnroled = enrollIds.includes(competition.id);
 
   return (
     <>
@@ -35,7 +35,7 @@ export function CompetitionSidebar({ competition }: Props) {
         }}
       >
         <Grid size={12}>
-          {!isEnrolled ? (
+          {!isEnroled ? (
             <EnrolmentCard
               price={competition.price ? `${competition.price}` : "Free"}
               title={competition.title}

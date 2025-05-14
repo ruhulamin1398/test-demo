@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 
 import { useDate } from "@/hooks/use-date";
-import AvatarShape from "@/assets/illustrations/avatar-shape";
 
 type Props = BoxProps & {
   submission: ISubmissionData | null;

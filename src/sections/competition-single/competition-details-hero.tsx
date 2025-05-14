@@ -18,6 +18,8 @@ import {
 import { Iconify } from "@/components/iconify";
 import { ICompetition } from "@/interfaces";
 import { useDate } from "@/hooks/use-date";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +32,11 @@ export function CompetitionDetailsHero({
   sx,
   ...other
 }: CompetitionDetailsHeroProps) {
+  const { enrollIds } = useSelector(
+    (state: RootState) => state.auth.competitionInfo
+  );
+  const isEnroled = enrollIds.includes(competition.id);
+
   const { formatDate } = useDate();
   const renderCompetitionSummaryList = () => {
     return (
@@ -118,6 +125,7 @@ export function CompetitionDetailsHero({
               },
             }}
           />
+
           {renderCompetitionSummaryList()}
         </Box>
       </Container>
@@ -154,7 +162,7 @@ function CompetitionHeroCard({
           <Box
             sx={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: { xs: "flex-start", md: "center" },
               alignItems: "center",
               width: 48,
             }}
@@ -162,7 +170,7 @@ function CompetitionHeroCard({
             <Iconify icon={icon} width={36} sx={{ color: "primary.main" }} />
           </Box>
 
-          <Box>
+          <Box sx={{ textAlign: "left" }}>
             <Typography variant="h6" sx={{ mb: 0.5 }}>
               {title}
             </Typography>

@@ -10,12 +10,27 @@ import { RouterLink } from "@/routes/components";
 import { AvatarShape } from "@/assets/illustrations";
 import { Image } from "@/components/image";
 import { Iconify } from "@/components/iconify";
+
+import { useTheme } from "@mui/material/styles";
 import { ISubmissionData, mockMyVottedSubmissionsIds } from "@/_mock/data";
-import { Button } from "@mui/material";
+import {
+  Button,
+  SpeedDial,
+  SpeedDialAction,
+  useMediaQuery,
+} from "@mui/material";
 import { Label } from "@/components/label";
 import { fShortenNumber } from "@/utils/format-number";
-import CompetitionSubmissionPopUp from "./submission-popup";
+import CompetitionSubmissionPopUp from "../../components/submission-popup";
 import { useEffect, useState } from "react";
+import { _socials } from "@/_mock";
+import {
+  FacebookIcon,
+  InstagramIcon,
+  LinkedinIcon,
+  TwitterIcon,
+} from "@/assets/icons";
+import SocialShare from "@/components/social-share";
 
 // ----------------------------------------------------------------------
 
@@ -111,6 +126,36 @@ export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
       <Image alt={item.title} src={item.submittedContent} ratio="4/3" />
     </Box>
   );
+  const renderShareBlock = () => (
+    <SpeedDial
+      direction={"right"}
+      ariaLabel="Share post"
+      icon={<Iconify width={12} icon="solar:share-bold" />}
+      FabProps={{ size: "small" }}
+      sx={{
+        position: "absolute",
+        top: { xs: 0, md: 0 },
+        left: { xs: 4, md: 4 },
+      }}
+    >
+      {_socials.map((social) => (
+        <SpeedDialAction
+          key={social.label}
+          icon={
+            <>
+              {social.value === "facebook" && <FacebookIcon />}
+              {social.value === "instagram" && <InstagramIcon />}
+              {social.value === "linkedin" && <LinkedinIcon />}
+              {social.value === "twitter" && <TwitterIcon />}
+            </>
+          }
+          tooltipPlacement="top"
+          FabProps={{ color: "default" }}
+          tooltipTitle={social.label}
+        />
+      ))}
+    </SpeedDial>
+  );
   const renderInfoBlock = () => (
     <Box
       sx={[
@@ -127,14 +172,22 @@ export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
       ]}
       {...other}
     >
-      <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
-        <Iconify width={16} icon="mdi:heart" style={{ color: "red" }} />
-        {fShortenNumber(item.vote)}
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <SocialShare url="/hello" />
+        <Iconify
+          width={16}
+          icon="mdi:heart-circle"
+          style={{ color: "red", marginBottom: 1 }}
+        />
+        <Typography sx={{ fontSize: 8 }}>
+          {fShortenNumber(item.vote)}
+        </Typography>
       </Box>
 
-      <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
+      {renderShareBlock()}
+      {/* <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
         <Iconify width={16} icon="solar:share-bold" color="primary" />
-      </Box>
+      </Box> */}
     </Box>
   );
   const renderContent = () => (
@@ -150,6 +203,7 @@ export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
             line: 2,
             persistent: theme.typography.subtitle2,
           }),
+          cursor: "pointer",
         })}
         onClick={(e) => {
           e.preventDefault();
