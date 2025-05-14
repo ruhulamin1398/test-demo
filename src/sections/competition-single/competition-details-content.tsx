@@ -10,6 +10,8 @@ import { Card, CardProps } from "@mui/material";
 import { ICompetition, IRound, RoundDetails } from "@/interfaces";
 import { Label } from "@/components/label";
 import { Markdown } from "@/components/markdown";
+import { useState } from "react";
+import CompetitionRoundPopUp from "@/components/round-popup";
 
 // ----------------------------------------------------------------------
 type ContestDetailsContentProps = {
@@ -123,28 +125,47 @@ export function ContestDetailsContent({
     </>
   );
 
-  const renderRoundDetails = () => (
-    <>
-      <Box>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          Round Details
-        </Typography>
+  const renderRoundDetails = () => {
+    const [currentRound, setCurrentRound] = useState<IRound | null>(null);
 
-        <Box
-          sx={{
-            rowGap: 2,
-            columnGap: 2,
-            display: "grid",
-            gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(2, 1fr)" },
-          }}
-        >
-          {competition.rounds.map((round) => (
-            <RoundDetailsCard round={round} key={round.id} />
-          ))}
+    const handleDialogClose = () => {
+      setCurrentRound(null);
+    };
+    return (
+      <>
+        <Box>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Round Details
+          </Typography>
+
+          <Box
+            sx={{
+              rowGap: 2,
+              columnGap: 2,
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "repeat(1, 1fr)",
+                md: "repeat(2, 1fr)",
+              },
+            }}
+          >
+            {competition.rounds.map((round) => (
+              <RoundDetailsCard
+                round={round}
+                key={round.id}
+                handlePopUp={setCurrentRound}
+              />
+            ))}
+          </Box>
         </Box>
-      </Box>
-    </>
-  );
+
+        <CompetitionRoundPopUp
+          handleDialogClose={handleDialogClose}
+          round={currentRound}
+        />
+      </>
+    );
+  };
 
   return (
     <>
@@ -163,9 +184,10 @@ export function ContestDetailsContent({
 
 type Props = CardProps & {
   round: IRound;
+  handlePopUp: (round: IRound) => void;
 };
 
-export function RoundDetailsCard({ sx, round, ...other }: Props) {
+export function RoundDetailsCard({ sx, round, handlePopUp, ...other }: Props) {
   const renderLabels = () => (
     <Box
       sx={{
@@ -200,14 +222,23 @@ export function RoundDetailsCard({ sx, round, ...other }: Props) {
       >
         {renderLabels()}
         <Box sx={{ mt: 2 }}>
-          <Link
-            variant="h5"
+          <Typography
             color="inherit"
-            underline="none"
-            href="competition/rounds/1"
+            variant="subtitle2"
+            sx={(theme) => ({
+              ...theme.mixins.maxLine({
+                line: 2,
+                persistent: theme.typography.subtitle2,
+              }),
+              cursor: "pointer",
+            })}
+            onClick={(e) => {
+              e.preventDefault();
+              handlePopUp(round);
+            }}
           >
             {round.title}
-          </Link>
+          </Typography>
         </Box>
 
         <Typography
