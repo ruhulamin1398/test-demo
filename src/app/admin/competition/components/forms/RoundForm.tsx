@@ -132,6 +132,10 @@ export const RoundForm: React.FC = () => {
       roundNumber,
       judges,
       isActiveRound,
+      deadline,
+      submissionDeadline,
+      votingDeadline,
+      judgingDeadline,
     } = values;
 
     const inputPayload = {
@@ -140,12 +144,13 @@ export const RoundForm: React.FC = () => {
       maxVote: Number(maxVote),
       maxWinners: Number(maxWinners),
       roundNumber: Number(roundNumber),
-      judges: judges,
+      judges: judges.map((item) => item.id),
       isActiveRound: isActiveRound,
+      deadline,
+      submissionDeadline,
+      votingDeadline,
+      judgingDeadline,
     };
-
-    console.log("Form values", values);
-    return;
     if (mode === CompetitionUiModeEnum.CREATE) {
       await createRound({ variables: { input: inputPayload } });
     } else {
@@ -204,6 +209,23 @@ export const RoundForm: React.FC = () => {
             </Grid>
             <Grid size={{ xs: 4 }}>
               <Stack spacing={1.5}>
+                <Typography variant="subtitle2">Submission Type</Typography>
+                <Field.Select
+                  name="submissionType"
+                  slotProps={{
+                    inputLabel: { shrink: true },
+                  }}
+                >
+                  {Object.values(SubmissionTypeEnum).map((subType) => (
+                    <MenuItem key={subType} value={subType}>
+                      {subType}
+                    </MenuItem>
+                  ))}
+                </Field.Select>
+              </Stack>
+            </Grid>
+            <Grid size={{ xs: 4 }}>
+              <Stack spacing={1.5}>
                 <Typography variant="subtitle2">Judgement Criteria</Typography>
                 <Field.Select
                   name="judgementCriteria"
@@ -237,13 +259,16 @@ export const RoundForm: React.FC = () => {
                     Submission Deadline
                   </Typography>
                   <DateRangePickerController
+                    disabled={!deadline?.[0] || !deadline?.[1]}
                     name="submissionDeadline"
                     control={control}
                     minDate={
-                      deadline?.[0] || dayjs(Number(competition?.startDate))
+                      submissionDeadline?.[0] ||
+                      dayjs(Number(competition?.startDate))
                     }
                     maxDate={
-                      deadline?.[1] || dayjs(Number(competition?.endDate))
+                      submissionDeadline?.[1] ||
+                      dayjs(Number(competition?.endDate))
                     }
                   />
                 </Stack>
@@ -262,7 +287,8 @@ export const RoundForm: React.FC = () => {
                     name="judgingDeadline"
                     control={control}
                     minDate={
-                      deadline?.[0] || dayjs(Number(competition?.startDate))
+                      submissionDeadline?.[1]?.add(1, "day") ||
+                      dayjs(Number(competition?.startDate))
                     }
                     maxDate={
                       deadline?.[1] || dayjs(Number(competition?.endDate))
@@ -284,7 +310,8 @@ export const RoundForm: React.FC = () => {
                     name="votingDeadline"
                     control={control}
                     minDate={
-                      deadline?.[0] || dayjs(Number(competition?.startDate))
+                      submissionDeadline?.[1]?.add(1, "day") ||
+                      dayjs(Number(competition?.startDate))
                     }
                     maxDate={
                       deadline?.[1] || dayjs(Number(competition?.endDate))
@@ -331,30 +358,31 @@ export const RoundForm: React.FC = () => {
               </Stack>
             </Grid>
           </Grid>
-          <Grid sx={{ xs: 4 }}>
-            <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-              Judges
-            </Typography>
-            <JudgeAutocomplete name="judges" control={control} />
-          </Grid>
+          {selectedCriteria === RoundJudgementCriteriaEnum.JUDGE ||
+          selectedCriteria === RoundJudgementCriteriaEnum.BOTH ? (
+            <Grid sx={{ xs: 4 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
+                Judges
+              </Typography>
+              <JudgeAutocomplete name="judges" control={control} />
+            </Grid>
+          ) : null}
         </Box>
         <Box>
-          <Grid size={{ xs: 4 }}>
-            <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Description</Typography>
-              <Field.Text
-                rows={3}
-                multiline
-                name="description"
-                slotProps={{
-                  inputLabel: {
-                    shrink: true,
-                  },
-                }}
-                variant="outlined"
-              />
-            </Stack>
-          </Grid>
+          <Stack spacing={1.5}>
+            <Typography variant="subtitle2">Description</Typography>
+            <Field.Text
+              rows={3}
+              multiline
+              name="description"
+              slotProps={{
+                inputLabel: {
+                  shrink: true,
+                },
+              }}
+              variant="outlined"
+            />
+          </Stack>
         </Box>
 
         <Box py={2} display={"flex"} justifyContent={"flex-end"}>
