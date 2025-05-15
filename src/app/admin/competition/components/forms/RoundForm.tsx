@@ -256,6 +256,9 @@ export const RoundForm: React.FC = () => {
                 <Stack spacing={1.5}>
                   <Typography variant="subtitle2">Judging Deadline</Typography>
                   <DateRangePickerController
+                    disabled={
+                      !submissionDeadline?.[0] || !submissionDeadline?.[1]
+                    }
                     name="judgingDeadline"
                     control={control}
                     minDate={
@@ -275,6 +278,9 @@ export const RoundForm: React.FC = () => {
                 <Stack spacing={1.5}>
                   <Typography variant="subtitle2">Voting Deadline</Typography>
                   <DateRangePickerController
+                    disabled={
+                      !submissionDeadline?.[0] || !submissionDeadline?.[1]
+                    }
                     name="votingDeadline"
                     control={control}
                     minDate={
