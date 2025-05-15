@@ -109,8 +109,22 @@ export const Competition =
 export interface IRound {
   id: string;
   roundNumber: number;
-  startDate: Date; // Date as string (ISO 8601 format)
-  endDate: Date; // Date as string (ISO 8601 format)
+  deadline: {
+    startDate: Date;
+    endDate: Date;
+  };
+  submissionDeadline?: {
+    startDate: Date;
+    endDate: Date;
+  };
+  judgingDeadline?: {
+    startDate: Date;
+    endDate: Date;
+  };
+  votingDeadline?: {
+    startDate: Date;
+    endDate: Date;
+  };
   judgementCriteria: RoundJudgementCriteriaEnum;
   maxScore: number;
   description: string;
@@ -124,12 +138,19 @@ export interface IRound {
 
 export interface IRoundDocument extends IRound, Document {}
 
+const dateRangeType = {
+  startDate: Date,
+  endDate: Date,
+};
+
 // Round Model
 const roundSchema = new Schema<IRoundDocument>(
   {
     roundNumber: { type: Number, required: true },
-    startDate: { type: Date, required: true },
-    endDate: { type: Date, required: true },
+    deadline: { type: dateRangeType, require: false },
+    submissionDeadline: { type: dateRangeType, require: false },
+    judgingDeadline: { type: dateRangeType, require: false },
+    votingDeadline: { type: dateRangeType, require: false },
     judgementCriteria: {
       type: String,
       enum: Object.values(
