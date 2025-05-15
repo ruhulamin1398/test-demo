@@ -9,15 +9,15 @@ export const secretKey = "lottaverse2.0_by@oxwd3v";
 const devAmoyConfig = {
   contractAddress: process.env.CONTRACT_ADDRESS,
   owner: "0x3ff88B69d1762AA444c85c30C4B0B795f9c48B59",
-  USDTaddress: "0xe7aB779bC1fd78539491CcD8248c96D7C979E0d1",
+  USDTaddress: "0xfe40b6fd49767069189F7bF297EdFB6F02d1045B",
   lotteryABI: lotteryABI.abi,
   erc20ABI: ERC20ABI.abi,
   decimals: 1e6,
-  chainId: 8002,
+  chainId: 80002,
   provider: new JsonRpcProvider(
-    "https://polygon-mainnet.infura.io/v3/276f8cf7af2341738b0fd12245ffd948",
+    "https://polygon-amoy.infura.io/v3/276f8cf7af2341738b0fd12245ffd948",
     {
-      chainId: 8002,
+      chainId: 80002,
       name: "polygon-amoy",
     }
   ),
