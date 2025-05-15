@@ -9,7 +9,13 @@ export interface IEnrolmentSubmission {
   roundId: IRound;
   userId: IUser;
   score: number;
+  title: string;
+  description: string;
   submittedContent: string;
   createdAt: string;
   updatedAt: string;
+}
+export interface IEnrolmentSubmissionInput {
+  title: string;
+  description: string;
 }

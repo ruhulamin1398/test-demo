@@ -6,6 +6,8 @@ export const enrolmentSubmissionTypeDefs = `#graphql
     userId: ID!
     score: Int!
     submittedContent: String!
+    title: String
+    description: String
     createdAt: String!
     updatedAt: String!
   }

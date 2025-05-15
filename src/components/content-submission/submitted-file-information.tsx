@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardMedia,
   Container,
+  Typography,
 } from "@mui/material";
 import { IEnrolmentSubmission } from "@/interfaces/enrolmentSubmission";
 import { useDate } from "@/hooks/use-date";
@@ -30,7 +31,10 @@ const SubmittedFileInformation = ({ submission }: Props) => {
             image={submission?.submittedContent}
             alt="Submission File"
           />
-          <Box></Box>
+          <Box sx={{ py: 2 }}>
+            <Typography variant="subtitle1">{submission?.title} </Typography>
+            <Typography variant="body2">{submission?.description} </Typography>
+          </Box>
         </CardContent>
       </Card>
     </>

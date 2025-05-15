@@ -132,6 +132,8 @@ export async function POST(req: NextRequest) {
     // Extract the uploaded file and ID from formData
     const uploadedFile = formData.get("file");
     const competitionId = formData.get("competitionId") as string;
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
     if (!competitionId) {
       throw new Error("No competition id provided ");
     }
@@ -196,23 +198,26 @@ export async function POST(req: NextRequest) {
     await connectToDatabase();
     await fs.writeFile(newFilePath, fileBuffer);
 
-    console.log(
-      "roundid , enrolId , userId  fileName submittedContentDir filePath  ",
-      roundId,
-      enrolId,
-      session.user.id,
-      newFileName,
-      submittedContentDir,
-      newFilePath
-    );
+    // console.log(
+    //   "roundid , enrolId , userId  fileName submittedContentDir filePath  ",
+    //   roundId,
+    //   enrolId,
+    //   session.user.id,
+    //   newFileName,
+    //   submittedContentDir,
+    //   newFilePath
+    // );
     // Create a new EnrolmentSubmission document
     const enrolmentSubmission = new EnrolmentSubmission({
       roundId,
       enrolId,
       userId: session.user.id,
       submittedContent: `${submittedContentDir}/${newFileName}`,
+      title: title,
+      description: description,
     });
     // Save the EnrolmentSubmission to the database
+    console.log("enrolmentSubmission to save ", enrolmentSubmission);
     await enrolmentSubmission.save();
 
     return NextResponse.json({ data: enrolmentSubmission }, { status: 200 });

@@ -8,6 +8,9 @@ export const GET_ACTIVE_ROUND_SUBMISSION_QUERY = gql`
       enrolId
       submittedContent
       score
+      title
+      description
+      submittedContent
       createdAt
       updatedAt
     }
