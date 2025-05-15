@@ -1,5 +1,8 @@
 import * as Yup from "yup";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
+
+import { z } from "zod";
+
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import {
@@ -8,6 +11,7 @@ import {
   RoundStatusEnum,
   SubmissionTypeEnum,
 } from "@/interfaces";
+import { validateDateRangeWithin } from "./date";
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
@@ -265,3 +269,226 @@ export const SubmissionValidationSchema = Yup.object({
     .required("Description is required")
     .min(40, "Description should be minimum 40 characters."),
 });
+
+export const getRoundFormZodSchema = ({
+  competitionStartDate,
+  competitionEndDate,
+  hasRoundWiseSubmission,
+}: {
+  competitionStartDate: dayjs.Dayjs;
+  competitionEndDate: dayjs.Dayjs;
+  hasRoundWiseSubmission: boolean;
+}) => {
+  const schema = z.object({
+    title: z.string().min(4).nonempty(),
+    roundNumber: z.number().positive(),
+    deadline: z
+      .tuple([
+        z.custom<dayjs.Dayjs | null>(() => true),
+        z.custom<dayjs.Dayjs | null>(() => true),
+      ])
+      .optional(),
+    submissionDeadline: z
+      .tuple([
+        z.custom<dayjs.Dayjs | null>(() => true),
+        z.custom<dayjs.Dayjs | null>(() => true),
+      ])
+      .optional(),
+    judgingDeadline: z
+      .tuple([
+        z.custom<dayjs.Dayjs | null>(() => true),
+        z.custom<dayjs.Dayjs | null>(() => true),
+      ])
+      .optional(),
+    votingDeadline: z
+      .tuple([
+        z.custom<dayjs.Dayjs | null>(() => true),
+        z.custom<dayjs.Dayjs | null>(() => true),
+      ])
+      .optional(),
+    submissionType: z.enum(
+      Object.values(SubmissionTypeEnum) as [string, ...string[]]
+    ),
+    judgementCriteria: z.enum(
+      Object.values(RoundJudgementCriteriaEnum) as [string, ...string[]]
+    ),
+    maxScore: z.preprocess(
+      (val) => (val === "" ? undefined : Number(val)),
+      z.number().optional()
+    ),
+
+    maxVote: z.preprocess(
+      (val) => (val === "" ? undefined : Number(val)),
+      z.number().optional()
+    ),
+    maxWinners: z.preprocess(
+      (val) =>
+        val === "" || val === null || val === undefined
+          ? undefined
+          : Number(val),
+      z
+        .number({ invalid_type_error: "Winners must be a number" })
+        .min(1, "Score must be greater than 0")
+    ),
+    isActiveRound: z.boolean(),
+    description: z.string().min(4).nonempty(),
+    status: z.enum(Object.values(RoundStatusEnum) as [string, ...string[]]),
+    judges: z
+      .array(
+        z.object({
+          id: z.string(),
+          label: z.string(),
+          profilePicture: z.string().url().optional(),
+        })
+      )
+      .default([]),
+  });
+
+  return schema.superRefine((data, ctx) => {
+    const [roundStart, roundEnd] = data.deadline as [
+      dayjs.Dayjs | null,
+      dayjs.Dayjs | null
+    ];
+    const roundErrors = validateDateRangeWithin({
+      start: roundStart,
+      end: roundEnd,
+      min: competitionStartDate,
+      max: competitionEndDate,
+      label: "Round period",
+    });
+    if (roundErrors) {
+      ctx.addIssue({
+        path: ["deadline"],
+        message: "Deadline should be in valid range.",
+        code: "custom",
+      });
+    }
+
+    if (hasRoundWiseSubmission) {
+      if (data.submissionDeadline) {
+        const [subStart, subEnd] = data.submissionDeadline;
+        if (roundStart && roundEnd) {
+          const submissionErrors = validateDateRangeWithin({
+            start: subStart,
+            end: subEnd,
+            min: roundStart,
+            max: roundEnd,
+            label: "Submission period",
+          });
+          if (submissionErrors) {
+            ctx.addIssue({
+              path: ["submissionDeadline"],
+              message: "Submission deadline should be valid",
+              code: "custom",
+            });
+          }
+        }
+      } else {
+        ctx.addIssue({
+          path: ["submissionDeadline"],
+          message: "Submission deadline should be valid",
+          code: "custom",
+        });
+      }
+    }
+    if (
+      data.judgementCriteria === "Judges" ||
+      data.judgementCriteria === "Both"
+    ) {
+      if (!data.maxScore || data.maxScore <= 0) {
+        ctx.addIssue({
+          path: ["maxScore"],
+          message: "Max score is required and min 1.",
+          code: "custom",
+        });
+      }
+
+      if (data.judgingDeadline) {
+      } else {
+        ctx.addIssue({
+          path: ["judgingDeadline"],
+          message: "Judgement deadline should be valid.",
+          code: "custom",
+        });
+      }
+    }
+
+    if (
+      data.judgementCriteria === "Vote" ||
+      data.judgementCriteria === "Both"
+    ) {
+      if (!data.maxVote || data.maxVote <= 0) {
+        ctx.addIssue({
+          path: ["maxVote"],
+          message: "Max vote must be greater than 0 when using VOTING criteria",
+          code: "custom",
+        });
+      }
+      if (data.votingDeadline) {
+        const [voteStart, voteEnd] = data.votingDeadline;
+        if (data.submissionDeadline) {
+          const [, end] = data.submissionDeadline;
+          if (end && roundEnd) {
+            const votingStartDate = end?.add(1, "day");
+            const votingDeadlineError = validateDateRangeWithin({
+              start: voteStart,
+              end: voteEnd,
+              min: votingStartDate,
+              max: roundEnd,
+              label: "Voting period",
+            });
+            if (votingDeadlineError) {
+              ctx.addIssue({
+                path: ["votingDeadline"],
+                message: "Voting deadline should be in valid range.",
+                code: "custom",
+              });
+            }
+          }
+        }
+      } else {
+        ctx.addIssue({
+          path: ["votingDeadline"],
+          message: "Voting deadline should be valid.",
+          code: "custom",
+        });
+      }
+      if (data.judgingDeadline) {
+        const [judgementStart, judgementEnd] = data.judgingDeadline;
+        if (data.submissionDeadline) {
+          const [, end] = data.submissionDeadline;
+          if (end && roundEnd) {
+            const judgingStartDate = end?.add(1, "day");
+            const judgingDeadlineError = validateDateRangeWithin({
+              start: judgementStart,
+              end: judgementEnd,
+              min: judgingStartDate,
+              max: roundEnd,
+              label: "Judging period",
+            });
+            if (judgingDeadlineError) {
+              ctx.addIssue({
+                path: ["judgingDeadline"],
+                message: "Judging deadline should be in valid range.",
+                code: "custom",
+              });
+            }
+          }
+        }
+      } else {
+        ctx.addIssue({
+          path: ["judgingDeadline"],
+          message: "Judging deadline should be valid.",
+          code: "custom",
+        });
+      }
+    }
+    if (data.maxWinners <= 0) {
+      ctx.addIssue({
+        path: ["maxWinners"],
+        message: "Max winners must be greater than 0",
+        code: "custom",
+      });
+    }
+  });
+};

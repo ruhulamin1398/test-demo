@@ -44,4 +44,51 @@ export const formatDateForDatePicker = (
   return parsedDate.isValid() ? parsedDate : dayjs();
 };
 
-// Time represents in minutes
+type ValidateDateRangeOptions = {
+  start: dayjs.Dayjs | null;
+  end: dayjs.Dayjs | null;
+  min: dayjs.Dayjs;
+  max: dayjs.Dayjs;
+  label?: string;
+};
+
+export const validateDateRangeWithin = ({
+  start,
+  end,
+  min,
+  max,
+  label = "Date",
+}: ValidateDateRangeOptions): boolean => {
+  const errors: string[] = [];
+
+  if (!dayjs.isDayjs(start) || !start.isValid()) {
+    errors.push(`${label} start is invalid`);
+  }
+  if (!dayjs.isDayjs(end) || !end.isValid()) {
+    errors.push(`${label} end is invalid`);
+  }
+
+  if (
+    dayjs.isDayjs(start) &&
+    dayjs.isDayjs(end) &&
+    start.isValid() &&
+    end.isValid()
+  ) {
+    if (!start.isBetween(min, max, "day", "[]")) {
+      errors.push(
+        `${label} start must be between ${min.format(
+          "YYYY-MM-DD"
+        )} and ${max.format("YYYY-MM-DD")}`
+      );
+    }
+    if (!end.isBetween(start, max, "day", "[]")) {
+      errors.push(
+        `${label} end must be after start and within ${max.format(
+          "YYYY-MM-DD"
+        )}`
+      );
+    }
+  }
+
+  return errors.length > 0;
+};

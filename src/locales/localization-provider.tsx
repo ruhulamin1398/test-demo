@@ -8,8 +8,8 @@ import "dayjs/locale/ar-sa";
 
 import dayjs from "dayjs";
 
-import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
-import { LocalizationProvider as Provider } from "@mui/x-date-pickers-pro/LocalizationProvider";
+import { AdapterDayjs } from "@/lib/daterange-picker/AdapterDayjs";
+import { LocalizationProvider as Provider } from "@/lib/daterange-picker/LocalizationProvider";
 
 import { useTranslate } from "./use-locales";
 
