@@ -286,6 +286,18 @@ export const getRoundFormZodSchema = ({
         z.custom<dayjs.Dayjs | null>(() => true),
       ])
       .optional(),
+    judgingDeadline: z
+      .tuple([
+        z.custom<dayjs.Dayjs | null>(() => true),
+        z.custom<dayjs.Dayjs | null>(() => true),
+      ])
+      .optional(),
+    votingDeadline: z
+      .tuple([
+        z.custom<dayjs.Dayjs | null>(() => true),
+        z.custom<dayjs.Dayjs | null>(() => true),
+      ])
+      .optional(),
     submissionType: z.enum(
       Object.values(SubmissionTypeEnum) as [string, ...string[]]
     ),
@@ -362,12 +374,6 @@ export const getRoundFormZodSchema = ({
               code: "custom",
             });
           }
-        } else {
-          ctx.addIssue({
-            path: ["submissionDeadline"],
-            message: "Submission deadline should be valid",
-            code: "custom",
-          });
         }
       } else {
         ctx.addIssue({
@@ -388,6 +394,15 @@ export const getRoundFormZodSchema = ({
           code: "custom",
         });
       }
+
+      if (data.judgingDeadline) {
+      } else {
+        ctx.addIssue({
+          path: ["judgingDeadline"],
+          message: "Judgement deadline should be valid.",
+          code: "custom",
+        });
+      }
     }
 
     if (
@@ -398,6 +413,64 @@ export const getRoundFormZodSchema = ({
         ctx.addIssue({
           path: ["maxVote"],
           message: "Max vote must be greater than 0 when using VOTING criteria",
+          code: "custom",
+        });
+      }
+      if (data.votingDeadline) {
+        const [voteStart, voteEnd] = data.votingDeadline;
+        if (data.submissionDeadline) {
+          const [, end] = data.submissionDeadline;
+          if (end && roundEnd) {
+            const votingStartDate = end?.add(1, "day");
+            const votingDeadlineError = validateDateRangeWithin({
+              start: voteStart,
+              end: voteEnd,
+              min: votingStartDate,
+              max: roundEnd,
+              label: "Voting period",
+            });
+            if (votingDeadlineError) {
+              ctx.addIssue({
+                path: ["votingDeadline"],
+                message: "Voting deadline should be in valid range.",
+                code: "custom",
+              });
+            }
+          }
+        }
+      } else {
+        ctx.addIssue({
+          path: ["votingDeadline"],
+          message: "Voting deadline should be valid.",
+          code: "custom",
+        });
+      }
+      if (data.judgingDeadline) {
+        const [judgementStart, judgementEnd] = data.judgingDeadline;
+        if (data.submissionDeadline) {
+          const [, end] = data.submissionDeadline;
+          if (end && roundEnd) {
+            const judgingStartDate = end?.add(1, "day");
+            const judgingDeadlineError = validateDateRangeWithin({
+              start: judgementStart,
+              end: judgementEnd,
+              min: judgingStartDate,
+              max: roundEnd,
+              label: "Judging period",
+            });
+            if (judgingDeadlineError) {
+              ctx.addIssue({
+                path: ["judgingDeadline"],
+                message: "Judging deadline should be in valid range.",
+                code: "custom",
+              });
+            }
+          }
+        }
+      } else {
+        ctx.addIssue({
+          path: ["judgingDeadline"],
+          message: "Judging deadline should be valid.",
           code: "custom",
         });
       }

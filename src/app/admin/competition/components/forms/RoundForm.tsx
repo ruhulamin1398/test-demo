@@ -96,6 +96,8 @@ export const RoundForm: React.FC = () => {
       roundNumber: 1,
       deadline: [null, null],
       submissionDeadline: [null, null],
+      votingDeadline: [null, null],
+      judgingDeadline: [null, null],
       judgementCriteria: RoundJudgementCriteriaEnum.JUDGE,
       maxScore: 0,
       maxVote: 0,
@@ -106,6 +108,7 @@ export const RoundForm: React.FC = () => {
       submissionType: SubmissionTypeEnum.PHOTO,
       judges: [],
     },
+    mode: "onSubmit",
   });
   const {
     register,
@@ -114,11 +117,13 @@ export const RoundForm: React.FC = () => {
     reset,
     watch,
     formState: { isSubmitting, errors },
+    trigger,
   } = methods;
-
-  const selectedCriteria = watch("judgementCriteria");
-  const deadline = watch("deadline");
-  console.log(errors);
+  const [deadline, submissionDeadline, selectedCriteria] = watch([
+    "deadline",
+    "submissionDeadline",
+    "judgementCriteria",
+  ]);
   const onSubmit: SubmitHandler<RoundFormInputs> = async (values) => {
     const {
       maxScore,
@@ -177,6 +182,10 @@ export const RoundForm: React.FC = () => {
     }
   }, [recordToModify, reset]);
 
+  useEffect(() => {
+    trigger(["submissionDeadline"]);
+  }, [deadline, submissionDeadline]);
+
   return (
     <LocalizationProvider>
       <Form methods={{ ...methods }} onSubmit={handleSubmit(onSubmit)}>
@@ -191,6 +200,23 @@ export const RoundForm: React.FC = () => {
               <Stack spacing={1.5}>
                 <Typography variant="subtitle2">Round Number</Typography>
                 <Field.Text name="roundNumber" placeholder="Ex: 1,2,3..." />
+              </Stack>
+            </Grid>
+            <Grid size={{ xs: 4 }}>
+              <Stack spacing={1.5}>
+                <Typography variant="subtitle2">Judgement Criteria</Typography>
+                <Field.Select
+                  name="judgementCriteria"
+                  slotProps={{
+                    inputLabel: { shrink: true },
+                  }}
+                >
+                  {Object.values(RoundJudgementCriteriaEnum).map((criteria) => (
+                    <MenuItem key={criteria} value={criteria}>
+                      {criteria}
+                    </MenuItem>
+                  ))}
+                </Field.Select>
               </Stack>
             </Grid>
             <Grid size={{ xs: 4 }}>
@@ -224,23 +250,43 @@ export const RoundForm: React.FC = () => {
               </Grid>
             ) : null}
 
-            <Grid size={{ xs: 4 }}>
-              <Stack spacing={1.5}>
-                <Typography variant="subtitle2">Judgement Criteria</Typography>
-                <Field.Select
-                  name="judgementCriteria"
-                  slotProps={{
-                    inputLabel: { shrink: true },
-                  }}
-                >
-                  {Object.values(RoundJudgementCriteriaEnum).map((criteria) => (
-                    <MenuItem key={criteria} value={criteria}>
-                      {criteria}
-                    </MenuItem>
-                  ))}
-                </Field.Select>
-              </Stack>
-            </Grid>
+            {selectedCriteria === RoundJudgementCriteriaEnum.JUDGE ||
+            selectedCriteria === RoundJudgementCriteriaEnum.BOTH ? (
+              <Grid size={{ xs: 4 }}>
+                <Stack spacing={1.5}>
+                  <Typography variant="subtitle2">Judging Deadline</Typography>
+                  <DateRangePickerController
+                    name="judgingDeadline"
+                    control={control}
+                    minDate={
+                      deadline?.[0] || dayjs(Number(competition?.startDate))
+                    }
+                    maxDate={
+                      deadline?.[1] || dayjs(Number(competition?.endDate))
+                    }
+                  />
+                </Stack>
+              </Grid>
+            ) : null}
+
+            {selectedCriteria === RoundJudgementCriteriaEnum.PUBLIC ||
+            selectedCriteria === RoundJudgementCriteriaEnum.BOTH ? (
+              <Grid size={{ xs: 4 }}>
+                <Stack spacing={1.5}>
+                  <Typography variant="subtitle2">Voting Deadline</Typography>
+                  <DateRangePickerController
+                    name="votingDeadline"
+                    control={control}
+                    minDate={
+                      deadline?.[0] || dayjs(Number(competition?.startDate))
+                    }
+                    maxDate={
+                      deadline?.[1] || dayjs(Number(competition?.endDate))
+                    }
+                  />
+                </Stack>
+              </Grid>
+            ) : null}
 
             {selectedCriteria === RoundJudgementCriteriaEnum.PUBLIC ||
             selectedCriteria === RoundJudgementCriteriaEnum.BOTH ? (
