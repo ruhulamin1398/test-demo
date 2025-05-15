@@ -20,14 +20,9 @@ export const navData = [
     ],
   },
   {
-    title: "My Team",
-    href: "/",
+    title: "Referral",
+    href: "/referral",
     icon: Users,
-    submenu: [
-      { title: "Structure", href: "/structure", icon: waveIcon },
-      { title: "Generation", href: "/generation", icon: sequelizeIcon },
-      { title: "Referral", href: "/referral", icon: chartIcon },
-    ],
   },
   {
     title: "Lottery",
@@ -39,8 +34,8 @@ export const navData = [
     ],
   },
   {
-    title: "Leaderboard",
-    href: "/leaderboard",
+    title: "Top Buyers",
+    href: "/top-buyers",
     icon: Award,
   },
 ];

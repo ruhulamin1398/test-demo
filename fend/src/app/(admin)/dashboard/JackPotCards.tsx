@@ -29,14 +29,14 @@ export const JackPotCards = ({ className, lottery, loading, ...props }: Props) =
 
   return (
     <div {...props}>
-      <div
+      {/* <div
         className={`mb-2 flex w-full items-center justify-end gap-x-2 ${activeLottery[0] == 0 ? "hidden" : ""}`}
       >
         <p className="flex items-center justify-center gap-x-2 rounded-lg bg-green-500 px-2">
           <span>Live</span> <span className="inline-block size-4 rounded-full bg-red-600"></span>
         </p>
         <Counter />
-      </div>
+      </div> */}
 
       <div className={cn("rounded-2xl p-6", className)}>
         <div className="flex items-center justify-between">
@@ -78,22 +78,22 @@ export const JackPotCards = ({ className, lottery, loading, ...props }: Props) =
         </div>
 
         <div className={`mt-6 w-full text-center ${SrbijaFont.className}`}>
-          <div className="grid grid-cols-8 md:grid-cols-3">
+          <div className="grid grid-cols-8 md:grid-cols-2">
             <p className="col-span-2 text-center md:col-span-1">Round</p>
             <p className="col-span-3 whitespace-nowrap text-center md:col-span-1">Ticket Sold </p>
-            <p className="col-span-3 text-center md:col-span-1">Participants</p>
+            {/* <p className="col-span-3 text-center md:col-span-1">Participants</p> */}
           </div>
 
-          <div className="main-gradient-reserver grid grid-cols-8 rounded-md py-2 md:grid-cols-3">
+          <div className="main-gradient-reserver grid grid-cols-8 rounded-md py-2 md:grid-cols-2">
             <p className="col-span-2 text-center md:col-span-1">
               {Number(activeLottery ? activeLottery[0] : 0)}{" "}
             </p>
             <p className="col-span-3 text-center md:col-span-1">
               {Number(activeLottery ? activeLottery[1] : 0)}{" "}
             </p>
-            <p className="col-span-3 md:col-span-1">
+            {/* <p className="col-span-3 md:col-span-1">
               {Number(activeLottery ? activeLottery[2] : 0)}{" "}
-            </p>
+            </p> */}
           </div>
         </div>
 
