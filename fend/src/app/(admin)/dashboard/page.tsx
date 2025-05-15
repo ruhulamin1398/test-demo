@@ -106,7 +106,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h1 className="mb-3 mt-5 text-xl font-black">Dashboard</h1>
+      {/* <h1 className="mb-3 mt-5 text-xl font-black">Dashboard</h1> */}
 
       <div className="grid w-full grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2">
         {latestEasy > -1 && (
@@ -155,7 +155,7 @@ const Dashboard = () => {
           referralCommission={user?.totalRefBalance.toFixed(2) || "0.00"}
         />
 
-        <LeaderboardBonusCards className="primary-bg-gradient" />
+        <LeaderboardBonusCards className="primary-bg-gradient text-center" />
       </div>
     </div>
   );
