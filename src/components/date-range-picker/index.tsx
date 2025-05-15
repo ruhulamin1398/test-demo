@@ -1,43 +1,47 @@
 // components/DateRangePickerController.tsx
 import React from "react";
 import { Controller } from "react-hook-form";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
-import { TextField, Box } from "@mui/material";
+import { DateRangePicker, DateRangePickerProps } from "@/lib/daterange-picker";
 import { Dayjs } from "dayjs";
-import { DateRange } from "@mui/x-date-pickers-pro/models";
+import { DateRange } from "@/lib/daterange-picker";
 
 type Props = {
-  name: string;
   control: any;
-  label?: string;
-};
+  name: string;
+} & DateRangePickerProps;
 
 export const DateRangePickerController: React.FC<Props> = ({
   name,
   control,
   label,
+  ...dateRangePickerProps
 }) => {
   return (
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState }) => (
-        <>
-          <DateRangePicker
-            value={field.value || [null, null]}
-            onChange={(newValue: DateRange<Dayjs>) => field.onChange(newValue)}
-            slotProps={{
-              textField: {
-                variant: "outlined",
-                fullWidth: true,
-                error: Boolean(fieldState.error),
-                helperText: fieldState.error?.message,
-                label: label,
-              },
-            }}
-          />
-        </>
-      )}
+      render={({ field, fieldState }) => {
+        return (
+          <>
+            <DateRangePicker
+              value={field.value || [null, null]}
+              onChange={(newValue: DateRange<Dayjs>) =>
+                field.onChange(newValue)
+              }
+              slotProps={{
+                textField: {
+                  variant: "outlined",
+                  fullWidth: true,
+                  error: Boolean(fieldState.error),
+                  helperText: fieldState.error?.message,
+                  label: label,
+                },
+              }}
+              {...dateRangePickerProps}
+            />
+          </>
+        );
+      }}
     />
   );
 };

@@ -1,64 +1,328 @@
-// RoundForm.tsx
-import React from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+"use client";
+import React, { useEffect } from "react";
+import { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
+import {
+  Button,
+  Grid2 as Grid,
+  MenuItem,
+  CircularProgress,
+  Box,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@mui/material";
-import { Dayjs } from "dayjs";
-import { DateRangePickerController } from "@/components/date-range-picker";
-import { LocalizationProvider } from "@/locales";
+import { z } from "zod";
 
-const roundSchema = z.object({
-  dateRange: z
-    .tuple([
-      z
-        .custom<Dayjs>()
-        .refine((d) => d?.isValid?.(), { message: "Start date is required" }),
-      z
-        .custom<Dayjs>()
-        .refine((d) => d?.isValid?.(), { message: "End date is required" }),
-    ])
-    .refine(([start, end]) => start && end && start.isBefore(end), {
-      message: "Start date must be before end date",
-    }),
+import {
+  RoundJudgementCriteriaEnum,
+  RoundStatusEnum,
+} from "@/interfaces/round";
+import { SubmissionTypeEnum } from "@/interfaces";
+
+import { IRound } from "@/interfaces/round";
+import { formatDateForDatePicker } from "@/utils/date";
+import { LocalizationProvider } from "@/locales";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { getRoundFormZodSchema } from "@/utils/ypu-validation";
+import dayjs, { Dayjs } from "dayjs";
+import { CompetitionUiModeEnum } from "@/store/slices/competitionSlice";
+import { toast } from "sonner";
+import { useMutation } from "@apollo/client";
+import {
+  CREATE_COMPETITION_ROUND,
+  UPDATE_COMPETITION_ROUND,
+} from "@/graphql-client/competition-round";
+import { GET_COMPETITION_QUERY } from "@/graphql-client/competition";
+import { DateRangePickerController } from "@/components/date-range-picker";
+import { Field, Form } from "@/components/hook-form";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { JudgeAutocomplete } from "@/components/atoms/JudgesAutocomplete";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
+
+// ... Apollo and Redux imports omitted for brevity
+
+const roundSchema = getRoundFormZodSchema({
+  competitionStartDate: dayjs(),
+  competitionEndDate: dayjs().add(7, "days"),
+  hasRoundWiseSubmission: false,
 });
 
-type RoundFormValues = {
-  dateRange: [Dayjs | null, Dayjs | null];
-  // other fields...
-};
+type RoundFormInputs = z.infer<typeof roundSchema>;
 
-export const RoundForm = () => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RoundFormValues>({
-    resolver: zodResolver(roundSchema),
-    defaultValues: {
-      dateRange: [null, null],
-    },
+export const RoundForm: React.FC = () => {
+  const dispatch = useDispatch();
+  const { competition } = useSelector((state: RootState) => state.competition);
+  const { recordToModify, mode } = useSelector(
+    (state: RootState) => state.competition.uiControls.roundInfoUi
+  );
+  // GraphQL Mutation hooks
+  const [createRound, { loading: createLoading, error: createError, data }] =
+    useMutation(CREATE_COMPETITION_ROUND, {
+      refetchQueries: [
+        {
+          query: GET_COMPETITION_QUERY,
+          variables: { id: competition?.id },
+        },
+      ],
+      awaitRefetchQueries: true, // ensures query finishes before continuing
+    });
+  const [
+    updateRound,
+    { loading: updateLoading, error: updateError, data: updatedData },
+  ] = useMutation(UPDATE_COMPETITION_ROUND, {
+    refetchQueries: [
+      {
+        query: GET_COMPETITION_QUERY,
+        variables: { id: competition?.id },
+      },
+    ],
+    awaitRefetchQueries: true, // ensures query finishes before continuing
   });
 
-  const onSubmit = (data: RoundFormValues) => {
-    console.log("Submitted data:", data);
+  const methods = useForm<RoundFormInputs>({
+    resolver: zodResolver(
+      getRoundFormZodSchema({
+        competitionStartDate: dayjs(Number(competition?.startDate)),
+        competitionEndDate: dayjs(Number(competition?.endDate)),
+        hasRoundWiseSubmission: competition?.haveRoundWiseSubmission || false,
+      })
+    ),
+    defaultValues: {
+      title: "",
+      roundNumber: 1,
+      deadline: [null, null],
+      submissionDeadline: [null, null],
+      judgementCriteria: RoundJudgementCriteriaEnum.JUDGE,
+      maxScore: 0,
+      maxVote: 0,
+      maxWinners: 100,
+      description: "",
+      isActiveRound: false,
+      status: RoundStatusEnum.UPCOMING,
+      submissionType: SubmissionTypeEnum.PHOTO,
+      judges: [],
+    },
+  });
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    watch,
+    formState: { isSubmitting, errors },
+  } = methods;
+
+  const selectedCriteria = watch("judgementCriteria");
+  const deadline = watch("deadline");
+  console.log(errors);
+  const onSubmit: SubmitHandler<RoundFormInputs> = async (values) => {
+    const {
+      maxScore,
+      maxVote,
+      maxWinners,
+      roundNumber,
+      judges,
+      isActiveRound,
+    } = values;
+
+    const inputPayload = {
+      ...values,
+      maxScore: Number(maxScore),
+      maxVote: Number(maxVote),
+      maxWinners: Number(maxWinners),
+      roundNumber: Number(roundNumber),
+      judges: judges,
+      isActiveRound: isActiveRound,
+    };
+
+    console.log("Form values", values);
+    return;
+    if (mode === CompetitionUiModeEnum.CREATE) {
+      await createRound({ variables: { input: inputPayload } });
+    } else {
+      if (!competition) {
+        toast.error("Need to create competition first.");
+        return;
+      }
+      const { id = null, ...updateData } = { id: null, ...values };
+      await updateRound({
+        variables: {
+          id: competition.id,
+          input: { ...updateData, competition: competition.id },
+        },
+      });
+    }
   };
+
+  useEffect(() => {
+    if (recordToModify) {
+      const modified = {
+        ...recordToModify,
+        startDate: dayjs(Number(recordToModify.startDate)),
+        endDate: dayjs(Number(recordToModify.endDate)),
+        submissionStartDate: dayjs(Number(recordToModify.submissionStartDate)),
+        submissionEndDate: dayjs(Number(recordToModify.submissionEndDate)),
+        judges: recordToModify.judges.map(({ id, name, profilePicture }) => ({
+          id,
+          label: name,
+          profilePicture,
+        })),
+        isActiveRound: !!recordToModify.isActiveRound,
+      };
+      reset(modified);
+    }
+  }, [recordToModify, reset]);
 
   return (
     <LocalizationProvider>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <DateRangePickerController
-          name="dateRange"
-          control={control}
-          label="Round"
-        />
-        {errors.dateRange && (
-          <p style={{ color: "red" }}>{errors.dateRange.message as string}</p>
-        )}
-        <Button type="submit" variant="contained" sx={{ mt: 2 }}>
-          Submit
-        </Button>
-      </form>
+      <Form methods={{ ...methods }} onSubmit={handleSubmit(onSubmit)}>
+        <Stack spacing={1.5}>
+          <Typography variant="subtitle2">Name</Typography>
+          <Field.Text name="title" placeholder="Ex: Eliminary round..." />
+        </Stack>
+
+        <Box py={2}>
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 4 }}>
+              <Stack spacing={1.5}>
+                <Typography variant="subtitle2">Round Number</Typography>
+                <Field.Text name="roundNumber" placeholder="Ex: 1,2,3..." />
+              </Stack>
+            </Grid>
+            <Grid size={{ xs: 4 }}>
+              <Stack spacing={1.5}>
+                <Typography variant="subtitle2">Deadline</Typography>
+                <DateRangePickerController
+                  name="deadline"
+                  control={control}
+                  minDate={dayjs(Number(competition?.startDate))}
+                  maxDate={dayjs(Number(competition?.endDate))}
+                />
+              </Stack>
+            </Grid>
+            {competition?.haveRoundWiseSubmission ? (
+              <Grid size={{ xs: 4 }}>
+                <Stack spacing={1.5}>
+                  <Typography variant="subtitle2">
+                    Submission Deadline
+                  </Typography>
+                  <DateRangePickerController
+                    name="submissionDeadline"
+                    control={control}
+                    minDate={
+                      deadline?.[0] || dayjs(Number(competition?.startDate))
+                    }
+                    maxDate={
+                      deadline?.[1] || dayjs(Number(competition?.endDate))
+                    }
+                  />
+                </Stack>
+              </Grid>
+            ) : null}
+
+            <Grid size={{ xs: 4 }}>
+              <Stack spacing={1.5}>
+                <Typography variant="subtitle2">Judgement Criteria</Typography>
+                <Field.Select
+                  name="judgementCriteria"
+                  slotProps={{
+                    inputLabel: { shrink: true },
+                  }}
+                >
+                  {Object.values(RoundJudgementCriteriaEnum).map((criteria) => (
+                    <MenuItem key={criteria} value={criteria}>
+                      {criteria}
+                    </MenuItem>
+                  ))}
+                </Field.Select>
+              </Stack>
+            </Grid>
+
+            {selectedCriteria === RoundJudgementCriteriaEnum.PUBLIC ||
+            selectedCriteria === RoundJudgementCriteriaEnum.BOTH ? (
+              <Grid size={{ xs: 4 }}>
+                <Stack spacing={1.5}>
+                  <Typography variant="subtitle2">Max Vote</Typography>
+                  <Field.Text
+                    {...register("maxVote", { valueAsNumber: true })}
+                    type="number"
+                    placeholder="Ex: 1,2,3..."
+                  />
+                </Stack>
+              </Grid>
+            ) : null}
+            {selectedCriteria === RoundJudgementCriteriaEnum.JUDGE ||
+            selectedCriteria === RoundJudgementCriteriaEnum.BOTH ? (
+              <Grid size={{ xs: 4 }}>
+                <Stack spacing={1.5}>
+                  <Typography variant="subtitle2">Max Score</Typography>
+                  <Field.Text
+                    type="number"
+                    {...register("maxScore", { valueAsNumber: true })}
+                    placeholder="Ex: 1,2,3..."
+                  />
+                </Stack>
+              </Grid>
+            ) : null}
+            <Grid size={{ xs: 4 }}>
+              <Stack spacing={1.5}>
+                <Typography variant="subtitle2">Max Winners</Typography>
+                <Field.Text
+                  type="number"
+                  {...register("maxWinners", { valueAsNumber: true })}
+                  placeholder="Ex: 1,2,3..."
+                />
+              </Stack>
+            </Grid>
+          </Grid>
+          <Grid sx={{ xs: 4 }}>
+            <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
+              Judges
+            </Typography>
+            <JudgeAutocomplete name="judges" control={control} />
+          </Grid>
+        </Box>
+        <Box>
+          <Grid size={{ xs: 4 }}>
+            <Stack spacing={1.5}>
+              <Typography variant="subtitle2">Description</Typography>
+              <Field.Text
+                rows={3}
+                multiline
+                name="description"
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
+                variant="outlined"
+              />
+            </Stack>
+          </Grid>
+        </Box>
+
+        <Box py={2} display={"flex"} justifyContent={"flex-end"}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={isSubmitting}
+            startIcon={
+              isSubmitting ? (
+                <CircularProgress color="inherit" size={"1.5rem"} />
+              ) : undefined
+            }
+          >
+            {!recordToModify ? "Create Round" : "Save Changes"}
+          </Button>
+        </Box>
+      </Form>
     </LocalizationProvider>
   );
 };
+
+export default RoundForm;
