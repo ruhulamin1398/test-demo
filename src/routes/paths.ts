@@ -44,6 +44,10 @@ export const paths = {
     details: (id: string) => `/product/${id}`,
     demo: { details: `/product/${MOCK_ID}` },
   },
+  submission: {
+    root: `/submission`,
+    details: (id: string) => `/submission/${id}`,
+  },
   profile: {
     root: `/profile`,
     account: `/profile?profile-tab=account`,

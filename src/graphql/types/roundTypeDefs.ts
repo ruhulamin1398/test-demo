@@ -17,7 +17,7 @@ export const roundTypeDefs = `#graphql
     Judge,
     Both,
   }
-  type Deadline {
+  input Deadline {
     startDate: String!
     endDate: String!
   }

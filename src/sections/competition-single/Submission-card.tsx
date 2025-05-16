@@ -3,11 +3,13 @@ import type { BoxProps } from "@mui/material/Box";
 import { Beenhere } from "@mui/icons-material";
 import { Iconify } from "@/components/iconify";
 import { Label, labelClasses } from "@/components/label";
-import { Button, Box } from "@mui/material";
+import { Button, Box, Link } from "@mui/material";
 import { ICompetition } from "@/interfaces";
 import { useDate } from "@/hooks/use-date";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { RouterLink } from "@/routes/components";
+import { paths } from "@/routes/paths";
 
 // ----------------------------------------------------------------------
 
@@ -96,9 +98,14 @@ export function SubmissionCard({ competition, sx, ...other }: Props) {
                 startIcon={<Beenhere />}
                 color="primary"
                 variant="contained"
-                onClick={() => {}}
               >
-                Submit Now
+                <Link
+                  component={RouterLink}
+                  href={paths.submission.details(competition.id)}
+                  color="inherit"
+                >
+                  Submit Now
+                </Link>
               </Button>
             )}
           </>
