@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 
 import { CompetitionItemSkeleton } from "./CompetitionItemSkeleton";
 import { ICompetition } from "@/interfaces";
-import { SingleCompetitionCard } from "@/sections/common/single-competition-card";
+import SingleCompetitionCard from "@/sections/common/single-competition-card";
 import { useEnrollment } from "@/app/hooks/useEnrollment";
 import EnrolmentConfirmationDialog from "@/components/confirmation-dialog";
 import { useSelector } from "react-redux";

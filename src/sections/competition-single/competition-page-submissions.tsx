@@ -42,7 +42,7 @@ export function CompetitionPageSubmissions({
       >
         {submissions.map((item, index) => (
           <Item
-            key={item.roundId}
+            key={item.id}
             id={item.roundId}
             title={item.title}
             createdAt={item.createdAt}

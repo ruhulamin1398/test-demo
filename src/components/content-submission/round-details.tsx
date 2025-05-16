@@ -40,7 +40,7 @@ const RoundDetails = ({ round }: Props) => {
           <Iconify width={24} icon="ic:round-upload-file" sx={{ mr: 2 }} />
           Submission Type :
           <Link variant="subtitle2" color="inherit">
-            &nbsp; {round.submissionType}
+            &nbsp; {round.submissionType} (Max: 5mb)
           </Link>
         </Box>
       </Stack>

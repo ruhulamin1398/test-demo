@@ -12,8 +12,6 @@ import HomeFeaturedCategoryCarousel from "./featured-category-carousel";
 // ----------------------------------------------------------------------
 
 export function HomeContestCategories() {
-  const loading = false;
-
   const renderNotFound = () => <EmptyContent filled sx={{ py: 10 }} />;
   return (
     <Container sx={{ py: 2 }}>
@@ -36,12 +34,9 @@ export function HomeContestCategories() {
             },
           }}
         >
-          <Typography variant="h6">Featured Contest</Typography>
+          <Typography variant="h6">Featured Categories</Typography>
         </Box>
-        <HomeFeaturedCategoryCarousel
-          list={mockCategoyList}
-          loading={loading}
-        />
+        <HomeFeaturedCategoryCarousel list={mockCategoyList} />
       </Box>
     </Container>
   );

@@ -11,7 +11,9 @@ import { ICompetition } from "@/interfaces";
 import { useEnrollment } from "@/app/hooks/useEnrollment";
 import EnrolmentConfirmationDialog from "@/components/confirmation-dialog";
 import { CompetitionItemSkeleton } from "@/app/competition/components/CompetitionItemSkeleton";
-import { SingleCompetitionCard } from "../common/single-competition-card";
+import SingleCompetitionCard from "../common/single-competition-card";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +30,9 @@ export function HomeFeaturedContestCarousel({
   sx,
   ...other
 }: Props) {
+  const { enrollIds } = useSelector(
+    (state: RootState) => state.auth.competitionInfo
+  );
   const {
     openDialog,
     handleOpenEnrolmentConfirmationDialog,
@@ -84,6 +89,7 @@ export function HomeFeaturedContestCarousel({
               key={item.id}
               item={item}
               handleEnrolment={handleOpenEnrolmentConfirmationDialog}
+              isEnrolled={enrollIds.includes(item.id)}
             />
           ))}
         </Carousel>
@@ -96,7 +102,7 @@ export function HomeFeaturedContestCarousel({
   };
   return (
     <Box sx={{ mb: 3, paddingX: 3, position: "relative" }} {...other}>
-      {loading ? renderLoading() : renderList()}
+      {isLoading ? renderLoading() : renderList()}
 
       <EnrolmentConfirmationDialog
         open={!!openDialog?.competitionId}

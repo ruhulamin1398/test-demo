@@ -82,7 +82,7 @@ const HomeFeaturedCategoryCarousel = ({
         >
           {list.map((item, id) => {
             const color: PaletteKey = paletteKeys[id % paletteKeys.length];
-            console.log(" paletteKeys.length", paletteKeys.length);
+            // console.log(" paletteKeys.length", paletteKeys.length);
             return <Item key={item.id} item={item} color={color} />;
           })}
         </Carousel>
@@ -120,12 +120,15 @@ const Item = ({ item, color, sx, ...other }: ItemProps) => {
                 line: 2,
                 persistent: theme.typography.subtitle2,
               }),
-              display: "flex", // Make Link a flex container
-              alignItems: "center", // Vertically center its children
-              height: "100%", // Take full height of parent
+              display: "flex",
+              alignItems: "center",
+              height: "100%",
             })}
           >
-            <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
+            <Typography
+              variant="subtitle2"
+              sx={{ color: "text.primary", textTransform: "uppercase" }}
+            >
               {item.name}
             </Typography>
           </Link>

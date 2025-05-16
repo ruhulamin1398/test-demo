@@ -13,6 +13,7 @@ import { RouterLink } from "@/routes/components";
 import { IconButton } from "@mui/material";
 import { ICompetition } from "@/interfaces";
 import { useDate } from "@/hooks/use-date";
+import { paths } from "@/routes/paths";
 
 // ----------------------------------------------------------------------
 
@@ -24,13 +25,13 @@ type CardItemProps = CardProps & {
   isEnrolled?: boolean;
 };
 
-export function SingleCompetitionCard({
+const SingleCompetitionCard = ({
   isEnrolled = false,
   item,
   handleEnrolment,
   sx,
   ...other
-}: CardItemProps) {
+}: CardItemProps) => {
   const { HumanTimeDifferent } = useDate();
 
   const renderImage = () => (
@@ -111,7 +112,7 @@ export function SingleCompetitionCard({
 
       <Link
         component={RouterLink}
-        href={`/competition/${item.id}`}
+        href={paths.competition.details(item.id)}
         color="inherit"
         underline="none"
       >
@@ -125,7 +126,7 @@ export function SingleCompetitionCard({
           }}
           disabled={isEnrolled}
         >
-          Join
+          {isEnrolled ? "Enrolled" : "Join"}
         </Button>
       </Link>
     </Box>
@@ -159,4 +160,6 @@ export function SingleCompetitionCard({
       </Card>
     </>
   );
-}
+};
+
+export default SingleCompetitionCard;

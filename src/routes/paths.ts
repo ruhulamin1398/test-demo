@@ -18,7 +18,6 @@ const ROOTS = {
 
 export const paths = {
   contest: "/contest",
-  competition: "/competition",
   vote: "/submission",
   comingSoon: "/coming-soon",
   maintenance: "/maintenance",
@@ -38,15 +37,14 @@ export const paths = {
   freeUI: "https://mui.com/store/items/minimal-dashboard-free/",
   figmaUrl:
     "https://www.figma.com/design/cAPz4pYPtQEXivqe11EcDE/%5BPreview%5D-Minimal-Web.v6.0.0",
-  product: {
-    root: `/product`,
-    checkout: `/product/checkout`,
-    details: (id: string) => `/product/${id}`,
-    demo: { details: `/product/${MOCK_ID}` },
-  },
+
   submission: {
     root: `/submission`,
     details: (id: string) => `/submission/${id}`,
+  },
+  competition: {
+    root: `/competition`,
+    details: (id: string) => `/competition/${id}`,
   },
   profile: {
     root: `/profile`,

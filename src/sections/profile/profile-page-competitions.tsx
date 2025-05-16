@@ -16,7 +16,7 @@ import { varAlpha } from "minimal-shared/utils";
 import { RouterLink } from "@/routes/components";
 import { Iconify } from "@/components/iconify";
 import { ICompetition } from "@/interfaces";
-import { SingleCompetitionCard } from "../common/single-competition-card";
+import SingleCompetitionCard from "../common/single-competition-card";
 import EnrolmentConfirmationDialog from "@/components/confirmation-dialog";
 import { useEnrollment } from "@/app/hooks/useEnrollment";
 
