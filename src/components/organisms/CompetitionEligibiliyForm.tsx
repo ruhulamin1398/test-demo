@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import MarkdownEditor from "./MarkdownEditor";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import useNotification from "@/app/hooks/useNotification";
@@ -11,6 +10,11 @@ import {
   setUiControlsEligibility,
 } from "@/store/slices/competitionSlice";
 import { Backdrop, CircularProgress } from "@mui/material";
+import dynamic from "next/dynamic";
+
+const MarkdownEditor = dynamic(() => import("./MarkdownEditor"), {
+  ssr: false,
+});
 
 const CompetitionEligibiliyForm: React.FC<{ id: string }> = ({ id }) => {
   const dispatch = useDispatch();

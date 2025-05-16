@@ -32,17 +32,6 @@ export function SingleCompetitionCard({
   ...other
 }: CardItemProps) {
   let nextDeadlineTime = 0;
-  // if (item.isEnrolled) {
-  //   const activeRound = item.rounds.find((round) => round.isActiveRound);
-  //   if (activeRound) {
-  //     const now = new Date().getTime();
-  //     const endDate = activeRound.submissionEndDate
-  //       ? new Date(activeRound.submissionEndDate).getTime()
-  //       : 0;
-  //     nextDeadlineTime = Math.max(0, endDate - now);
-  //   }
-  // }
-
   const renderImage = () => (
     <Box sx={{ px: 1, pt: 1 }}>
       <Image

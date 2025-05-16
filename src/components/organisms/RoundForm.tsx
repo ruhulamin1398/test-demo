@@ -73,6 +73,13 @@ const RoundForm: React.FC = () => {
   });
 
   const handleSubmit = async (values: unknown) => {
+    if (competition === null) {
+      notify({
+        severity: "error",
+        message: "Need to create competition first.",
+      });
+      return;
+    }
     const payloads = values as IRound;
     const {
       maxScore = 0,
@@ -80,7 +87,6 @@ const RoundForm: React.FC = () => {
       maxWinners = 0,
       roundNumber = 1,
       judges = [],
-      isActiveRound = false,
     } = payloads;
     const jids = judges.map((item) => item.id);
     if (mode === CompetitionUiModeEnum.CREATE) {
@@ -88,23 +94,16 @@ const RoundForm: React.FC = () => {
         variables: {
           input: {
             ...payloads,
+            competition: competition.id,
             maxScore: Number(maxScore || 0),
             maxVote: Number(maxVote || 0),
             maxWinners: Number(maxWinners),
             roundNumber: Number(roundNumber || 0),
-            isActiveRound: isActiveRound,
             judges: jids,
           },
         },
       });
     } else {
-      if (competition === null) {
-        notify({
-          severity: "error",
-          message: "Need to create competition first.",
-        });
-        return;
-      }
       const { id, ...updatedPayload } = payloads;
       await updateRound({
         variables: {
@@ -159,33 +158,9 @@ const RoundForm: React.FC = () => {
     judges: [] as string[],
   };
 
-  console.log(recordToModify);
-
-  const competitionRound = recordToModify
-    ? {
-        ...recordToModify,
-        startDate: formatDateForDatePicker(recordToModify.startDate),
-        endDate: formatDateForDatePicker(recordToModify.endDate),
-        submissionStartDate: formatDateForDatePicker(
-          recordToModify.submissionStartDate
-        ),
-        submissionEndDate: formatDateForDatePicker(
-          recordToModify.submissionEndDate
-        ),
-        judges: recordToModify.judges.map(({ id, firstName, lastName }) => ({
-          id,
-          label: `${firstName} ${lastName}`,
-        })),
-        submissionType: recordToModify.submissionType || "Photo",
-        maxScore: recordToModify.maxScore || 0,
-        maxVote: recordToModify.maxVote || 0,
-        maxWinners: recordToModify.maxWinners || 0,
-      }
-    : initialFormValues;
-
   return (
     <Formik
-      initialValues={competitionRound}
+      initialValues={initialFormValues}
       validationSchema={roundFormValidationSchema({
         competitionStartDate: formatDateForDatePicker(
           (competition as ICompetition).startDate

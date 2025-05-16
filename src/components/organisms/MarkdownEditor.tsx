@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef } from "react";
 import SimpleMDE from "react-simplemde-editor";
 import EasyMDE from "easymde";

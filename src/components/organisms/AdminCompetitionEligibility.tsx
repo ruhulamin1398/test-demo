@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import { RootState } from "@/store/store";
 import { CancelOutlined, EditOutlined } from "@mui/icons-material";

@@ -19,19 +19,29 @@ export interface IRound {
   id: string;
   title: string;
   roundNumber: number;
-  startDate: Date; // Date as string (ISO 8601 format)
-  endDate: Date; // Date as string (ISO 8601 format)
-  submissionStartDate: Date; // Date as string (ISO 8601 format)
-  submissionEndDate: Date; // Date as string (ISO 8601 format)
+  deadline: {
+    startDate: Date; // Date as string (ISO 8601 format)
+    endDate: Date; // Date as string (ISO 8601 format)
+  };
+  submissionDeadline: {
+    startDate: Date; // Date as string (ISO 8601 format)
+    endDate: Date; // Date as string (ISO 8601 format)
+  };
+  votingDeadline: {
+    startDate: Date; // Date as string (ISO 8601 format)
+    endDate: Date; // Date as string (ISO 8601 format)
+  };
+  judgingDeadline: {
+    startDate: Date; // Date as string (ISO 8601 format)
+    endDate: Date; // Date as string (ISO 8601 format)
+  };
   judgementCriteria: RoundJudgementCriteriaEnum;
-
   submissionType: SubmissionTypeEnum;
   maxScore: number;
   maxVote: number;
   maxWinners: number;
   description: string;
   status: RoundStatusEnum;
-  isActiveRound: Boolean;
   enrolments: IEnrolment[];
   judges: IUser[];
   competition: ICompetition;

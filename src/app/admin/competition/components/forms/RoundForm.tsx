@@ -103,7 +103,6 @@ export const RoundForm: React.FC = () => {
       maxVote: 0,
       maxWinners: 100,
       description: "",
-      isActiveRound: false,
       status: RoundStatusEnum.UPCOMING,
       submissionType: SubmissionTypeEnum.PHOTO,
       judges: [],
@@ -125,63 +124,112 @@ export const RoundForm: React.FC = () => {
     "judgementCriteria",
   ]);
   const onSubmit: SubmitHandler<RoundFormInputs> = async (values) => {
+    if (!competition) {
+      toast.error("Need to create competition first.");
+      return;
+    }
     const {
       maxScore,
       maxVote,
       maxWinners,
       roundNumber,
       judges,
-      isActiveRound,
       deadline,
       submissionDeadline,
       votingDeadline,
       judgingDeadline,
+      ...otherValues
     } = values;
 
     const inputPayload = {
-      ...values,
+      ...otherValues,
       maxScore: Number(maxScore),
       maxVote: Number(maxVote),
       maxWinners: Number(maxWinners),
       roundNumber: Number(roundNumber),
       judges: judges.map((item) => item.id),
-      isActiveRound: isActiveRound,
-      deadline,
-      submissionDeadline,
-      votingDeadline,
-      judgingDeadline,
+      ...(deadline
+        ? { deadline: { startDate: deadline[0], endDate: deadline[1] } }
+        : {}),
+      ...(submissionDeadline
+        ? {
+            submissionDeadline: {
+              startDate: submissionDeadline[0],
+              endDate: submissionDeadline[1],
+            },
+          }
+        : {}),
+      ...(votingDeadline
+        ? {
+            votingDeadline: {
+              startDate: votingDeadline[0],
+              endDate: votingDeadline[1],
+            },
+          }
+        : {}),
+      ...(judgingDeadline
+        ? {
+            judgingDeadline: {
+              startDate: judgingDeadline[0],
+              endDate: judgingDeadline[1],
+            },
+          }
+        : {}),
     };
     if (mode === CompetitionUiModeEnum.CREATE) {
-      await createRound({ variables: { input: inputPayload } });
-    } else {
-      if (!competition) {
-        toast.error("Need to create competition first.");
-        return;
-      }
-      const { id = null, ...updateData } = { id: null, ...values };
-      await updateRound({
-        variables: {
-          id: competition.id,
-          input: { ...updateData, competition: competition.id },
-        },
+      await createRound({
+        variables: { input: { ...inputPayload, competition: competition.id } },
       });
+    } else {
+      console.log(recordToModify);
+      if (recordToModify?.id)
+        await updateRound({
+          variables: {
+            id: recordToModify.id,
+            input: { ...inputPayload, competition: competition.id },
+          },
+        });
     }
   };
 
   useEffect(() => {
     if (recordToModify) {
+      const {
+        id,
+        submissionDeadline,
+        votingDeadline,
+        judgingDeadline,
+        deadline,
+        judges,
+        ...others
+      } = recordToModify;
+      const newDeadline: [dayjs.Dayjs | null, dayjs.Dayjs | null] = [
+        deadline ? dayjs(Number(deadline.startDate)) : null,
+        deadline ? dayjs(Number(deadline.endDate)) : null,
+      ];
+      const newSubmissionDeadline: [dayjs.Dayjs | null, dayjs.Dayjs | null] = [
+        submissionDeadline ? dayjs(Number(submissionDeadline.startDate)) : null,
+        submissionDeadline ? dayjs(Number(submissionDeadline.endDate)) : null,
+      ];
+      const newVotingDeadline: [dayjs.Dayjs | null, dayjs.Dayjs | null] = [
+        votingDeadline ? dayjs(Number(votingDeadline.startDate)) : null,
+        votingDeadline ? dayjs(Number(votingDeadline.endDate)) : null,
+      ];
+      const newJudgingDeadline: [dayjs.Dayjs | null, dayjs.Dayjs | null] = [
+        votingDeadline ? dayjs(Number(votingDeadline.startDate)) : null,
+        votingDeadline ? dayjs(Number(votingDeadline.endDate)) : null,
+      ];
       const modified = {
-        ...recordToModify,
-        startDate: dayjs(Number(recordToModify.startDate)),
-        endDate: dayjs(Number(recordToModify.endDate)),
-        submissionStartDate: dayjs(Number(recordToModify.submissionStartDate)),
-        submissionEndDate: dayjs(Number(recordToModify.submissionEndDate)),
-        judges: recordToModify.judges.map(({ id, name, profilePicture }) => ({
+        ...others,
+        deadline: newDeadline,
+        submissionDeadline: newSubmissionDeadline,
+        judgingDeadline: newJudgingDeadline,
+        votingDeadline: newVotingDeadline,
+        judges: judges.map(({ id, name, profilePicture }) => ({
           id,
           label: name,
           profilePicture,
         })),
-        isActiveRound: !!recordToModify.isActiveRound,
       };
       reset(modified);
     }
@@ -190,6 +238,8 @@ export const RoundForm: React.FC = () => {
   useEffect(() => {
     trigger(["submissionDeadline"]);
   }, [deadline, submissionDeadline]);
+
+  console.log(errors);
 
   return (
     <LocalizationProvider>
