@@ -404,7 +404,9 @@ const competitionResolver = {
   },
   Competition: {
     rounds: async (competition: ICompetition) => {
-      return await Round.find({ competition: competition.id });
+      return await Round.find({ competition: competition.id }).populate(
+        "judges"
+      );
     },
     mySubmission: async (
       competition: ICompetition,
