@@ -325,9 +325,7 @@ const CompetitionForm = () => {
                 type="submit"
                 variant="contained"
                 color="primary"
-                disabled={
-                  createLoading || updateLoading || !isValid || isSubmitting
-                }
+                disabled={createLoading || updateLoading || isSubmitting}
                 startIcon={
                   createLoading || updateLoading ? (
                     <CircularProgress color="inherit" size={"1.5rem"} />
