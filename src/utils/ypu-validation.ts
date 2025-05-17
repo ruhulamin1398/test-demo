@@ -483,3 +483,62 @@ export const getRoundFormZodSchema = ({
     }
   });
 };
+
+const competitionFormValidationZodSchema = z
+  .object({
+    title: z.string().min(4).nonempty(),
+    description: z.string().min(4).nonempty(),
+    roundNumber: z.number().positive(),
+    enrolmentDeadline: z
+      .tuple([
+        z.custom<dayjs.Dayjs | null>(() => true),
+        z.custom<dayjs.Dayjs | null>(() => true),
+      ])
+      .optional(),
+    competitionDeadline: z
+      .tuple([
+        z.custom<dayjs.Dayjs | null>(() => true),
+        z.custom<dayjs.Dayjs | null>(() => true),
+      ])
+      .optional(),
+  })
+  .superRefine((data, ctx) => {
+    const [startDate, endDate] = data.competitionDeadline as [
+      dayjs.Dayjs | null,
+      dayjs.Dayjs | null
+    ];
+
+    if (!startDate || !endDate) {
+      ctx.addIssue({
+        path: ["competitionDeadline"],
+        message: "Deadline should be in valid range.",
+        code: "custom",
+      });
+    }
+    if (startDate && endDate && data.competitionDeadline) {
+      const [enrollmentStartDate, enrollmentEndDate] =
+        data.enrolmentDeadline as [dayjs.Dayjs | null, dayjs.Dayjs | null];
+      if (enrollmentStartDate && enrollmentEndDate) {
+        const submissionErrors = validateDateRangeWithin({
+          start: enrollmentStartDate,
+          end: enrollmentEndDate,
+          min: startDate,
+          max: endDate,
+          label: "Enrolment period",
+        });
+        if (submissionErrors) {
+          ctx.addIssue({
+            path: ["enrollmentDeadline"],
+            message: "Enrollment deadline should be valid",
+            code: "custom",
+          });
+        }
+      }
+    } else {
+      ctx.addIssue({
+        path: ["enrollmentDeadline"],
+        message: "EnrollmentDeadline deadline should be valid",
+        code: "custom",
+      });
+    }
+  });
