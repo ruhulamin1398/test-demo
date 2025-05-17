@@ -86,7 +86,6 @@ const getRunningRoundId = async ({
     // get current active round
     const activeRound = await Round.findOne({
       competition: competitionId,
-      isActiveRound: true,
     });
 
     if (!activeRound) {

@@ -38,7 +38,6 @@ export const CREATE_COMPETITION = gql`
           lastName
         }
         maxWinners
-        isActiveRound
       }
     }
   }
@@ -229,7 +228,6 @@ export const GET_COMPETITIONS_QUERY = gql`
             lastName
           }
           maxWinners
-          isActiveRound
         }
         prizes {
           id

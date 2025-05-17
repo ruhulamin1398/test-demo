@@ -34,7 +34,6 @@ const enrolmentSubmissionResolver = {
       }
       const activeRound = await Round.findOne({
         competition: competitionId,
-        isActiveRound: true,
       });
       const submission = await EnrolmentSubmission.findOne({
         roundId: activeRound.id,

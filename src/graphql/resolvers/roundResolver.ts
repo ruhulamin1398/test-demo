@@ -47,7 +47,6 @@ const roundResolver = {
           maxScore: number;
           maxVote: number;
           status: RoundStatusEnum;
-          isActiveRound: boolean;
           judges: [];
           maxWinners: number;
         };
@@ -150,7 +149,6 @@ const roundResolver = {
           maxScore: number;
           maxVote: number;
           status: RoundStatusEnum;
-          isActiveRound: boolean;
           judges: [];
           maxWinners: number;
           deadline: { startDate: string; endDate: string };
@@ -169,7 +167,6 @@ const roundResolver = {
         submissionType,
         maxVote,
         status,
-        isActiveRound,
         maxWinners,
         judges = [],
         deadline,
