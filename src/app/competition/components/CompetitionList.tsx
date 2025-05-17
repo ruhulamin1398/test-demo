@@ -7,7 +7,7 @@ import { CompetitionItemSkeleton } from "./CompetitionItemSkeleton";
 import { ICompetition } from "@/interfaces";
 import { SingleCompetitionCard } from "@/sections/common/single-competition-card";
 import { useEnrollment } from "@/app/hooks/useEnrollment";
-import EnrolmentConfirmationDialog from "@/components/confirmation-dialog";
+import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
@@ -29,9 +29,9 @@ export function CompetitionList({
   );
   const {
     openDialog,
-    handleOpenEnrolmentConfirmationDialog,
-    handleCloseEnrolmentConfirmationDialog,
-    onAgreeEnrolment,
+    handleOpenEnrollmentConfirmationDialog,
+    handleCloseEnrollmentConfirmationDialog,
+    onAgreeEnrollment,
     loading,
   } = useEnrollment();
 
@@ -48,7 +48,7 @@ export function CompetitionList({
       <SingleCompetitionCard
         key={competition.id}
         item={competition}
-        handleEnrolment={handleOpenEnrolmentConfirmationDialog}
+        handleEnrollment={handleOpenEnrollmentConfirmationDialog}
         isEnrolled={enrollIds.includes(competition.id)}
       />
     ));
@@ -72,10 +72,10 @@ export function CompetitionList({
         {...other}
       >
         {fetchCompetitionsLoading ? renderLoading() : renderList()}
-        <EnrolmentConfirmationDialog
+        <EnrollmentConfirmationDialog
           open={!!openDialog?.competitionId}
-          onAgree={onAgreeEnrolment}
-          onDisagree={handleCloseEnrolmentConfirmationDialog}
+          onAgree={onAgreeEnrollment}
+          onDisagree={handleCloseEnrollmentConfirmationDialog}
           createLoading={loading}
         />
       </Box>

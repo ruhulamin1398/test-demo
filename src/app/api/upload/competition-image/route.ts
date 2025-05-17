@@ -4,12 +4,12 @@ import fs from "fs/promises";
 import path from "path";
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/app/lib/mongodb";
-import { Competition, Enrolment, Round } from "@/models";
+import { Competition, Enrollment, Round } from "@/models";
 import { authOptions } from "../../auth/[...nextauth]/route";
 import { uuidv4 } from "minimal-shared/utils";
-import EnrolmentSubmission from "@/models/EnrolmentSubmission";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
+import EnrollmentSubmission from "@/models/EnrollmentSubmission";
 const absolutePath = "/uploads/competition-image";
 // const publicPath = "/public/uploads";
 
@@ -35,19 +35,19 @@ const getRunningRoundId = async ({
       throw new Error("The specified competition does not exist.");
     }
 
-    // check enrolment exist or not
-    const enrolment = await Enrolment.findOne({
+    // check enrollment exist or not
+    const enrollment = await Enrollment.findOne({
       competitionId,
       userId,
     });
 
-    if (!enrolment) {
+    if (!enrollment) {
       throw new Error("You are not enrolled in this competition.");
     }
 
     const haveRoundWiseSubmission = competition.haveRoundWiseSubmission;
 
-    /// if not roundwise submission  check enrolment deadline
+    /// if not roundwise submission  check enrollment deadline
     if (!haveRoundWiseSubmission) {
       const isDeadlineExist = dayjs().isBetween(
         competition.submission?.startDate,
@@ -70,9 +70,9 @@ const getRunningRoundId = async ({
       }
 
       // revert if alreay submitted
-      const existingSubmission = await EnrolmentSubmission.findOne({
+      const existingSubmission = await EnrollmentSubmission.findOne({
         roundId: round.id,
-        enrolId: enrolment.id,
+        enrolId: enrollment.id,
         userId,
       });
 
@@ -80,7 +80,7 @@ const getRunningRoundId = async ({
         throw new Error("You have already submitted for this round.");
       }
 
-      return { roundId: round.id, enrolId: enrolment.id };
+      return { roundId: round.id, enrolId: enrollment.id };
     }
 
     // get current active round
@@ -104,16 +104,16 @@ const getRunningRoundId = async ({
       );
     }
 
-    const existingSubmission = await EnrolmentSubmission.findOne({
+    const existingSubmission = await EnrollmentSubmission.findOne({
       roundId: activeRound.id,
-      enrolId: enrolment.id,
+      enrolId: enrollment.id,
       userId,
     });
 
     if (existingSubmission) {
       throw new Error("You have already submitted for this round.");
     }
-    return { roundId: activeRound.id, enrolId: enrolment.id };
+    return { roundId: activeRound.id, enrolId: enrollment.id };
   } catch (error) {
     console.error("Error in getRunningRoundId:", error);
     throw new Error(
@@ -204,17 +204,17 @@ export async function POST(req: NextRequest) {
       submittedContentDir,
       newFilePath
     );
-    // Create a new EnrolmentSubmission document
-    const enrolmentSubmission = new EnrolmentSubmission({
+    // Create a new EnrollmentSubmission document
+    const enrollmentSubmission = new EnrollmentSubmission({
       roundId,
       enrolId,
       userId: session.user.id,
       submittedContent: `${submittedContentDir}/${newFileName}`,
     });
-    // Save the EnrolmentSubmission to the database
-    await enrolmentSubmission.save();
+    // Save the EnrollmentSubmission to the database
+    await enrollmentSubmission.save();
 
-    return NextResponse.json({ data: enrolmentSubmission }, { status: 200 });
+    return NextResponse.json({ data: enrollmentSubmission }, { status: 200 });
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";

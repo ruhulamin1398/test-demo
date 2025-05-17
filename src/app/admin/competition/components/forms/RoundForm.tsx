@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import {
   Button,
   Grid2 as Grid,
@@ -12,20 +12,16 @@ import {
 } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-
 import {
   RoundJudgementCriteriaEnum,
   RoundStatusEnum,
 } from "@/interfaces/round";
 import { SubmissionTypeEnum } from "@/interfaces";
-
-import { IRound } from "@/interfaces/round";
-import { formatDateForDatePicker } from "@/utils/date";
 import { LocalizationProvider } from "@/locales";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { getRoundFormZodSchema } from "@/utils/ypu-validation";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { CompetitionUiModeEnum } from "@/store/slices/competitionSlice";
 import { toast } from "sonner";
 import { useMutation } from "@apollo/client";
@@ -53,8 +49,21 @@ const roundSchema = getRoundFormZodSchema({
 
 type RoundFormInputs = z.infer<typeof roundSchema>;
 
+const isPublicSentiment = (criteria: RoundJudgementCriteriaEnum) => {
+  return (
+    criteria === RoundJudgementCriteriaEnum.BOTH ||
+    criteria == RoundJudgementCriteriaEnum.PUBLIC
+  );
+};
+
+const isJudgeScore = (criteria: RoundJudgementCriteriaEnum) => {
+  return (
+    criteria === RoundJudgementCriteriaEnum.BOTH ||
+    criteria == RoundJudgementCriteriaEnum.JUDGE
+  );
+};
+
 export const RoundForm: React.FC = () => {
-  const dispatch = useDispatch();
   const { competition } = useSelector((state: RootState) => state.competition);
   const { recordToModify, mode } = useSelector(
     (state: RootState) => state.competition.uiControls.roundInfoUi
@@ -86,8 +95,12 @@ export const RoundForm: React.FC = () => {
   const methods = useForm<RoundFormInputs>({
     resolver: zodResolver(
       getRoundFormZodSchema({
-        competitionStartDate: dayjs(Number(competition?.startDate)),
-        competitionEndDate: dayjs(Number(competition?.endDate)),
+        competitionStartDate: dayjs(
+          Number(competition?.competitionDeadline.startDate)
+        ),
+        competitionEndDate: dayjs(
+          Number(competition?.competitionDeadline.endDate)
+        ),
         hasRoundWiseSubmission: competition?.haveRoundWiseSubmission || false,
       })
     ),
@@ -138,11 +151,13 @@ export const RoundForm: React.FC = () => {
       submissionDeadline,
       votingDeadline,
       judgingDeadline,
+      judgementCriteria,
       ...otherValues
     } = values;
 
     const inputPayload = {
       ...otherValues,
+      judgementCriteria,
       maxScore: Number(maxScore),
       maxVote: Number(maxVote),
       maxWinners: Number(maxWinners),
@@ -159,7 +174,8 @@ export const RoundForm: React.FC = () => {
             },
           }
         : {}),
-      ...(votingDeadline
+      ...(votingDeadline &&
+      isPublicSentiment(judgementCriteria as RoundJudgementCriteriaEnum)
         ? {
             votingDeadline: {
               startDate: votingDeadline[0],
@@ -167,7 +183,8 @@ export const RoundForm: React.FC = () => {
             },
           }
         : {}),
-      ...(judgingDeadline
+      ...(judgingDeadline &&
+      isJudgeScore(judgementCriteria as RoundJudgementCriteriaEnum)
         ? {
             judgingDeadline: {
               startDate: judgingDeadline[0],
@@ -178,7 +195,9 @@ export const RoundForm: React.FC = () => {
     };
     if (mode === CompetitionUiModeEnum.CREATE) {
       await createRound({
-        variables: { input: { ...inputPayload, competition: competition.id } },
+        variables: {
+          input: { ...inputPayload, competition: competition.id },
+        },
       });
     } else {
       console.log(recordToModify);
@@ -239,8 +258,6 @@ export const RoundForm: React.FC = () => {
     trigger(["submissionDeadline"]);
   }, [deadline, submissionDeadline]);
 
-  console.log(errors);
-
   return (
     <LocalizationProvider>
       <Form methods={{ ...methods }} onSubmit={handleSubmit(onSubmit)}>
@@ -297,8 +314,12 @@ export const RoundForm: React.FC = () => {
                 <DateRangePickerController
                   name="deadline"
                   control={control}
-                  minDate={dayjs(Number(competition?.startDate))}
-                  maxDate={dayjs(Number(competition?.endDate))}
+                  minDate={dayjs(
+                    Number(competition?.competitionDeadline.startDate)
+                  )}
+                  maxDate={dayjs(
+                    Number(competition?.competitionDeadline.endDate)
+                  )}
                 />
               </Stack>
             </Grid>
@@ -314,11 +335,11 @@ export const RoundForm: React.FC = () => {
                     control={control}
                     minDate={
                       submissionDeadline?.[0] ||
-                      dayjs(Number(competition?.startDate))
+                      dayjs(Number(competition?.competitionDeadline.startDate))
                     }
                     maxDate={
                       submissionDeadline?.[1] ||
-                      dayjs(Number(competition?.endDate))
+                      dayjs(Number(competition?.competitionDeadline.endDate))
                     }
                   />
                 </Stack>
@@ -338,10 +359,11 @@ export const RoundForm: React.FC = () => {
                     control={control}
                     minDate={
                       submissionDeadline?.[1]?.add(1, "day") ||
-                      dayjs(Number(competition?.startDate))
+                      dayjs(Number(competition?.competitionDeadline.startDate))
                     }
                     maxDate={
-                      deadline?.[1] || dayjs(Number(competition?.endDate))
+                      deadline?.[1] ||
+                      dayjs(Number(competition?.competitionDeadline.endDate))
                     }
                   />
                 </Stack>
@@ -361,10 +383,11 @@ export const RoundForm: React.FC = () => {
                     control={control}
                     minDate={
                       submissionDeadline?.[1]?.add(1, "day") ||
-                      dayjs(Number(competition?.startDate))
+                      dayjs(Number(competition?.competitionDeadline.startDate))
                     }
                     maxDate={
-                      deadline?.[1] || dayjs(Number(competition?.endDate))
+                      deadline?.[1] ||
+                      dayjs(Number(competition?.competitionDeadline.endDate))
                     }
                   />
                 </Stack>

@@ -115,7 +115,6 @@ const RoundForm: React.FC = () => {
             maxVote: Number(maxVote || 0),
             maxWinners: Number(maxWinners),
             roundNumber: Number(roundNumber || 0),
-            isActiveRound: isActiveRound,
             judges: jids,
           },
         },
@@ -163,10 +162,10 @@ const RoundForm: React.FC = () => {
       initialValues={initialFormValues}
       validationSchema={roundFormValidationSchema({
         competitionStartDate: formatDateForDatePicker(
-          (competition as ICompetition).startDate
+          (competition as ICompetition).competitionDeadline.startDate
         ),
         competitionEndDate: formatDateForDatePicker(
-          (competition as ICompetition).endDate
+          (competition as ICompetition).competitionDeadline.endDate
         ),
       })}
       onSubmit={handleSubmit}

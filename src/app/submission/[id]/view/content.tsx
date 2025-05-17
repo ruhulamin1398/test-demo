@@ -16,7 +16,7 @@ const PageContent = ({ competition }: Props) => {
       <Grid size={{ xs: 12, md: 6, lg: 7 }}>
         <ContentSubmission
           title={competition.title}
-          date={formatDate(competition.enrolmentDeadline.endDate)}
+          date={formatDate(competition.enrollmentDeadline.endDate)}
           competitionId={competition.id}
         />
       </Grid>

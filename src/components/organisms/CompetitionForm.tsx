@@ -18,7 +18,7 @@ import {
 import CustomDatePicker from "../atoms/CustomDatepicker";
 import {
   CompetitionStatusEnum,
-  EnrolmentTypeEnum,
+  EnrollmentTypeEnum,
   ICompetition,
   SubmissionTypeEnum,
 } from "@/interfaces";
@@ -79,7 +79,6 @@ const CompetitionForm = () => {
         });
       } else {
         const {
-          id,
           rounds: _skipRounds,
           prizes: _skipPrizes,
           eligibility: _eligibility,
@@ -87,7 +86,7 @@ const CompetitionForm = () => {
         } = payloads;
         await updateCompetition({
           variables: {
-            id: id,
+            id: recordToModify.id,
             input: updatedPayload,
           },
         });
@@ -140,11 +139,11 @@ const CompetitionForm = () => {
     description: "",
     startDate: null,
     endDate: null,
-    enrolmentDeadline: {
+    enrollmentDeadline: {
       startDate: null,
       endDate: null,
     },
-    enrolmentType: "Free",
+    enrollmentType: "Free",
     price: 0,
     mediaUrl: "",
     submissionType: "Photo",
@@ -155,14 +154,18 @@ const CompetitionForm = () => {
   const competitionValues = recordToModify
     ? {
         ...recordToModify,
-        startDate: formatDateForDatePicker(recordToModify.startDate),
-        endDate: formatDateForDatePicker(recordToModify.endDate),
-        enrolmentDeadline: {
+        startDate: formatDateForDatePicker(
+          recordToModify.competitionDeadline.startDate
+        ),
+        endDate: formatDateForDatePicker(
+          recordToModify.competitionDeadline.endDate
+        ),
+        enrollmentDeadline: {
           startDate: formatDateForDatePicker(
-            recordToModify.enrolmentDeadline?.startDate
+            recordToModify.enrollmentDeadline?.startDate
           ),
           endDate: formatDateForDatePicker(
-            recordToModify.enrolmentDeadline?.endDate
+            recordToModify.enrollmentDeadline?.endDate
           ),
         },
         haveRoundWiseSubmission:
@@ -222,29 +225,29 @@ const CompetitionForm = () => {
                 />
               </Grid>
 
-              {/* Enrolment Deadline Start */}
+              {/* Enrollment Deadline Start */}
               <Grid size={{ xs: 12, sm: 6 }}>
                 <Field
-                  name="enrolmentDeadline.startDate"
-                  label="Enrolment Deadline Start"
+                  name="enrollmentDeadline.startDate"
+                  label="Enrollment Deadline Start"
                   component={CustomDatePicker}
                 />
               </Grid>
 
-              {/* Enrolment Deadline End */}
+              {/* Enrollment Deadline End */}
               <Grid size={{ xs: 12, sm: 6 }}>
                 <Field
-                  name="enrolmentDeadline.endDate"
-                  label="Enrolment Deadline End"
+                  name="enrollmentDeadline.endDate"
+                  label="Enrollment Deadline End"
                   component={CustomDatePicker}
                 />
               </Grid>
 
-              {/* Enrolment Type */}
+              {/* Enrollment Type */}
               <Grid size={{ xs: 6, sm: 3 }}>
                 <Field
-                  label="Enrolment Type"
-                  name="enrolmentType"
+                  label="Enrollment Type"
+                  name="enrollmentType"
                   component={OutlinedTextField}
                   select
                   onChange={(
@@ -257,7 +260,7 @@ const CompetitionForm = () => {
                     }
                   }}
                 >
-                  {Object.values(EnrolmentTypeEnum).map((enrolType) => (
+                  {Object.values(EnrollmentTypeEnum).map((enrolType) => (
                     <MenuItem key={enrolType} value={enrolType}>
                       {enrolType}
                     </MenuItem>
@@ -266,7 +269,7 @@ const CompetitionForm = () => {
               </Grid>
 
               {/* Price */}
-              {values.enrolmentType === "Paid" && (
+              {values.enrollmentType === "Paid" && (
                 <Grid size={{ xs: 6, sm: 3 }}>
                   <Field
                     label="Price"
@@ -325,7 +328,9 @@ const CompetitionForm = () => {
                 type="submit"
                 variant="contained"
                 color="primary"
-                disabled={createLoading || updateLoading || isSubmitting}
+                disabled={
+                  createLoading || updateLoading || !isValid || isSubmitting
+                }
                 startIcon={
                   createLoading || updateLoading ? (
                     <CircularProgress color="inherit" size={"1.5rem"} />

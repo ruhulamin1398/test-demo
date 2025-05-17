@@ -10,12 +10,12 @@ export const CREATE_COMPETITION = gql`
       description
       startDate
       endDate
-      enrolmentDeadline {
+      enrollmentDeadline {
         startDate
         endDate
       }
       eligibility
-      enrolmentType
+      enrollmentType
       price
       mediaUrl
       submissionType
@@ -51,11 +51,11 @@ export const UPDATE_COMPETITION = gql`
       description
       startDate
       endDate
-      enrolmentDeadline {
+      enrollmentDeadline {
         startDate
         endDate
       }
-      enrolmentType
+      enrollmentType
       price
       mediaUrl
       submissionType
@@ -105,8 +105,6 @@ export const GET_COMPETITION_QUERY = gql`
       id
       title
       description
-      startDate
-      endDate
       mySubmission {
         id
         score
@@ -114,11 +112,15 @@ export const GET_COMPETITION_QUERY = gql`
         createdAt
         updatedAt
       }
-      enrolmentDeadline {
+      enrollmentDeadline {
         startDate
         endDate
       }
-      enrolmentType
+      competitionDeadline {
+        startDate
+        endDate
+      }
+      enrollmentType
       price
       mediaUrl
       submissionType
@@ -127,8 +129,6 @@ export const GET_COMPETITION_QUERY = gql`
       haveRoundWiseSubmission
       rounds {
         id
-        startDate
-        endDate
         title
         description
         judgementCriteria
@@ -183,8 +183,6 @@ export const GET_COMPETITIONS_QUERY = gql`
         id
         title
         description
-        startDate
-        endDate
         mySubmission {
           id
           score
@@ -192,11 +190,15 @@ export const GET_COMPETITIONS_QUERY = gql`
           createdAt
           updatedAt
         }
-        enrolmentDeadline {
+        enrollmentDeadline {
           startDate
           endDate
         }
-        enrolmentType
+        competitionDeadline {
+          startDate
+          endDate
+        }
+        enrollmentType
         price
         mediaUrl
         submissionType

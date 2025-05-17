@@ -1,4 +1,4 @@
-import { IEnrolment } from "@/interfaces/enrolment";
+import { IEnrollment } from "@/interfaces/enrollment";
 import { IUser } from "@/interfaces/user";
 import mongoose, { Schema } from "mongoose";
 
@@ -23,7 +23,7 @@ export interface IRound {
   maxScore: number;
   description: string;
   status: RoundStatusEnum;
-  enrolments: IEnrolment[];
+  enrollments: IEnrollment[];
   judges: IUser[];
   competition: ICompetition;
   createdAt: string;
@@ -44,7 +44,7 @@ export enum SubmissionTypeEnum {
   LINK = "Link",
 }
 
-export enum EnrolmentTypeEnum {
+export enum EnrollmentTypeEnum {
   PAID = "Paid",
   FREE = "Free",
 }
@@ -56,12 +56,12 @@ export interface ICompetition {
   description: string;
   startDate: Date; // Date as string (ISO 8601 format)
   endDate: Date; // Date as string (ISO 8601 format)
-  enrolmentDeadline: {
+  enrollmentDeadline: {
     startDate: Date; // Date as string (ISO 8601 format)
     endDate: Date; // Date as string (ISO 8601 format)
   };
   rounds: IRound[];
-  enrolmentType: EnrolmentTypeEnum;
+  enrollmentType: EnrollmentTypeEnum;
   price: number;
   mediaUrl?: string;
   submissionType: SubmissionTypeEnum;
@@ -77,15 +77,15 @@ const competitionSchema = new Schema<ICompetitionDocument>(
     description: { type: String, required: true },
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
-    enrolmentDeadline: {
+    enrollmentDeadline: {
       startDate: { type: Date, required: true },
       endDate: { type: Date, required: true },
     },
     // rounds: [{ type: mongoose.Schema.Types.ObjectId, ref: "Round" }],
-    enrolmentType: {
+    enrollmentType: {
       type: String,
-      enum: Object.values(EnrolmentTypeEnum) as EnrolmentTypeEnum[], // Explicit cast
-      default: EnrolmentTypeEnum.FREE,
+      enum: Object.values(EnrollmentTypeEnum) as EnrollmentTypeEnum[], // Explicit cast
+      default: EnrollmentTypeEnum.FREE,
     },
     price: { type: Number, required: true, default: 0 },
     mediaUrl: { type: String },
@@ -132,7 +132,7 @@ export interface IRound {
   maxWinners: number;
   description: string;
   status: RoundStatusEnum;
-  enrolments: IEnrolment[];
+  enrollments: IEnrollment[];
   judges: IUser[];
   competition: ICompetition;
   createdAt: string;
@@ -175,7 +175,7 @@ const roundSchema = new Schema<IRoundDocument>(
       enum: Object.values(RoundStatusEnum) as RoundStatusEnum[], // Explicit cast
       default: RoundStatusEnum.UPCOMING,
     },
-    enrolments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Enrolment" }],
+    enrollments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Enrollment" }],
     judges: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     competition: {
       type: mongoose.Schema.Types.ObjectId,

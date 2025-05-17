@@ -15,8 +15,8 @@ import {
   setUiControlsBasicInfo,
 } from "@/store/slices/competitionSlice";
 import { AddOutlined, CancelOutlined } from "@mui/icons-material";
-import CompetitionForm from "@/components/organisms/CompetitionForm";
 import CompetitionList from "./components/CompetitionList";
+import CompetitionForm from "./components/forms/CompetitionForm";
 
 const Competitions: React.FC = () => {
   const { mode } = useSelector((state: RootState) => {

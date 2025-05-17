@@ -8,9 +8,9 @@ import {
   CardMedia,
   Container,
 } from "@mui/material";
-import { IEnrolmentSubmission } from "@/interfaces/enrolmentSubmission";
+import { IEnrollmentSubmission } from "@/interfaces/enrollmentSubmission";
 type Props = {
-  submission: IEnrolmentSubmission | null;
+  submission: IEnrollmentSubmission | null;
 };
 
 const SubmittedFileInformation = ({ submission }: Props) => {

@@ -20,14 +20,14 @@ import { useState } from "react";
 
 type CardItemProps = CardProps & {
   item: ICompetition;
-  handleEnrolment: (competitionId: string) => void;
+  handleEnrollment: (competitionId: string) => void;
   isEnrolled?: boolean;
 };
 
 export function SingleCompetitionCard({
   isEnrolled = false,
   item,
-  handleEnrolment,
+  handleEnrollment,
   sx,
   ...other
 }: CardItemProps) {
@@ -130,7 +130,7 @@ export function SingleCompetitionCard({
             size="small"
             onClick={(e) => {
               e.preventDefault();
-              handleEnrolment(item.id);
+              handleEnrollment(item.id);
             }}
             disabled={isEnrolled}
           >

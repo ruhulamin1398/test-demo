@@ -1,6 +1,6 @@
-import { IEnrolment } from "@/interfaces/enrolment";
 import { IUser } from "@/interfaces/user";
 import { ICompetition, SubmissionTypeEnum } from "@/interfaces/competition";
+import { IEnrollment } from "./enrollment";
 
 export enum RoundStatusEnum {
   COMPLETED = "Completed",
@@ -42,7 +42,7 @@ export interface IRound {
   maxWinners: number;
   description: string;
   status: RoundStatusEnum;
-  enrolments: IEnrolment[];
+  enrollments: IEnrollment[];
   judges: IUser[];
   competition: ICompetition;
   createdAt: string;

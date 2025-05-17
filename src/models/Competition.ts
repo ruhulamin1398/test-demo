@@ -1,6 +1,6 @@
 import {
   CompetitionStatusEnum,
-  EnrolmentTypeEnum,
+  EnrollmentTypeEnum,
   ICompetitionDocument,
   SubmissionTypeEnum,
   IPrizesAndRewards,
@@ -19,19 +19,21 @@ const competitionSchema = new Schema<ICompetitionDocument>(
     title: { type: String, required: true },
     description: { type: String, required: true },
     eligibility: { type: String, required: true, default: "Open for everyone" },
-    startDate: { type: Date, required: true },
-    endDate: { type: Date, required: true },
-    enrolmentDeadline: {
+    competitionDeadline: {
+      startDate: { type: Date, required: true },
+      endDate: { type: Date, required: true },
+    },
+    enrollmentDeadline: {
       startDate: { type: Date, required: true },
       endDate: { type: Date, required: true },
     },
     prizes: {
       type: [PrizesAndRewardsSchema], // Array of prizes
     },
-    enrolmentType: {
+    enrollmentType: {
       type: String,
-      enum: Object.values(EnrolmentTypeEnum) as EnrolmentTypeEnum[], // Explicit cast
-      default: EnrolmentTypeEnum.FREE,
+      enum: Object.values(EnrollmentTypeEnum) as EnrollmentTypeEnum[], // Explicit cast
+      default: EnrollmentTypeEnum.FREE,
     },
     price: { type: Number, required: true, default: 0 },
     haveRoundWiseSubmission: { type: Boolean, required: false, default: false },

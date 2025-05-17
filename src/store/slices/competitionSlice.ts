@@ -13,7 +13,7 @@ interface IUiControlsPayload<T> {
 }
 
 interface CompetitionState {
-  competition: ICompetition | null;
+  competition: (ICompetition & { id: string }) | null;
   uiControls: {
     basicInfoUi: IUiControlsPayload<ICompetition>;
     roundInfoUi: IUiControlsPayload<IRound>;

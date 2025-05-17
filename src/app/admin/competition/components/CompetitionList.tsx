@@ -171,10 +171,14 @@ const CompetitionList: React.FC = () => {
 
                 <TableCell>{item.description}</TableCell>
                 <TableCell align="right">
-                  {formatDateToHumanReadableDate(item.startDate)}
+                  {formatDateToHumanReadableDate(
+                    item.competitionDeadline.startDate
+                  )}
                 </TableCell>
                 <TableCell align="right">
-                  {formatDateToHumanReadableDate(item.endDate)}
+                  {formatDateToHumanReadableDate(
+                    item.competitionDeadline.endDate
+                  )}
                 </TableCell>
                 <TableCell align="center">
                   <TextField

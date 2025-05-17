@@ -6,7 +6,7 @@ const submissionScoreSchema = new mongoose.Schema(
   {
     enrolId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Enrolment",
+      ref: "Enrollment",
       required: true,
     },
     roundId: {

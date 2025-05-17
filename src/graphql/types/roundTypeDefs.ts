@@ -55,7 +55,7 @@ export const roundTypeDefs = `#graphql
     judgingDeadline: RoundDeadlines
     maxVote: Float!
     submissionType: SubmissionTypeEnum!
-    enrolledIds: [Enrolment]
+    enrolledIds: [Enrollment]
     judges: [User]
     maxWinners: Int!
     competition: String!

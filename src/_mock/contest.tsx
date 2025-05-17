@@ -4,7 +4,7 @@ import PaletteIcon from "@mui/icons-material/Palette";
 
 import {
   CompetitionStatusEnum,
-  EnrolmentTypeEnum,
+  EnrollmentTypeEnum,
   SubmissionTypeEnum,
   ICompetition,
   RoundDetails,
@@ -19,7 +19,7 @@ export const competitions: ICompetition[] = [
     eligibility: "Open to all",
     startDate: new Date("2025-05-01"),
     endDate: new Date("2025-05-15"),
-    enrolmentDeadline: {
+    enrollmentDeadline: {
       startDate: new Date("2025-04-01"),
       endDate: new Date("2025-04-30"),
     },
@@ -33,7 +33,7 @@ export const competitions: ICompetition[] = [
       },
     ],
     rounds: [],
-    enrolmentType: EnrolmentTypeEnum.FREE,
+    enrollmentType: EnrollmentTypeEnum.FREE,
     price: 0,
     mediaUrl: "/banner-back.jpg",
     submissionType: SubmissionTypeEnum.PHOTO,
@@ -51,7 +51,7 @@ export const competitions: ICompetition[] = [
     eligibility: "Open to all",
     startDate: new Date("2025-06-01"),
     endDate: new Date("2025-06-15"),
-    enrolmentDeadline: {
+    enrollmentDeadline: {
       startDate: new Date("2025-05-01"),
       endDate: new Date("2025-05-31"),
     },
@@ -65,7 +65,7 @@ export const competitions: ICompetition[] = [
       },
     ],
     rounds: [],
-    enrolmentType: EnrolmentTypeEnum.PAID,
+    enrollmentType: EnrollmentTypeEnum.PAID,
     price: 20,
     mediaUrl: "/banner-back.jpg",
     submissionType: SubmissionTypeEnum.PHOTO,
@@ -83,7 +83,7 @@ export const competitions: ICompetition[] = [
     eligibility: "Open to all",
     startDate: new Date("2025-07-01"),
     endDate: new Date("2025-07-15"),
-    enrolmentDeadline: {
+    enrollmentDeadline: {
       startDate: new Date("2025-06-01"),
       endDate: new Date("2025-06-30"),
     },
@@ -97,7 +97,7 @@ export const competitions: ICompetition[] = [
       },
     ],
     rounds: [],
-    enrolmentType: EnrolmentTypeEnum.FREE,
+    enrollmentType: EnrollmentTypeEnum.FREE,
     price: 0,
     mediaUrl: "/banner-back.jpg",
     submissionType: SubmissionTypeEnum.PHOTO,
@@ -115,7 +115,7 @@ export const competitions: ICompetition[] = [
     eligibility: "Open to all",
     startDate: new Date("2025-08-01"),
     endDate: new Date("2025-08-15"),
-    enrolmentDeadline: {
+    enrollmentDeadline: {
       startDate: new Date("2025-07-01"),
       endDate: new Date("2025-07-31"),
     },
@@ -129,7 +129,7 @@ export const competitions: ICompetition[] = [
       },
     ],
     rounds: [],
-    enrolmentType: EnrolmentTypeEnum.PAID,
+    enrollmentType: EnrollmentTypeEnum.PAID,
     price: 30,
     mediaUrl: "/banner-back.jpg",
     submissionType: SubmissionTypeEnum.VIDEO,
@@ -147,7 +147,7 @@ export const competitions: ICompetition[] = [
     eligibility: "Open to all",
     startDate: new Date("2025-09-01"),
     endDate: new Date("2025-09-15"),
-    enrolmentDeadline: {
+    enrollmentDeadline: {
       startDate: new Date("2025-08-01"),
       endDate: new Date("2025-08-31"),
     },
@@ -161,7 +161,7 @@ export const competitions: ICompetition[] = [
       },
     ],
     rounds: [],
-    enrolmentType: EnrolmentTypeEnum.PAID,
+    enrollmentType: EnrollmentTypeEnum.PAID,
     price: 50,
     mediaUrl: "/banner-back.jpg",
     submissionType: SubmissionTypeEnum.VIDEO,
@@ -178,7 +178,7 @@ export const competitions: ICompetition[] = [
     eligibility: "Open to all",
     startDate: new Date("2025-10-01"),
     endDate: new Date("2025-10-15"),
-    enrolmentDeadline: {
+    enrollmentDeadline: {
       startDate: new Date("2025-09-01"),
       endDate: new Date("2025-09-30"),
     },
@@ -192,7 +192,7 @@ export const competitions: ICompetition[] = [
       },
     ],
     rounds: [],
-    enrolmentType: EnrolmentTypeEnum.FREE,
+    enrollmentType: EnrollmentTypeEnum.FREE,
     price: 0,
     mediaUrl: "/banner-back.jpg",
     submissionType: SubmissionTypeEnum.VIDEO,

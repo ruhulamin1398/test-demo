@@ -1,25 +1,25 @@
-import { IEnrolment, IUser } from "@/interfaces";
-import { Competition, Enrolment } from "@/models";
+import { IEnrollment, IUser } from "@/interfaces";
+import { Competition, Enrollment } from "@/models";
 import { GraphQLError } from "graphql";
 
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-const enrolmentResolver = {
+const enrollmentResolver = {
   Query: {
-    getEnrolments: async (): Promise<IEnrolment[]> => {
-      return Enrolment.find().populate("competitionId").populate("userId");
+    getEnrollments: async (): Promise<IEnrollment[]> => {
+      return Enrollment.find().populate("competitionId").populate("userId");
     },
-    getEnrolment: async (
+    getEnrollment: async (
       _: void,
       { id }: { id: string }
-    ): Promise<IEnrolment | null> => {
-      return Enrolment.findById(id)
+    ): Promise<IEnrollment | null> => {
+      return Enrollment.findById(id)
         .populate("competitionId")
         .populate("userId");
     },
   },
   Mutation: {
-    createEnrolment: async (
+    createEnrollment: async (
       _: void,
       {
         competitionId,
@@ -27,13 +27,13 @@ const enrolmentResolver = {
         competitionId: string;
       },
       { user }: { user: IUser | null }
-    ): Promise<IEnrolment> => {
+    ): Promise<IEnrollment> => {
       if (!user) {
         // user fetch error
         throw new Error("Not authenticated");
       }
       // Check if the email already exists
-      const alreadyEnrolled = await Enrolment.findOne({
+      const alreadyEnrolled = await Enrollment.findOne({
         competitionId,
         userId: user.id,
       });
@@ -47,8 +47,8 @@ const enrolmentResolver = {
 
       dayjs.extend(isBetween);
       const isDeadlineExist = dayjs().isBetween(
-        competition.enrolmentDeadline?.startDate,
-        competition.enrolmentDeadline?.endDate,
+        competition.enrollmentDeadline?.startDate,
+        competition.enrollmentDeadline?.endDate,
         "day",
         "[]"
       ); // '[]' means inclusive
@@ -59,16 +59,16 @@ const enrolmentResolver = {
       }
 
       try {
-        const enrolment = new Enrolment({
+        const enrollment = new Enrollment({
           competitionId,
           userId: user.id,
         });
-        return enrolment.save();
+        return enrollment.save();
       } catch (_error: unknown) {
         throw new GraphQLError("Something went wrong, we are looking into it.");
       }
     },
-    updateEnrolment: async (
+    updateEnrollment: async (
       _: void,
       {
         id,
@@ -81,20 +81,20 @@ const enrolmentResolver = {
         submissionType?: string;
         status?: string;
       }
-    ): Promise<IEnrolment | null> => {
-      return Enrolment.findByIdAndUpdate(
+    ): Promise<IEnrollment | null> => {
+      return Enrollment.findByIdAndUpdate(
         id,
         { mediaUrl, submissionType, status },
         { new: true }
       );
     },
-    deleteEnrolment: async (
+    deleteEnrollment: async (
       _: void,
       { id }: { id: string }
-    ): Promise<IEnrolment | null> => {
-      return Enrolment.findByIdAndDelete(id);
+    ): Promise<IEnrollment | null> => {
+      return Enrollment.findByIdAndDelete(id);
     },
   },
 };
 
-export default enrolmentResolver;
+export default enrollmentResolver;

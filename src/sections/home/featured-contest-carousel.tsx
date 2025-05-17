@@ -9,7 +9,7 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import { ICompetition } from "@/interfaces";
 import { useEnrollment } from "@/app/hooks/useEnrollment";
-import EnrolmentConfirmationDialog from "@/components/confirmation-dialog";
+import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
 import { CompetitionItemSkeleton } from "@/app/competition/components/CompetitionItemSkeleton";
 import { SingleCompetitionCard } from "../common/single-competition-card";
 
@@ -30,9 +30,9 @@ export function HomeFeaturedContestCarousel({
 }: Props) {
   const {
     openDialog,
-    handleOpenEnrolmentConfirmationDialog,
-    handleCloseEnrolmentConfirmationDialog,
-    onAgreeEnrolment,
+    handleOpenEnrollmentConfirmationDialog,
+    handleCloseEnrollmentConfirmationDialog,
+    onAgreeEnrollment,
     createLoading,
   } = useEnrollment();
 
@@ -83,7 +83,7 @@ export function HomeFeaturedContestCarousel({
             <SingleCompetitionCard
               key={item.id}
               item={item}
-              handleEnrolment={handleOpenEnrolmentConfirmationDialog}
+              handleEnrollment={handleOpenEnrollmentConfirmationDialog}
             />
           ))}
         </Carousel>
@@ -98,10 +98,10 @@ export function HomeFeaturedContestCarousel({
     <Box sx={{ mb: 3, paddingX: 3, position: "relative" }} {...other}>
       {loading ? renderLoading() : renderList()}
 
-      <EnrolmentConfirmationDialog
+      <EnrollmentConfirmationDialog
         open={!!openDialog?.competitionId}
-        onAgree={onAgreeEnrolment}
-        onDisagree={handleCloseEnrolmentConfirmationDialog}
+        onAgree={onAgreeEnrollment}
+        onDisagree={handleCloseEnrollmentConfirmationDialog}
         createLoading={createLoading}
       />
     </Box>

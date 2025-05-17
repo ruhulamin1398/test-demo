@@ -1,21 +1,21 @@
 import { ICompetition, SubmissionTypeEnum } from "@/interfaces/competition";
 import { IUser } from "@/interfaces/user";
 
-export enum EnrolmentStatusEnum {
+export enum EnrollmentStatusEnum {
   REJECTED = "Rejected",
   ACTIVE = "Active",
   PENDING = "Pending",
 }
 
-// IEnrolment Interface (Pivot between IUser and ICompetition)
-export interface IEnrolment {
+// IEnrollment Interface (Pivot between IUser and ICompetition)
+export interface IEnrollment {
   id: string;
   competitionId: ICompetition;
   userId: IUser;
   enrolDate: Date; // ISO 8601 format date
-  status: EnrolmentStatusEnum;
+  status: EnrollmentStatusEnum;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface IEnrolmentDocument extends IEnrolment, Document {}
+export interface IEnrollmentDocument extends IEnrollment, Document {}

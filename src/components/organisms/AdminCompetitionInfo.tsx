@@ -59,7 +59,9 @@ const AdminCompetitionInfo: React.FC = () => {
                       component={"span"}
                       sx={{ fontWeight: "medium" }}
                     >
-                      {formatDateToHumanReadableDate(competition?.startDate)}
+                      {formatDateToHumanReadableDate(
+                        competition?.competitionDeadline.startDate
+                      )}
                     </Typography>
                   </Box>
                 </Grid>
@@ -79,7 +81,9 @@ const AdminCompetitionInfo: React.FC = () => {
                       component={"span"}
                       sx={{ fontWeight: "medium" }}
                     >
-                      {formatDateToHumanReadableDate(competition?.endDate)}
+                      {formatDateToHumanReadableDate(
+                        competition?.competitionDeadline.endDate
+                      )}
                     </Typography>
                   </Box>
                 </Grid>
@@ -99,7 +103,7 @@ const AdminCompetitionInfo: React.FC = () => {
           </ListItemIcon>
           <ListItemText
             disableTypography
-            primary={"Enrolment Deadline"}
+            primary={"Enrollment Deadline"}
             secondary={
               <Grid container spacing={2}>
                 <Grid>
@@ -119,7 +123,7 @@ const AdminCompetitionInfo: React.FC = () => {
                       sx={{ fontWeight: "medium" }}
                     >
                       {formatDateToHumanReadableDate(
-                        competition?.enrolmentDeadline.startDate
+                        competition?.enrollmentDeadline.startDate
                       )}
                     </Typography>
                   </Box>
@@ -141,7 +145,7 @@ const AdminCompetitionInfo: React.FC = () => {
                       sx={{ fontWeight: "medium" }}
                     >
                       {formatDateToHumanReadableDate(
-                        competition?.enrolmentDeadline.endDate
+                        competition?.enrollmentDeadline.endDate
                       )}
                     </Typography>
                   </Box>
@@ -163,14 +167,14 @@ const AdminCompetitionInfo: React.FC = () => {
           </ListItemIcon>
           <ListItemText
             sx={{ mr: 2 }}
-            primary={"Enrolment type"}
-            secondary="Enrolment type can be either Free and Paid."
+            primary={"Enrollment type"}
+            secondary="Enrollment type can be either Free and Paid."
           />
           <Typography
             variant="body1"
             sx={{ fontWeight: 900, color: "primary.main" }}
           >
-            {competition?.enrolmentType}
+            {competition?.enrollmentType}
           </Typography>
         </ListItem>
         <ListItem sx={{ py: 1, px: 0 }}>
@@ -185,8 +189,8 @@ const AdminCompetitionInfo: React.FC = () => {
           </ListItemIcon>
           <ListItemText
             sx={{ mr: 2 }}
-            primary={"Enrolment Fee"}
-            secondary="If enrolment type is Free, user need to pay this amount to proceed enrolment."
+            primary={"Enrollment Fee"}
+            secondary="If enrollment type is Free, user need to pay this amount to proceed enrollment."
           />
           <Typography
             variant="body1"

@@ -1,12 +1,12 @@
-import { IEnrolmentSubmission } from "@/interfaces/enrolmentSubmission";
+import { IEnrollmentSubmission } from "@/interfaces/enrollmentSubmission";
 import mongoose from "mongoose";
 
-// enrolmentSubmissionSchema Model
-const enrolmentSubmissionSchema = new mongoose.Schema(
+// enrollmentSubmissionSchema Model
+const enrollmentSubmissionSchema = new mongoose.Schema(
   {
     enrolId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Enrolment",
+      ref: "Enrollment",
       required: true,
     },
     roundId: {
@@ -25,11 +25,11 @@ const enrolmentSubmissionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const EnrolmentSubmission =
-  mongoose.models.EnrolmentSubmission ||
-  mongoose.model<IEnrolmentSubmission & Document>(
-    "EnrolmentSubmission",
-    enrolmentSubmissionSchema
+export const EnrollmentSubmission =
+  mongoose.models.EnrollmentSubmission ||
+  mongoose.model<IEnrollmentSubmission & Document>(
+    "EnrollmentSubmission",
+    enrollmentSubmissionSchema
   );
 
-export default EnrolmentSubmission;
+export default EnrollmentSubmission;

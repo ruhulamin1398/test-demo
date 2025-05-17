@@ -1,8 +1,8 @@
 import UploadSubmissionFile from "./upload-content";
 import SubmittedFileInformation from "./submitted-file-information";
 import { useQuery } from "@apollo/client";
-import { GET_ACTIVE_ROUND_SUBMISSION_QUERY } from "@/graphql-client/enrolment-submission";
 import { SubmissionUploadSkeleton } from "@/app/submission/[id]/view/submission-upload-skeleton";
+import { GET_ACTIVE_ROUND_SUBMISSION_QUERY } from "@/graphql-client/enrolment-submission";
 
 type Props = {
   competitionId: string;

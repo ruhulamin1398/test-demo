@@ -1,5 +1,5 @@
-export const enrolmentTypeDefs = `#graphql
-  type Enrolment {
+export const enrollmentTypeDefs = `#graphql
+  type Enrollment {
     id: ID!
     competitionId: String!
     userId: User!
@@ -10,17 +10,17 @@ export const enrolmentTypeDefs = `#graphql
     competition: Competition!
   }
   type Query {
-    getEnrolments: [Enrolment]
-    getEnrolment(id: ID!): Enrolment
+    getEnrollments: [Enrollment]
+    getEnrollment(id: ID!): Enrollment
   }
 
   type Mutation {
-    createEnrolment(
+    createEnrollment(
       competitionId: ID!
-    ): Enrolment
-    updateEnrolment(
+    ): Enrollment
+    updateEnrollment(
       competitionId: ID!
-    ): Enrolment
-    deleteEnrolment(id: ID!): Enrolment
+    ): Enrollment
+    deleteEnrollment(id: ID!): Enrollment
   }
 `;
