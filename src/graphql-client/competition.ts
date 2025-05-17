@@ -8,9 +8,11 @@ export const CREATE_COMPETITION = gql`
       id
       title
       description
-      startDate
-      endDate
       enrollmentDeadline {
+        startDate
+        endDate
+      }
+      competitionDeadline {
         startDate
         endDate
       }
@@ -49,9 +51,11 @@ export const UPDATE_COMPETITION = gql`
       id
       title
       description
-      startDate
-      endDate
       enrollmentDeadline {
+        startDate
+        endDate
+      }
+      competitionDeadline {
         startDate
         endDate
       }
