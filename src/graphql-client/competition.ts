@@ -30,7 +30,9 @@ export const CREATE_COMPETITION = gql`
         roundNumber
         maxScore
         maxVote
+        submissionType
         judges {
+          id
           name
           firstName
           lastName
@@ -70,7 +72,9 @@ export const UPDATE_COMPETITION = gql`
         status
         maxScore
         maxVote
+        submissionType
         judges {
+          id
           name
           firstName
           lastName
@@ -139,13 +143,30 @@ export const GET_COMPETITION_QUERY = gql`
         status
         maxScore
         maxVote
+        submissionType
         judges {
+          id
           name
           firstName
           lastName
         }
         maxWinners
-        isActiveRound
+        deadline {
+          startDate
+          endDate
+        }
+        submissionDeadline {
+          startDate
+          endDate
+        }
+        votingDeadline {
+          startDate
+          endDate
+        }
+        judgingDeadline {
+          startDate
+          endDate
+        }
       }
       prizes {
         id
@@ -200,7 +221,9 @@ export const GET_COMPETITIONS_QUERY = gql`
           status
           maxScore
           maxVote
+          submissionType
           judges {
+            id
             name
             firstName
             lastName

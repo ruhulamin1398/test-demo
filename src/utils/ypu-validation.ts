@@ -330,7 +330,6 @@ export const getRoundFormZodSchema = ({
         .number({ invalid_type_error: "Winners must be a number" })
         .min(1, "Score must be greater than 0")
     ),
-    isActiveRound: z.boolean(),
     description: z.string().min(4).nonempty(),
     status: z.enum(Object.values(RoundStatusEnum) as [string, ...string[]]),
     judges: z

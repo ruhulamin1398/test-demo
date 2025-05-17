@@ -45,7 +45,7 @@ export function JudgeAutocomplete({
           profilePicture,
         })
       );
-      setOptions(formattedOptions); // Update the options state after data is fetched
+      setOptions([...formattedOptions]); // Update the options state after data is fetched
     }
   }, [data]);
 
@@ -74,20 +74,20 @@ export function JudgeAutocomplete({
           value={field.value}
           onChange={(_, newValue) => field.onChange(newValue)}
           renderOption={(props, judge) => (
-            <li {...props} key={judge.id}>
+            <li {...props} key={judge.id + "option"}>
               <Avatar
                 alt={judge.label}
                 src={judge.profilePicture}
                 sx={{ mr: 1, width: 24, height: 24, flexShrink: 0 }}
               />
-              {judge.label}
+              {judge.label}+{judge.id}
             </li>
           )}
           renderTags={(selected, getTagProps) =>
             selected.map((judge, index) => (
               <Chip
                 {...getTagProps({ index })}
-                key={judge.id}
+                key={judge.id + "chip"}
                 size="small"
                 variant="soft"
                 label={judge.label}
@@ -98,15 +98,17 @@ export function JudgeAutocomplete({
           renderInput={(params) => (
             <TextField
               {...params}
-              placeholder="+ Tour Guides"
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                  <>
-                    {loading ? <CircularProgress size={18} /> : null}
-                    {params.InputProps.endAdornment}
-                  </>
-                ),
+              placeholder="+ Judge"
+              slotProps={{
+                input: {
+                  ...params.InputProps,
+                  endAdornment: (
+                    <>
+                      {loading ? <CircularProgress size={18} /> : null}
+                      {params.InputProps.endAdornment}
+                    </>
+                  ),
+                },
               }}
             />
           )}

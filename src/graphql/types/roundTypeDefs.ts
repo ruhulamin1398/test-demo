@@ -33,14 +33,15 @@ export const roundTypeDefs = `#graphql
     votingDeadline: Deadline
     judgingDeadline: Deadline
     submissionType: SubmissionTypeEnum!
-    submissionStartDate: String!
-    submissionEndDate: String!
     maxScore: Float!
     maxVote: Float!
     status: RoundStatusEnum
-    isActiveRound:Boolean!
     judges: [String!]
     maxWinners: Int!
+  }
+  type RoundDeadlines {
+    startDate: String!
+    endDate: String!
   }
   type Round {
     id: ID!
@@ -48,11 +49,10 @@ export const roundTypeDefs = `#graphql
     description: String!
     roundNumber: Int!
     judgementCriteria: String!
-    startDate: String!
-    endDate: String!
-    submissionStartDate: String!
-    submissionEndDate: String!
-    maxScore: Float!
+    deadline: RoundDeadlines
+    submissionDeadline: RoundDeadlines
+    votingDeadline: RoundDeadlines
+    judgingDeadline: RoundDeadlines
     maxVote: Float!
     submissionType: SubmissionTypeEnum!
     enrolledIds: [Enrolment]
@@ -60,9 +60,9 @@ export const roundTypeDefs = `#graphql
     maxWinners: Int!
     competition: String!
     status: String!
-    isActiveRound:Boolean!
     createdAt: String!
     updatedAt: String!
+    maxScore: Float!
   }
 
   type Query {

@@ -39,10 +39,10 @@ const roundResolver = {
           description: string;
           roundNumber: number;
           judgementCriteria: RoundJudgementCriteriaEnum;
-          startDate: string;
-          endDate: string;
-          submissionStartDate: string;
-          submissionEndDate: string;
+          deadline: { startDate: string; endDate: string };
+          submissionDeadline: { startDate: string; endDate: string };
+          votingDeadline: { startDate: string; endDate: string };
+          judgingDeadline: { startDate: string; endDate: string };
           submissionType: SubmissionTypeEnum;
           maxScore: number;
           maxVote: number;
@@ -61,15 +61,14 @@ const roundResolver = {
           description,
           roundNumber,
           judgementCriteria,
-          startDate,
-          endDate,
-          submissionStartDate,
-          submissionEndDate,
+          deadline,
+          submissionDeadline,
+          votingDeadline,
+          judgingDeadline,
           submissionType,
           maxScore,
           maxVote,
           status,
-          isActiveRound,
           maxWinners,
           judges = [],
         } = input;
@@ -79,19 +78,51 @@ const roundResolver = {
           description,
           roundNumber,
           judgementCriteria,
-          startDate,
-          endDate,
-          submissionStartDate,
-          submissionEndDate,
+          ...(deadline
+            ? {
+                deadline: {
+                  startDate: new Date(deadline.startDate as string),
+                  endDate: new Date(deadline.endDate as string),
+                },
+              }
+            : {}),
+          ...(submissionDeadline
+            ? {
+                submissionDeadline: {
+                  startDate: new Date(submissionDeadline.startDate as string),
+                  endDate: new Date(submissionDeadline.endDate as string),
+                },
+              }
+            : {}),
+          ...(votingDeadline
+            ? {
+                votingDeadline: {
+                  startDate: new Date(votingDeadline.startDate as string),
+                  endDate: new Date(votingDeadline.endDate as string),
+                },
+              }
+            : {}),
+          ...(judgingDeadline
+            ? {
+                judgingDeadline: {
+                  startDate: new Date(judgingDeadline.startDate as string),
+                  endDate: new Date(judgingDeadline.endDate as string),
+                },
+              }
+            : {}),
           submissionType,
           maxScore: Number(maxScore),
           maxVote: Number(maxVote),
-          isActiveRound,
           status,
           maxWinners: Number(maxWinners),
           judges,
         });
-        console.log(" new round ______++___", round);
+        console.log(" new round ______++___", round, {
+          deadline,
+          submissionDeadline,
+          votingDeadline,
+          judgingDeadline,
+        });
         return await round.save();
       } catch (error) {
         const formattedError = getResolverErrorMessage(error);
@@ -115,17 +146,17 @@ const roundResolver = {
           description: string;
           roundNumber: number;
           judgementCriteria: RoundJudgementCriteriaEnum;
-          startDate: string;
-          endDate: string;
           submissionType: SubmissionTypeEnum;
-          submissionStartDate: string;
-          submissionEndDate: string;
           maxScore: number;
           maxVote: number;
           status: RoundStatusEnum;
           isActiveRound: boolean;
           judges: [];
           maxWinners: number;
+          deadline: { startDate: string; endDate: string };
+          submissionDeadline: { startDate: string; endDate: string };
+          votingDeadline: { startDate: string; endDate: string };
+          judgingDeadline: { startDate: string; endDate: string };
         };
       }
     ): Promise<IRound | null> => {
@@ -135,17 +166,16 @@ const roundResolver = {
         description,
         roundNumber,
         judgementCriteria,
-        startDate,
-        endDate,
         submissionType,
-        submissionStartDate,
-        submissionEndDate,
-        maxScore,
         maxVote,
         status,
         isActiveRound,
         maxWinners,
         judges = [],
+        deadline,
+        submissionDeadline,
+        votingDeadline,
+        judgingDeadline,
       } = input;
       return await Round.findByIdAndUpdate(
         id,
@@ -155,17 +185,43 @@ const roundResolver = {
           description,
           roundNumber,
           judgementCriteria,
-          startDate,
-          endDate,
           submissionType,
-          submissionStartDate,
-          submissionEndDate,
-          maxScore,
           maxVote,
           status,
-          isActiveRound,
           maxWinners,
           judges,
+          ...(deadline
+            ? {
+                deadline: {
+                  startDate: new Date(deadline.startDate as string),
+                  endDate: new Date(deadline.endDate as string),
+                },
+              }
+            : {}),
+          ...(submissionDeadline
+            ? {
+                submissionDeadline: {
+                  startDate: new Date(submissionDeadline.startDate as string),
+                  endDate: new Date(submissionDeadline.endDate as string),
+                },
+              }
+            : {}),
+          ...(votingDeadline
+            ? {
+                votingDeadline: {
+                  startDate: new Date(votingDeadline.startDate as string),
+                  endDate: new Date(votingDeadline.endDate as string),
+                },
+              }
+            : {}),
+          ...(judgingDeadline
+            ? {
+                judgingDeadline: {
+                  startDate: new Date(judgingDeadline.startDate as string),
+                  endDate: new Date(judgingDeadline.endDate as string),
+                },
+              }
+            : {}),
         },
         { new: true }
       );

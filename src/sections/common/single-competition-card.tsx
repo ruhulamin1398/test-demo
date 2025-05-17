@@ -31,6 +31,8 @@ const SingleCompetitionCard = ({
   handleEnrolment,
   sx,
   ...other
+}: CardItemProps) {
+  let nextDeadlineTime = 0;
 }: CardItemProps) => {
   const { HumanTimeDifferent } = useDate();
 

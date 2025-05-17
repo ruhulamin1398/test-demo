@@ -9,15 +9,9 @@ export const CREATE_COMPETITION_ROUND = gql`
       description
       roundNumber
       judgementCriteria
-      startDate
-      submissionStartDate
-      submissionEndDate
-      submissionType
-      endDate
       maxScore
       maxVote
       status
-      isActiveRound
       judges {
         id
         name
@@ -41,11 +35,7 @@ export const UPDATE_COMPETITION_ROUND = gql`
       description
       roundNumber
       judgementCriteria
-      startDate
-      endDate
       submissionType
-      submissionStartDate
-      submissionEndDate
       maxScore
       maxVote
       status

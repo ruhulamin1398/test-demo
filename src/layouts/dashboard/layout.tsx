@@ -90,8 +90,6 @@ export function DashboardLayout({
 
   const renderHeader = () => {
     const user = useSelector((state: RootState) => state.auth.user);
-    console.log("user in admin page ", user);
-
     const headerSlotProps: HeaderSectionProps["slotProps"] = {
       container: {
         maxWidth: false,
