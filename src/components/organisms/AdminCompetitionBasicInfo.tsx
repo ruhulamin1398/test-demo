@@ -4,13 +4,13 @@ import { CancelOutlined, EditOutlined } from "@mui/icons-material";
 import { Card, CardContent, CardHeader, IconButton } from "@mui/material";
 import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CompetitionForm from "./CompetitionForm";
 import { ICompetition } from "@/interfaces";
 import AdminCompetitionInfo from "./AdminCompetitionInfo";
 import {
   CompetitionUiModeEnum,
   setUiControlsBasicInfo,
 } from "@/store/slices/competitionSlice";
+import CompetitionForm from "@/app/admin/competition/components/forms/CompetitionForm";
 
 const AdminCompetitionBasicInfo: React.FC = () => {
   const { competition } = useSelector((state: RootState) => state.competition);
