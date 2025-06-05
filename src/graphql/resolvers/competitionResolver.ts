@@ -9,8 +9,9 @@ import {
   PaginationInput,
   SubmissionTypeEnum,
 } from "@/interfaces";
-import { Competition, Enrolment, Round } from "@/models";
-import EnrolmentSubmission from "@/models/EnrolmentSubmission";
+import { Competition, Round } from "@/models";
+import Enrollment from "@/models/Enrollment";
+import EnrollmentSubmission from "@/models/EnrollmentSubmission";
 import { GraphQLError } from "graphql";
 
 const competitionResolver = {
@@ -96,13 +97,15 @@ const competitionResolver = {
         input: {
           title: string;
           description: string;
-          startDate: string;
-          endDate: string;
-          enrolmentDeadline: {
+          competitionDeadline: {
             startDate: string;
             endDate: string;
           };
-          enrolmentType: string;
+          enrollmentDeadline: {
+            startDate: string;
+            endDate: string;
+          };
+          enrollmentType: string;
           price: number;
           mediaUrl: string;
           submissionType: SubmissionTypeEnum;
@@ -115,25 +118,27 @@ const competitionResolver = {
         const {
           title,
           description,
-          startDate,
-          endDate,
-          enrolmentType,
+          enrollmentType,
           price,
           submissionType,
-          enrolmentDeadline,
+          enrollmentDeadline,
+          competitionDeadline,
           status,
           haveRoundWiseSubmission,
         } = input;
+        console.log("INPUT FROM RESOLVER", input);
         const newCompetition = new Competition({
           title,
           description,
-          startDate: new Date(startDate as string),
-          endDate: new Date(endDate as string),
-          enrolmentDeadline: {
-            startDate: new Date(enrolmentDeadline.startDate as string),
-            endDate: new Date(enrolmentDeadline.endDate as string),
+          enrollmentDeadline: {
+            startDate: new Date(enrollmentDeadline.startDate as string),
+            endDate: new Date(enrollmentDeadline.endDate as string),
           },
-          enrolmentType,
+          competitionDeadline: {
+            startDate: new Date(competitionDeadline.startDate as string),
+            endDate: new Date(competitionDeadline.endDate as string),
+          },
+          enrollmentType,
           price,
           submissionType,
           haveRoundWiseSubmission,
@@ -164,11 +169,11 @@ const competitionResolver = {
           description: string;
           startDate: string;
           endDate: string;
-          enrolmentDeadline: {
+          enrollmentDeadline: {
             startDate: string;
             endDate: string;
           };
-          enrolmentType: string;
+          enrollmentType: string;
           price: number;
           mediaUrl: string;
           submissionType: SubmissionTypeEnum;
@@ -184,10 +189,10 @@ const competitionResolver = {
           description,
           startDate,
           endDate,
-          enrolmentType,
+          enrollmentType,
           price,
           submissionType,
-          enrolmentDeadline,
+          enrollmentDeadline,
           status,
           haveRoundWiseSubmission,
         } = input;
@@ -198,11 +203,11 @@ const competitionResolver = {
             description,
             startDate: new Date(startDate as string),
             endDate: new Date(endDate as string),
-            enrolmentDeadline: {
-              startDate: new Date(enrolmentDeadline.startDate as string),
-              endDate: new Date(enrolmentDeadline.endDate as string),
+            enrollmentDeadline: {
+              startDate: new Date(enrollmentDeadline.startDate as string),
+              endDate: new Date(enrollmentDeadline.endDate as string),
             },
-            enrolmentType,
+            enrollmentType,
             price,
             submissionType,
             haveRoundWiseSubmission,
@@ -417,7 +422,7 @@ const competitionResolver = {
       const rounds = await Round.find({ competition: competition.id }).select(
         "_id"
       );
-      const submission = await EnrolmentSubmission.find({
+      const submission = await EnrollmentSubmission.find({
         userId: user.id,
         roundId: { $in: rounds },
       });

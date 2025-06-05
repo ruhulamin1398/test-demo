@@ -1,16 +1,17 @@
-import { IEnrolment, IUser } from "@/interfaces";
-import { IEnrolmentSubmission } from "@/interfaces/enrolmentSubmission";
-import { Enrolment, Round } from "@/models";
-import EnrolmentSubmission from "@/models/EnrolmentSubmission";
+import { IUser } from "@/interfaces";
+import { IEnrollmentSubmission } from "@/interfaces/enrollmentSubmission";
+import { Round } from "@/models";
+import Enrollment from "@/models/Enrollment";
+import EnrollmentSubmission from "@/models/EnrollmentSubmission";
 import { GraphQLError } from "graphql";
 
-const enrolmentSubmissionResolver = {
+const enrollmentSubmissionResolver = {
   Query: {
     GetActiveRoundSubmission: async (
       _: void,
       { competitionId }: { competitionId: string },
       { user }: { user: IUser | null }
-    ): Promise<IEnrolmentSubmission | null> => {
+    ): Promise<IEnrollmentSubmission | null> => {
       if (!user) {
         throw new GraphQLError("Not authenticated", {
           extensions: {
@@ -19,13 +20,13 @@ const enrolmentSubmissionResolver = {
         });
       }
 
-      // console.log("user in enrolment resolver ====== ", user);
-      const enrolment = await Enrolment.findOne({
+      // console.log("user in enrollment resolver ====== ", user);
+      const enrollment = await Enrollment.findOne({
         competitionId,
         userId: user.id,
       });
 
-      if (!enrolment) {
+      if (!enrollment) {
         throw new GraphQLError("User Doesn't Enrolled", {
           extensions: {
             code: "NOT_FOUND",
@@ -35,10 +36,10 @@ const enrolmentSubmissionResolver = {
       const activeRound = await Round.findOne({
         competition: competitionId,
       });
-      const submission = await EnrolmentSubmission.findOne({
+      const submission = await EnrollmentSubmission.findOne({
         roundId: activeRound.id,
         userId: user.id,
-        enrolId: enrolment.id,
+        enrolId: enrollment.id,
       }).populate("roundId");
 
       // console.log(
@@ -50,4 +51,4 @@ const enrolmentSubmissionResolver = {
   },
 };
 
-export default enrolmentSubmissionResolver;
+export default enrollmentSubmissionResolver;

@@ -1,4 +1,4 @@
-import { IEnrolmentSubmission } from "@/interfaces/enrolmentSubmission";
+// File: src/graphql/types/competitionTypeDefs.ts
 export const competitionTypeDefs = `#graphql
   # Enums for various competition-related values
   enum CompetitionStatusEnum {
@@ -15,18 +15,18 @@ export const competitionTypeDefs = `#graphql
     Link,
   }
 
-  enum EnrolmentTypeEnum {
+  enum EnrollmentTypeEnum {
     Paid
     Free
   }
 
-  # Input and Output types for EnrolmentDeadline
-  type EnrolmentDeadline {
+  # Input and Output types for EnrollmentDeadline
+  type EnrollmentDeadline {
     startDate: String!
     endDate: String!
   }
 
-  input EnrolmentDeadlineInput {
+  input EnrollmentDeadlineInput {
     startDate: String!
     endDate: String!
   }
@@ -50,13 +50,11 @@ export const competitionTypeDefs = `#graphql
   input CreateCompetitionInput {
     title: String!
     description: String!
-    startDate: String!
-    endDate: String!
-    enrolmentDeadline: EnrolmentDeadlineInput!
-    enrolmentType: EnrolmentTypeEnum!
+    competitionDeadline: EnrollmentDeadlineInput!
+    enrollmentDeadline: EnrollmentDeadlineInput!
+    enrollmentType: EnrollmentTypeEnum!
     price: Float!
     mediaUrl: String
-    submissionType: SubmissionTypeEnum!
     status: CompetitionStatusEnum
     haveRoundWiseSubmission: Boolean
   }
@@ -73,11 +71,10 @@ export const competitionTypeDefs = `#graphql
     id: ID!
     title: String!
     description: String!
-    startDate: String!
     eligibility: String!
-    endDate: String!
-    enrolmentDeadline: EnrolmentDeadline!
-    enrolmentType: EnrolmentTypeEnum!
+    enrollmentDeadline: EnrollmentDeadline!
+    competitionDeadline: EnrollmentDeadline!
+    enrollmentType: EnrollmentTypeEnum!
     price: Float!
     mediaUrl: String
     submissionType: SubmissionTypeEnum!

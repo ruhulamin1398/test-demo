@@ -7,6 +7,7 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import {
   CompetitionStatusEnum,
+  EnrollmentTypeEnum,
   RoundJudgementCriteriaEnum,
   RoundStatusEnum,
   SubmissionTypeEnum,
@@ -22,8 +23,6 @@ interface RoundFormValidationContext {
 }
 
 export const competitionFormValidationSchema = Yup.object({
-  title: Yup.string().required("Title is required"),
-  description: Yup.string().required("Description is required"),
   // Start Date: Must be on or after today
   startDate: Yup.date()
     .required("Start Date is required")
@@ -34,25 +33,16 @@ export const competitionFormValidationSchema = Yup.object({
     .required("End Date is required")
     .min(Yup.ref("startDate"), "End date must be on or after the start date"),
 
-  haveRoundWiseSubmission: Yup.boolean()
-    .notRequired()
-    .default(false)
-    .test(
-      "is-boolean",
-      "haveRoundWiseSubmission must be a boolean value",
-      (value) => typeof value === "boolean"
-    ),
-
-  enrolmentDeadline: Yup.object({
+  enrollmentDeadline: Yup.object({
     startDate: Yup.date()
-      .required("Enrolment Start Date is required")
+      .required("Enrollment Start Date is required")
       .test(
-        "enrolment-startdate-valid",
-        "Enrolment start date must be between competition start and end date",
+        "enrollment-startdate-valid",
+        "Enrollment start date must be between competition start and end date",
         function (value) {
           const rootStartDate = this.options.context?.startDate; // Access root startDate
           const rootEndDate = this.options.context?.endDate; // Access root endDate
-          // Ensure enrolment start date is within the competition start and end dates
+          // Ensure enrollment start date is within the competition start and end dates
           const minValid = dayjs(value).isSameOrAfter(
             dayjs(rootStartDate),
             "day"
@@ -66,17 +56,17 @@ export const competitionFormValidationSchema = Yup.object({
         }
       ),
 
-    // Enrolment Deadline End Date:
+    // Enrollment Deadline End Date:
     endDate: Yup.date()
-      .required("Enrolment End Date is required")
+      .required("Enrollment End Date is required")
       .test(
-        "enrolment-startdate-valid",
-        "Enrolment start date must be between competition start and end date",
+        "enrollment-startdate-valid",
+        "Enrollment start date must be between competition start and end date",
         function (value) {
           const { startDate } = this.parent; // Access root startDate
           const rootEndDate = this.options.context?.endDate; // Access root endDate
 
-          // Ensure enrolment start date is within the competition start and end dates
+          // Ensure enrollment start date is within the competition start and end dates
           const minValid = dayjs(value).isSameOrAfter(dayjs(startDate), "day");
           const maxValid = dayjs(value).isSameOrBefore(
             dayjs(rootEndDate),
@@ -87,26 +77,6 @@ export const competitionFormValidationSchema = Yup.object({
         }
       ),
   }),
-  enrolmentType: Yup.string()
-    .oneOf(["Free", "Paid"])
-    .required("Enrolment Type is required"),
-  price: Yup.number()
-    .when("enrolmentType", {
-      is: (enrolmentType: string) => enrolmentType === "Paid",
-      then: (schema) =>
-        schema
-          .required("Price is required for paid enrolments")
-          .min(1, "Price must be greater than 0"),
-      otherwise: (schema) => schema.nullable(),
-    })
-    .nullable(),
-  mediaUrl: Yup.string().notRequired(),
-  submissionType: Yup.string()
-    .oneOf(Object.values(SubmissionTypeEnum))
-    .required("Submission Type is required"),
-  status: Yup.string()
-    .oneOf(Object.values(CompetitionStatusEnum))
-    .required("Status is required"),
 });
 
 // Define the Yup validation schema
@@ -146,11 +116,11 @@ export const roundFormValidationSchema = ({
     endDate: Yup.date()
       .required("End date is required")
       .test(
-        "enrolment-startdate-valid",
-        "Enrolment start date must be between competition start and end date",
+        "enrollment-startdate-valid",
+        "Enrollment start date must be between competition start and end date",
         function (value) {
           const { startDate } = this.parent; // Access root startDate
-          // Ensure enrolment start date is within the competition start and end dates
+          // Ensure enrollment start date is within the competition start and end dates
           const minValid = dayjs(value).isSameOrAfter(dayjs(startDate), "day");
           const maxValid = dayjs(value).isSameOrBefore(
             dayjs(competitionEndDate),
@@ -492,12 +462,23 @@ export const getRoundFormZodSchema = ({
   });
 };
 
-const competitionFormValidationZodSchema = z
+export const competitionFormValidationZodSchema = z
   .object({
     title: z.string().min(4).nonempty(),
     description: z.string().min(4).nonempty(),
-    roundNumber: z.number().positive(),
-    enrolmentDeadline: z
+    enrollmentType: z.enum(
+      Object.values(EnrollmentTypeEnum) as [string, ...string[]],
+      {
+        required_error: "Status is required",
+      }
+    ),
+    haveRoundWiseSubmission: z.boolean().optional().default(false),
+    price: z.preprocess(
+      (val) => (val === "" ? undefined : Number(val)),
+      z.number().optional()
+    ),
+    mediaUrl: z.string().nullable(),
+    enrollmentDeadline: z
       .tuple([
         z.custom<dayjs.Dayjs | null>(() => true),
         z.custom<dayjs.Dayjs | null>(() => true),
@@ -509,6 +490,12 @@ const competitionFormValidationZodSchema = z
         z.custom<dayjs.Dayjs | null>(() => true),
       ])
       .optional(),
+    status: z.enum(
+      Object.values(CompetitionStatusEnum) as [string, ...string[]],
+      {
+        required_error: "Status is required",
+      }
+    ),
   })
   .superRefine((data, ctx) => {
     const [startDate, endDate] = data.competitionDeadline as [
@@ -525,14 +512,14 @@ const competitionFormValidationZodSchema = z
     }
     if (startDate && endDate && data.competitionDeadline) {
       const [enrollmentStartDate, enrollmentEndDate] =
-        data.enrolmentDeadline as [dayjs.Dayjs | null, dayjs.Dayjs | null];
+        data.enrollmentDeadline as [dayjs.Dayjs | null, dayjs.Dayjs | null];
       if (enrollmentStartDate && enrollmentEndDate) {
         const submissionErrors = validateDateRangeWithin({
           start: enrollmentStartDate,
           end: enrollmentEndDate,
           min: startDate,
           max: endDate,
-          label: "Enrolment period",
+          label: "Enrollment period",
         });
         if (submissionErrors) {
           ctx.addIssue({
@@ -548,5 +535,49 @@ const competitionFormValidationZodSchema = z
         message: "EnrollmentDeadline deadline should be valid",
         code: "custom",
       });
+    }
+    // only enforce price when enrollmentType is Paid
+    console.log("VALIDATING", data.price, data.enrollmentType);
+    if (data.enrollmentType === EnrollmentTypeEnum.PAID) {
+      // missing or not a number
+      if (data.price == null) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Price is required for paid enrollments",
+          path: ["price"],
+        });
+      }
+      // present but too small
+      else if (data.price < 1) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Price must be greater than 0",
+          path: ["price"],
+        });
+      }
+    }
+    if (data.enrollmentType === EnrollmentTypeEnum.PAID) {
+      if (typeof data.price !== "number" || isNaN(data.price)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Price is required for paid enrollments",
+          path: ["price"],
+        });
+      } else if (data.price < 1) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Price must be greater than 0",
+          path: ["price"],
+        });
+      }
+    } else {
+      // If enrollmentType is not PAID, price should not be filled
+      if (typeof data.price === "number" && data.price > 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Price should not be provided for free enrollments",
+          path: ["price"],
+        });
+      }
     }
   });

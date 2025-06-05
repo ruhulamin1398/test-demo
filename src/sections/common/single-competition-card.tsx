@@ -21,19 +21,19 @@ import { paths } from "@/routes/paths";
 
 type CardItemProps = CardProps & {
   item: ICompetition;
-  handleEnrolment: (competitionId: string) => void;
+  handleEnrollment: (competitionId: string) => void;
   isEnrolled?: boolean;
 };
 
 const SingleCompetitionCard = ({
   isEnrolled = false,
   item,
-  handleEnrolment,
+  handleEnrollment,
   sx,
   ...other
-}: CardItemProps) {
+}: CardItemProps) => {
   let nextDeadlineTime = 0;
- 
+
   const { HumanTimeDifferent } = useDate();
 
   const renderImage = () => (
@@ -65,7 +65,7 @@ const SingleCompetitionCard = ({
           <Label
             startIcon={<Iconify width={12} icon="solar:clock-circle-outline" />}
           >
-            {HumanTimeDifferent(Number(item.enrolmentDeadline.endDate))}
+            {HumanTimeDifferent(Number(item.enrollmentDeadline.endDate))}
           </Label>
         )}
 
@@ -124,7 +124,7 @@ const SingleCompetitionCard = ({
           size="small"
           onClick={(e) => {
             e.preventDefault();
-            handleEnrolment(item.id);
+            handleEnrollment(item.id);
           }}
           disabled={isEnrolled}
         >

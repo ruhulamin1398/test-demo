@@ -5,8 +5,8 @@ import {
   UserFilterInput,
   UsersResponse,
 } from "@/interfaces";
-import { Enrolment, User } from "@/models"; // Assuming your model is exported from this path
-import EnrolmentSubmission from "@/models/EnrolmentSubmission";
+import { Enrollment, User } from "@/models"; // Assuming your model is exported from this path
+import EnrolmentSubmission from "@/models/EnrollmentSubmission";
 import { GraphQLError } from "graphql";
 import { NextApiRequest } from "next";
 
@@ -285,10 +285,10 @@ const resolvers = {
   User: {
     // Custom resolver for the 'phoneNumber' field
     enrollIds: async (user: IUser) => {
-      const enrolments = (await Enrolment.find({ userId: user.id })).map(
-        (enrolment) => enrolment.competitionId
+      const enrollments = (await Enrollment.find({ userId: user.id })).map(
+        (enrollment) => enrollment.competitionId
       );
-      return enrolments;
+      return enrollments;
     },
     submissions: async (user: IUser) => {
       const submissionList = await EnrolmentSubmission.find({

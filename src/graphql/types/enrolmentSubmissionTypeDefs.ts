@@ -1,5 +1,5 @@
-export const enrolmentSubmissionTypeDefs = `#graphql
-  type EnrolmentSubmission {
+export const enrollmentSubmissionTypeDefs = `#graphql
+  type EnrollmentSubmission {
     id: ID!
     enrolId: ID!
     roundId: ID
@@ -12,7 +12,7 @@ export const enrolmentSubmissionTypeDefs = `#graphql
     updatedAt: String!
   }
   type Query {
-    GetActiveRoundSubmission(competitionId: ID!): EnrolmentSubmission
+    GetActiveRoundSubmission(competitionId: ID!): EnrollmentSubmission
   }
  
   enum SubmissionTypeEnum {

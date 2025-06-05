@@ -8,14 +8,16 @@ export const CREATE_COMPETITION = gql`
       id
       title
       description
-      startDate
-      endDate
-      enrolmentDeadline {
+      enrollmentDeadline {
+        startDate
+        endDate
+      }
+      competitionDeadline {
         startDate
         endDate
       }
       eligibility
-      enrolmentType
+      enrollmentType
       price
       mediaUrl
       submissionType
@@ -49,13 +51,15 @@ export const UPDATE_COMPETITION = gql`
       id
       title
       description
-      startDate
-      endDate
-      enrolmentDeadline {
+      enrollmentDeadline {
         startDate
         endDate
       }
-      enrolmentType
+      competitionDeadline {
+        startDate
+        endDate
+      }
+      enrollmentType
       price
       mediaUrl
       submissionType
@@ -105,9 +109,12 @@ export const GET_COMPETITION_QUERY = gql`
       id
       title
       description
+<<<<<<< HEAD
       startDate
       endDate
       enroledUserCount
+=======
+>>>>>>> efb8bad47c02cf53a38b30f4c89b7440c6bb0476
       mySubmission {
         id
         score
@@ -115,11 +122,15 @@ export const GET_COMPETITION_QUERY = gql`
         createdAt
         updatedAt
       }
-      enrolmentDeadline {
+      enrollmentDeadline {
         startDate
         endDate
       }
-      enrolmentType
+      competitionDeadline {
+        startDate
+        endDate
+      }
+      enrollmentType
       price
       mediaUrl
       submissionType
@@ -129,8 +140,6 @@ export const GET_COMPETITION_QUERY = gql`
       enroledUserCount
       rounds {
         id
-        startDate
-        endDate
         title
 
         submissionStartDate
@@ -188,9 +197,12 @@ export const GET_COMPETITIONS_QUERY = gql`
         id
         title
         description
+<<<<<<< HEAD
         startDate
         endDate
         enroledUserCount
+=======
+>>>>>>> efb8bad47c02cf53a38b30f4c89b7440c6bb0476
         mySubmission {
           id
           score
@@ -198,11 +210,15 @@ export const GET_COMPETITIONS_QUERY = gql`
           createdAt
           updatedAt
         }
-        enrolmentDeadline {
+        enrollmentDeadline {
           startDate
           endDate
         }
-        enrolmentType
+        competitionDeadline {
+          startDate
+          endDate
+        }
+        enrollmentType
         price
         mediaUrl
         submissionType

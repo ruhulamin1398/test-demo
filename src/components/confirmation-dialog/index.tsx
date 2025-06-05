@@ -27,19 +27,19 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export type EnrolmentConfirmationDialogProps = {
+export type EnrollmentConfirmationDialogProps = {
   onAgree: () => void;
   onDisagree: () => void;
   open: boolean;
   createLoading?: boolean;
 };
 
-export const EnrolmentConfirmationDialog = ({
+export const EnrollmentConfirmationDialog = ({
   onAgree,
   onDisagree,
   open,
   createLoading,
-}: EnrolmentConfirmationDialogProps) => {
+}: EnrollmentConfirmationDialogProps) => {
   return (
     <Dialog
       open={open}
@@ -97,4 +97,4 @@ export const EnrolmentConfirmationDialog = ({
   );
 };
 
-export default EnrolmentConfirmationDialog;
+export default EnrollmentConfirmationDialog;

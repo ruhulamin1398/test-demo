@@ -3,7 +3,7 @@ import type { UseBackToTopReturn } from "minimal-shared/hooks";
 
 import Grid from "@mui/material/Grid2";
 import { ContestDateTimeLine } from "../contest-date-timeline";
-import { EnrolmentCard } from "../enroll-contest";
+import { EnrollmentCard } from "../enroll-contest";
 import { PrizeList } from "../prize-list";
 import { Box } from "@mui/material";
 import { ICompetition } from "@/interfaces";
@@ -36,12 +36,12 @@ export function CompetitionSidebar({ competition }: Props) {
       >
         <Grid size={12}>
           {!isEnroled ? (
-            <EnrolmentCard
+            <EnrollmentCard
               price={competition.price ? `${competition.price}` : "Free"}
               title={competition.title}
               description={competition.description}
               competitionId={competition.id}
-              deadlineEndDate={competition.enrolmentDeadline.endDate}
+              deadlineEndDate={competition.enrollmentDeadline.endDate}
             />
           ) : (
             <>

@@ -6,7 +6,7 @@ import InputBase from "@mui/material/InputBase";
 import { Beenhere } from "@mui/icons-material";
 import { Iconify } from "@/components/iconify";
 import { Label, labelClasses } from "@/components/label";
-import EnrolmentConfirmationDialog from "@/components/confirmation-dialog";
+import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
 import { useEnrollment } from "@/app/hooks/useEnrollment";
 import { useDate } from "@/hooks/use-date";
 
@@ -20,7 +20,7 @@ type Props = BoxProps & {
   deadlineEndDate: Date;
 };
 
-export function EnrolmentCard({
+export function EnrollmentCard({
   competitionId,
   price,
   title,
@@ -31,9 +31,9 @@ export function EnrolmentCard({
 }: Props) {
   const {
     openDialog,
-    handleOpenEnrolmentConfirmationDialog,
-    handleCloseEnrolmentConfirmationDialog,
-    onAgreeEnrolment,
+    handleOpenEnrollmentConfirmationDialog,
+    handleCloseEnrollmentConfirmationDialog,
+    onAgreeEnrollment,
     loading,
   } = useEnrollment();
   const { HumanTimeDifferent } = useDate();
@@ -97,16 +97,16 @@ export function EnrolmentCard({
           color="primary"
           variant="contained"
           onClick={() => {
-            handleOpenEnrolmentConfirmationDialog(competitionId);
+            handleOpenEnrollmentConfirmationDialog(competitionId);
           }}
         >
           ENROLL NOW
         </Button>
       </Box>
-      <EnrolmentConfirmationDialog
+      <EnrollmentConfirmationDialog
         open={!!openDialog?.competitionId}
-        onAgree={onAgreeEnrolment}
-        onDisagree={handleCloseEnrolmentConfirmationDialog}
+        onAgree={onAgreeEnrollment}
+        onDisagree={handleCloseEnrollmentConfirmationDialog}
         createLoading={loading}
       />
     </>

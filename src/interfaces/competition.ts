@@ -13,7 +13,7 @@ export enum SubmissionTypeEnum {
   LINK = "Link",
 }
 
-export enum EnrolmentTypeEnum {
+export enum EnrollmentTypeEnum {
   PAID = "Paid",
   FREE = "Free",
 }
@@ -32,15 +32,17 @@ export interface ICompetition {
   title: string;
   description: string;
   eligibility: string;
-  startDate: Date;
-  endDate: Date;
-  enrolmentDeadline: {
+  competitionDeadline: {
+    startDate: Date;
+    endDate: Date;
+  };
+  enrollmentDeadline: {
     startDate: Date;
     endDate: Date;
   };
   prizes: IPrizesAndRewards[];
   rounds: IRound[];
-  enrolmentType: EnrolmentTypeEnum;
+  enrollmentType: EnrollmentTypeEnum;
   price: number;
   mediaUrl?: string;
   submissionType: SubmissionTypeEnum;

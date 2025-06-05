@@ -43,18 +43,18 @@ const ContentSubmission = ({
   const renderRoundSubmission = () => {
     dayjs.extend(isBetween);
     const isDeadlineExist =
-      activeRound?.submissionStartDate &&
-      activeRound?.submissionEndDate &&
+      activeRound?.submissionDeadline.startDate &&
+      activeRound?.submissionDeadline.endDate &&
       dayjs().isBetween(
-        Number(activeRound.submissionStartDate),
-        Number(activeRound.submissionEndDate),
+        Number(activeRound.submissionDeadline.startDate),
+        Number(activeRound.submissionDeadline.endDate),
         "day",
         "[]"
       );
     // console.log(
     //   "isDeadlineExist  _____",
-    //   activeRound?.submissionStartDate,
-    //   activeRound?.submissionEndDate,
+    //   activeRound?.submissionDeadline.StartDate,
+    //   activeRound?.submissionDeadline.EndDate,
     //   Math.floor(new Date().getTime()),
     //   isDeadlineExist
     // );

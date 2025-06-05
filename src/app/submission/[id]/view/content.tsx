@@ -11,14 +11,14 @@ type Props = { competition: ICompetition };
 const PageContent = ({ competition }: Props) => {
   const { formatDate } = useDate();
   const activeRound: IRound | undefined = competition.rounds.find(
-    (round) => round.isActiveRound
+    (round) => true // round.isActiveRound
   );
   return (
     <Grid container spacing={{ xs: 3, md: 5, lg: 8 }}>
       <Grid size={{ xs: 12, md: 6, lg: 7 }}>
         <ContentSubmission
           title={competition.title}
-          date={formatDate(competition.enrolmentDeadline.endDate)}
+          date={formatDate(competition.enrollmentDeadline.endDate)}
           activeRound={activeRound}
           competitionId={competition.id}
         />

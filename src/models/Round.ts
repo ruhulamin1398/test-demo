@@ -39,7 +39,7 @@ const roundSchema = new Schema<IRoundDocument>(
       enum: Object.values(RoundStatusEnum) as RoundStatusEnum[], // Explicit cast
       default: RoundStatusEnum.UPCOMING,
     },
-    enrolments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Enrolment" }],
+    enrollments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Enrollment" }],
     judges: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     competition: {
       type: mongoose.Schema.Types.ObjectId,

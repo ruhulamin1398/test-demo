@@ -5,7 +5,7 @@ import {
   RoundStatusEnum,
   SubmissionTypeEnum,
 } from "@/interfaces";
-import { Enrolment, Round, User } from "@/models";
+import { Enrollment, Round, User } from "@/models";
 import { GraphQLError } from "graphql";
 interface DeleteRoundArgs {
   id: string;
@@ -254,7 +254,7 @@ const roundResolver = {
   },
   Round: {
     enrolledIds: async (round: IRound) => {
-      return Enrolment.find({ _id: { $in: round.enrolments } });
+      return Enrollment.find({ _id: { $in: round.enrollments } });
     },
     judges: async (round: IRound) => {
       return User.find({ _id: { $in: round.judges } });

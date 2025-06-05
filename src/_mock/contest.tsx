@@ -4,7 +4,7 @@ import PaletteIcon from "@mui/icons-material/Palette";
 
 import {
   CompetitionStatusEnum,
-  EnrolmentTypeEnum,
+  EnrollmentTypeEnum,
   SubmissionTypeEnum,
   ICompetition,
   RoundDetails,
@@ -17,9 +17,11 @@ export const competitions: ICompetition[] = [
       "Nature Photography Contest - Capture the Stunning Beauty of the Natural World",
     description: "Capture the beauty of nature in its purest form.",
     eligibility: "Open to all",
-    startDate: new Date("2025-05-01"),
-    endDate: new Date("2025-05-15"),
-    enrolmentDeadline: {
+    competitionDeadline: {
+      startDate: new Date("2025-05-01"),
+      endDate: new Date("2025-05-15"),
+    },
+    enrollmentDeadline: {
       startDate: new Date("2025-04-01"),
       endDate: new Date("2025-04-30"),
     },
@@ -33,7 +35,7 @@ export const competitions: ICompetition[] = [
       },
     ],
     rounds: [],
-    enrolmentType: EnrolmentTypeEnum.FREE,
+    enrollmentType: EnrollmentTypeEnum.FREE,
     price: 0,
     mediaUrl: "/banner-back.jpg",
     submissionType: SubmissionTypeEnum.PHOTO,
@@ -48,9 +50,11 @@ export const competitions: ICompetition[] = [
       "Digital Art Challenge - Unleash Your Creativity Through Digital Masterpieces",
     description: "Unleash your creativity through digital masterpieces.",
     eligibility: "Open to all",
-    startDate: new Date("2025-06-01"),
-    endDate: new Date("2025-06-15"),
-    enrolmentDeadline: {
+    competitionDeadline: {
+      startDate: new Date("2025-06-01"),
+      endDate: new Date("2025-06-15"),
+    },
+    enrollmentDeadline: {
       startDate: new Date("2025-05-01"),
       endDate: new Date("2025-05-31"),
     },
@@ -64,7 +68,7 @@ export const competitions: ICompetition[] = [
       },
     ],
     rounds: [],
-    enrolmentType: EnrolmentTypeEnum.PAID,
+    enrollmentType: EnrollmentTypeEnum.PAID,
     price: 20,
     mediaUrl: "/banner-back.jpg",
     submissionType: SubmissionTypeEnum.PHOTO,
@@ -79,9 +83,11 @@ export const competitions: ICompetition[] = [
       "Creative Writing Contest - Share Your Unique Stories with the World",
     description: "Share your unique stories with the world.",
     eligibility: "Open to all",
-    startDate: new Date("2025-07-01"),
-    endDate: new Date("2025-07-15"),
-    enrolmentDeadline: {
+    competitionDeadline: {
+      startDate: new Date("2025-06-01"),
+      endDate: new Date("2025-06-15"),
+    },
+    enrollmentDeadline: {
       startDate: new Date("2025-06-01"),
       endDate: new Date("2025-06-30"),
     },
@@ -95,7 +101,7 @@ export const competitions: ICompetition[] = [
       },
     ],
     rounds: [],
-    enrolmentType: EnrolmentTypeEnum.FREE,
+    enrollmentType: EnrollmentTypeEnum.FREE,
     price: 0,
     mediaUrl: "/banner-back.jpg",
     submissionType: SubmissionTypeEnum.PHOTO,
@@ -110,9 +116,11 @@ export const competitions: ICompetition[] = [
       "Music Composition Contest - Compose and Showcase Your Musical Masterpiece",
     description: "Compose a masterpiece and showcase your talent.",
     eligibility: "Open to all",
-    startDate: new Date("2025-08-01"),
-    endDate: new Date("2025-08-15"),
-    enrolmentDeadline: {
+    competitionDeadline: {
+      startDate: new Date("2025-06-01"),
+      endDate: new Date("2025-06-15"),
+    },
+    enrollmentDeadline: {
       startDate: new Date("2025-07-01"),
       endDate: new Date("2025-07-31"),
     },
@@ -126,7 +134,7 @@ export const competitions: ICompetition[] = [
       },
     ],
     rounds: [],
-    enrolmentType: EnrolmentTypeEnum.PAID,
+    enrollmentType: EnrollmentTypeEnum.PAID,
     price: 30,
     mediaUrl: "/banner-back.jpg",
     submissionType: SubmissionTypeEnum.VIDEO,
@@ -141,9 +149,11 @@ export const competitions: ICompetition[] = [
       "Short Film Festival - Create a Captivating Short Film That Inspires",
     description: "Create a captivating short film that inspires.",
     eligibility: "Open to all",
-    startDate: new Date("2025-09-01"),
-    endDate: new Date("2025-09-15"),
-    enrolmentDeadline: {
+    competitionDeadline: {
+      startDate: new Date("2025-06-01"),
+      endDate: new Date("2025-06-15"),
+    },
+    enrollmentDeadline: {
       startDate: new Date("2025-08-01"),
       endDate: new Date("2025-08-31"),
     },
@@ -157,7 +167,7 @@ export const competitions: ICompetition[] = [
       },
     ],
     rounds: [],
-    enrolmentType: EnrolmentTypeEnum.PAID,
+    enrollmentType: EnrollmentTypeEnum.PAID,
     price: 50,
     mediaUrl: "/banner-back.jpg",
     submissionType: SubmissionTypeEnum.VIDEO,
@@ -171,9 +181,11 @@ export const competitions: ICompetition[] = [
     title: "Robotics Challenge - Showcase Your Innovative Robotics Creations",
     description: "Showcase your innovative robotics creations.",
     eligibility: "Open to all",
-    startDate: new Date("2025-10-01"),
-    endDate: new Date("2025-10-15"),
-    enrolmentDeadline: {
+    competitionDeadline: {
+      startDate: new Date("2025-06-01"),
+      endDate: new Date("2025-06-15"),
+    },
+    enrollmentDeadline: {
       startDate: new Date("2025-09-01"),
       endDate: new Date("2025-09-30"),
     },
@@ -187,7 +199,7 @@ export const competitions: ICompetition[] = [
       },
     ],
     rounds: [],
-    enrolmentType: EnrolmentTypeEnum.FREE,
+    enrollmentType: EnrollmentTypeEnum.FREE,
     price: 0,
     mediaUrl: "/banner-back.jpg",
     submissionType: SubmissionTypeEnum.VIDEO,

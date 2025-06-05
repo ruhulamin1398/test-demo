@@ -1,7 +1,7 @@
 export const submissionScoreTypeDefs = `
   type SubmissionScore {
     id: ID!
-    enrolId: Enrolment!
+    enrolId: Enrollment!
     roundId: Round!
     userId: User!
     score: Float!

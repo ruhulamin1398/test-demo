@@ -15,7 +15,7 @@ type Props = BoxProps & {
   description?: string;
 };
 
-export function EnrolmentCard({
+export function EnrollmentCard({
   price,
   title,
   description,

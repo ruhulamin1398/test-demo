@@ -1,4 +1,3 @@
-import { ENROLMENT_MUTATION } from "@/graphql-client/enrolment";
 import { useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { toast } from "@/components/snackbar";
@@ -6,55 +5,56 @@ import { toast } from "@/components/snackbar";
 import { handleGraphQLError } from "@/utils/errorHandling";
 import { useDispatch } from "react-redux";
 import { updateEnrollIds } from "@/store/slices/authSlice";
+import { ENROLMENT_MUTATION } from "@/graphql-client/enrolment";
 
-type EnrolmentConfirmationDialogProps = {
+type EnrollmentConfirmationDialogProps = {
   competitionId?: string;
 };
 
 export const useEnrollment = () => {
   const dispatch = useDispatch();
   const [openDialog, setOpenDialog] =
-    useState<EnrolmentConfirmationDialogProps>({});
-  const [createEnrolment, { loading, error, data }] =
+    useState<EnrollmentConfirmationDialogProps>({});
+  const [createEnrollment, { loading, error, data }] =
     useMutation(ENROLMENT_MUTATION);
 
-  const handleOpenEnrolmentConfirmationDialog = (id: string) => {
+  const handleOpenEnrollmentConfirmationDialog = (id: string) => {
     setOpenDialog({
       competitionId: id,
     });
   };
 
-  const handleCloseEnrolmentConfirmationDialog = () => {
+  const handleCloseEnrollmentConfirmationDialog = () => {
     setOpenDialog({});
   };
-  const onAgreeEnrolment = async () => {
+  const onAgreeEnrollment = async () => {
     if (openDialog?.competitionId) {
-      const response = await createEnrolment({
+      const response = await createEnrollment({
         variables: {
           competitionId: openDialog?.competitionId,
         },
       });
       console.log(response);
-      if (response.data?.createEnrolment) {
-        const { competitionId } = response.data.createEnrolment;
+      if (response.data?.createEnrollment) {
+        const { competitionId } = response.data.createEnrollment;
         dispatch(updateEnrollIds({ enrollId: competitionId }));
         toast.dismiss();
-        toast.success("Enrolment successfull.");
+        toast.success("Enrollment successfull.");
       }
     }
 
-    handleCloseEnrolmentConfirmationDialog();
+    handleCloseEnrollmentConfirmationDialog();
   };
 
   useEffect(() => {
     if (loading) {
       toast.dismiss();
-      toast.loading("Enrolment in progress.");
+      toast.loading("Enrollment in progress.");
     }
-    if (data && data.createEnrolment && !loading) {
+    if (data && data.createEnrollment && !loading) {
       setOpenDialog({});
       toast.dismiss();
-      toast.success("Enrolment successfull.");
+      toast.success("Enrollment successfull.");
     }
     if (error) {
       setOpenDialog({});
@@ -65,9 +65,9 @@ export const useEnrollment = () => {
   }, [loading, data, error]);
   return {
     openDialog,
-    handleOpenEnrolmentConfirmationDialog,
-    handleCloseEnrolmentConfirmationDialog,
-    onAgreeEnrolment,
+    handleOpenEnrollmentConfirmationDialog,
+    handleCloseEnrollmentConfirmationDialog,
+    onAgreeEnrollment,
     loading,
   };
 };

@@ -1,11 +1,11 @@
-import { IEnrolment } from "@/interfaces/enrolment";
+import { IEnrollment } from "@/interfaces/enrollment";
 import { IRound } from "@/interfaces/round";
 import { IUser } from "@/interfaces/user";
 
 // ISubmissionScore Interface
-export interface IEnrolmentSubmission {
+export interface IEnrollmentSubmission {
   id: string;
-  enrolId: IEnrolment;
+  enrolId: IEnrollment;
   roundId: IRound;
   userId: IUser;
   score: number;

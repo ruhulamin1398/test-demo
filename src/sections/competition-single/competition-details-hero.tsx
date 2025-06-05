@@ -68,13 +68,13 @@ export function CompetitionDetailsHero({
           icon="mdi:currency-usd-circle"
         />
         <CompetitionHeroCard
-          title="Enrolment Start At"
-          value={formatDate(competition.enrolmentDeadline.startDate)}
+          title="Enrollment Start At"
+          value={formatDate(competition.enrollmentDeadline.startDate)}
           icon="mdi:currency-usd-circle"
         />
         <CompetitionHeroCard
-          title="Enrolment Ends At"
-          value={formatDate(competition.enrolmentDeadline.endDate)}
+          title="Enrollment Ends At"
+          value={formatDate(competition.enrollmentDeadline.endDate)}
           icon="mdi:currency-usd-circle"
         />
       </Box>

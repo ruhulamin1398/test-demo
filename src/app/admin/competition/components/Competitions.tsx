@@ -14,8 +14,8 @@ import {
   setUiControlsBasicInfo,
 } from "@/store/slices/competitionSlice";
 import { AddOutlined, CancelOutlined } from "@mui/icons-material";
-import CompetitionForm from "@/components/organisms/CompetitionForm";
-import CompetitionList from "@/app/dashboard/competition/components/CompetitionList";
+import { CompetitionList } from "@/app/competition/components/CompetitionList";
+import CompetitionForm from "./forms/CompetitionForm";
 
 const Competitions: React.FC = () => {
   const { mode } = useSelector((state: RootState) => {
@@ -72,7 +72,7 @@ const Competitions: React.FC = () => {
         />
         <CardContent>
           {mode !== CompetitionUiModeEnum.VIEW ? (
-            <CompetitionList />
+            <CompetitionList competitions={[]} />
           ) : (
             <CompetitionForm />
           )}
