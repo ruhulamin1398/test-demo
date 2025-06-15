@@ -125,7 +125,7 @@ export const paths = {
       course: `${ROOTS.DASHBOARD}/course`,
     },
     user: {
-      root: `${ROOTS.DASHBOARD}/user`,
+      root: `${ROOTS.DASHBOARD}/users`,
       new: `${ROOTS.DASHBOARD}/user/new`,
       list: `${ROOTS.DASHBOARD}/user/list`,
       cards: `${ROOTS.DASHBOARD}/user/cards`,
