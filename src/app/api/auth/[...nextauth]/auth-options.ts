@@ -65,12 +65,7 @@ export const authOptions: AuthOptions = {
               authProvider: authProvider,
             },
           });
-
-          console.log(" social login data is ___", data);
-
           const user = data?.socialLogin?.user;
-          console.log("logged in user ", token, user);
-
           if (data?.socialLogin?.user) {
             token.user = data.socialLogin.user;
           }

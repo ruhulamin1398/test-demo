@@ -71,7 +71,6 @@ const competitionResolver = {
           .limit(limit)
           .sort({ createdAt: -1 })
           .populate("enroledUserCount"); // Sort by creation date, newest first
-        console.log(competitions);
         // Fetch enrolment counts for all competitions in a single query
 
         return {

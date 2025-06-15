@@ -30,10 +30,10 @@ export interface GetUsersQueryVariables {
     limit: number;
     page: number;
   };
-  filter?: {
-    isActive?: boolean;
-    name?: string;
-    role?: string;
+  filter: {
+    isActive: boolean;
+    name: string;
+    role: string;
   };
 }
 

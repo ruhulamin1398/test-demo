@@ -72,14 +72,10 @@ export const authOptions: AuthOptions = {
       user: User | AdapterUser;
       account: Account | null;
     }) {
-      console.log("token ", token, "user", user, "account ", account);
       // When the user signs in with a provider, we get an account object.
       if (account && user) {
         // Check if login was with a social provider (Google, GitHub, Twitter)
         if (account.provider !== "credentials") {
-          console.log(
-            " Social login mutation called +++++++++++++++__________________________"
-          );
           const email = user.email;
           const [firstName = "", lastName = ""] = user.name?.split(" ") || [];
           const socialId = user.id;

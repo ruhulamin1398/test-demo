@@ -49,6 +49,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { formatDateToHumanReadableDate } from "@/utils/date";
 import NoData from "@/components/atoms/NoData";
 import Link from "next/link";
+import { GET_USERS_QUERY } from "@/graphql-client/auth";
 
 const CompetitionList: React.FC = () => {
   const table = useTable();
@@ -57,7 +58,7 @@ const CompetitionList: React.FC = () => {
   const { data, loading, error } = useQuery<
     GetCompetitionsQueryResponse,
     GetCompetitionsQueryVariables
-  >(GET_COMPETITIONS_QUERY, {
+  >(GET_USERS_QUERY, {
     variables: {
       page: { ...pagination }, // Pagination settings
     },
@@ -152,11 +153,9 @@ const CompetitionList: React.FC = () => {
         >
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell align="right">Start Date</TableCell>
-              <TableCell align="right">End Date</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell align="right">Role</TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>

@@ -43,7 +43,6 @@ export const CustomPagination: React.FC<
   return (
     <TablePagination
       ActionsComponent={(actionProps) => {
-        console.log("ACTION PROPS", actionProps);
         return (
           <Pagination
             {...actionProps}
