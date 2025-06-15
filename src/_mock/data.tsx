@@ -2,9 +2,9 @@ import { Iconify } from "../components/iconify/iconify";
 import { ICategory } from "../interfaces/category";
 import {
   CompetitionStatusEnum,
-  EnrolmentTypeEnum,
+  EnrollmentTypeEnum,
   ICompetition,
-  IEnrolment,
+  IEnrollment,
   IUser,
   SubmissionTypeEnum,
 } from "@/interfaces";
@@ -80,7 +80,7 @@ export interface ISubmissionData {
   };
 
   roundId?: string;
-  enrolId?: IEnrolment;
+  enrolId?: IEnrollment;
   user?: {
     id: string;
     name: string;
@@ -630,9 +630,11 @@ export const mockMissingSubmission: ICompetition = {
   title: "Robotics Challenge - Showcase Your Innovative Robotics Creations",
   description: "Showcase your innovative robotics creations.",
   eligibility: "Open to all",
-  startDate: new Date("2025-10-01"),
-  endDate: new Date("2025-10-15"),
-  enrolmentDeadline: {
+  competitionDeadline: {
+    startDate: new Date("2025-09-01"),
+    endDate: new Date("2025-09-30"),
+  },
+  enrollmentDeadline: {
     startDate: new Date("2025-09-01"),
     endDate: new Date("2025-09-30"),
   },
@@ -646,7 +648,7 @@ export const mockMissingSubmission: ICompetition = {
     },
   ],
   rounds: [],
-  enrolmentType: EnrolmentTypeEnum.FREE,
+  enrollmentType: EnrollmentTypeEnum.FREE,
   price: 0,
   mediaUrl: "/banner-back.jpg",
   submissionType: SubmissionTypeEnum.VIDEO,

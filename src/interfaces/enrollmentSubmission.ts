@@ -15,7 +15,7 @@ export interface IEnrollmentSubmission {
   createdAt: string;
   updatedAt: string;
 }
-export interface IEnrolmentSubmissionInput {
+export interface IEnrollmentSubmissionInput {
   title: string;
   description: string;
 }

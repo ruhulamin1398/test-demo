@@ -210,7 +210,7 @@ export function AccountDrawer({ sx, ...other }: IconButtonProps) {
               {renderList()}
             </Scrollbar>
 
-            <Box sx={{ p: 2.5 }}>
+            <Box sx={{ px: 2.5 }}>
               <SignOutButton onClose={onClose} />
             </Box>
           </Drawer>

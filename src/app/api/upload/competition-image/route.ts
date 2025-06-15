@@ -206,7 +206,7 @@ export async function POST(req: NextRequest) {
     //   submittedContentDir,
     //   newFilePath
     // );
-    // Create a new EnrolmentSubmission document
+    // Create a new EnrollmentSubmission document
     const enrollmentSubmission = new EnrollmentSubmission({
       roundId,
       enrolId,
@@ -215,7 +215,7 @@ export async function POST(req: NextRequest) {
       title: title,
       description: description,
     });
-    // Save the EnrolmentSubmission to the database
+    // Save the EnrollmentSubmission to the database
     console.log("enrolmentSubmission to save ", enrollmentSubmission);
     await enrollmentSubmission.save();
 

@@ -85,7 +85,7 @@ export const competitionTypeDefs = `#graphql
     prizes: [Prize]
     haveRoundWiseSubmission: Boolean
     isEnrolled:Boolean
-    mySubmission: [EnrolmentSubmission]
+    mySubmission: [EnrollmentSubmission]
     enroledUserCount:Int
   }
 

@@ -60,7 +60,7 @@ const competitionSchema = new Schema<ICompetitionDocument>(
 
 competitionSchema
   .virtual("enroledUserCount", {
-    ref: "Enrolment",
+    ref: "Enrollment",
     localField: "_id",
     foreignField: "competitionId",
     count: true, // This makes Mongoose return the count instead of documents

@@ -18,7 +18,7 @@ import { toast } from "@/components/snackbar";
 import { Field, Form, Formik } from "formik";
 import { SubmissionValidationSchema } from "@/utils/ypu-validation";
 import { OutlinedTextField } from "../atoms/OutlinedTextField";
-import { IEnrolmentSubmissionInput } from "@/interfaces/enrolmentSubmission";
+import { IEnrollmentSubmissionInput } from "@/interfaces/enrolmentSubmission";
 type Props = {
   competitionId: string;
   title: string;
@@ -65,7 +65,7 @@ const UploadSubmissionFile = ({
     setFile(newFile);
   }, []);
   const handleUpload = async (values: unknown) => {
-    const payloads = values as IEnrolmentSubmissionInput;
+    const payloads = values as IEnrollmentSubmissionInput;
     if (!file || !competitionId) return;
     const { title, description } = payloads;
     try {

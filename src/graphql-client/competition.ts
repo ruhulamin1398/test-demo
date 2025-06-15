@@ -25,8 +25,22 @@ export const CREATE_COMPETITION = gql`
       haveRoundWiseSubmission
       rounds {
         id
-        startDate
-        endDate
+        deadline {
+          startDate
+          endDate
+        }
+        submissionDeadline {
+          startDate
+          endDate
+        }
+        votingDeadline {
+          startDate
+          endDate
+        }
+        judgingDeadline {
+          startDate
+          endDate
+        }
         title
         judgementCriteria
         roundNumber
@@ -66,8 +80,22 @@ export const UPDATE_COMPETITION = gql`
       status
       rounds {
         id
-        startDate
-        endDate
+        deadline {
+          startDate
+          endDate
+        }
+        submissionDeadline {
+          startDate
+          endDate
+        }
+        votingDeadline {
+          startDate
+          endDate
+        }
+        judgingDeadline {
+          startDate
+          endDate
+        }
         title
         description
         judgementCriteria
@@ -109,12 +137,6 @@ export const GET_COMPETITION_QUERY = gql`
       id
       title
       description
-<<<<<<< HEAD
-      startDate
-      endDate
-      enroledUserCount
-=======
->>>>>>> efb8bad47c02cf53a38b30f4c89b7440c6bb0476
       mySubmission {
         id
         score
@@ -141,9 +163,6 @@ export const GET_COMPETITION_QUERY = gql`
       rounds {
         id
         title
-
-        submissionStartDate
-        submissionEndDate
         submissionType
         description
         judgementCriteria
@@ -197,12 +216,6 @@ export const GET_COMPETITIONS_QUERY = gql`
         id
         title
         description
-<<<<<<< HEAD
-        startDate
-        endDate
-        enroledUserCount
-=======
->>>>>>> efb8bad47c02cf53a38b30f4c89b7440c6bb0476
         mySubmission {
           id
           score
@@ -227,8 +240,6 @@ export const GET_COMPETITIONS_QUERY = gql`
         haveRoundWiseSubmission
         rounds {
           id
-          startDate
-          endDate
           title
           description
           judgementCriteria
@@ -244,6 +255,22 @@ export const GET_COMPETITIONS_QUERY = gql`
             lastName
           }
           maxWinners
+          deadline {
+            startDate
+            endDate
+          }
+          submissionDeadline {
+            startDate
+            endDate
+          }
+          votingDeadline {
+            startDate
+            endDate
+          }
+          judgingDeadline {
+            startDate
+            endDate
+          }
         }
         prizes {
           id

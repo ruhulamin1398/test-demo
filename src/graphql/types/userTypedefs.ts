@@ -45,7 +45,7 @@ type User {
   authProvider: AuthProviderEnum
   socialId: String
   enrollIds: [ID!]
-  submissions:[EnrolmentSubmission]
+  submissions:[EnrollmentSubmission]
 }
 
 
