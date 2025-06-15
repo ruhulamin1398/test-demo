@@ -82,6 +82,3 @@ export function UserTableFiltersResult({
     </FiltersResult>
   );
 }
-
-// GRAPHQL_API_URL https://www.beejoyi.com/api/graphql
-// MONGO_ATLAS_URL mongodb+srv://raceproduction:Race987_(shjdskg@cluster0.lz6meb8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
