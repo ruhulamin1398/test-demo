@@ -10,19 +10,14 @@ import { Typography } from "@mui/material";
 import { paths } from "@/routes/paths";
 import { RouterLink } from "@/routes/components";
 import { varFade } from "@/components/animate";
+import { ISubmissionData } from "@/_mock/data";
+import { useDate } from "@/hooks/use-date";
 
 // ----------------------------------------------------------------------
 
 type Props = CardProps & {
   title?: string;
-  list: {
-    id: string;
-    title: string;
-    totalTask: number;
-    currentTask: number;
-    reminderAt: string;
-    status: string;
-  }[];
+  list: ISubmissionData[];
 };
 
 export function CompetitionRecentSubmissions({
@@ -34,8 +29,8 @@ export function CompetitionRecentSubmissions({
   return (
     <Card sx={{ px: 2 }}>
       {/* <Typography variant="h6" sx={{ mb: 3 }}>
-        {title}
-      </Typography> */}
+          {title}
+        </Typography> */}
 
       <Box
         sx={{
@@ -72,6 +67,7 @@ type CourseItemProps = BoxProps & {
 };
 
 function Item({ item, sx, ...other }: CourseItemProps) {
+  const { HumanTimeDifferent } = useDate();
   return (
     <m.div variants={varFade("inUp")}>
       <Box
@@ -128,7 +124,7 @@ function Item({ item, sx, ...other }: CourseItemProps) {
             >
               <Box component="span">
                 <Typography variant="caption" color="text.secondary" noWrap>
-                  {item.reminderAt}
+                  {HumanTimeDifferent(Number(item.createdAt))}
                 </Typography>
               </Box>
 
@@ -147,7 +143,7 @@ function Item({ item, sx, ...other }: CourseItemProps) {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {item.status}
+                  {"View"}
                 </Link>
               </Box>
             </Box>

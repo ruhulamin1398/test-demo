@@ -12,7 +12,8 @@ import { Label, labelClasses } from "@/components/label";
 import { RouterLink } from "@/routes/components";
 import { IconButton } from "@mui/material";
 import { ICompetition } from "@/interfaces";
-import { useState } from "react";
+import { useDate } from "@/hooks/use-date";
+import { paths } from "@/routes/paths";
 
 // ----------------------------------------------------------------------
 
@@ -24,14 +25,17 @@ type CardItemProps = CardProps & {
   isEnrolled?: boolean;
 };
 
-export function SingleCompetitionCard({
+const SingleCompetitionCard = ({
   isEnrolled = false,
   item,
   handleEnrollment,
   sx,
   ...other
-}: CardItemProps) {
+}: CardItemProps) => {
   let nextDeadlineTime = 0;
+
+  const { HumanTimeDifferent } = useDate();
+
   const renderImage = () => (
     <Box sx={{ px: 1, pt: 1 }}>
       <Image
@@ -57,11 +61,13 @@ export function SingleCompetitionCard({
       }}
     >
       <Box sx={{ flexGrow: 1 }}>
-        <Label
-          startIcon={<Iconify width={12} icon="solar:clock-circle-outline" />}
-        >
-          {nextDeadlineTime}
-        </Label>
+        {!isEnrolled && (
+          <Label
+            startIcon={<Iconify width={12} icon="solar:clock-circle-outline" />}
+          >
+            {HumanTimeDifferent(Number(item.enrollmentDeadline.endDate))}
+          </Label>
+        )}
 
         <Label
           sx={{ ml: 1 }}
@@ -69,7 +75,7 @@ export function SingleCompetitionCard({
             <Iconify width={12} icon="solar:users-group-rounded-bold" />
           }
         >
-          {fShortenNumber(100)}
+          {fShortenNumber(item?.enroledUserCount)}
         </Label>
       </Box>
 
@@ -106,38 +112,25 @@ export function SingleCompetitionCard({
         ${10000}
       </Box>
 
-      {item.isEnrolled ? (
-        <Link
-          component={RouterLink}
-          href={`/submission/${item.id}`}
-          color="inherit"
-          underline="none"
+      <Link
+        component={RouterLink}
+        href={paths.competition.details(item.id)}
+        color="inherit"
+        underline="none"
+      >
+        <Button
+          color="primary"
+          variant="contained"
+          size="small"
+          onClick={(e) => {
+            e.preventDefault();
+            handleEnrollment(item.id);
+          }}
+          disabled={isEnrolled}
         >
-          <Button color="primary" variant="outlined" size="small">
-            Submit
-          </Button>
-        </Link>
-      ) : (
-        <Link
-          component={RouterLink}
-          href={`/competition/${item.id}`}
-          color="inherit"
-          underline="none"
-        >
-          <Button
-            color="primary"
-            variant="contained"
-            size="small"
-            onClick={(e) => {
-              e.preventDefault();
-              handleEnrollment(item.id);
-            }}
-            disabled={isEnrolled}
-          >
-            Join
-          </Button>
-        </Link>
-      )}
+          {isEnrolled ? "Enrolled" : "Join"}
+        </Button>
+      </Link>
     </Box>
   );
 
@@ -169,4 +162,6 @@ export function SingleCompetitionCard({
       </Card>
     </>
   );
-}
+};
+
+export default SingleCompetitionCard;

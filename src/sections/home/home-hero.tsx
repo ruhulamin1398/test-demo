@@ -20,7 +20,15 @@ import { Button } from "@mui/material";
 
 export function HomeHero({ sx, ...other }: BoxProps) {
   const renderActions = () => (
-    <Box sx={{ gap: 2, display: "flex", mt: 3 }}>
+    <Box
+      sx={{
+        gap: 2,
+        display: "flex",
+        mt: 3,
+        alignItems: "center",
+        justifyContent: { xs: "center", md: "start" },
+      }}
+    >
       <Button
         color="success"
         variant="contained"
@@ -30,14 +38,14 @@ export function HomeHero({ sx, ...other }: BoxProps) {
         Explore Contests
       </Button>
 
-      <Button
+      {/* <Button
         color="info"
         variant="contained"
         size="large"
         sx={{ whiteSpace: "nowrap" }}
       >
         Submit Entry
-      </Button>
+      </Button> */}
     </Box>
   );
 

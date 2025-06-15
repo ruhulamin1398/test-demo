@@ -51,7 +51,7 @@ export function HomeFeaturedContest() {
 
   const renderNotFound = () => <EmptyContent filled sx={{ py: 10 }} />;
   return (
-    <Container sx={{ py: 6 }}>
+    <Container sx={{ py: 2 }}>
       <Box
         sx={{
           gap: 5,
@@ -71,7 +71,7 @@ export function HomeFeaturedContest() {
             },
           }}
         >
-          <Typography variant="h5">Featured Contest</Typography>
+          <Typography variant="h6">Featured Contest</Typography>
           <Link
             component={RouterLink}
             href="competition"
@@ -91,7 +91,7 @@ export function HomeFeaturedContest() {
         <HomeFeaturedContestCarousel
           title="Competitions You May Enroll"
           list={competitions}
-          loading={loading}
+          isLoading={loading}
         />
       </Box>
     </Container>

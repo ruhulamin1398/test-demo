@@ -9,12 +9,12 @@ import { Iconify } from "@/components/iconify";
 
 import { SubmissionItemSkeleton } from "./submission-skeleton";
 import { SubmissionItem } from "./submission-item";
-import { ISubmissionItem } from "@/types/submission";
+import { ISubmissionData } from "@/_mock/data";
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  data: ISubmissionItem[];
+  data: ISubmissionData[];
   loading?: boolean;
 };
 
@@ -47,10 +47,7 @@ export function SubmissionList({ data, loading }: Props) {
             lg: 3,
           }}
         >
-          <SubmissionItem
-            item={item}
-            detailsHref={paths.post.details(item.title)}
-          />
+          <SubmissionItem item={item} />
         </Grid>
       ))}
     </Grid>

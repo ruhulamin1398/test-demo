@@ -17,8 +17,10 @@ export const competitions: ICompetition[] = [
       "Nature Photography Contest - Capture the Stunning Beauty of the Natural World",
     description: "Capture the beauty of nature in its purest form.",
     eligibility: "Open to all",
-    startDate: new Date("2025-05-01"),
-    endDate: new Date("2025-05-15"),
+    competitionDeadline: {
+      startDate: new Date("2025-05-01"),
+      endDate: new Date("2025-05-15"),
+    },
     enrollmentDeadline: {
       startDate: new Date("2025-04-01"),
       endDate: new Date("2025-04-30"),
@@ -40,8 +42,7 @@ export const competitions: ICompetition[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     status: CompetitionStatusEnum.ACTIVE,
-    totalPrizeMoney: 5000,
-    detailsHref: "/competition/1",
+    haveRoundWiseSubmission: false,
   },
   {
     id: "2",
@@ -49,8 +50,10 @@ export const competitions: ICompetition[] = [
       "Digital Art Challenge - Unleash Your Creativity Through Digital Masterpieces",
     description: "Unleash your creativity through digital masterpieces.",
     eligibility: "Open to all",
-    startDate: new Date("2025-06-01"),
-    endDate: new Date("2025-06-15"),
+    competitionDeadline: {
+      startDate: new Date("2025-06-01"),
+      endDate: new Date("2025-06-15"),
+    },
     enrollmentDeadline: {
       startDate: new Date("2025-05-01"),
       endDate: new Date("2025-05-31"),
@@ -72,8 +75,7 @@ export const competitions: ICompetition[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     status: CompetitionStatusEnum.ACTIVE,
-    totalPrizeMoney: 3000,
-    detailsHref: "/competition/2",
+    haveRoundWiseSubmission: false,
   },
   {
     id: "3",
@@ -81,8 +83,10 @@ export const competitions: ICompetition[] = [
       "Creative Writing Contest - Share Your Unique Stories with the World",
     description: "Share your unique stories with the world.",
     eligibility: "Open to all",
-    startDate: new Date("2025-07-01"),
-    endDate: new Date("2025-07-15"),
+    competitionDeadline: {
+      startDate: new Date("2025-06-01"),
+      endDate: new Date("2025-06-15"),
+    },
     enrollmentDeadline: {
       startDate: new Date("2025-06-01"),
       endDate: new Date("2025-06-30"),
@@ -104,8 +108,7 @@ export const competitions: ICompetition[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     status: CompetitionStatusEnum.ACTIVE,
-    totalPrizeMoney: 2000,
-    detailsHref: "/competition/3",
+    haveRoundWiseSubmission: false,
   },
   {
     id: "4",
@@ -113,8 +116,10 @@ export const competitions: ICompetition[] = [
       "Music Composition Contest - Compose and Showcase Your Musical Masterpiece",
     description: "Compose a masterpiece and showcase your talent.",
     eligibility: "Open to all",
-    startDate: new Date("2025-08-01"),
-    endDate: new Date("2025-08-15"),
+    competitionDeadline: {
+      startDate: new Date("2025-06-01"),
+      endDate: new Date("2025-06-15"),
+    },
     enrollmentDeadline: {
       startDate: new Date("2025-07-01"),
       endDate: new Date("2025-07-31"),
@@ -136,8 +141,7 @@ export const competitions: ICompetition[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     status: CompetitionStatusEnum.ACTIVE,
-    totalPrizeMoney: 4000,
-    detailsHref: "/competition/4",
+    haveRoundWiseSubmission: false,
   },
   {
     id: "5",
@@ -145,8 +149,10 @@ export const competitions: ICompetition[] = [
       "Short Film Festival - Create a Captivating Short Film That Inspires",
     description: "Create a captivating short film that inspires.",
     eligibility: "Open to all",
-    startDate: new Date("2025-09-01"),
-    endDate: new Date("2025-09-15"),
+    competitionDeadline: {
+      startDate: new Date("2025-06-01"),
+      endDate: new Date("2025-06-15"),
+    },
     enrollmentDeadline: {
       startDate: new Date("2025-08-01"),
       endDate: new Date("2025-08-31"),
@@ -168,16 +174,17 @@ export const competitions: ICompetition[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     status: CompetitionStatusEnum.ACTIVE,
-    totalPrizeMoney: 6000,
-    detailsHref: "/competition/5",
+    haveRoundWiseSubmission: false,
   },
   {
     id: "6",
     title: "Robotics Challenge - Showcase Your Innovative Robotics Creations",
     description: "Showcase your innovative robotics creations.",
     eligibility: "Open to all",
-    startDate: new Date("2025-10-01"),
-    endDate: new Date("2025-10-15"),
+    competitionDeadline: {
+      startDate: new Date("2025-06-01"),
+      endDate: new Date("2025-06-15"),
+    },
     enrollmentDeadline: {
       startDate: new Date("2025-09-01"),
       endDate: new Date("2025-09-30"),
@@ -199,8 +206,7 @@ export const competitions: ICompetition[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     status: CompetitionStatusEnum.ACTIVE,
-    totalPrizeMoney: 7000,
-    detailsHref: "/competition/6",
+    haveRoundWiseSubmission: false,
   },
 ];
 

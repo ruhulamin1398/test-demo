@@ -2,10 +2,9 @@ import type { BoxProps } from "@mui/material/Box";
 
 import Box from "@mui/material/Box";
 
-import { CompetitionItem } from "./CompetitionItem";
 import { CompetitionItemSkeleton } from "./CompetitionItemSkeleton";
 import { ICompetition } from "@/interfaces";
-import { SingleCompetitionCard } from "@/sections/common/single-competition-card";
+import SingleCompetitionCard from "@/sections/common/single-competition-card";
 import { useEnrollment } from "@/app/hooks/useEnrollment";
 import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
 import { useSelector } from "react-redux";
@@ -39,12 +38,6 @@ export function CompetitionList({
 
   const renderList = () =>
     competitions.map((competition) => (
-      // <CompetitionItem
-      //   key={competition.id}
-      //   competition={competition}
-      //   detailsHref={"add-path-later"}
-      // />
-
       <SingleCompetitionCard
         key={competition.id}
         item={competition}

@@ -16,7 +16,7 @@ import { varAlpha } from "minimal-shared/utils";
 import { RouterLink } from "@/routes/components";
 import { Iconify } from "@/components/iconify";
 import { ICompetition } from "@/interfaces";
-import { SingleCompetitionCard } from "../common/single-competition-card";
+import SingleCompetitionCard from "../common/single-competition-card";
 import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
 import { useEnrollment } from "@/app/hooks/useEnrollment";
 
@@ -40,7 +40,7 @@ export function ProfilePageCompetition({
     handleOpenEnrollmentConfirmationDialog,
     handleCloseEnrollmentConfirmationDialog,
     onAgreeEnrollment,
-    createLoading,
+    loading,
   } = useEnrollment();
 
   return (
@@ -81,7 +81,7 @@ export function ProfilePageCompetition({
             p: 3,
             gap: 3,
             display: "flex",
-            flexDirection: "row",
+            flexDirection: { xs: "column", md: "row" },
           }}
         >
           {list.slice(1, 4).map((item) => (
@@ -97,7 +97,7 @@ export function ProfilePageCompetition({
         open={!!openDialog?.competitionId}
         onAgree={onAgreeEnrollment}
         onDisagree={handleCloseEnrollmentConfirmationDialog}
-        createLoading={createLoading}
+        createLoading={loading}
       />
     </>
   );

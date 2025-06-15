@@ -52,7 +52,7 @@ export interface ICompetition {
   haveRoundWiseSubmission: boolean;
   slug?: string;
   activeRound?: IRound;
-  isEnrolled?: boolean;
+  enroledUserCount?: number;
 }
 
 export interface PaginationInput {

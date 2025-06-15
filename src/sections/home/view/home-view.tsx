@@ -42,8 +42,8 @@ export function HomeView() {
       <HomeFeaturedContest />
 
       <HomeContestCategories />
-      <HomeHowItWorks />
       <HomeVision />
+      <HomeHowItWorks />
     </>
   );
 }

@@ -11,29 +11,34 @@ import { ICompetition } from "@/interfaces";
 import { useEnrollment } from "@/app/hooks/useEnrollment";
 import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
 import { CompetitionItemSkeleton } from "@/app/competition/components/CompetitionItemSkeleton";
-import { SingleCompetitionCard } from "../common/single-competition-card";
+import SingleCompetitionCard from "../common/single-competition-card";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 // ----------------------------------------------------------------------
 
 type Props = BoxProps & {
   title: string;
-  loading?: boolean;
+  isLoading?: boolean;
   list: ICompetition[];
 };
 
 export function HomeFeaturedContestCarousel({
   title,
-  loading,
+  isLoading,
   list,
   sx,
   ...other
 }: Props) {
+  const { enrollIds } = useSelector(
+    (state: RootState) => state.auth.competitionInfo
+  );
   const {
     openDialog,
     handleOpenEnrollmentConfirmationDialog,
     handleCloseEnrollmentConfirmationDialog,
     onAgreeEnrollment,
-    createLoading,
+    loading,
   } = useEnrollment();
 
   const carousel = useCarousel(
@@ -84,6 +89,7 @@ export function HomeFeaturedContestCarousel({
               key={item.id}
               item={item}
               handleEnrollment={handleOpenEnrollmentConfirmationDialog}
+              isEnrolled={enrollIds.includes(item.id)}
             />
           ))}
         </Carousel>
@@ -96,13 +102,13 @@ export function HomeFeaturedContestCarousel({
   };
   return (
     <Box sx={{ mb: 3, paddingX: 3, position: "relative" }} {...other}>
-      {loading ? renderLoading() : renderList()}
+      {isLoading ? renderLoading() : renderList()}
 
       <EnrollmentConfirmationDialog
         open={!!openDialog?.competitionId}
         onAgree={onAgreeEnrollment}
         onDisagree={handleCloseEnrollmentConfirmationDialog}
-        createLoading={createLoading}
+        createLoading={isLoading}
       />
     </Box>
   );

@@ -34,13 +34,6 @@ interface FormValues {
   confirmPassword: string;
 }
 
-// Country codes list (can be extended)
-const countryCodes = [
-  { code: "+1", name: "United States" },
-  { code: "+44", name: "United Kingdom" },
-  { code: "+91", name: "India" },
-];
-
 const validationSchema = Yup.object({
   firstName: Yup.string().required("First name is required"),
   lastName: Yup.string().required("Last name is required"),

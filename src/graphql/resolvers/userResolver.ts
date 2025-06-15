@@ -6,6 +6,7 @@ import {
   UsersResponse,
 } from "@/interfaces";
 import { Enrollment, User } from "@/models"; // Assuming your model is exported from this path
+import EnrollmentSubmission from "@/models/EnrollmentSubmission";
 import { GraphQLError } from "graphql";
 import { NextApiRequest } from "next";
 
@@ -288,6 +289,12 @@ const resolvers = {
         (enrollment) => enrollment.competitionId
       );
       return enrollments;
+    },
+    submissions: async (user: IUser) => {
+      const submissionList = await EnrollmentSubmission.find({
+        userId: user.id,
+      });
+      return submissionList;
     },
   },
 };

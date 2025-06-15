@@ -1,18 +1,13 @@
-import { competitions } from "@/_mock/contest";
-import CompetitionSubmissionDialog from "@/components/competition-submission-dialog";
+import { ICompetition } from "@/interfaces";
 import { Alert, Button, Container, Typography } from "@mui/material";
 import Card, { CardProps } from "@mui/material/Card";
-import { useState } from "react";
 
 // ----------------------------------------------------------------------
+type Props = CardProps & {
+  competition: ICompetition;
+};
 
-export function SubmissionNotificationAlert({ sx, ...other }: CardProps) {
-  const [isOpenDialog, setIsOpenDialog] = useState(false);
-  const competition = competitions[0];
-  const dismissDialog = () => {
-    setIsOpenDialog(false);
-  };
-
+const SubmissionNotificationAlert = ({ competition, sx, ...other }: Props) => {
   return (
     <>
       <Alert
@@ -23,7 +18,6 @@ export function SubmissionNotificationAlert({ sx, ...other }: CardProps) {
             size="small"
             variant="soft"
             sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem", md: "1rem" } }}
-            onClick={() => setIsOpenDialog(true)}
           >
             Submit
           </Button>
@@ -45,12 +39,8 @@ export function SubmissionNotificationAlert({ sx, ...other }: CardProps) {
           {competition.title}
         </Typography>
       </Alert>
-
-      <CompetitionSubmissionDialog
-        competition={competition}
-        open={!!isOpenDialog}
-        dismissDialog={dismissDialog}
-      />
     </>
   );
-}
+};
+
+export default SubmissionNotificationAlert;

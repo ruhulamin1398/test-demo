@@ -1,205 +1,167 @@
-import type { BoxProps } from "@mui/material/Box";
 import type { CardProps } from "@mui/material/Card";
 
-import { varAlpha } from "minimal-shared/utils";
-
-import Box from "@mui/material/Box";
+import Box, { BoxProps } from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import Card from "@mui/material/Card";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
-
 import { RouterLink } from "@/routes/components";
-
-import { fDate } from "@/utils/format-time";
-import { fShortenNumber } from "@/utils/format-number";
-
 import { AvatarShape } from "@/assets/illustrations";
-
 import { Image } from "@/components/image";
 import { Iconify } from "@/components/iconify";
-import { ISubmissionItem } from "@/types/submission";
+
+import { useTheme } from "@mui/material/styles";
+import { ISubmissionData, mockMyVottedSubmissionsIds } from "@/_mock/data";
+import {
+  Button,
+  SpeedDial,
+  SpeedDialAction,
+  useMediaQuery,
+} from "@mui/material";
+import { Label } from "@/components/label";
+import { fShortenNumber } from "@/utils/format-number";
+import CompetitionSubmissionPopUp from "../../components/submission-popup";
+import { useEffect, useState } from "react";
+import { _socials } from "@/_mock";
+import {
+  FacebookIcon,
+  InstagramIcon,
+  LinkedinIcon,
+  TwitterIcon,
+} from "@/assets/icons";
+import SocialShare from "@/components/social-share";
 
 // ----------------------------------------------------------------------
 
 type PostItemProps = CardProps & {
-  item: ISubmissionItem;
-  detailsHref: string;
+  item: ISubmissionData;
 };
 
-export function SubmissionItem({
-  item,
-  detailsHref,
-  sx,
-  ...other
-}: PostItemProps) {
-  return (
-    <Card sx={sx} {...other}>
-      <Box sx={{ position: "relative" }}>
-        <AvatarShape
-          sx={{
-            left: 0,
-            zIndex: 9,
-            width: 88,
-            height: 36,
-            bottom: -16,
-            position: "absolute",
-          }}
-        />
+export function SubmissionItem({ item, sx, ...other }: PostItemProps) {
+  const alreadyVoted = mockMyVottedSubmissionsIds.includes(item.id);
+  const [currentSubmission, setCurrentSubmission] =
+    useState<ISubmissionData | null>(null);
 
-        <Avatar
-          alt={item.author}
-          src={item.author.avatarUrl}
-          sx={{
-            left: 24,
-            zIndex: 9,
-            bottom: -24,
-            position: "absolute",
-          }}
-        />
+  const handleDialogClose = () => {
+    setCurrentSubmission(null);
+  };
 
-        <Image alt={item.title} src={item.image} ratio="4/3" />
-      </Box>
-
-      <CardContent sx={{ pt: 6 }}>
-        <Typography
-          variant="caption"
-          component="div"
-          sx={{ mb: 1, color: "text.disabled" }}
-        >
-          {fDate(item.createdAt)}
-        </Typography>
-
-        <Link
-          component={RouterLink}
-          href={detailsHref}
-          color="inherit"
-          variant="subtitle2"
-          sx={(theme) => ({
-            ...theme.mixins.maxLine({
-              line: 2,
-              persistent: theme.typography.subtitle2,
-            }),
-          })}
-        >
-          {item.title}
-        </Link>
-
-        <InfoBlock
-          totalViews={item.totalViews}
-          totalShares={item.totalShares}
-          totalComments={item.totalComments}
-        />
-      </CardContent>
-    </Card>
-  );
-}
-
-// ----------------------------------------------------------------------
-
-type PostItemLatestProps = {
-  item: ISubmissionItem;
-  index: number;
-  detailsHref: string;
-};
-
-export function PostItemLatest({
-  item,
-  index,
-  detailsHref,
-}: PostItemLatestProps) {
-  const itemSmall = index === 1 || index === 2;
-
-  return (
-    <Card>
-      <Avatar
-        alt={item.author}
-        src={item.author.avatarUrl}
+  const renderFooter = () => (
+    <Box
+      sx={{
+        mt: 2.5,
+        gap: 0.5,
+        display: "flex",
+        justifyContent: "flex-end",
+      }}
+    >
+      {/* <Box
+        component="span"
         sx={{
-          top: 24,
-          left: 24,
-          zIndex: 9,
-          position: "absolute",
-        }}
-      />
-
-      <Image
-        alt={item.title}
-        src={item.coverUrl}
-        ratio="4/3"
-        sx={{ height: 360 }}
-        slotProps={{
-          overlay: {
-            sx: (theme) => ({
-              bgcolor: varAlpha(theme.vars.palette.grey["900Channel"], 0.64),
-            }),
-          },
-        }}
-      />
-
-      <CardContent
-        sx={{
-          width: 1,
-          zIndex: 9,
-          bottom: 0,
-          position: "absolute",
-          color: "common.white",
+          flexGrow: 1,
+          display: "flex",
+          alignItems: "center", // Align icon and text inline
+          gap: 1, // Space between the icon and text
+          typography: "subtitle1",
         }}
       >
-        <Typography
-          variant="caption"
-          component="div"
-          sx={{ mb: 1, opacity: 0.64 }}
-        >
-          {fDate(item.createdAt)}
-        </Typography>
+        <Iconify icon="mdi:heart" width={20} style={{ color: "red" }} />
+        {item.vote}
+      </Box> */}
 
-        <Link
-          component={RouterLink}
-          href={detailsHref}
-          color="inherit"
-          variant={postSmall ? "subtitle2" : "h5"}
-          sx={(theme) => ({
-            ...theme.mixins.maxLine({
-              line: 2,
-              persistent: postSmall
-                ? theme.typography.subtitle2
-                : theme.typography.h5,
-            }),
-          })}
-        >
-          {item.title}
-        </Link>
-
-        <InfoBlock
-          totalViews={item.totalViews}
-          totalShares={item.totalShares}
-          totalComments={item.totalComments}
-          sx={{ opacity: 0.64, color: "common.white" }}
-        />
-      </CardContent>
-    </Card>
+      <Button
+        color={alreadyVoted ? "error" : "primary"}
+        variant="contained"
+        size="small"
+        onClick={(e) => {
+          e.preventDefault();
+        }}
+      >
+        {alreadyVoted ? "Unvote" : "Vote"}
+      </Button>
+    </Box>
   );
-}
 
-// ----------------------------------------------------------------------
+  const renderLabels = () => (
+    <Box
+      sx={{
+        gap: 1,
+        top: 16,
+        zIndex: 9,
+        right: 16,
+        display: "flex",
+        position: "absolute",
+        alignItems: "center",
+      }}
+    >
+      <Label variant="filled" color="info">
+        {item.category?.name}
+      </Label>
+    </Box>
+  );
+  const renderHeader = () => (
+    <Box sx={{ position: "relative" }}>
+      <AvatarShape
+        sx={{
+          left: 0,
+          zIndex: 9,
+          width: 88,
+          height: 36,
+          bottom: -16,
+          position: "absolute",
+        }}
+      />
+      <Avatar
+        alt={item?.user?.id}
+        src={item?.user?.profilePicture}
+        sx={{
+          left: 24,
+          zIndex: 9,
+          bottom: -24,
+          position: "absolute",
+        }}
+      />
 
-type InfoBlockProps = BoxProps &
-  Pick<ISubmissionItem, "totalViews" | "totalShares" | "totalComments">;
-
-function InfoBlock({
-  sx,
-  totalViews,
-  totalShares,
-  totalComments,
-  ...other
-}: InfoBlockProps) {
-  return (
+      <Image alt={item.title} src={item.submittedContent} ratio="4/3" />
+    </Box>
+  );
+  const renderShareBlock = () => (
+    <SpeedDial
+      direction={"right"}
+      ariaLabel="Share post"
+      icon={<Iconify width={12} icon="solar:share-bold" />}
+      FabProps={{ size: "small" }}
+      sx={{
+        position: "absolute",
+        top: { xs: 0, md: 0 },
+        left: { xs: 4, md: 4 },
+      }}
+    >
+      {_socials.map((social) => (
+        <SpeedDialAction
+          key={social.label}
+          icon={
+            <>
+              {social.value === "facebook" && <FacebookIcon />}
+              {social.value === "instagram" && <InstagramIcon />}
+              {social.value === "linkedin" && <LinkedinIcon />}
+              {social.value === "twitter" && <TwitterIcon />}
+            </>
+          }
+          tooltipPlacement="top"
+          FabProps={{ color: "default" }}
+          tooltipTitle={social.label}
+        />
+      ))}
+    </SpeedDial>
+  );
+  const renderInfoBlock = () => (
     <Box
       sx={[
         () => ({
-          mt: 3,
+          mt: 2,
+          mx: 2,
           gap: 1.5,
           display: "flex",
           typography: "caption",
@@ -210,20 +172,80 @@ function InfoBlock({
       ]}
       {...other}
     >
-      <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
-        <Iconify width={16} icon="eva:message-circle-fill" />
-        {fShortenNumber(totalComments)}
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <SocialShare url="/hello" />
+        <Iconify
+          width={16}
+          icon="mdi:heart-circle"
+          style={{ color: "red", marginBottom: 1 }}
+        />
+        <Typography sx={{ fontSize: 8 }}>
+          {fShortenNumber(item.vote)}
+        </Typography>
       </Box>
 
-      <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
-        <Iconify width={16} icon="solar:eye-bold" />
-        {fShortenNumber(totalViews)}
-      </Box>
-
-      <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
-        <Iconify width={16} icon="solar:share-bold" />
-        {fShortenNumber(totalShares)}
-      </Box>
+      {renderShareBlock()}
+      {/* <Box sx={{ gap: 0.5, display: "flex", alignItems: "center" }}>
+        <Iconify width={16} icon="solar:share-bold" color="primary" />
+      </Box> */}
     </Box>
   );
+  const renderContent = () => (
+    <CardContent sx={{ pt: 2 }}>
+      <Typography variant="caption" color="primary">
+        {item.competition?.title}
+      </Typography>
+      <Typography
+        color="inherit"
+        variant="subtitle2"
+        sx={(theme) => ({
+          ...theme.mixins.maxLine({
+            line: 2,
+            persistent: theme.typography.subtitle2,
+          }),
+          cursor: "pointer",
+        })}
+        onClick={(e) => {
+          e.preventDefault();
+          setCurrentSubmission(item);
+        }}
+      >
+        {item.title}
+      </Typography>
+      <Typography
+        variant="caption"
+        component="div"
+        sx={(theme) => ({
+          ...theme.mixins.maxLine({
+            line: 1,
+            persistent: theme.typography.body2,
+          }),
+          color: "text.disabled",
+        })}
+      >
+        {item.description}
+      </Typography>
+
+      {renderFooter()}
+    </CardContent>
+  );
+
+  return (
+    <>
+      <Card sx={sx} {...other}>
+        {renderHeader()}
+
+        {renderLabels()}
+        {renderInfoBlock()}
+
+        {renderContent()}
+      </Card>
+      <CompetitionSubmissionPopUp
+        handleDialogClose={handleDialogClose}
+        submission={currentSubmission}
+      />
+    </>
+  );
 }
+
+// ----------------------------------------------------------------------

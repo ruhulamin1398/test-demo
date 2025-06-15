@@ -45,7 +45,9 @@ type User {
   authProvider: AuthProviderEnum
   socialId: String
   enrollIds: [ID!]
+  submissions:[EnrollmentSubmission]
 }
+
 
 # Pagination input type
 input PaginationInput {

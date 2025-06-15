@@ -18,10 +18,12 @@ const competitionResolver = {
   Query: {
     getCompetition: async (
       _: void,
-      { id }: { id: string }
+      { id }: { id: string },
+      { user }: { user: IUser | null }
     ): Promise<ICompetition | null> => {
       const competition = await Competition.findById(id);
       console.log(competition);
+
       return competition;
     },
     getCompetitions: async (
@@ -67,22 +69,11 @@ const competitionResolver = {
         let competitions = await Competition.find(filterQuery)
           .skip(skip)
           .limit(limit)
-          .sort({ createdAt: -1 }); // Sort by creation date, newest first
-        // Update the isEnrolled field for each competition based on user enrollment
-        if (user) {
-          const enrollments = await Enrollment.find({ userId: user.id }).select(
-            "competitionId"
-          );
-          const enrolledCompetitionIds = enrollments.map((enrollment) =>
-            enrollment.competitionId.toString()
-          );
+          .sort({ createdAt: -1 })
+          .populate("enroledUserCount"); // Sort by creation date, newest first
+        console.log(competitions);
+        // Fetch enrolment counts for all competitions in a single query
 
-          competitions.forEach((competition) => {
-            competition.isEnrolled = enrolledCompetitionIds.includes(
-              competition._id.toString()
-            );
-          });
-        }
         return {
           competitions,
           totalCount,

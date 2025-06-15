@@ -13,18 +13,17 @@ import LinearProgress, {
 import { fPercent } from "@/utils/format-number";
 
 import { Iconify } from "@/components/iconify";
+import { IDeadlineReminder } from "@/_mock/data";
+import { useDate } from "@/hooks/use-date";
+import { Typography } from "@mui/material";
+import { RouterLink } from "@/routes/components";
+import { paths } from "@/routes/paths";
 
 // ----------------------------------------------------------------------
 
 type Props = CardProps & {
   title: string;
-  list: {
-    id: string;
-    title: string;
-    totalTask: number;
-    currentTask: number;
-    reminderAt: string;
-  }[];
+  list: IDeadlineReminder[];
 };
 
 export function CompetitionDeadlineReminders({
@@ -70,12 +69,11 @@ export function CompetitionDeadlineReminders({
 // ----------------------------------------------------------------------
 
 type CourseItemProps = BoxProps & {
-  item: Props["list"][number];
+  item: IDeadlineReminder;
 };
 
 function Item({ item, sx, ...other }: CourseItemProps) {
-  const percent = (item.currentTask / item.totalTask) * 100;
-
+  const { HumanTimeDifferent } = useDate();
   return (
     <Box
       sx={[{ gap: 1.5, display: "flex" }, ...(Array.isArray(sx) ? sx : [sx])]}
@@ -120,34 +118,39 @@ function Item({ item, sx, ...other }: CourseItemProps) {
             color: "text.secondary",
           }}
         >
-          <Iconify width={16} icon="solar:calendar-date-bold" />
-          {item.reminderAt}
-        </Box>
-
-        <Box sx={{ gap: 2, display: "flex", alignItems: "center" }}>
-          <LinearProgress
-            color="warning"
-            variant="determinate"
-            value={percent}
-            sx={[
-              (theme) => ({
-                width: 1,
-                height: 6,
-                bgcolor: varAlpha(theme.vars.palette.grey["500Channel"], 0.16),
-                [` .${linearProgressClasses.bar}`]: { bgcolor: "currentColor" },
-              }),
-            ]}
-          />
           <Box
-            component="span"
             sx={{
-              width: 40,
-              typography: "caption",
-              color: "text.primary",
-              fontWeight: "fontWeightMedium",
+              width: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 2,
             }}
           >
-            {fPercent(percent)}
+            <Box component="span">
+              <Typography variant="caption" color="text.secondary" noWrap>
+                {HumanTimeDifferent(Number(item.submissionEndDate))}
+              </Typography>
+            </Box>
+
+            <Box
+              component="span"
+              sx={{
+                typography: "caption",
+                color: "text.secondary",
+                fontWeight: "fontWeightMedium",
+              }}
+            >
+              <Link
+                component={RouterLink}
+                href={paths.profile.root}
+                sx={{
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {"View"}
+              </Link>
+            </Box>
           </Box>
         </Box>
       </Box>

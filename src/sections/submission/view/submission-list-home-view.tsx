@@ -8,24 +8,28 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
 import { paths } from "@/routes/paths";
-
-import { POST_SORT_OPTIONS } from "@/_mock";
-
 import { SubmissionList } from "../submission-list";
-import { PostSort } from "../post-sort";
+import { SubmissionSort } from "../submission-sort";
 import { SubmissionSearch } from "../submission-search";
-import { ISubmissionItem } from "@/types/submission";
+import {
+  ISubmissionData,
+  SUBMISSION_FILTER_CATEGORY_OPTIONS,
+  SUBMISSION_FILTER_CONTEST_OPTIONS,
+  SUBMISSION_FILTER_ROUND_OPTIONS,
+  SUBMISSION_SORT_TIME_OPTIONS,
+} from "@/_mock/data";
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  entries: ISubmissionItem[];
+  submissions: ISubmissionData[];
 };
 
-export function SubmissionHomeView({ entries }: Props) {
-  const [sortBy, setSortBy] = useState("latest");
-
-  // const dataFiltered = applyFilter({ inputData: entries, sortBy });
+export function SubmissionHomeView({ submissions }: Props) {
+  const [filterByCategory, setFilterByCategory] = useState("All Categories");
+  const [filterByContest, setFilterByContest] = useState("All Contest");
+  const [filterByRound, setFilterByRound] = useState("All Round");
+  const [sortByTime, setSortByTime] = useState("latest");
 
   return (
     <Container>
@@ -46,17 +50,44 @@ export function SubmissionHomeView({ entries }: Props) {
         ]}
       >
         <SubmissionSearch
+          sx={{ flexGrow: 1 }}
           redirectPath={(title: string) => paths.post.details(title)}
         />
 
-        <PostSort
-          sort={sortBy}
-          onSort={(newValue: string) => setSortBy(newValue)}
-          sortOptions={POST_SORT_OPTIONS}
-        />
+        <Box
+          sx={[
+            () => ({
+              gap: 3,
+              display: "flex",
+              justifyContent: "space-between",
+              flexDirection: { xs: "row", sm: "row" },
+            }),
+          ]}
+        >
+          <SubmissionSort
+            sort={filterByRound}
+            onSort={(newValue: string) => setFilterByRound(newValue)}
+            sortOptions={SUBMISSION_FILTER_ROUND_OPTIONS}
+          />
+          <SubmissionSort
+            sort={filterByContest}
+            onSort={(newValue: string) => setFilterByContest(newValue)}
+            sortOptions={SUBMISSION_FILTER_CONTEST_OPTIONS}
+          />
+          <SubmissionSort
+            sort={filterByCategory}
+            onSort={(newValue: string) => setFilterByCategory(newValue)}
+            sortOptions={SUBMISSION_FILTER_CATEGORY_OPTIONS}
+          />
+          <SubmissionSort
+            sort={sortByTime}
+            onSort={(newValue: string) => setSortByTime(newValue)}
+            sortOptions={SUBMISSION_SORT_TIME_OPTIONS}
+          />
+        </Box>
       </Box>
 
-      <SubmissionList data={entries} />
+      <SubmissionList data={submissions} />
     </Container>
   );
 }
@@ -64,21 +95,21 @@ export function SubmissionHomeView({ entries }: Props) {
 // ----------------------------------------------------------------------
 
 type ApplyFilterProps = {
-  inputData: ISubmissionItem[];
+  inputData: ISubmissionData[];
   sortBy: string;
 };
 
 function applyFilter({ inputData, sortBy }: ApplyFilterProps) {
   if (sortBy === "latest") {
-    return orderBy(inputData, ["likes"], ["desc"]);
+    return orderBy(inputData, ["vote"], ["desc"]);
   }
 
   if (sortBy === "oldest") {
-    return orderBy(inputData, ["likes"], ["asc"]);
+    return orderBy(inputData, ["vote"], ["asc"]);
   }
 
   if (sortBy === "popular") {
-    return orderBy(inputData, ["likes"], ["desc"]);
+    return orderBy(inputData, ["vote"], ["desc"]);
   }
 
   return inputData;

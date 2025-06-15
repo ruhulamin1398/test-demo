@@ -231,6 +231,14 @@ export const prizeFormValidationSchema = Yup.object({
     .required("Title is required")
     .min(4, "Title should be minimum 4 characters."),
 });
+export const SubmissionValidationSchema = Yup.object({
+  title: Yup.string()
+    .required("Title is required")
+    .min(4, "Rewards should be minimum 4 chatacters."),
+  description: Yup.string()
+    .required("Description is required")
+    .min(40, "Description should be minimum 40 characters."),
+});
 
 export const getRoundFormZodSchema = ({
   competitionStartDate,

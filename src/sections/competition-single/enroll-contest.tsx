@@ -8,6 +8,7 @@ import { Iconify } from "@/components/iconify";
 import { Label, labelClasses } from "@/components/label";
 import EnrollmentConfirmationDialog from "@/components/confirmation-dialog";
 import { useEnrollment } from "@/app/hooks/useEnrollment";
+import { useDate } from "@/hooks/use-date";
 
 // ----------------------------------------------------------------------
 
@@ -16,6 +17,7 @@ type Props = BoxProps & {
   title?: string;
   price?: string;
   description?: string;
+  deadlineEndDate: Date;
 };
 
 export function EnrollmentCard({
@@ -23,6 +25,7 @@ export function EnrollmentCard({
   price,
   title,
   description,
+  deadlineEndDate,
   sx,
   ...other
 }: Props) {
@@ -31,9 +34,9 @@ export function EnrollmentCard({
     handleOpenEnrollmentConfirmationDialog,
     handleCloseEnrollmentConfirmationDialog,
     onAgreeEnrollment,
-    createLoading,
+    loading,
   } = useEnrollment();
-
+  const { HumanTimeDifferent } = useDate();
   return (
     <>
       <Box
@@ -44,6 +47,7 @@ export function EnrollmentCard({
             position: "relative",
             color: "common.white",
             backgroundImage: `linear-gradient(135deg, ${theme.vars.palette.primary.main}, ${theme.vars.palette.primary.dark})`,
+            width: "100%",
           }),
           ...(Array.isArray(sx) ? sx : [sx]),
         ]}
@@ -74,7 +78,7 @@ export function EnrollmentCard({
           <Label
             startIcon={<Iconify width={12} icon="solar:clock-circle-outline" />}
           >
-            1h 40m
+            {HumanTimeDifferent(Number(deadlineEndDate))}
           </Label>
 
           <Label
@@ -103,7 +107,7 @@ export function EnrollmentCard({
         open={!!openDialog?.competitionId}
         onAgree={onAgreeEnrollment}
         onDisagree={handleCloseEnrollmentConfirmationDialog}
-        createLoading={createLoading}
+        createLoading={loading}
       />
     </>
   );

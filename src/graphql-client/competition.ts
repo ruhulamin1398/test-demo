@@ -25,8 +25,22 @@ export const CREATE_COMPETITION = gql`
       haveRoundWiseSubmission
       rounds {
         id
-        startDate
-        endDate
+        deadline {
+          startDate
+          endDate
+        }
+        submissionDeadline {
+          startDate
+          endDate
+        }
+        votingDeadline {
+          startDate
+          endDate
+        }
+        judgingDeadline {
+          startDate
+          endDate
+        }
         title
         judgementCriteria
         roundNumber
@@ -66,8 +80,22 @@ export const UPDATE_COMPETITION = gql`
       status
       rounds {
         id
-        startDate
-        endDate
+        deadline {
+          startDate
+          endDate
+        }
+        submissionDeadline {
+          startDate
+          endDate
+        }
+        votingDeadline {
+          startDate
+          endDate
+        }
+        judgingDeadline {
+          startDate
+          endDate
+        }
         title
         description
         judgementCriteria
@@ -131,9 +159,11 @@ export const GET_COMPETITION_QUERY = gql`
       status
       eligibility
       haveRoundWiseSubmission
+      enroledUserCount
       rounds {
         id
         title
+        submissionType
         description
         judgementCriteria
         roundNumber
@@ -172,7 +202,6 @@ export const GET_COMPETITION_QUERY = gql`
         rewards
         title
       }
-      isEnrolled
     }
   }
 `;
@@ -211,8 +240,6 @@ export const GET_COMPETITIONS_QUERY = gql`
         haveRoundWiseSubmission
         rounds {
           id
-          startDate
-          endDate
           title
           description
           judgementCriteria
@@ -228,6 +255,22 @@ export const GET_COMPETITIONS_QUERY = gql`
             lastName
           }
           maxWinners
+          deadline {
+            startDate
+            endDate
+          }
+          submissionDeadline {
+            startDate
+            endDate
+          }
+          votingDeadline {
+            startDate
+            endDate
+          }
+          judgingDeadline {
+            startDate
+            endDate
+          }
         }
         prizes {
           id
@@ -236,7 +279,6 @@ export const GET_COMPETITIONS_QUERY = gql`
           rewards
           title
         }
-        isEnrolled
       }
       totalCount
     }

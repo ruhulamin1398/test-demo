@@ -4,19 +4,13 @@ export const GET_ACTIVE_ROUND_SUBMISSION_QUERY = gql`
   query GetActiveRoundSubmission($competitionId: ID!) {
     GetActiveRoundSubmission(competitionId: $competitionId) {
       id
-      roundId {
-        id
-        title
-        submissionType
-        startDate
-        endDate
-        submissionStartDate
-        submissionEndDate
-      }
       userId
       enrolId
       submittedContent
       score
+      title
+      description
+      submittedContent
       createdAt
       updatedAt
     }

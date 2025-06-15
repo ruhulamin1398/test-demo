@@ -19,6 +19,9 @@ const enrollmentSubmissionSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+
+    title: { type: String, required: false },
+    description: { type: String, required: false },
     submittedContent: { type: String, required: false },
     score: { type: Number, default: 1 },
   },

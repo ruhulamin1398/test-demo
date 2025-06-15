@@ -42,10 +42,10 @@ const enrollmentSubmissionResolver = {
         enrolId: enrollment.id,
       }).populate("roundId");
 
-      console.log(
-        "submission from resolver____________________________",
-        submission
-      );
+      // console.log(
+      //   "submission from resolver____________________________",
+      //   submission
+      // );
       return submission;
     },
   },

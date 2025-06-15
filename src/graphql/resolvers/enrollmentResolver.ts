@@ -54,7 +54,7 @@ const enrollmentResolver = {
       ); // '[]' means inclusive
       if (!isDeadlineExist) {
         throw new Error(
-          "You cannot enroll in this competition, the enrollment is upcoming."
+          "Enrollment are only allowed during the submission period."
         );
       }
 

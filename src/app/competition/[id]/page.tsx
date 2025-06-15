@@ -1,14 +1,13 @@
-import React from "react"; // Import your Apollo Client instance
-import ProfileHeroSection from "@/components/organisms/ProfileHeroSection";
-import CompetitionDetail from "@/components/organisms/CompetitionDetail";
+import React from "react";
 import { SiingleCompetitionView } from "@/sections/competition-single/view";
+import { Metadata } from "next";
+import { CONFIG } from "@/global-config";
 
+export const metadata: Metadata = { title: `Competitions - ${CONFIG.appName}` };
 export default async function HomePage() {
   return (
     <div>
       <SiingleCompetitionView />
-      {/* <ProfileHeroSection /> */}
-      {/* <CompetitionDetail /> */}
     </div>
   );
 }

@@ -14,9 +14,10 @@ type Props = {
   sort: string;
   onSort: (newValue: string) => void;
   sortOptions: { value: string; label: string }[];
+  title?: string;
 };
 
-export function PostSort({ sort, sortOptions, onSort }: Props) {
+export function SubmissionSort({ sort, sortOptions, onSort, title }: Props) {
   const menuActions = usePopover();
 
   const renderMenuActions = () => (
@@ -59,7 +60,7 @@ export function PostSort({ sort, sortOptions, onSort }: Props) {
         }
         sx={{ fontWeight: "fontWeightSemiBold", textTransform: "capitalize" }}
       >
-        Sort by:
+        {title}
         <Box component="span" sx={{ ml: 0.5, fontWeight: "fontWeightBold" }}>
           {sort}
         </Box>

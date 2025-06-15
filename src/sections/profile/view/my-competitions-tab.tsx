@@ -1,7 +1,7 @@
 import { _coursesContinue, _coursesFeatured, _tours } from "@/_mock";
 import Grid from "@mui/material/Grid2";
-import { CompetitionSidebar } from "./competition-sidebar";
 import { MyCompetitionMainContent } from "../my-competiton-tab/my-competition-main-content";
+import { ProfileSidebar } from "./profile-sidebar";
 
 // ----------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ export function MyCompetitionsTab() {
 
         <Grid container spacing={3} size={{ xs: 12, md: 6, lg: 4 }}>
           {/* // right side */}
-          <CompetitionSidebar />
+          <ProfileSidebar />
         </Grid>
       </Grid>
     </>
