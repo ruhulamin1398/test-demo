@@ -16,7 +16,7 @@ export const adminMiddleware: MiddlewareFactory = (next) => {
       if (token && token.user) {
         const { role } = token.user as IUser;
         console.log("From admin middleware test", role);
-        next(request, event);
+        return next(request, event);
         // return role === RoleEnum.ADMIN
         //   ? next(request, event)
         //   : NextResponse.redirect(new URL("/", request.url));
