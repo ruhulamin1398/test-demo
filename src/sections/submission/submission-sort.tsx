@@ -33,7 +33,7 @@ export function SubmissionSort({ sort, sortOptions, onSort, title }: Props) {
             selected={sort === option.value}
             onClick={() => {
               menuActions.onClose();
-              onSort(option.value);
+              onSort(option.label);
             }}
           >
             {option.label}
@@ -60,7 +60,6 @@ export function SubmissionSort({ sort, sortOptions, onSort, title }: Props) {
         }
         sx={{ fontWeight: "fontWeightSemiBold", textTransform: "capitalize" }}
       >
-        {title}
         <Box component="span" sx={{ ml: 0.5, fontWeight: "fontWeightBold" }}>
           {sort}
         </Box>
