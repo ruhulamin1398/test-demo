@@ -136,7 +136,7 @@ export function UserTableRow({ row, editHref, onDeleteRow }: Props) {
               "default"
             }
           >
-            {row.isActive ? "Active user" : "Inactive user"}
+            {row.isActive ? "Active" : " Inactive"}
           </Label>
         </TableCell>
 
