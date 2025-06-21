@@ -20,6 +20,14 @@ type PhoneNumber {
   number: String!
 }
 
+
+# Gender enum
+type GenderEnum {
+  male
+  female
+  other
+}
+
 # Authentication response for logged-in user
 type AuthUser {
   user: User

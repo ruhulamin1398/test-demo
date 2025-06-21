@@ -175,20 +175,29 @@ export const UPDATE_GENERAL_INFO_MUTATION = gql`
   mutation UpdateGeneralInfo(
     $firstName: String
     $lastName: String
-    $phoneNumber: PhoneNumberInput
+    $email: String!
+    $phoneNumber: String
+    $country: String
+    $gender: GenderEnum
+    $dob: Date
   ) {
     updateGeneralInfo(
       firstName: $firstName
       lastName: $lastName
+      email: $email
       phoneNumber: $phoneNumber
+      country: $country
+      gender: $gender
+      dob: $dob
     ) {
       id
       firstName
       lastName
-      phoneNumber {
-        countryCode
-        number
-      }
+      email
+      phoneNumber
+      country
+      gender
+      dob
     }
   }
 `;

@@ -4,6 +4,12 @@ export enum RoleEnum {
   MODERATOR = "moderator",
 }
 
+export enum GenderEnum {
+  MALE = "Male",
+  FEMALE = "Female",
+  NA = "N/A",
+}
+
 export enum AuthProviderEnum {
   CUSTOM = "custom",
   GOOGLE = "google",
@@ -14,7 +20,6 @@ export interface IPhoneNumber {
   countryCode: string;
   number: string;
 }
-
 export interface IUser {
   id: string;
   name: string;
@@ -22,7 +27,7 @@ export interface IUser {
   password: string;
   firstName?: string;
   lastName?: string;
-  phoneNumber?: IPhoneNumber;
+  phoneNumber?: string;
   authProvider: AuthProviderEnum;
   socialId?: string; // Stores the social media ID (Google, Facebook, Instagram)
   profilePicture?: string;
@@ -31,6 +36,9 @@ export interface IUser {
   isActive: boolean;
   updatedAt: Date;
   elrollIds: string[]; // Array of competition IDs the user is enrolled in
+  country?: string;
+  gender?: GenderEnum;
+  dob?: Date | null;
 }
 
 export interface PaginationInput {

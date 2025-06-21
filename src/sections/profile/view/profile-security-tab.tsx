@@ -96,6 +96,7 @@ export function ProfileSecurityTab() {
           gap: 3,
           display: "flex",
           flexDirection: "column",
+          mt: { xs: 2, md: 6 },
         }}
       >
         <CardHeader title="Change Password" />
