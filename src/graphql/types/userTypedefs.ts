@@ -22,7 +22,7 @@ type PhoneNumber {
 
 
 # Gender enum
-type GenderEnum {
+enum GenderEnum {
   male
   female
   other
