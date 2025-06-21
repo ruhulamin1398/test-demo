@@ -127,9 +127,8 @@ export function ProfileAccountTab() {
         if (response.data) {
           toast.dismiss();
           console.log(response.data);
-          toast.success("Upload successful");
-
-          // TODO: attach uploaded image url to the data
+          data.profilePicture = response?.data?.url;
+          // toast.success("Upload successful");
         } else {
           toast.dismiss();
           console.log("Something went wrong");
@@ -146,6 +145,7 @@ export function ProfileAccountTab() {
     }
 
     try {
+      console.log("Submitting data:", data);
       // await new Promise((resolve) => setTimeout(resolve, 500));
       // toast.success("Update success!");
       await updateGeneralInfo({
@@ -157,6 +157,7 @@ export function ProfileAccountTab() {
           country: data.country,
           gender: data.gender,
           dob: data.dob,
+          profilePicture: data.profilePicture,
         },
       });
     } catch (error) {

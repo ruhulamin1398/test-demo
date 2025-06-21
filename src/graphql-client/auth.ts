@@ -180,6 +180,7 @@ export const UPDATE_GENERAL_INFO_MUTATION = gql`
     $country: String
     $gender: GenderEnum
     $dob: Date
+    $profilePicture: String
   ) {
     updateGeneralInfo(
       firstName: $firstName
@@ -189,6 +190,7 @@ export const UPDATE_GENERAL_INFO_MUTATION = gql`
       country: $country
       gender: $gender
       dob: $dob
+      profilePicture: $profilePicture
     ) {
       id
       firstName
@@ -198,6 +200,7 @@ export const UPDATE_GENERAL_INFO_MUTATION = gql`
       country
       gender
       dob
+      profilePicture
     }
   }
 `;
