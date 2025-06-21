@@ -106,3 +106,5 @@ input PhoneNumberInput {
   number: String!
 }
 `;
+
+// This is example commenting
