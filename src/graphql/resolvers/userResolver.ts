@@ -41,6 +41,7 @@ const resolvers = {
         if (!findMe) throw new Error("User could not be found.");
         return findMe;
       } catch (_error: unknown) {
+        console.log(_error);
         throw new Error("Something went wrong, we are looking into it.");
       }
     },
