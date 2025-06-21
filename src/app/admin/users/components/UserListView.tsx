@@ -48,7 +48,7 @@ const STATUS_OPTIONS = [
 const TABLE_HEAD: TableHeadCellProps[] = [
   { id: "name", label: "Name" },
   { id: "phoneNumber", label: "Phone number", width: 180 },
-  { id: "company", label: "Company", width: 220 },
+  { id: "email", label: "Email", width: 220 },
   { id: "role", label: "Role", width: 180 },
   { id: "status", label: "Status", width: 100 },
   { id: "", width: 88 },
