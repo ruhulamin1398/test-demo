@@ -6,15 +6,7 @@ import { useState, useCallback, useEffect } from "react";
 import { varAlpha } from "minimal-shared/utils";
 import { useBoolean, useSetState } from "minimal-shared/hooks";
 
-import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
-import Card from "@mui/material/Card";
-import Table from "@mui/material/Table";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import TableBody from "@mui/material/TableBody";
-import IconButton from "@mui/material/IconButton";
+import { Box, Tab, Tabs, Card, Table, Button, TableBody } from "@mui/material";
 
 import { paths } from "src/routes/paths";
 import { RouterLink } from "src/routes/components";
@@ -44,7 +36,7 @@ import {
   GetUsersQueryVariables,
 } from "@/graphql-client/user";
 import { useQuery } from "@apollo/client";
-import { IUser } from "@/interfaces";
+import { IUser, RoleEnum } from "@/interfaces";
 
 // ----------------------------------------------------------------------
 
@@ -68,19 +60,14 @@ export function UserListView() {
   const table = useTable();
   const confirmDialog = useBoolean();
   const [tableData, setTableData] = useState<IUser[]>([]);
-  const filters = useSetState<GetUsersQueryVariables["filter"]>({
-    name: "",
-    role: "",
-    isActive: "all",
-  });
-  const { state: currentFilters, setState: updateFilters } = filters;
+  const [filters, setFilters] = useState<GetUsersQueryVariables["filter"]>({});
   const { data, loading, error } = useQuery<
     GetUsersQueryResponse,
     GetUsersQueryVariables
   >(GET_USERS_QUERY, {
     variables: {
       page: { page: table.page, limit: table.rowsPerPage }, // Pagination settings
-      filter: { ...currentFilters }, // Optional filter
+      filter: { ...filters }, // Optional filter
     },
   });
   useEffect(() => {
@@ -92,10 +79,7 @@ export function UserListView() {
     }
   }, [data, loading, error]);
 
-  const canReset =
-    !!currentFilters.name ||
-    currentFilters?.role?.length > 0 ||
-    currentFilters?.isActive !== "all";
+  const canReset = Object.keys(filters).length > 0;
 
   const notFound =
     !loading && ((!tableData.length && canReset) || !tableData.length);
@@ -122,13 +106,28 @@ export function UserListView() {
 
   const handleFilterStatus = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
+      if (newValue === "all" && filters.isActive !== undefined) {
+        const { isActive, ...restFilters } = filters;
+        setFilters({
+          ...restFilters,
+        });
+      } else {
+        setFilters({
+          isActive: Boolean(Number(newValue)),
+        });
+      }
       table.onResetPage();
-      updateFilters({
-        isActive: newValue === "all" ? newValue : Boolean(newValue),
-      });
     },
-    [updateFilters, table]
+    [table]
   );
+
+  const handleUpdateFilters = (
+    newFilters: GetUsersQueryVariables["filter"]
+  ) => {
+    setFilters(() => ({
+      ...newFilters,
+    }));
+  };
 
   const renderConfirmDialog = () => (
     <ConfirmDialog
@@ -155,6 +154,7 @@ export function UserListView() {
       }
     />
   );
+  console.log(filters);
 
   return (
     <>
@@ -181,7 +181,13 @@ export function UserListView() {
 
         <Card>
           <Tabs
-            value={currentFilters.isActive || "all"}
+            value={
+              filters.isActive === undefined
+                ? "all"
+                : filters.isActive
+                ? "1"
+                : "0"
+            }
             onChange={handleFilterStatus}
             sx={[
               (theme) => ({
@@ -193,6 +199,19 @@ export function UserListView() {
               }),
             ]}
           >
+            <Tab
+              iconPosition="end"
+              value={"all"}
+              label={"All"}
+              icon={
+                <Label variant={"filled"} color={"default"}>
+                  {/* {["1", "0"].includes(tab.value.toString())
+                      ? tableData.filter((user) => user.isActive === tab.value)
+                          .length
+                      : tableData.length} */}
+                </Label>
+              }
+            />
             {STATUS_OPTIONS.map((tab) => (
               <Tab
                 key={tab.value}
@@ -201,18 +220,8 @@ export function UserListView() {
                 label={tab.label}
                 icon={
                   <Label
-                    variant={
-                      ((tab.value === "all" ||
-                        tab.value === currentFilters.isActive) &&
-                        "filled") ||
-                      "soft"
-                    }
-                    color={
-                      (tab.value === "active" && "success") ||
-                      (tab.value === "pending" && "warning") ||
-                      (tab.value === "banned" && "error") ||
-                      "default"
-                    }
+                    variant={"filled"}
+                    color={tab.value === "1" ? "success" : "error"}
                   >
                     {/* {["1", "0"].includes(tab.value.toString())
                       ? tableData.filter((user) => user.isActive === tab.value)
@@ -224,10 +233,15 @@ export function UserListView() {
             ))}
           </Tabs>
 
-          <UserTableToolbar filters={filters} onResetPage={table.onResetPage} />
+          <UserTableToolbar
+            handleUpdateFilters={handleUpdateFilters}
+            filters={filters}
+            onResetPage={table.onResetPage}
+          />
 
           {canReset && (
             <UserTableFiltersResult
+              updateFilters={handleUpdateFilters}
               filters={filters}
               totalResults={tableData.length}
               onResetPage={table.onResetPage}

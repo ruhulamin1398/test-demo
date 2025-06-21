@@ -8,6 +8,7 @@ import {
 import { Enrollment, User } from "@/models"; // Assuming your model is exported from this path
 import EnrollmentSubmission from "@/models/EnrollmentSubmission";
 import { GraphQLError } from "graphql";
+import { FilterQuery } from "mongoose";
 import { NextApiRequest } from "next";
 
 interface PhoneNumberInput {
@@ -50,14 +51,11 @@ const resolvers = {
       _info: unknown // Info about the query (e.g., field name, schema)
     ): Promise<UsersResponse> => {
       try {
-        type FilterPropsType = {
-          name?: { $regex: string; $options: string };
-          isActive?: boolean;
-        };
+        type FilterPropsType = FilterQuery<IUser>;
         const { limit, page: currentPage } = page;
 
         // Calculate the skip value for pagination
-        const skip = (currentPage - 1) * limit;
+        const skip = currentPage * limit;
 
         // Build the filter query
         const filterQuery: FilterPropsType = {};
@@ -67,10 +65,22 @@ const resolvers = {
           if (filter.isActive !== undefined) {
             filterQuery.isActive = filter.isActive;
           }
+
           if (filter.name) {
-            filterQuery.name = { $regex: filter.name, $options: "i" }; // Case-insensitive search
+            filterQuery.$or = [
+              { email: { $regex: filter.name, $options: "i" } },
+              {
+                name: { $regex: filter.name, $options: "i" },
+              },
+              { "phoneNumber.number": { $regex: filter.name, $options: "i" } },
+            ];
+          }
+          if (filter.role) {
+            filterQuery.role = filter.role; // Assuming role is a direct field in User
           }
         }
+
+        console.log(filterQuery);
 
         // Fetch the total count of users matching the filter (for pagination)
         const totalCount = await User.countDocuments(filterQuery);
@@ -159,7 +169,68 @@ const resolvers = {
         });
       }
     },
-
+    updateGeneralInfo: async (
+      _parent: unknown,
+      {
+        name,
+        email,
+        firstName,
+        lastName,
+        phoneNumber,
+        id,
+        gender,
+        country,
+      }: {
+        name: string;
+        email: string;
+        firstName?: string;
+        lastName?: string;
+        phoneNumber?: PhoneNumberInput;
+        id: string;
+        country: string;
+        gender: string;
+      },
+      _context: unknown
+    ) => {
+      try {
+        // Check if the email already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+          throw new GraphQLError("User already exists", {
+            extensions: {
+              code: "USER_ALREADY_EXISTS", // Custom error code
+              invalidArgs: { email },
+            },
+          });
+        }
+        // Create a new user instance
+        const newUser = await User.findByIdAndUpdate(id, {
+          name,
+          email,
+          firstName,
+          gender,
+          country,
+          lastName,
+          phoneNumber,
+          isActive: true, // Set to CUSTOM for regular registration
+        });
+        return { user: newUser };
+      } catch (err) {
+        console.log("Error while creating user", err);
+        if (
+          err instanceof GraphQLError &&
+          err.extensions.code === "USER_ALREADY_EXISTS"
+        ) {
+          throw err;
+        }
+        throw new GraphQLError("Internal server error", {
+          extensions: {
+            code: "INTERNAL_SERVER_ERROR",
+            http: { status: 500 },
+          },
+        });
+      }
+    },
     // Social login (Google/Facebook)
     socialLogin: async (
       _parent: unknown,
