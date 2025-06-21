@@ -36,6 +36,8 @@ const userSchema = new Schema<IUser & Document>({
   },
   firstName: String,
   lastName: String,
+  country: { type: String, required: false },
+  gender: { type: String, required: false },
   phoneNumber: phoneNumberSchema,
   createdAt: {
     type: Date,

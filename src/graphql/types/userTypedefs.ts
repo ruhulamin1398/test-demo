@@ -87,7 +87,7 @@ type Mutation {
     phoneNumber: PhoneNumberInput
   ): AuthUser!
   updateProfileAvatar(avatarUrl: String!): User!
-  updateGeneralInfo(firstName: String, lastName: String, phoneNumber: PhoneNumberInput): User!
+  updateGeneralInfo(firstName: String, lastName: String, phoneNumber: PhoneNumberInput, email: String, country: String, gender: String): User!
   login(username: String!, password: String!): AuthUser!
   socialLogin(
     socialId: String!

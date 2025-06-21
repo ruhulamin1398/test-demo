@@ -17,68 +17,69 @@ import { GetUsersQueryVariables } from "@/graphql-client/user";
 
 type Props = FiltersResultProps & {
   onResetPage: () => void;
-  filters: UseSetStateReturn<GetUsersQueryVariables["filter"]>;
+  filters: GetUsersQueryVariables["filter"];
+  updateFilters: (newValues: GetUsersQueryVariables["filter"]) => void;
 };
 
 export function UserTableFiltersResult({
+  updateFilters,
   filters,
   onResetPage,
   totalResults,
   sx,
 }: Props) {
-  const {
-    state: currentFilters,
-    setState: updateFilters,
-    resetState: resetFilters,
-  } = filters;
-
   const handleRemoveKeyword = useCallback(() => {
     onResetPage();
-    updateFilters({ name: "" });
+    const { name, ...restFilters } = filters;
+    updateFilters(restFilters);
   }, [onResetPage, updateFilters]);
 
   const handleRemoveStatus = useCallback(() => {
     onResetPage();
-    updateFilters({ isActive: true });
+    updateFilters({});
   }, [onResetPage, updateFilters]);
 
   const handleRemoveRole = useCallback(() => {
     onResetPage();
-    updateFilters({ role: "" });
-  }, [onResetPage, updateFilters, currentFilters.role]);
+    const { role, ...restFilters } = filters;
+    updateFilters({ ...restFilters });
+  }, [onResetPage, updateFilters, filters.role]);
 
   const handleReset = useCallback(() => {
     onResetPage();
-    resetFilters();
-  }, [onResetPage, resetFilters]);
+    updateFilters({});
+  }, [onResetPage, updateFilters]);
 
   return (
     <FiltersResult totalResults={totalResults} onReset={handleReset} sx={sx}>
-      <FiltersBlock label="Status:" isShow={true}>
+      <FiltersBlock label="Status:" isShow={filters.isActive !== undefined}>
         <Chip
           {...chipProps}
-          label={currentFilters.isActive}
+          label={filters.isActive ? "Active" : "Inactive"}
           onDelete={handleRemoveStatus}
           sx={{ textTransform: "capitalize" }}
         />
       </FiltersBlock>
 
-      <FiltersBlock label="Role:" isShow={!!currentFilters.role.length}>
+      <FiltersBlock label="Role:" isShow={!!filters.role}>
         <Chip
           {...chipProps}
-          key={"user-role-" + currentFilters.role}
-          label={currentFilters.role}
+          key={"user-role-" + filters.role}
+          label={filters.role}
           onDelete={() => handleRemoveRole()}
         />
       </FiltersBlock>
 
-      <FiltersBlock label="Keyword:" isShow={!!currentFilters.name}>
+      <FiltersBlock label="Keyword:" isShow={!!filters.name}>
         <Chip
           {...chipProps}
-          label={currentFilters.name}
+          label={filters.name}
           onDelete={handleRemoveKeyword}
         />
       </FiltersBlock>
     </FiltersResult>
   );
 }
+
+// GRAPHQL_API_URL https://www.beejoyi.com/api/graphql
+// MONGO_ATLAS_URL

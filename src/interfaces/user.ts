@@ -30,6 +30,8 @@ export interface IUser {
   role: RoleEnum;
   isActive: boolean;
   updatedAt: Date;
+  country?: string; // Optional country
+  gender?: string;
   elrollIds: string[]; // Array of competition IDs the user is enrolled in
 }
 
