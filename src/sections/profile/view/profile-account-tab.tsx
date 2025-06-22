@@ -20,12 +20,12 @@ import { ProfileSecurityTab } from "./profile-security-tab";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { FormControlLabel, MenuItem, Switch, Typography } from "@mui/material";
-import { GenderEnum, IPhoneNumber, RoleEnum } from "@/interfaces";
+import { GenderEnum, IPhoneNumber, IUser, RoleEnum } from "@/interfaces";
 import { LocalizationProvider } from "@/locales";
-import { useMutation } from "@apollo/client";
-import { useEffect } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
 import ProfileAccountTabProfileImage from "../profile-account-tab-profileImage";
-import { UPDATE_USER_MUTATION } from "@/graphql-client/user";
+import { GET_USER_QUERY, UPDATE_USER_MUTATION } from "@/graphql-client/user";
 import dayjs from "dayjs";
 import { handleGraphQLError } from "@/utils/errorHandling";
 
@@ -94,7 +94,17 @@ const defaultValues: UserSchemaType = {
 
 export function ProfileAccountTab() {
   const [updateGeneralInfo, { loading }] = useMutation(UPDATE_USER_MUTATION);
-  const user = useSelector((state: RootState) => state.auth.user);
+  const loggedUser = useSelector((state: RootState) => state.auth.user);
+  const [user, setUser] = useState<IUser | null>(null);
+
+  const {
+    data,
+    loading: getUserLoading,
+    error,
+  } = useQuery(GET_USER_QUERY, {
+    variables: { id: loggedUser?.id },
+    skip: !loggedUser?.id, // Skip the query if `id` is not present
+  });
 
   const methods = useForm<UserSchemaType>({
     mode: "onSubmit",
@@ -127,6 +137,12 @@ export function ProfileAccountTab() {
       });
     }
   }, [user, methods]);
+
+  useEffect(() => {
+    if (data && data.getUser) {
+      setUser(data.getUser);
+    }
+  }, [data]);
 
   const onSubmit = handleSubmit(async (data) => {
     if (formState.isSubmitting) return;
