@@ -124,6 +124,7 @@ export const ME_QUERY = gql`
       authProvider
       socialId
       enrollIds
+      profilePicture
       submissions {
         id
         enrolId
