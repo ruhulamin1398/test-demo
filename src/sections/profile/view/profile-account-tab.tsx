@@ -7,11 +7,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid2";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
-
-import { fData } from "@/utils/format-number";
 
 import { toast } from "@/components/snackbar";
 import { Form, Field, schemaHelper } from "@/components/hook-form";
@@ -19,14 +15,15 @@ import { Form, Field, schemaHelper } from "@/components/hook-form";
 import { ProfileSecurityTab } from "./profile-security-tab";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { _mock, USER_STATUS_OPTIONS } from "@/_mock";
 import { MenuItem } from "@mui/material";
-import { GenderEnum } from "@/interfaces";
+import { GenderEnum, IPhoneNumber } from "@/interfaces";
 import { LocalizationProvider } from "@/locales";
 import { useMutation } from "@apollo/client";
 import { UPDATE_GENERAL_INFO_MUTATION } from "@/graphql-client/auth";
 import { useEffect } from "react";
 import { useFileUpload } from "@/app/hooks/useFileUpload";
+import ProfileAccountTabProfileImage from "../profile-account-tab-profileImage";
+import { setUser } from "@/store/slices/authSlice";
 
 // ----------------------------------------------------------------------
 
@@ -55,7 +52,6 @@ export const UpdateUserSchema = zod.object({
       zod.date()
     )
     .nullable(),
-  profilePicture: schemaHelper.file({ message: "Avatar is required!" }),
 });
 
 // ----------------------------------------------------------------------
@@ -73,13 +69,18 @@ export function ProfileAccountTab() {
   const [updateGeneralInfo, { loading, error, data }] = useMutation(
     UPDATE_GENERAL_INFO_MUTATION
   );
+
   const currentUser: UpdateUserSchemaType = {
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
-    email: user?.email || "user@user.com",
-    phoneNumber: user?.phoneNumber || "+8801000000000",
+    email: user?.email || "",
+    phoneNumber:
+      user?.phoneNumber &&
+      user.phoneNumber.countryCode &&
+      user.phoneNumber.number
+        ? user.phoneNumber.countryCode + user.phoneNumber.number.slice(1)
+        : "+8801000000000",
     country: user?.country || "Bangladesh",
-    profilePicture: user?.profilePicture || null,
     gender: user?.gender || GenderEnum.NA,
     dob: user?.dob ? new Date(user.dob) : null,
   };
@@ -92,7 +93,6 @@ export function ProfileAccountTab() {
     country: null,
     gender: GenderEnum.NA,
     dob: null,
-    profilePicture: null,
   };
 
   const methods = useForm<UpdateUserSchemaType>({
@@ -110,54 +110,21 @@ export function ProfileAccountTab() {
   const onSubmit = handleSubmit(async (data: UpdateUserSchemaType) => {
     console.info("DATA", data);
 
-    let profilePictureToUpload = data.profilePicture;
-    if (profilePictureToUpload && typeof profilePictureToUpload === "object") {
-      console.info("Profile picture is an object, preparing to upload...");
-      console.log("profilePictureToUpload", profilePictureToUpload);
-
-      try {
-        const uploadbleContent = profilePictureToUpload as File;
-        const response = await uploadFile(
-          uploadbleContent,
-          `/api/upload/user-image`,
-          {
-            userId: user?.id,
-          }
-        );
-        if (response.data) {
-          toast.dismiss();
-          console.log(response.data);
-          data.profilePicture = response?.data?.url;
-          // toast.success("Upload successful");
-        } else {
-          toast.dismiss();
-          console.log("Something went wrong");
-          // TODO: Handle error
-        }
-      } catch (err) {
-        console.log("err");
-      }
-    } else {
-      console.info(
-        "Profile picture is not an object, skipping upload.",
-        data.profilePicture
-      );
-    }
-
     try {
       console.log("Submitting data:", data);
-      // await new Promise((resolve) => setTimeout(resolve, 500));
-      // toast.success("Update success!");
+      const phoneNumber: IPhoneNumber = {
+        countryCode: data.phoneNumber.slice(0, 4),
+        number: data.phoneNumber.slice(3),
+      };
       await updateGeneralInfo({
         variables: {
+          id: user?.id,
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
-          phoneNumber: data.phoneNumber,
+          phoneNumber: phoneNumber,
           country: data.country,
           gender: data.gender,
-          dob: data.dob,
-          profilePicture: data.profilePicture,
         },
       });
     } catch (error) {
@@ -168,7 +135,8 @@ export function ProfileAccountTab() {
   useEffect(() => {
     if (data) {
       toast.success("Update success!");
-      // TODO:  update the user in the redux
+      dispatch(setUser({ ...user, ...data.updateGeneralInfo }));
+      // TODO: recheck  update the user in the redux
     }
     if (error) {
       toast.error(error.message || "Something went wrong!");
@@ -177,44 +145,11 @@ export function ProfileAccountTab() {
   return (
     <>
       <LocalizationProvider>
-        <Form methods={methods} onSubmit={onSubmit}>
-          <Grid container spacing={3}>
-            <Grid size={{ xs: 12, md: 4 }}>
-              <Card
-                sx={{
-                  pt: 10,
-                  pb: 5,
-                  px: 3,
-                  textAlign: "center",
-                }}
-              >
-                <Field.UploadAvatar
-                  name="profilePicture"
-                  maxSize={3145728}
-                  helperText={
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        mt: 3,
-                        mx: "auto",
-                        display: "block",
-                        textAlign: "center",
-                        color: "text.disabled",
-                      }}
-                    >
-                      Allowed *.jpeg, *.jpg, *.png, *.gif
-                      <br /> max size of {fData(3145728)}
-                    </Typography>
-                  }
-                />
+        <Grid container spacing={3}>
+          <ProfileAccountTabProfileImage />
 
-                {/* <Button variant="soft" color="error" sx={{ mt: 3 }}>
-                Delete user
-              </Button> */}
-              </Card>
-            </Grid>
-
-            <Grid size={{ xs: 12, md: 8 }}>
+          <Grid size={{ xs: 12, md: 8 }}>
+            <Form methods={methods} onSubmit={onSubmit}>
               <Card sx={{ p: 3, mb: 3 }}>
                 <Box
                   sx={{
@@ -264,9 +199,9 @@ export function ProfileAccountTab() {
                   </LoadingButton>
                 </Stack>
               </Card>
-            </Grid>
+            </Form>
           </Grid>
-        </Form>
+        </Grid>
       </LocalizationProvider>
       <ProfileSecurityTab />
     </>
