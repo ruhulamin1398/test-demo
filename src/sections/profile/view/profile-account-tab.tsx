@@ -7,18 +7,23 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid2";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
-
-import { fData } from "@/utils/format-number";
 
 import { toast } from "@/components/snackbar";
 import { Form, Field, schemaHelper } from "@/components/hook-form";
 
 import { ProfileSecurityTab } from "./profile-security-tab";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { MenuItem } from "@mui/material";
+import { GenderEnum, IPhoneNumber } from "@/interfaces";
+import { LocalizationProvider } from "@/locales";
+import { useMutation } from "@apollo/client";
+import { UPDATE_GENERAL_INFO_MUTATION } from "@/graphql-client/auth";
+import { useEffect } from "react";
+import { useFileUpload } from "@/app/hooks/useFileUpload";
+import ProfileAccountTabProfileImage from "../profile-account-tab-profileImage";
+import { setUser } from "@/store/slices/authSlice";
 
 // ----------------------------------------------------------------------
 
@@ -31,27 +36,63 @@ export const UpdateUserSchema = zod.object({
     .string()
     .min(1, { message: "Email is required!" })
     .email({ message: "Email must be a valid email address!" }),
-  profilePicture: schemaHelper.file({ message: "Avatar is required!" }),
-  // phoneNumber: schemaHelper.phoneNumber({ isValid: isValidPhoneNumber }),
+  phoneNumber: schemaHelper.phoneNumber({ isValid: isValidPhoneNumber }),
+  country: schemaHelper.nullableInput(
+    zod.string().min(1, { message: "Country is required!" }),
+    {
+      message: "Country is required!",
+    }
+  ),
+  gender: schemaHelper.nullableInput(zod.nativeEnum(GenderEnum), {
+    message: "Gender is required!",
+  }),
+  dob: zod
+    .preprocess(
+      (arg) => (typeof arg === "string" ? new Date(arg) : arg),
+      zod.date()
+    )
+    .nullable(),
 });
 
 // ----------------------------------------------------------------------
 
 export function ProfileAccountTab() {
+  const dispatch = useDispatch();
+  const {
+    uploadFile,
+    isLoading,
+    progress,
+    error: uploadError,
+  } = useFileUpload();
+
   const user = useSelector((state: RootState) => state.auth.user);
+  const [updateGeneralInfo, { loading, error, data }] = useMutation(
+    UPDATE_GENERAL_INFO_MUTATION
+  );
 
   const currentUser: UpdateUserSchemaType = {
-    firstName: user?.firstName || "firstName",
-    lastName: user?.lastName || "lastName",
-    email: user?.email || "user@user.com",
-    profilePicture: user?.profilePicture || "",
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
+    phoneNumber:
+      user?.phoneNumber &&
+      user.phoneNumber.countryCode &&
+      user.phoneNumber.number
+        ? user.phoneNumber.countryCode + user.phoneNumber.number.slice(1)
+        : "+8801000000000",
+    country: user?.country || "Bangladesh",
+    gender: user?.gender || GenderEnum.NA,
+    dob: user?.dob ? new Date(user.dob) : null,
   };
 
   const defaultValues: UpdateUserSchemaType = {
     firstName: "",
     lastName: "",
     email: "",
-    profilePicture: null,
+    phoneNumber: "",
+    country: null,
+    gender: GenderEnum.NA,
+    dob: null,
   };
 
   const methods = useForm<UpdateUserSchemaType>({
@@ -66,86 +107,102 @@ export function ProfileAccountTab() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data: UpdateUserSchemaType) => {
+    console.info("DATA", data);
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      toast.success("Update success!");
-      console.info("DATA", data);
+      console.log("Submitting data:", data);
+      const phoneNumber: IPhoneNumber = {
+        countryCode: data.phoneNumber.slice(0, 4),
+        number: data.phoneNumber.slice(3),
+      };
+      await updateGeneralInfo({
+        variables: {
+          id: user?.id,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phoneNumber: phoneNumber,
+          country: data.country,
+          gender: data.gender,
+        },
+      });
     } catch (error) {
       console.error(error);
     }
   });
 
+  useEffect(() => {
+    if (data) {
+      toast.success("Update success!");
+      dispatch(setUser({ ...user, ...data.updateGeneralInfo }));
+      // TODO: recheck  update the user in the redux
+    }
+    if (error) {
+      toast.error(error.message || "Something went wrong!");
+    }
+  }, [data, error, loading]);
   return (
     <>
-      <Form methods={methods} onSubmit={onSubmit}>
+      <LocalizationProvider>
         <Grid container spacing={3}>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <Card
-              sx={{
-                pt: 10,
-                pb: 5,
-                px: 3,
-                textAlign: "center",
-              }}
-            >
-              <Field.UploadAvatar
-                name="profilePicture"
-                maxSize={3145728}
-                helperText={
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mt: 3,
-                      mx: "auto",
-                      display: "block",
-                      textAlign: "center",
-                      color: "text.disabled",
-                    }}
-                  >
-                    Allowed *.jpeg, *.jpg, *.png, *.gif
-                    <br /> max size of {fData(3145728)}
-                  </Typography>
-                }
-              />
-
-              <Button variant="soft" color="error" sx={{ mt: 3 }}>
-                Delete user
-              </Button>
-            </Card>
-          </Grid>
+          <ProfileAccountTabProfileImage />
 
           <Grid size={{ xs: 12, md: 8 }}>
-            <Card sx={{ p: 3, mb: 3 }}>
-              <Box
-                sx={{
-                  rowGap: 3,
-                  columnGap: 2,
-                  display: "grid",
-                  gridTemplateColumns: {
-                    xs: "repeat(1, 1fr)",
-                    sm: "repeat(2, 1fr)",
-                  },
-                }}
-              >
-                <Field.Text name="firstName" label="First Name" />
-                <Field.Text name="lastName" label="Last Name" />
-                <Field.Text name="email" label="Email address" />
-              </Box>
-
-              <Stack spacing={3} sx={{ mt: 3, alignItems: "flex-end" }}>
-                <LoadingButton
-                  type="submit"
-                  variant="contained"
-                  loading={isSubmitting}
+            <Form methods={methods} onSubmit={onSubmit}>
+              <Card sx={{ p: 3, mb: 3 }}>
+                <Box
+                  sx={{
+                    rowGap: 3,
+                    columnGap: 2,
+                    display: "grid",
+                    gridTemplateColumns: {
+                      xs: "repeat(1, 1fr)",
+                      sm: "repeat(2, 1fr)",
+                    },
+                  }}
                 >
-                  Save changes
-                </LoadingButton>
-              </Stack>
-            </Card>
+                  <Field.Text name="firstName" label="First Name" />
+                  <Field.Text name="lastName" label="Last Name" />
+                  <Field.Text name="email" label="Email address" />
+
+                  <Field.DatePicker name="dob" label="Date of Birth" />
+                  <Field.Select
+                    name="gender"
+                    label="Gender"
+                    slotProps={{
+                      inputLabel: { shrink: true },
+                    }}
+                  >
+                    {Object.values(GenderEnum).map((gender) => (
+                      <MenuItem key={gender} value={gender}>
+                        {gender}
+                      </MenuItem>
+                    ))}
+                  </Field.Select>
+                  <Field.Phone name="phoneNumber" label="Phone number" />
+                  <Field.CountrySelect
+                    fullWidth
+                    name="country"
+                    label="Country"
+                    placeholder="Choose a country"
+                  />
+                </Box>
+
+                <Stack spacing={3} sx={{ mt: 3, alignItems: "flex-end" }}>
+                  <LoadingButton
+                    type="submit"
+                    variant="contained"
+                    loading={isSubmitting}
+                  >
+                    Save changes
+                  </LoadingButton>
+                </Stack>
+              </Card>
+            </Form>
           </Grid>
         </Grid>
-      </Form>
+      </LocalizationProvider>
       <ProfileSecurityTab />
     </>
   );

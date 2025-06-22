@@ -42,6 +42,10 @@ const userSchema = new Schema<IUser & Document>({
   city: { type: String, required: false },
   zipCode: { type: String, required: false },
   phoneNumber: phoneNumberSchema,
+  profilePicture: {
+    type: String,
+    required: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

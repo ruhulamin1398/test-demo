@@ -13,6 +13,9 @@ import { toast } from "@/components/snackbar";
 import { Iconify } from "@/components/iconify";
 import { Form, Field } from "@/components/hook-form";
 import { CardHeader } from "@mui/material";
+import { CHANGE_PASSWORD_MUTATION } from "@/graphql-client/auth";
+import { useMutation } from "@apollo/client";
+import { useEffect } from "react";
 
 // ----------------------------------------------------------------------
 
@@ -56,6 +59,10 @@ export const ChangePassWordSchema = zod
 // ----------------------------------------------------------------------
 
 export function ProfileSecurityTab() {
+  const [changePassword, { loading, error, data }] = useMutation(
+    CHANGE_PASSWORD_MUTATION
+  );
+
   const showPassword = useBoolean();
 
   const defaultValues: ChangePassWordSchemaType = {
@@ -78,14 +85,28 @@ export function ProfileSecurityTab() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      console.info("password reset data ", data);
+      await changePassword({
+        variables: {
+          currentPassword: data.oldPassword,
+          newPassword: data.newPassword,
+        },
+      });
+
       reset();
-      toast.success("Update success!");
-      console.info("DATA", data);
     } catch (error) {
       console.error(error);
     }
   });
+
+  useEffect(() => {
+    if (data) {
+      toast.success("Update success!");
+    }
+    if (error) {
+      toast.error(error.message || "Something went wrong!");
+    }
+  }, [data, error, loading]);
 
   return (
     <Form methods={methods} onSubmit={onSubmit}>
@@ -96,6 +117,7 @@ export function ProfileSecurityTab() {
           gap: 3,
           display: "flex",
           flexDirection: "column",
+          mt: { xs: 2, md: 6 },
         }}
       >
         <CardHeader title="Change Password" />

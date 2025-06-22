@@ -1,4 +1,3 @@
-import { Iconify } from "../components/iconify/iconify";
 import { ICategory } from "../interfaces/category";
 import {
   CompetitionStatusEnum,
@@ -9,7 +8,6 @@ import {
   SubmissionTypeEnum,
 } from "@/interfaces";
 import { _mock } from "./_mock";
-import { ReactNode } from "react";
 
 export const SUBMISSION_SORT_TIME_OPTIONS = [
   { value: "latest", label: "Latest" },
@@ -19,17 +17,17 @@ export const SUBMISSION_SORT_TIME_OPTIONS = [
 export const SUBMISSION_FILTER_CATEGORY_OPTIONS = [
   { value: "wild", label: "Wildlife" },
   { value: "nature", label: "Nature" },
-  { value: "art", label: "Oldest" },
+  { value: "art", label: "Art" },
 ];
 export const SUBMISSION_FILTER_CONTEST_OPTIONS = [
-  { value: "latest", label: "Morning Dew on Leaves" },
-  { value: "popular", label: "Portrait of a Smile" },
-  { value: "oldest", label: "Waves Crashing on Rocks" },
+  { value: "contest1", label: "Morning Dew on Leaves" },
+  { value: "contest2", label: "Portrait of a Smile" },
+  { value: "contest3", label: "Waves Crashing on Rocks" },
 ];
 export const SUBMISSION_FILTER_ROUND_OPTIONS = [
-  { value: "latest", label: "Round 1" },
-  { value: "popular", label: "Round 2 " },
-  { value: "oldest", label: "Round 3" },
+  { value: "round1", label: "Round 1" },
+  { value: "round2", label: "Round 2" },
+  { value: "round3", label: "Round 3" },
 ];
 
 export interface IDeadlineReminder {
