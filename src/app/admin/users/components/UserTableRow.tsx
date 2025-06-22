@@ -1,4 +1,3 @@
-import type { IUserItem } from "src/types/user";
 import { useBoolean, usePopover } from "minimal-shared/hooks";
 import {
   Box,
@@ -6,7 +5,6 @@ import {
   Stack,
   Button,
   Avatar,
-  Tooltip,
   MenuList,
   MenuItem,
   TableRow,
@@ -20,7 +18,6 @@ import { Label } from "src/components/label";
 import { Iconify } from "src/components/iconify";
 import { ConfirmDialog } from "src/components/custom-dialog";
 import { CustomPopover } from "src/components/custom-popover";
-import { UserQuickEditForm } from "./UserQuickEditForm";
 import { IUser } from "@/interfaces";
 
 // ----------------------------------------------------------------------
@@ -34,15 +31,6 @@ type Props = {
 export function UserTableRow({ row, editHref, onDeleteRow }: Props) {
   const menuActions = usePopover();
   const confirmDialog = useBoolean();
-  const quickEditForm = useBoolean();
-  const renderQuickEditForm = () => (
-    <UserQuickEditForm
-      currentUser={row}
-      open={quickEditForm.value}
-      onClose={quickEditForm.onFalse}
-    />
-  );
-
   const renderMenuActions = () => (
     <CustomPopover
       open={menuActions.open}
@@ -136,7 +124,7 @@ export function UserTableRow({ row, editHref, onDeleteRow }: Props) {
               "default"
             }
           >
-            {row.isActive}
+            {row.isActive ? "Active" : " Inactive"}
           </Label>
         </TableCell>
 
@@ -149,12 +137,6 @@ export function UserTableRow({ row, editHref, onDeleteRow }: Props) {
           </IconButton>
         </TableCell>
       </TableRow>
-
-      <UserQuickEditForm
-        currentUser={row}
-        open={quickEditForm.value}
-        onClose={quickEditForm.onFalse}
-      />
       {renderMenuActions()}
       {renderConfirmDialog()}
     </>

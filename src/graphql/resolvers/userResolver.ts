@@ -2,6 +2,7 @@ import { getResolverErrorMessage } from "@/app/lib/utils";
 import {
   IUser,
   PaginationInput,
+  RoleEnum,
   UserFilterInput,
   UsersResponse,
 } from "@/interfaces";
@@ -41,8 +42,13 @@ const resolvers = {
         if (!findMe) throw new Error("User could not be found.");
         return findMe;
       } catch (_error: unknown) {
+        console.log(_error);
         throw new Error("Something went wrong, we are looking into it.");
       }
+    },
+    getUser: async (_: void, { id }: { id: string }): Promise<IUser | null> => {
+      const user = await User.findById(id);
+      return user;
     },
     getUsers: async (
       _parent: unknown, // Parent object (could be null or previous result)
@@ -172,48 +178,66 @@ const resolvers = {
     updateGeneralInfo: async (
       _parent: unknown,
       {
-        name,
-        email,
-        firstName,
-        lastName,
-        phoneNumber,
         id,
-        gender,
-        country,
+        input,
       }: {
-        name: string;
-        email: string;
-        firstName?: string;
-        lastName?: string;
-        phoneNumber?: PhoneNumberInput;
+        input: {
+          email: string;
+          firstName?: string;
+          lastName?: string;
+          phoneNumber?: PhoneNumberInput;
+          country: string;
+          gender: string;
+          role: RoleEnum;
+          dob?: string;
+          state?: string;
+          city?: string;
+          isActive: boolean;
+          address?: string;
+          zipCode?: string;
+        };
         id: string;
-        country: string;
-        gender: string;
       },
       _context: unknown
     ) => {
       try {
-        // Check if the email already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-          throw new GraphQLError("User already exists", {
-            extensions: {
-              code: "USER_ALREADY_EXISTS", // Custom error code
-              invalidArgs: { email },
-            },
-          });
-        }
-        // Create a new user instance
-        const newUser = await User.findByIdAndUpdate(id, {
-          name,
+        const {
           email,
           firstName,
-          gender,
-          country,
           lastName,
           phoneNumber,
-          isActive: true, // Set to CUSTOM for regular registration
-        });
+          gender,
+          country,
+          state,
+          city,
+          zipCode,
+          address,
+          dob,
+          isActive,
+        } = input;
+
+        const dateOfBirth = dob ? new Date(dob) : dob;
+
+        // Create a new user instance
+        const newUser = await User.findByIdAndUpdate(
+          id,
+          {
+            name: `${firstName} ${lastName}`,
+            state,
+            city,
+            zipCode,
+            address,
+            dob: dateOfBirth,
+            email,
+            firstName,
+            gender,
+            country,
+            lastName,
+            phoneNumber,
+            isActive, // Set to CUSTOM for regular registration
+          },
+          { new: true }
+        );
         return { user: newUser };
       } catch (err) {
         console.log("Error while creating user", err);

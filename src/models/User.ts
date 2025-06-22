@@ -22,7 +22,6 @@ const userSchema = new Schema<IUser & Document>({
   name: {
     type: String,
     required: true,
-    unique: false,
   },
   email: {
     type: String,
@@ -38,6 +37,10 @@ const userSchema = new Schema<IUser & Document>({
   lastName: String,
   country: { type: String, required: false },
   gender: { type: String, required: false },
+  address: { type: String, required: false },
+  state: { type: String, required: false },
+  city: { type: String, required: false },
+  zipCode: { type: String, required: false },
   phoneNumber: phoneNumberSchema,
   profilePicture: {
     type: String,
@@ -64,6 +67,7 @@ const userSchema = new Schema<IUser & Document>({
     type: Boolean,
     default: true,
   },
+  dob: { type: Date, required: false },
 });
 
 // Password hashing middleware

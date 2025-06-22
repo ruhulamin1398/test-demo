@@ -19,6 +19,7 @@ import { defaultSettings, SettingsProvider } from "@/components/settings";
 import { CONFIG } from "@/global-config";
 import { MotionLazy } from "@/components/animate/motion-lazy";
 import { Snackbar } from "@/components/snackbar";
+import { LocalizationProvider } from "@/locales";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -60,28 +61,29 @@ export default async function RootLayout({
           modeStorageKey={themeConfig.modeStorageKey}
           attribute={themeConfig.cssVariables.colorSchemeSelector}
         />
-
-        <AppRouterCacheProvider options={{ key: "css" }}>
-          <SettingsProvider
-            cookieSettings={appConfig.cookieSettings}
-            defaultSettings={defaultSettings}
-          >
-            <ThemeProvider
-              defaultMode={themeConfig.defaultMode}
-              modeStorageKey={themeConfig.modeStorageKey}
-            >
-              <Snackbar />
-              <MotionLazy>
-                <ApolloClientProvider>
-                  <ReduxProvider>
-              <Snackbar />
-                    <LayoutRenderer>{children}</LayoutRenderer>
-                  </ReduxProvider>
-                </ApolloClientProvider>
-              </MotionLazy>
-            </ThemeProvider>
-          </SettingsProvider>
-        </AppRouterCacheProvider>
+        <SettingsProvider
+          cookieSettings={appConfig.cookieSettings}
+          defaultSettings={defaultSettings}
+        >
+          <LocalizationProvider>
+            <AppRouterCacheProvider options={{ key: "css" }}>
+              <ThemeProvider
+                defaultMode={themeConfig.defaultMode}
+                modeStorageKey={themeConfig.modeStorageKey}
+              >
+                <Snackbar />
+                <MotionLazy>
+                  <ApolloClientProvider>
+                    <ReduxProvider>
+                      <Snackbar />
+                      <LayoutRenderer>{children}</LayoutRenderer>
+                    </ReduxProvider>
+                  </ApolloClientProvider>
+                </MotionLazy>
+              </ThemeProvider>
+            </AppRouterCacheProvider>
+          </LocalizationProvider>
+        </SettingsProvider>
       </body>
     </html>
   );

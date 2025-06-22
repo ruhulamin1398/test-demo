@@ -7,7 +7,8 @@ export enum RoleEnum {
 export enum GenderEnum {
   MALE = "Male",
   FEMALE = "Female",
-  NA = "N/A",
+  NA = "NA",
+ 
 }
 
 export enum AuthProviderEnum {
@@ -34,11 +35,16 @@ export interface IUser {
   createdAt?: Date;
   role: RoleEnum;
   isActive: boolean;
-  updatedAt: Date;
-  elrollIds: string[]; // Array of competition IDs the user is enrolled in
-  country?: string;
+  updatedAt: Date; 
+
+  country?: string; // Optional country
   gender?: GenderEnum;
-  dob?: Date | null;
+  state?: string; // Optional state
+  city?: string; // Optional city
+  address?: string; // Optional address
+  zipCode?: string; // Optional zip code
+  elrollIds: string[]; // Array of competition IDs the user is enrolled in
+  dob?: string;
 }
 
 export interface PaginationInput {

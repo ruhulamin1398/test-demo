@@ -48,7 +48,7 @@ const STATUS_OPTIONS = [
 const TABLE_HEAD: TableHeadCellProps[] = [
   { id: "name", label: "Name" },
   { id: "phoneNumber", label: "Phone number", width: 180 },
-  { id: "company", label: "Company", width: 220 },
+  { id: "email", label: "Email", width: 220 },
   { id: "role", label: "Role", width: 180 },
   { id: "status", label: "Status", width: 100 },
   { id: "", width: 88 },
@@ -166,16 +166,6 @@ export function UserListView() {
             { name: "User", href: paths.dashboard.user.root },
             { name: "List" },
           ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.dashboard.user.new}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New user
-            </Button>
-          }
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 
@@ -263,7 +253,6 @@ export function UserListView() {
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                 />
-
                 <TableBody>
                   {tableData.map((row) => (
                     <UserTableRow
@@ -274,14 +263,16 @@ export function UserListView() {
                     />
                   ))}
 
-                  <TableEmptyRows
-                    height={table.dense ? 56 : 56 + 20}
-                    emptyRows={emptyRows(
-                      table.page,
-                      table.rowsPerPage,
-                      tableData.length
-                    )}
-                  />
+                  {tableData.length > 0 && (
+                    <TableEmptyRows
+                      height={table.dense ? 52 : 72}
+                      emptyRows={emptyRows(
+                        table.page,
+                        table.rowsPerPage,
+                        tableData.length
+                      )}
+                    />
+                  )}
 
                   <TableNoData notFound={notFound} />
                 </TableBody>

@@ -1,9 +1,9 @@
-import type { Theme, SxProps } from '@mui/material/styles';
+import type { Theme, SxProps } from "@mui/material/styles";
 
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
 
-import { EmptyContent } from '../empty-content';
+import { EmptyContent } from "../empty-content";
 
 // ----------------------------------------------------------------------
 
@@ -17,7 +17,10 @@ export function TableNoData({ notFound, sx }: TableNoDataProps) {
     <TableRow>
       {notFound ? (
         <TableCell colSpan={12}>
-          <EmptyContent filled sx={[{ py: 10 }, ...(Array.isArray(sx) ? sx : [sx])]} />
+          <EmptyContent
+            filled
+            sx={[{ py: 10 }, ...(Array.isArray(sx) ? sx : [sx])]}
+          />
         </TableCell>
       ) : (
         <TableCell colSpan={12} sx={{ p: 0 }} />
