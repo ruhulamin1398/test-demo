@@ -146,7 +146,7 @@ const resolvers = {
         }
         // Create a new user instance
         const newUser = new User({
-          name,
+          name: `${firstName} ${lastName}`,
           email,
           password,
           firstName,
@@ -212,6 +212,7 @@ const resolvers = {
           address,
           dob,
           isActive,
+          role,
         } = input;
 
         const dateOfBirth = dob ? new Date(dob) : dob;
@@ -220,6 +221,7 @@ const resolvers = {
         const newUser = await User.findByIdAndUpdate(
           id,
           {
+            role,
             name: `${firstName} ${lastName}`,
             state,
             city,
