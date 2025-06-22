@@ -8,7 +8,6 @@ export enum GenderEnum {
   MALE = "Male",
   FEMALE = "Female",
   NA = "NA",
- 
 }
 
 export enum AuthProviderEnum {
@@ -35,7 +34,7 @@ export interface IUser {
   createdAt?: Date;
   role: RoleEnum;
   isActive: boolean;
-  updatedAt: Date; 
+  updatedAt: Date;
 
   country?: string; // Optional country
   gender?: GenderEnum;

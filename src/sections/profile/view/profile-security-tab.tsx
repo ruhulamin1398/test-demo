@@ -16,6 +16,7 @@ import { CardHeader } from "@mui/material";
 import { CHANGE_PASSWORD_MUTATION } from "@/graphql-client/auth";
 import { useMutation } from "@apollo/client";
 import { useEffect } from "react";
+import { UPDATE_PASSWORD_MUTATION } from "@/graphql-client/user";
 
 // ----------------------------------------------------------------------
 
@@ -59,8 +60,8 @@ export const ChangePassWordSchema = zod
 // ----------------------------------------------------------------------
 
 export function ProfileSecurityTab() {
-  const [changePassword, { loading, error, data }] = useMutation(
-    CHANGE_PASSWORD_MUTATION
+  const [updatePassword, { loading, error, data }] = useMutation(
+    UPDATE_PASSWORD_MUTATION
   );
 
   const showPassword = useBoolean();
@@ -86,10 +87,11 @@ export function ProfileSecurityTab() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       console.info("password reset data ", data);
-      await changePassword({
+      await updatePassword({
         variables: {
-          currentPassword: data.oldPassword,
-          newPassword: data.newPassword,
+          oldPassword: data.oldPassword,
+          password: data.newPassword,
+          confirmPassword: data.confirmNewPassword,
         },
       });
 
@@ -100,11 +102,15 @@ export function ProfileSecurityTab() {
   });
 
   useEffect(() => {
-    if (data) {
-      toast.success("Update success!");
+    if (data && data?.updatePassword?.success === true) {
+      console.info("Password updated successfully", data);
+      toast.success(
+        data?.updatePassword?.message || "Password updated successfully!"
+      );
     }
-    if (error) {
-      toast.error(error.message || "Something went wrong!");
+    if (error || data?.updatePassword?.success === false) {
+      console.error("Error updating password", error);
+      toast.error(error?.message || "Something went wrong!");
     }
   }, [data, error, loading]);
 

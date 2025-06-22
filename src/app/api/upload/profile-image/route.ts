@@ -83,8 +83,6 @@ export async function POST(req: NextRequest) {
       { _id: loggedUser._id },
       { $set: { profilePicture: uploadedFileUrl } }
     );
-    const updatedUser = await User.findById(loggedUser._id);
-    console.log("updatedUser is : ______________ ", updatedUser);
 
     return NextResponse.json(
       {

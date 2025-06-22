@@ -67,6 +67,7 @@ type User {
   socialId: String
   enrollIds: [ID!]
   submissions:[EnrollmentSubmission]
+  profilePicture: String
 }
 
 
