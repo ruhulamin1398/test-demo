@@ -178,18 +178,16 @@ export const UPDATE_GENERAL_INFO_MUTATION = gql`
     $email: String!
     $gender: GenderEnum
     $phoneNumber: String
-    $country: String
-  ) # $dob: String
-  {
+    $country: String # $dob: String
+  ) {
     updateGeneralInfo(
       firstName: $firstName
       lastName: $lastName
       email: $email
       gender: $gender
       phoneNumber: $phoneNumber
-      country: $country
-    ) # dob: $dob
-    {
+      country: $country # dob: $dob
+    ) {
       id
       firstName
       lastName
