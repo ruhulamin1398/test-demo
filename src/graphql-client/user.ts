@@ -79,6 +79,23 @@ export const UPDATE_USER_MUTATION = gql`
   }
 `;
 
+export const UPDATE_PASSWORD_MUTATION = gql`
+  mutation UpdatePassword(
+    $oldPassword: String!
+    $password: String!
+    $confirmPassword: String!
+  ) {
+    updatePassword(
+      oldPassword: $oldPassword
+      password: $password
+      confirmPassword: $confirmPassword
+    ) {
+      message
+      success
+    }
+  }
+`;
+
 // TypeScript types for the query variables and result
 export interface GetUsersQueryVariables {
   page: {

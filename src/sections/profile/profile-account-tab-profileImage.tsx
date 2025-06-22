@@ -90,7 +90,6 @@ const ProfileAccountTabProfileImage = () => {
       );
       if (response.data) {
         toast.dismiss();
-        console.log(response.data);
         dispatch(setUser({ ...user, profilePicture: response.data }));
       } else {
         toast.dismiss();
