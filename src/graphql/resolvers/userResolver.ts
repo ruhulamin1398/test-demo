@@ -156,8 +156,6 @@ const resolvers = {
           authProvider: "custom", // Set to CUSTOM for regular registration
         });
         await newUser.save();
-        const userPlainObject = newUser.toObject();
-        console.log("userPlainObject===============", userPlainObject);
         return { user: newUser };
       } catch (err) {
         console.log("Error while creating user", err);
@@ -375,6 +373,59 @@ const resolvers = {
       return {
         success: true,
       };
+    },
+
+    updatePassword: async (
+      _: void,
+      {
+        oldPassword,
+        password,
+        confirmPassword,
+      }: { oldPassword: string; password: string; confirmPassword: string },
+      { user }: { user: IUser | null }
+    ) => {
+      if (!user) {
+        throw new GraphQLError("Not authenticated", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
+      }
+      if (oldPassword === password) {
+        throw new GraphQLError(
+          "New password cannot be the same as the old password",
+          {
+            extensions: {
+              code: "INVALID_INPUT",
+            },
+          }
+        );
+      }
+      if (password !== confirmPassword) {
+        throw new GraphQLError("Passwords do not match", {
+          extensions: {
+            code: "INVALID_INPUT",
+          },
+        });
+      }
+      try {
+        await User.findByIdAndUpdate(user.id, { password }, { new: true });
+        return {
+          success: true,
+          message: "Password updated successfully",
+        };
+      } catch (err) {
+        if (err instanceof GraphQLError) {
+          throw err;
+        }
+        throw new GraphQLError("An error occurred during login", {
+          extensions: {
+            code: "INTERNAL_SERVER_ERROR",
+            http: { status: 500 },
+          },
+        });
+      }
     },
   },
   User: {

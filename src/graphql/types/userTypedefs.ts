@@ -111,6 +111,11 @@ type UpdateGeneralInfoResponse {
   user: User!
 }
 
+type UpdatePasswordResponse {
+  success: Boolean!
+  message: String
+}
+
 # Mutations
 type Mutation {
   createUser(
@@ -124,6 +129,7 @@ type Mutation {
   updateProfileAvatar(avatarUrl: String!): User!
   updateGeneralInfo(id: ID!, input: UpdateGeneralInfoInput): UpdateGeneralInfoResponse
   login(username: String!, password: String!): AuthUser!
+  updatePassword(oldPassword: String!, password: String!, confirmPassword: String!): UpdatePasswordResponse!
   socialLogin(
     socialId: String!
     email: String!
