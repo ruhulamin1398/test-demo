@@ -263,7 +263,6 @@ export function UserListView() {
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                 />
-
                 <TableBody>
                   {tableData.map((row) => (
                     <UserTableRow
@@ -274,14 +273,16 @@ export function UserListView() {
                     />
                   ))}
 
-                  <TableEmptyRows
-                    height={table.dense ? 56 : 56 + 20}
-                    emptyRows={emptyRows(
-                      table.page,
-                      table.rowsPerPage,
-                      tableData.length
-                    )}
-                  />
+                  {tableData.length > 0 && (
+                    <TableEmptyRows
+                      height={table.dense ? 52 : 72}
+                      emptyRows={emptyRows(
+                        table.page,
+                        table.rowsPerPage,
+                        tableData.length
+                      )}
+                    />
+                  )}
 
                   <TableNoData notFound={notFound} />
                 </TableBody>

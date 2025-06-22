@@ -35,14 +35,6 @@ export function UserTableRow({ row, editHref, onDeleteRow }: Props) {
   const menuActions = usePopover();
   const confirmDialog = useBoolean();
   const quickEditForm = useBoolean();
-  const renderQuickEditForm = () => (
-    <UserQuickEditForm
-      currentUser={row}
-      open={quickEditForm.value}
-      onClose={quickEditForm.onFalse}
-    />
-  );
-
   const renderMenuActions = () => (
     <CustomPopover
       open={menuActions.open}
@@ -51,16 +43,15 @@ export function UserTableRow({ row, editHref, onDeleteRow }: Props) {
       slotProps={{ arrow: { placement: "right-top" } }}
     >
       <MenuList>
-        <li>
-          <MenuItem
-            component={RouterLink}
-            href={editHref}
-            onClick={() => menuActions.onClose()}
-          >
-            <Iconify icon="solar:pen-bold" />
-            Edit
-          </MenuItem>
-        </li>
+        <MenuItem
+          onClick={() => {
+            quickEditForm.onTrue();
+            menuActions.onClose();
+          }}
+        >
+          <Iconify icon="solar:pen-bold" />
+          Edit
+        </MenuItem>
 
         <MenuItem
           onClick={() => {

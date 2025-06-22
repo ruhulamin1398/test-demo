@@ -4,6 +4,12 @@ export enum RoleEnum {
   MODERATOR = "moderator",
 }
 
+export enum GenderEnum {
+  MALE = "Male",
+  FEMALE = "Female",
+  NA = "N/A",
+}
+
 export enum AuthProviderEnum {
   CUSTOM = "custom",
   GOOGLE = "google",
@@ -31,7 +37,11 @@ export interface IUser {
   isActive: boolean;
   updatedAt: Date;
   country?: string; // Optional country
-  gender?: string;
+  gender?: GenderEnum;
+  state?: string; // Optional state
+  city?: string; // Optional city
+  address?: string; // Optional address
+  zipCode?: string; // Optional zip code
   elrollIds: string[]; // Array of competition IDs the user is enrolled in
 }
 

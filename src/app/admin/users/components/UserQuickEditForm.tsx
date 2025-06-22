@@ -76,7 +76,7 @@ export function UserQuickEditForm({ currentUser, open, onClose }: Props) {
     mode: "all",
     resolver: zodResolver(UserQuickEditSchema),
     defaultValues,
-    values: currentUser,
+    values: { ...defaultValues, ...currentUser },
   });
 
   const {
@@ -149,7 +149,7 @@ export function UserQuickEditForm({ currentUser, open, onClose }: Props) {
 
             <Field.Text name="name" label="Full name" />
             <Field.Text name="email" label="Email address" />
-            <Field.Phone name="phoneNumber" label="Phone number" />
+            {/* <Field.Phone name="phoneNumber" label="Phone number" /> */}
 
             <Field.CountrySelect
               fullWidth
