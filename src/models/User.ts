@@ -39,6 +39,10 @@ const userSchema = new Schema<IUser & Document>({
   country: { type: String, required: false },
   gender: { type: String, required: false },
   phoneNumber: phoneNumberSchema,
+  profilePicture: {
+    type: String,
+    required: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

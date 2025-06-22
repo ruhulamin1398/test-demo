@@ -51,9 +51,6 @@ const ProfileAccountTabProfileImage = () => {
   } = useFileUpload();
 
   const user = useSelector((state: RootState) => state.auth.user);
-  const [updateProfileAvatar, { loading, error, data }] = useMutation(
-    UPDATE_PROFILE_AVATAR_MUTATION
-  );
 
   const currentUser: UpdateUserSchemaType = {
     profilePicture: user?.profilePicture || null,
@@ -89,26 +86,12 @@ const ProfileAccountTabProfileImage = () => {
       const uploadbleContent = profilePicture as File;
       const response = await uploadFile(
         uploadbleContent,
-        `/api/upload/user-image`,
-        {
-          userId: user?.id,
-        }
+        `/api/upload/profile-image`
       );
       if (response.data) {
         toast.dismiss();
         console.log(response.data);
-
-        try {
-          console.log("Submitting data:", response.data);
-
-          await updateProfileAvatar({
-            variables: {
-              avatarUrl: response?.data?.url,
-            },
-          });
-        } catch (error) {
-          console.error(error);
-        }
+        dispatch(setUser({ ...user, profilePicture: response.data }));
       } else {
         toast.dismiss();
         console.log("Something went wrong");
@@ -122,17 +105,6 @@ const ProfileAccountTabProfileImage = () => {
   const onSubmit = handleSubmit(async (data: UpdateUserSchemaType) => {
     console.log("Submitting data:", data);
   });
-
-  useEffect(() => {
-    if (data) {
-      toast.success(" Avatar updated successfully!");
-      dispatch(setUser({ ...user, ...data.updateProfileAvatar }));
-      // TODO:  update the profile  in the redux
-    }
-    if (error) {
-      toast.error(error.message || "Something went wrong!");
-    }
-  }, [data, error, loading]);
 
   return (
     <>

@@ -76,10 +76,7 @@ export function ProfileView() {
           <ProfilePageHero
             role={user?.role || " "}
             name={`${user?.firstName} ${user?.lastName}`}
-            avatarUrl={
-              user?.profilePicture ??
-              `${CONFIG.assetsDir}/assets/images/mock/avatar/avatar-2.webp`
-            }
+            avatarUrl={user?.profilePicture}
             coverUrl={_userAbout.coverUrl}
           />
 
