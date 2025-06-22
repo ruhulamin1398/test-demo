@@ -7,6 +7,12 @@ enum RoleEnum {
   moderator
 }
 
+enum GenderEnum {
+  Male
+  Female
+  NA
+}
+
 # Enum for social login providers
 enum AuthProviderEnum {
   google
@@ -42,6 +48,13 @@ type User {
   isActive: Boolean!
   avatar: String
   role: RoleEnum
+  gender: GenderEnum
+  country: String
+  dob: String
+  state: String
+  city: String
+  address: String
+  zipCode: String
   authProvider: AuthProviderEnum
   socialId: String
   enrollIds: [ID!]
@@ -64,6 +77,23 @@ input UserFilterInput {
   name: String
 }
 
+
+input UpdateGeneralInfoInput {
+  email: String!
+  firstName: String
+  lastName: String
+  phoneNumber: PhoneNumberInput
+  isActive: Boolean!
+  role: RoleEnum
+  gender: GenderEnum
+  country: String
+  dob: String
+  state: String
+  city: String
+  address: String
+  zipCode: String
+}
+
 # Paginated response for users
 type UserPage {
   users: [User!]!
@@ -74,6 +104,11 @@ type UserPage {
 type Query {
   me: User
   getUsers(page: PaginationInput!, filter: UserFilterInput): UserPage!
+  getUser(id: ID!): User!
+}
+
+type UpdateGeneralInfoResponse {
+  user: User!
 }
 
 # Mutations
@@ -87,7 +122,7 @@ type Mutation {
     phoneNumber: PhoneNumberInput
   ): AuthUser!
   updateProfileAvatar(avatarUrl: String!): User!
-  updateGeneralInfo(id: ID!,firstName: String, lastName: String, phoneNumber: PhoneNumberInput, email: String, country: String, gender: String): User!
+  updateGeneralInfo(id: ID!, input: UpdateGeneralInfoInput): UpdateGeneralInfoResponse
   login(username: String!, password: String!): AuthUser!
   socialLogin(
     socialId: String!

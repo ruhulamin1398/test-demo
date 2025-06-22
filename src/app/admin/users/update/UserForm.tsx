@@ -1,35 +1,38 @@
-import type { IUserItem } from "src/types/user";
 import { z as zod } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
-import { isValidPhoneNumber } from "react-phone-number-input/input";
-
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import Grid from "@mui/material/Grid2";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import Switch from "@mui/material/Switch";
-import Typography from "@mui/material/Typography";
+import {
+  isValidPhoneNumber,
+  parsePhoneNumber,
+  PhoneNumber,
+} from "react-phone-number-input/input";
+import dayjs from "dayjs";
+import {
+  Box,
+  Card,
+  Stack,
+  Switch,
+  Typography,
+  FormControlLabel,
+} from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import FormControlLabel from "@mui/material/FormControlLabel";
-
-import { paths } from "src/routes/paths";
-import { useRouter } from "src/routes/hooks";
+import { handleGraphQLError } from "@/utils/errorHandling";
 
 import { toast } from "src/components/snackbar";
 import { Form, Field, schemaHelper } from "src/components/hook-form";
 import { MenuItem } from "@mui/material";
-import { AuthProviderEnum, GenderEnum, IUser, RoleEnum } from "@/interfaces";
+import { GenderEnum, IUser, RoleEnum } from "@/interfaces";
 import { useEffect } from "react";
+import { useMutation } from "@apollo/client";
+import { UPDATE_USER_MUTATION } from "@/graphql-client/user";
 
 // ----------------------------------------------------------------------
 
 export type UserSchemaType = zod.infer<typeof UserSchema>;
 
 export const UserSchema = zod.object({
-  avatarUrl: schemaHelper.file({ message: "Avatar is required!" }),
-  name: zod.string().min(1, { message: "Name is required!" }),
+  firstName: zod.string().min(1, { message: "Name is required!" }),
+  lastName: zod.string().min(1, { message: "Name is required!" }),
   email: zod
     .string()
     .min(1, { message: "Email is required!" })
@@ -49,48 +52,50 @@ export const UserSchema = zod.object({
       message: "Gender is required!",
     }
   ),
-  address: zod.string().min(1, { message: "Address is required!" }),
-  company: zod.string().min(1, { message: "Company is required!" }),
-  state: zod.string().min(1, { message: "State is required!" }),
-  city: zod.string().min(1, { message: "City is required!" }),
+  address: zod.string().nullable().optional(),
+  state: zod.string().nullable().optional(),
+  city: zod.string().nullable().optional(),
   role: zod.string().min(1, { message: "Role is required!" }),
-  zipCode: zod.string().min(1, { message: "Zip code is required!" }),
-  // Not required
-  status: zod.string(),
-  isVerified: zod.boolean(),
+  zipCode: zod.string().nullable().optional(),
+  isActive: zod.boolean(),
+  dob: zod
+    .any()
+    .nullable()
+    .refine(
+      (val) => {
+        const parsed = dayjs(val);
+        return val !== null && parsed.isValid();
+      },
+      {
+        message: "Date of birth and must be valid",
+      }
+    ),
 });
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentUser?: IUserItem;
+  currentUser?: IUser;
+};
+
+const defaultValues: UserSchemaType = {
+  isActive: false,
+  firstName: "",
+  lastName: "",
+  email: "",
+  phoneNumber: "",
+  country: "",
+  state: "",
+  city: "",
+  address: "",
+  zipCode: "",
+  role: RoleEnum.USER, // Default role
+  gender: GenderEnum.NA,
+  dob: null,
 };
 
 export function UserForm({ currentUser }: Props) {
-  const router = useRouter();
-
-  const defaultValues: Omit<
-    IUser,
-    "phoneNumber" | "profilePicture" | "name" | "id" | "createdAt" | "updatedAt"
-  > & {
-    phoneNumber: string;
-  } = {
-    password: "",
-    isActive: false,
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    country: "",
-    state: "",
-    city: "",
-    address: "",
-    zipCode: "",
-    role: RoleEnum.USER, // Default role
-    gender: GenderEnum.NA,
-    authProvider: AuthProviderEnum.CUSTOM, // Default auth provider
-    elrollIds: [],
-  };
+  const [updateGeneralInfo, { loading }] = useMutation(UPDATE_USER_MUTATION);
 
   const methods = useForm<UserSchemaType>({
     mode: "onSubmit",
@@ -98,47 +103,56 @@ export function UserForm({ currentUser }: Props) {
     defaultValues,
   });
 
-  const {
-    reset,
-    watch,
-    control,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
+  const { reset, watch, control, handleSubmit, formState } = methods;
 
   const values = watch();
 
   useEffect(() => {
     if (currentUser) {
-      methods.reset({
-        avatarUrl: currentUser.profilePicture || "",
-        name: `${currentUser.firstName} ${currentUser.lastName}`,
+      console.log(dayjs(Number(currentUser.dob)).format("YYYY-MM-DD"));
+      const dob = currentUser.dob ? dayjs(Number(currentUser.dob)) : null;
+      reset({
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
         email: currentUser.email,
         phoneNumber: currentUser.phoneNumber?.number || "",
         country: currentUser.country || "",
-        gender: currentUser.gender || "",
+        gender: currentUser.gender || GenderEnum.NA,
         address: currentUser.address || "",
-        company: currentUser.company || "",
         state: currentUser.state || "",
         city: currentUser.city || "",
         zipCode: currentUser.zipCode || "",
-        role: currentUser.role,
-        status: currentUser.isActive ? "active" : "banned",
-        isVerified: currentUser.isVerified,
+        role: currentUser.role || RoleEnum.USER,
+        isActive: currentUser.isActive || false,
+        dob: dob,
       });
     }
   }, [currentUser, methods]);
 
   const onSubmit = handleSubmit(async (data) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      toast.success(currentUser ? "Update success!" : "Create success!");
-      router.push(paths.dashboard.user.list);
-      console.info("DATA", data);
-    } catch (error) {
-      console.error(error);
-    }
+    if (formState.isSubmitting) return;
+    const { phoneNumber, ...restData } = data;
+    const { countryCallingCode, number } = parsePhoneNumber(
+      phoneNumber
+    ) as PhoneNumber;
+    const payload = {
+      id: currentUser?.id,
+      input: {
+        phoneNumber: { countryCode: countryCallingCode, number },
+        ...restData,
+      },
+    };
+    // await updateGeneralInfo({ variables: payload });
+    toast.promise(
+      updateGeneralInfo({ variables: payload }).then((res) => res.data),
+      {
+        loading: "Updating user information...",
+        success: () => `User has been updated`,
+        error: (err) => {
+          return handleGraphQLError(err);
+        },
+      }
+    );
   });
 
   return (
@@ -197,15 +211,13 @@ export function UserForm({ currentUser }: Props) {
             labelPlacement="start"
             control={
               <Controller
-                name="status"
+                name="isActive"
                 control={control}
                 render={({ field }) => (
                   <Switch
                     {...field}
-                    checked={field.value !== "active"}
-                    onChange={(event) =>
-                      field.onChange(event.target.checked ? "banned" : "active")
-                    }
+                    checked={field.value}
+                    onChange={(event) => field.onChange(event.target.checked)}
                   />
                 )}
               />
@@ -230,12 +242,8 @@ export function UserForm({ currentUser }: Props) {
         </Box>
 
         <Stack sx={{ mt: 3, alignItems: "flex-end" }}>
-          <LoadingButton
-            type="submit"
-            variant="contained"
-            loading={isSubmitting}
-          >
-            {!currentUser ? "Create user" : "Save changes"}
+          <LoadingButton type="submit" variant="contained" loading={loading}>
+            Save changes
           </LoadingButton>
         </Stack>
       </Card>

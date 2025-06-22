@@ -24,6 +24,61 @@ export const GET_USERS_QUERY = gql`
   }
 `;
 
+export const GET_USER_QUERY = gql`
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      id
+      name
+      email
+      firstName
+      lastName
+      role
+      isActive
+      avatar
+      phoneNumber {
+        countryCode
+        number
+      }
+      country
+      city
+      state
+      zipCode
+      address
+      dob
+      gender
+    }
+  }
+`;
+export const UPDATE_USER_MUTATION = gql`
+  mutation UpdateGeneralInfo($id: ID!, $input: UpdateGeneralInfoInput!) {
+    updateGeneralInfo(id: $id, input: $input) {
+      user {
+        id
+        name
+        email
+        firstName
+        lastName
+        phoneNumber {
+          countryCode
+          number
+        }
+        isActive
+        avatar
+        role
+        authProvider
+        socialId
+        country
+        city
+        state
+        zipCode
+        address
+        dob
+        gender
+      }
+    }
+  }
+`;
+
 // TypeScript types for the query variables and result
 export interface GetUsersQueryVariables {
   page: {

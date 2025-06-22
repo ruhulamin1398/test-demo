@@ -7,7 +7,7 @@ export enum RoleEnum {
 export enum GenderEnum {
   MALE = "Male",
   FEMALE = "Female",
-  NA = "N/A",
+  NA = "NA",
 }
 
 export enum AuthProviderEnum {
@@ -43,6 +43,7 @@ export interface IUser {
   address?: string; // Optional address
   zipCode?: string; // Optional zip code
   elrollIds: string[]; // Array of competition IDs the user is enrolled in
+  dob?: string;
 }
 
 export interface PaginationInput {

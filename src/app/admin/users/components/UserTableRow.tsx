@@ -1,4 +1,3 @@
-import type { IUserItem } from "src/types/user";
 import { useBoolean, usePopover } from "minimal-shared/hooks";
 import {
   Box,
@@ -6,7 +5,6 @@ import {
   Stack,
   Button,
   Avatar,
-  Tooltip,
   MenuList,
   MenuItem,
   TableRow,
@@ -20,7 +18,6 @@ import { Label } from "src/components/label";
 import { Iconify } from "src/components/iconify";
 import { ConfirmDialog } from "src/components/custom-dialog";
 import { CustomPopover } from "src/components/custom-popover";
-import { UserQuickEditForm } from "./UserQuickEditForm";
 import { IUser } from "@/interfaces";
 
 // ----------------------------------------------------------------------
@@ -34,7 +31,6 @@ type Props = {
 export function UserTableRow({ row, editHref, onDeleteRow }: Props) {
   const menuActions = usePopover();
   const confirmDialog = useBoolean();
-  const quickEditForm = useBoolean();
   const renderMenuActions = () => (
     <CustomPopover
       open={menuActions.open}
@@ -43,15 +39,16 @@ export function UserTableRow({ row, editHref, onDeleteRow }: Props) {
       slotProps={{ arrow: { placement: "right-top" } }}
     >
       <MenuList>
-        <MenuItem
-          onClick={() => {
-            quickEditForm.onTrue();
-            menuActions.onClose();
-          }}
-        >
-          <Iconify icon="solar:pen-bold" />
-          Edit
-        </MenuItem>
+        <li>
+          <MenuItem
+            component={RouterLink}
+            href={editHref}
+            onClick={() => menuActions.onClose()}
+          >
+            <Iconify icon="solar:pen-bold" />
+            Edit
+          </MenuItem>
+        </li>
 
         <MenuItem
           onClick={() => {
@@ -140,12 +137,6 @@ export function UserTableRow({ row, editHref, onDeleteRow }: Props) {
           </IconButton>
         </TableCell>
       </TableRow>
-
-      <UserQuickEditForm
-        currentUser={row}
-        open={quickEditForm.value}
-        onClose={quickEditForm.onFalse}
-      />
       {renderMenuActions()}
       {renderConfirmDialog()}
     </>

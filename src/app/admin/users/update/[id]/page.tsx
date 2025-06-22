@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { CONFIG } from "src/global-config";
-import { UserFormView } from "./UserFormView";
+import { UserFormView } from "../UserFormView";
 
 // ----------------------------------------------------------------------
 
