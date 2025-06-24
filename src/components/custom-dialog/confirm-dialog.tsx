@@ -19,7 +19,7 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   return (
     <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose} {...other}>
-      <DialogTitle sx={{ pb: 2 }}>{title}</DialogTitle>
+      {title && <DialogTitle sx={{ pb: 2 }}>{title}</DialogTitle>}
 
       {content && (
         <DialogContent sx={{ typography: "body2" }}> {content} </DialogContent>

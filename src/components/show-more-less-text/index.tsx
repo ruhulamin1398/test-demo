@@ -2,11 +2,15 @@ import { Box, BoxProps, Typography } from "@mui/material";
 import { useState } from "react";
 
 type Props = BoxProps & {
-  text: string;
+  text?: string;
   maxLength?: number;
 };
 
-const ShowMoreLessText = ({ text, maxLength = 200, ...boxProps }: Props) => {
+const ShowMoreLessText = ({
+  text = " ",
+  maxLength = 200,
+  ...boxProps
+}: Props) => {
   const [expanded, setExpanded] = useState(false);
 
   const isLongText = text.length > maxLength;
@@ -34,7 +38,7 @@ const ShowMoreLessText = ({ text, maxLength = 200, ...boxProps }: Props) => {
           sx={{
             color: "primary.main",
             cursor: "pointer",
-            mt: 1,
+
             fontWeight: 500,
             display: "inline-block",
           }}

@@ -1,6 +1,6 @@
 import { ISubmissionData } from "@/_mock/data";
 import { ConfirmDialog } from "@/components/custom-dialog";
-import RoundDetails from "./submission-details";
+import RoundDetails from "./round-details";
 import { IRound } from "@/interfaces";
 
 type Props = {
@@ -17,7 +17,6 @@ const CompetitionRoundPopUp = ({
   return (
     <>
       <ConfirmDialog
-        title={""}
         open={!!round}
         content={<RoundDetails round={round} />}
         action={<></>}

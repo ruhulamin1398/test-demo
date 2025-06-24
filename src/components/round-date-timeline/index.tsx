@@ -1,4 +1,3 @@
-import type { CardProps } from "@mui/material/Card";
 import type { TimelineItemProps } from "@mui/lab/TimelineItem";
 
 import Timeline from "@mui/lab/Timeline";
@@ -16,44 +15,85 @@ import { Box, CardHeader } from "@mui/material";
 
 type Props = {
   title?: string;
-  rounds: IRound[];
+  round?: IRound | null;
 };
 
-export function ContestDateTimeLine({ title, rounds }: Props) {
+const RoundDateTimeLine = ({ title, round }: Props) => {
+  const { formatDate } = useDate();
   return (
-    <Box>
-      {title && <CardHeader title={title} sx={{ my: 0.5, py: 0.5 }} />}
+    <Box
+      sx={{
+        mb: 2,
+        gap: 0.5,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "left",
+      }}
+    >
+      {title && (
+        <Box component="span">
+          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+            {title}
+          </Typography>
+        </Box>
+      )}
       <Timeline
         sx={{
           m: 0,
-          p: 1,
-          px: 3,
+
           [`& .${timelineItemClasses.root}:before`]: { flex: 0, padding: 0 },
         }}
       >
-        {rounds.map((item, index) => (
+        <Item
+          key={1}
+          index={1}
+          title={"Submission Open"}
+          text={`${formatDate(
+            round?.submissionDeadline?.startDate
+          )} - ${formatDate(round?.submissionDeadline?.endDate)}`}
+          lastItem={false}
+        />
+
+        {round?.votingDeadline?.startDate && (
           <Item
-            key={item.title}
-            item={item}
-            lastItem={index === rounds.length - 1}
-            index={index + 1}
+            key={2}
+            index={2}
+            title={"Voting Deadline"}
+            text={`${formatDate(
+              round?.votingDeadline?.startDate
+            )} - ${formatDate(round?.votingDeadline?.endDate)}`}
+            lastItem={false}
           />
-        ))}
+        )}
+
+        {round?.judgingDeadline?.startDate && (
+          <Item
+            key={3}
+            index={3}
+            title={"Judging Deadline"}
+            text={`${formatDate(
+              round?.judgingDeadline?.startDate
+            )} - ${formatDate(round?.judgingDeadline?.endDate)}`}
+            lastItem={true}
+          />
+        )}
       </Timeline>
     </Box>
   );
-}
+};
+
+export default RoundDateTimeLine;
 
 // ----------------------------------------------------------------------
 
 type ItemProps = TimelineItemProps & {
   lastItem: boolean;
-  item: IRound;
   index: number;
+  title: string;
+  text: string;
 };
 
-function Item({ item, lastItem, index, ...other }: ItemProps) {
-  const { formatDate } = useDate();
+function Item({ index, title, text, lastItem, ...other }: ItemProps) {
   return (
     <TimelineItem {...other}>
       <TimelineSeparator>
@@ -70,18 +110,11 @@ function Item({ item, lastItem, index, ...other }: ItemProps) {
       </TimelineSeparator>
 
       <TimelineContent>
-        <Typography variant="subtitle2">
-          Round {item.roundNumber}: {item.title}
-        </Typography>
+        <Typography variant="subtitle2">{title}</Typography>
         <Typography variant="caption" sx={{ color: "text.disabled" }}>
-          {formatDate(item?.deadline?.startDate)} -{" "}
-          {formatDate(item?.deadline?.endDate)}
+          {text}
         </Typography>
         <br />
-
-        {/* <Typography variant="caption" sx={{ color: "text.disabled" }}>
-          {"date2"}
-        </Typography> */}
       </TimelineContent>
     </TimelineItem>
   );
