@@ -10,12 +10,12 @@ type CompetitionItemSkeletonProps = BoxProps & {
   variant?: "vertical" | "horizontal";
 };
 
-export function CompetitionItemSkeleton({
+const CompetitionItemSkeleton = ({
   sx,
   itemCount = 16,
   variant = "vertical",
   ...other
-}: CompetitionItemSkeletonProps) {
+}: CompetitionItemSkeletonProps) => {
   if (variant === "horizontal") {
     return Array.from({ length: itemCount }, (_, index) => (
       <Box
@@ -109,30 +109,7 @@ export function CompetitionItemSkeleton({
       </Box>
     </Box>
   ));
-}
+};
 
+export default CompetitionItemSkeleton;
 // ----------------------------------------------------------------------
-
-export function CompetitionDetailsSkeleton({ sx, ...other }: BoxProps) {
-  return (
-    <Box sx={sx} {...other}>
-      <Skeleton variant="rectangular" sx={{ height: 480 }} />
-
-      <Box sx={{ width: 1, maxWidth: 720, mx: "auto" }}>
-        <Box
-          sx={{
-            my: 8,
-            gap: 1,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <Skeleton height={10} />
-          <Skeleton height={10} sx={{ width: 0.9 }} />
-          <Skeleton height={10} sx={{ width: 0.8 }} />
-        </Box>
-        <Skeleton sx={{ height: 720, mb: 8 }} />
-      </Box>
-    </Box>
-  );
-}

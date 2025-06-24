@@ -45,6 +45,7 @@ export interface IRound {
   enrollments: IEnrollment[];
   judges: IUser[];
   competition: ICompetition;
+  isActiveRound: boolean;
   createdAt: string;
   updatedAt: string;
 }

@@ -2,16 +2,9 @@ import type { BoxProps } from "@mui/material/Box";
 import type { CardProps } from "@mui/material/Card";
 import { varAlpha } from "minimal-shared/utils";
 
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import Avatar from "@mui/material/Avatar";
-import CardHeader from "@mui/material/CardHeader";
-
-import { fShortenNumber } from "@/utils/format-number";
-
 import { Iconify } from "@/components/iconify";
-import { CONFIG } from "@/global-config";
 import { IPrizesAndRewards } from "@/interfaces";
+import { Typography, Box, CardHeader } from "@mui/material";
 
 // ----------------------------------------------------------------------
 
@@ -22,12 +15,12 @@ type Props = CardProps & {
 
 export function PrizeList({ title, prizes, sx, ...other }: Props) {
   return (
-    <Card sx={sx} {...other}>
-      <CardHeader title={title} />
-
+    <Box sx={sx} {...other}>
+      <CardHeader sx={{ my: 0.5, py: 0.5 }} title={title} />
       <Box
         sx={{
-          p: 3,
+          p: 1,
+          px: 3,
           gap: 3,
           display: "flex",
           flexDirection: "column",
@@ -37,7 +30,7 @@ export function PrizeList({ title, prizes, sx, ...other }: Props) {
           <Item key={item.id} item={item} index={index} />
         ))}
       </Box>
-    </Card>
+    </Box>
   );
 }
 
@@ -84,20 +77,10 @@ function Item({ item, index, sx, ...other }: ItemProps) {
       </Box>
 
       <Box flexGrow={1}>
-        <Box sx={{ typography: "h5", color: "text.secondary" }}>
-          {item.title}
-        </Box>
-        <Box
-          sx={{
-            typography: "body2",
-            color: "text.secondary",
-            display: "flex",
-            alignItems: "center",
-            gap: 0.5,
-          }}
-        >
+        <Typography variant="subtitle2">{item.title}</Typography>
+        <Typography variant="caption" sx={{ color: "text.disabled" }}>
           {item.rewards}
-        </Box>
+        </Typography>
       </Box>
     </Box>
   );

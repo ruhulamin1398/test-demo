@@ -5,25 +5,22 @@ import type { UseBackToTopReturn } from "minimal-shared/hooks";
 
 import { useBackToTop } from "minimal-shared/hooks";
 
-import Fab from "@mui/material/Fab";
-import SvgIcon from "@mui/material/SvgIcon";
-
 import {
   ScrollProgress,
   useScrollProgress,
 } from "@/components/animate/scroll-progress";
-import { CompetitionDetailsHero } from "../competition-details-hero";
+import CompetitionDetailsHero from "../competition-details-hero";
 import Grid from "@mui/material/Grid2";
-import { Container } from "@mui/material";
-import { ContestSummaryOverview } from "../OverView";
-import { ContestDetailsContent } from "../competition-details-content";
-import { CompetitionSidebar } from "./competition-sidebar";
-import { CompetitionDetailsSkeleton } from "./competition-details-skeleton";
+import { Container, Fab, SvgIcon } from "@mui/material";
+import ContestSummaryOverview from "../OverView";
+import ContestDetailsContent from "../competition-details-content";
+import CompetitionSidebar from "./competition-sidebar";
 import { useCompetitionDetailsQuery } from "@/hooks/use-competition-details";
+import CompetitionDetailsSkeleton from "../skeleton/competition-details-skeleton";
 
 // ----------------------------------------------------------------------
 
-export function SiingleCompetitionView() {
+export function SingleCompetitionView() {
   const { loading, competitionDetails } = useCompetitionDetailsQuery({});
   const pageProgress = useScrollProgress();
   const { onBackToTop, isVisible } = useBackToTop("90%");

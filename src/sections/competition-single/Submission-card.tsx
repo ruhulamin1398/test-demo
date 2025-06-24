@@ -1,9 +1,8 @@
 import type { BoxProps } from "@mui/material/Box";
 
-import { Beenhere } from "@mui/icons-material";
 import { Iconify } from "@/components/iconify";
 import { Label, labelClasses } from "@/components/label";
-import { Button, Box, Link } from "@mui/material";
+import { Button, Box, Link, Beenhere } from "@mui/material";
 import { ICompetition } from "@/interfaces";
 import { useDate } from "@/hooks/use-date";
 import { useSelector } from "react-redux";

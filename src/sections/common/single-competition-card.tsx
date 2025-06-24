@@ -109,7 +109,7 @@ const SingleCompetitionCard = ({
           width={16}
           sx={{ color: "#FFD700" }} // Golden color
         />
-        ${10000}
+        10000 Tk
       </Box>
 
       <Link

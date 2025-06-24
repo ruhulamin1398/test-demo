@@ -1,4 +1,5 @@
 import { IRound } from "@/interfaces/round";
+import { ICategory } from "./category";
 
 export enum CompetitionStatusEnum {
   DRAFT = "Draft",
@@ -53,6 +54,7 @@ export interface ICompetition {
   slug?: string;
   activeRound?: IRound;
   enroledUserCount?: number;
+  category?: ICategory;
 }
 
 export interface PaginationInput {

@@ -51,11 +51,11 @@ export const EnrollmentConfirmationDialog = ({
       <DialogTitle>{"Do you want to join the competition?"}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-slide-description">
-          <Typography variant="body2" color="text.primary" component="span">
+          {/* <Typography variant="body2" color="text.primary" component="span">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Non minima
             cupiditate beatae animi odit consequuntur qui voluptatum iusto earum
             culpa.
-          </Typography>
+          </Typography> */}
 
           <FormControlLabel
             disabled

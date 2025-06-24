@@ -10,41 +10,40 @@ import { fNumber } from "@/utils/format-number";
 
 // ----------------------------------------------------------------------
 
-export function ContestSummaryOverview() {
+const ContestSummaryOverview = () => {
   return (
-    <Card>
-      <Box
-        sx={{
-          gap: 3,
-          display: "grid",
-          gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(3, 1fr)" },
-          bgcolor: "transparent",
-        }}
-      >
-        <CourseWidgetSummary
-          title="Rounds Compelted"
-          total={2}
-          icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
-        />
+    <Box
+      sx={{
+        gap: 3,
+        display: "grid",
+        gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(3, 1fr)" },
+        bgcolor: "transparent",
+      }}
+    >
+      <CourseWidgetSummary
+        title="Rounds Compelted"
+        total={2}
+        icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
+      />
 
-        <CourseWidgetSummary
-          title="Peoples Enrolled"
-          total={300}
-          color="success"
-          icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-completed.svg`}
-        />
+      <CourseWidgetSummary
+        title="Peoples Enrolled"
+        total={300}
+        color="success"
+        icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-completed.svg`}
+      />
 
-        <CourseWidgetSummary
-          title="Submissions"
-          total={500}
-          color="secondary"
-          icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-certificates.svg`}
-        />
-      </Box>
-    </Card>
+      <CourseWidgetSummary
+        title="Submissions"
+        total={500}
+        color="secondary"
+        icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-certificates.svg`}
+      />
+    </Box>
   );
-}
+};
 
+export default ContestSummaryOverview;
 // ----------------------------------------------------------------------
 
 type Props = CardProps & {

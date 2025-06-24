@@ -1,11 +1,7 @@
 import type { BoxProps } from "@mui/material/Box";
 
-import { m } from "framer-motion";
 import { varAlpha } from "minimal-shared/utils";
-
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
+import { Typography, Container, Box, Button } from "@mui/material";
 
 import { CONFIG } from "@/global-config";
 
@@ -15,71 +11,99 @@ import {
   MotionContainer,
   animateTextClasses,
 } from "@/components/animate";
-import { Iconify } from "@/components/iconify";
 import { ICompetition } from "@/interfaces";
 import { useDate } from "@/hooks/use-date";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-
-// ----------------------------------------------------------------------
+import CompetitionHeroInlineCard from "./competition-hero-inline-card";
+import { SubmissionTypeIconLabel } from "@/utils/constants";
+import { ShareOutlined } from "@mui/icons-material";
+import EnrollSubmissionButton from "./enroll-submission-button";
+// ------------------------------------./competition-hero-inline-card-------
 
 type CompetitionDetailsHeroProps = BoxProps & {
   competition: ICompetition;
 };
 
-export function CompetitionDetailsHero({
+const CompetitionDetailsHero = ({
   competition,
   sx,
   ...other
-}: CompetitionDetailsHeroProps) {
+}: CompetitionDetailsHeroProps) => {
   const { enrollIds } = useSelector(
     (state: RootState) => state.auth.competitionInfo
   );
   const isEnroled = enrollIds.includes(competition.id);
 
-  const { formatDate } = useDate();
+  const { HumanTimeDifferent } = useDate();
+
   const renderCompetitionSummaryList = () => {
     return (
       <Box
         component="ul"
         sx={{
-          mt: 5,
-          display: "grid",
+          mt: 3,
+          display: "flex",
           color: "common.white",
-          rowGap: { xs: 5, md: 0 },
-          columnGap: { xs: 2, md: 5 },
-          gridTemplateColumns: {
-            xs: "repeat(2, 1fr)",
-            md: "repeat(4, 1fr)",
-          },
+          mr: { xs: 4, md: 6 },
+          columnGap: { xs: 2, md: 3 },
+          flexDirection: { xs: "column", md: "row" },
         }}
       >
-        <CompetitionHeroCard
-          title="PRIZE MONEY"
-          value={`TK 5000`}
-          icon="mdi:currency-usd-circle"
+        <CompetitionHeroInlineCard
+          value={` Ends ${HumanTimeDifferent(
+            Number(competition?.enrollmentDeadline.endDate)
+          )}`}
+          icon="solar:clock-circle-outline"
+        />
+        <CompetitionHeroInlineCard
+          value={`${competition?.enroledUserCount} Participants`}
+          icon="solar:users-group-rounded-bold"
         />
 
-        <CompetitionHeroCard
-          title="TimeLine"
-          value={`${formatDate(competition.startDate)} - ${formatDate(
-            competition.endDate
-          )}`}
-          icon="mdi:currency-usd-circle"
-        />
-        <CompetitionHeroCard
-          title="Enrollment Start At"
-          value={formatDate(competition.enrollmentDeadline.startDate)}
-          icon="mdi:currency-usd-circle"
-        />
-        <CompetitionHeroCard
-          title="Enrollment Ends At"
-          value={formatDate(competition.enrollmentDeadline.endDate)}
-          icon="mdi:currency-usd-circle"
+        <CompetitionHeroInlineCard
+          value={SubmissionTypeIconLabel[competition?.submissionType]?.label}
+          icon={SubmissionTypeIconLabel[competition?.submissionType]?.icon}
         />
       </Box>
     );
   };
+  const renderBadges = () => (
+    <>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 1,
+          mb: 2,
+        }}
+      >
+        <Button
+          color="primary"
+          variant="soft"
+          sx={{ height: { xs: 40, md: 48 }, color: "primary.main" }}
+        >
+          {competition?.category?.name || "UnCategorized"}
+        </Button>
+
+        <Button
+          color="warning"
+          variant="soft"
+          sx={{ height: { xs: 40, md: 48 }, color: "warning.main" }}
+        >
+          {competition?.status}
+        </Button>
+
+        <Button
+          color="secondary"
+          variant="soft"
+          sx={{ height: { xs: 40, md: 48 }, color: "secondary.main" }}
+        >
+          {competition?.price === 0 ? "Free " : "Paid"}
+        </Button>
+      </Box>
+    </>
+  );
   return (
     <Box
       component="section"
@@ -95,91 +119,76 @@ export function CompetitionDetailsHero({
             ],
           }),
           overflow: "hidden",
-          height: { md: 560 },
+          height: { xs: "auto", md: "auto" },
           position: "relative",
-          py: { xs: 10, md: 0 },
+          py: { xs: 10, md: 10 },
         }),
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
       {...other}
     >
       <Container component={MotionContainer}>
+        {renderBadges()}
         <Box
           sx={{
-            bottom: { md: 80 },
-            position: { md: "absolute" },
-            textAlign: { xs: "center", md: "unset" },
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", md: "3fr 2fr" },
+            gap: 2,
           }}
         >
-          <AnimateText
-            component="h1"
-            variant="h1"
-            textContent={competition.title}
-            variants={varFade("inUp", { distance: 24 })}
-            sx={{
-              color: "common.white",
-              [`& .${animateTextClasses.line}[data-index="0"]`]: {
-                [`& .${animateTextClasses.word}[data-index="0"]`]: {
-                  color: "primary.main",
+          <Box
+            sx={
+              {
+                // position: { md: "absolute" },
+              }
+            }
+          >
+            <AnimateText
+              component="h1"
+              variant="h2"
+              textContent={competition.title}
+              variants={varFade("inUp", { distance: 24 })}
+              sx={{
+                // fontSize: { xs: "2.5rem", md: "3.5rem" },
+                color: "common.white",
+                textTransform: "capitalize",
+                [`& .${animateTextClasses.line}[data-index="0"]`]: {
+                  [`& .${animateTextClasses.word}[data-index="0"]`]: {
+                    color: "primary.main",
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            />
 
-          {renderCompetitionSummaryList()}
+            {renderCompetitionSummaryList()}
+          </Box>
+
+          <Box
+            sx={{
+              // textAlign: { xs: "left", md: "unset" },
+              display: "flex",
+              justifyContent: "center",
+              gap: 2,
+              mt: { xs: 2, md: 2 },
+            }}
+          >
+            <EnrollSubmissionButton competition={competition} />
+
+            <Button
+              color="primary"
+              startIcon={<ShareOutlined />}
+              variant="contained"
+              disableElevation
+              sx={{ height: { xs: 40, md: 48 } }}
+            >
+              Share
+            </Button>
+          </Box>
         </Box>
       </Container>
     </Box>
   );
-}
-
-// ----------------------------------------------------------------------
-type CompetitionHeroCardProps = BoxProps & {
-  title: string;
-  value: string;
-  icon: string;
 };
 
-function CompetitionHeroCard({
-  title,
-  value,
-  icon,
-  sx,
-  ...other
-}: CompetitionHeroCardProps) {
-  return (
-    <li key={"Prize"}>
-      <m.div variants={varFade("inUp", { distance: 24 })}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-            mb: 2,
-          }}
-        >
-          {/* First Column: Icon */}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: { xs: "flex-start", md: "center" },
-              alignItems: "center",
-              width: 48,
-            }}
-          >
-            <Iconify icon={icon} width={36} sx={{ color: "primary.main" }} />
-          </Box>
-
-          <Box sx={{ textAlign: "left" }}>
-            <Typography variant="h6" sx={{ mb: 0.5 }}>
-              {title}
-            </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
-              {value}
-            </Typography>
-          </Box>
-        </Box>
-      </m.div>
-    </li>
-  );
-}
+export default CompetitionDetailsHero;
+// -----------------------------------------------------------------

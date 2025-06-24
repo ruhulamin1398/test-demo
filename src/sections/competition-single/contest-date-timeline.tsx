@@ -22,11 +22,12 @@ type Props = {
 export function ContestDateTimeLine({ title, rounds }: Props) {
   return (
     <Box>
-      {title && <CardHeader title={title} />}
+      {title && <CardHeader title={title} sx={{ my: 0.5, py: 0.5 }} />}
       <Timeline
         sx={{
           m: 0,
-          p: 3,
+          p: 1,
+          px: 3,
           [`& .${timelineItemClasses.root}:before`]: { flex: 0, padding: 0 },
         }}
       >
@@ -71,7 +72,8 @@ function Item({ item, lastItem, ...other }: ItemProps) {
           Round {item.roundNumber}: {item.title}
         </Typography>
         <Typography variant="caption" sx={{ color: "text.disabled" }}>
-          {formatDate(item.startDate)} - {formatDate(item.endDate)}
+          {formatDate(item?.deadline?.startDate)} -{" "}
+          {formatDate(item?.deadline?.endDate)}
         </Typography>
         <br />
 
