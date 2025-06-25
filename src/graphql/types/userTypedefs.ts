@@ -129,11 +129,11 @@ type UpdatePasswordResponse {
 type Mutation {
   createUser(
     name: String!
-    email: String!
+    email: String
     password: String!
     firstName: String
     lastName: String
-    phoneNumber: PhoneNumberInput
+    phoneNumber: PhoneNumberInput!
   ): AuthUser!
   updateProfileAvatar(avatarUrl: String!): User!
   updateGeneralInfo(id: ID!, input: UpdateGeneralInfoInput): UpdateGeneralInfoResponse

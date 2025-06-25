@@ -48,8 +48,9 @@ export const SignUpSchema = zod.object({
   lastName: zod.string().min(1, { message: "Last name is required!" }),
   email: zod
     .string()
-    .min(1, { message: "Email is required!" })
-    .email({ message: "Email must be a valid email address!" }),
+    .email({ message: "Email must be a valid email address!" })
+    .optional()
+    .or(zod.literal("")),
   phoneNumber: schemaHelper.phoneNumber({ isValid: isValidPhoneNumber }),
   password: zod
     .string()
@@ -86,7 +87,7 @@ export function SignUpView() {
   const defaultValues: SignUpSchemaType = {
     firstName: "Hello",
     lastName: "Friend",
-    email: "hello@gmail.com",
+    email: "",
     phoneNumber: "",
     password: "@2Minimal",
   };
@@ -109,14 +110,7 @@ export function SignUpView() {
       const { countryCallingCode, number } = parsePhoneNumber(
         phoneNumber
       ) as PhoneNumber;
-      console.log("submitting data is ", {
-        name: firstName,
-        firstName,
-        email,
-        phoneNumber: { countryCode: countryCallingCode, number },
-        password,
-        lastName,
-      });
+
       const { data: userData } = await register({
         variables: {
           name: firstName,
