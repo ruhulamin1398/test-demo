@@ -18,7 +18,7 @@ import { useRouter } from "@/routes/hooks";
 import { RouterLink } from "@/routes/components";
 
 import { Iconify } from "@/components/iconify";
-import { Form, Field } from "@/components/hook-form";
+import { Form, Field, schemaHelper } from "@/components/hook-form";
 
 // import { signUp } from '../context/jwt';
 // import { useAuthContext } from '../hooks';
@@ -34,24 +34,14 @@ import { IUser } from "@/interfaces";
 import { signIn } from "next-auth/react";
 import { getCookie } from "minimal-shared/utils";
 import { setUser } from "@/store/slices/authSlice";
-
+import {
+  isValidPhoneNumber,
+  parsePhoneNumber,
+  PhoneNumber,
+} from "react-phone-number-input/input";
 // ----------------------------------------------------------------------
 
 export type SignUpSchemaType = zod.infer<typeof SignUpSchema>;
-
-const phoneNumberSchema = zod.string().refine(
-  (val) => {
-    // Check if length is 11 and contains only digits
-    const isValidLength = val.length === 11;
-    const isNumeric = /^\d{11}$/.test(val); // Only digits and exactly 11 digits
-    const validPrefix = /^(017|015|016|018|019|013)/.test(val); // Check for valid prefixes
-
-    return isValidLength && isNumeric && validPrefix;
-  },
-  {
-    message: "Invalid phone number.",
-  }
-);
 
 export const SignUpSchema = zod.object({
   firstName: zod.string().min(1, { message: "First name is required!" }),
@@ -60,7 +50,7 @@ export const SignUpSchema = zod.object({
     .string()
     .min(1, { message: "Email is required!" })
     .email({ message: "Email must be a valid email address!" }),
-  phone: phoneNumberSchema,
+  phoneNumber: schemaHelper.phoneNumber({ isValid: isValidPhoneNumber }),
   password: zod
     .string()
     .min(1, { message: "Password is required!" })
@@ -97,7 +87,7 @@ export function SignUpView() {
     firstName: "Hello",
     lastName: "Friend",
     email: "hello@gmail.com",
-    phone: "+8801000000000",
+    phoneNumber: "",
     password: "@2Minimal",
   };
 
@@ -112,14 +102,27 @@ export function SignUpView() {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
+    if (isSubmitting) return;
     try {
-      const { firstName, lastName, email, phone, password } = data;
+      const { firstName, lastName, email, phoneNumber, password } = data;
+
+      const { countryCallingCode, number } = parsePhoneNumber(
+        phoneNumber
+      ) as PhoneNumber;
+      console.log("submitting data is ", {
+        name: firstName,
+        firstName,
+        email,
+        phoneNumber: { countryCode: countryCallingCode, number },
+        password,
+        lastName,
+      });
       const { data: userData } = await register({
         variables: {
           name: firstName,
           firstName,
           email,
-          phoneNumber: { number: phone, countryCode: "+880" },
+          phoneNumber: { countryCode: countryCallingCode, number },
           password,
           lastName,
         },
@@ -167,11 +170,8 @@ export function SignUpView() {
         />
       </Box>
 
-      <Field.Text
-        name="phone"
-        label="Phone"
-        slotProps={{ inputLabel: { shrink: true } }}
-      />
+      <Field.Phone name="phoneNumber" label="Phone number" country="BD" />
+
       <Field.Text
         name="email"
         label="Email address"

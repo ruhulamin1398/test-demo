@@ -57,7 +57,7 @@ const ProfileAccountTabProfileImage = () => {
 
   useEffect(() => {
     if (profilePicture && profilePicture instanceof File) {
-      console.log("Profile picture file changed:", profilePicture);
+      // console.log("Profile picture file changed:", profilePicture);
       if (formState.isSubmitting) return;
 
       updateProfilePicture(profilePicture);

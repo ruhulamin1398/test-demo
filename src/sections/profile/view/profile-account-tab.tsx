@@ -114,8 +114,6 @@ export function ProfileAccountTab() {
 
   const { reset, watch, control, handleSubmit, formState } = methods;
 
-  const values = watch();
-
   useEffect(() => {
     if (user) {
       console.log(dayjs(Number(user.dob)).format("YYYY-MM-DD"));
@@ -196,7 +194,7 @@ export function ProfileAccountTab() {
                   <Field.Phone
                     name="phoneNumber"
                     label="Phone number"
-                    country={!user ? "DE" : undefined}
+                    country={!user ? "BD" : undefined}
                   />
 
                   <Field.CountrySelect
