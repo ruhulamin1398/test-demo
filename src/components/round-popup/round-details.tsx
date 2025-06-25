@@ -110,9 +110,13 @@ const Item = ({ title, text, index, icon, sx, ...other }: ItmProps) => {
       )}
       <Box flexGrow={1}>
         <Typography variant="h5">{title}</Typography>
-        <Typography variant="body2" sx={{ color: "text.disabled" }}>
-          {text}
-        </Typography>
+        {typeof text === "string" ? (
+          <Typography variant="body2" sx={{ color: "text.disabled" }}>
+            {text}
+          </Typography>
+        ) : (
+          text
+        )}
       </Box>
     </Box>
   );
