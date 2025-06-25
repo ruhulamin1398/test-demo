@@ -244,7 +244,7 @@ export function ProfileAccountTab() {
                           variant="body2"
                           sx={{ color: "text.secondary" }}
                         >
-                          Apply to activate/deactivate this user
+                          Apply to activate/deactivate me
                         </Typography>
                       </>
                     }

@@ -6,38 +6,22 @@ import { useForm } from "react-hook-form";
 import { useBoolean } from "minimal-shared/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
-import Alert from "@mui/material/Alert";
-import IconButton from "@mui/material/IconButton";
+import { Box, Link, Alert, IconButton, InputAdornment } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import InputAdornment from "@mui/material/InputAdornment";
-
-interface LoginResponse {
-  login: {
-    user: IUser;
-  };
-}
 
 import { paths } from "@/routes/paths";
-import { useRouter } from "next/navigation";
 import { RouterLink } from "@/routes/components";
-
 import { Iconify } from "@/components/iconify";
-import { Form, Field } from "@/components/hook-form";
+import { Form, Field, schemaHelper } from "@/components/hook-form";
 
 import { FormHead } from "../components/form-head";
-import { LOGIN_MUTATION } from "@/graphql-client/auth";
-import { useMutation } from "@apollo/client";
-import { useDispatch } from "react-redux";
 import { IUser } from "@/interfaces";
-import { setUser } from "@/store/slices/authSlice";
-import { handleGraphQLError } from "@/utils/errorHandling";
-import useNotification from "@/app/hooks/useNotification";
 import { FormSocials } from "../components/form-socials";
 import { FormDivider } from "../components/form-divider";
 import { signIn } from "next-auth/react";
 import { getCookie } from "minimal-shared/utils";
+import useNotification from "@/app/hooks/useNotification";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 // ----------------------------------------------------------------------
 
@@ -59,7 +43,11 @@ const phoneNumberSchema = zod.string().refine(
   }
 );
 export const SignInSchema = zod.object({
-  email: zod.union([phoneNumberSchema, emailSchema]),
+  emailOrPhone: zod.union([
+    phoneNumberSchema,
+    emailSchema,
+    schemaHelper.phoneNumber({ isValid: isValidPhoneNumber }),
+  ]),
   password: zod
     .string()
     .min(1, { message: "Password is required!" })
@@ -67,15 +55,14 @@ export const SignInSchema = zod.object({
 });
 
 // ----------------------------------------------------------------------
-
-export function SignInView() {
+const SignInView = () => {
   const [loading, setLoading] = useState(false);
   const { notify } = useNotification();
   const callbackUrl = getCookie<string>("next-auth.callback-url");
   const showPassword = useBoolean();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const defaultValues: SignInSchemaType = {
-    email: "hello@gmail.com",
+    emailOrPhone: "hello@gmail.com",
     password: "@2Minimal",
   };
   const methods = useForm<SignInSchemaType>({
@@ -87,11 +74,11 @@ export function SignInView() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async ({ email, password }) => {
+  const onSubmit = handleSubmit(async ({ emailOrPhone, password }) => {
     try {
       const result = await signIn("credentials", {
         redirect: false,
-        email,
+        email: emailOrPhone,
         password,
       });
 
@@ -112,8 +99,8 @@ export function SignInView() {
   const renderForm = () => (
     <Box sx={{ gap: 3, display: "flex", flexDirection: "column" }}>
       <Field.Text
-        name="email"
-        label="Email address"
+        name="emailOrPhone"
+        label="Mobile No/Email"
         slotProps={{ inputLabel: { shrink: true } }}
       />
 
@@ -201,4 +188,6 @@ export function SignInView() {
       <FormSocials />
     </>
   );
-}
+};
+
+export default SignInView;

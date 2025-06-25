@@ -1,5 +1,4 @@
-import { SignUpView } from "@/auth/view/sign-up-view";
-import { AuthSplitLayout } from "@/layouts/auth-split";
+import SignUpView from "@/auth/view/sign-up-view";
 
 // ----------------------------------------------------------------------
 

@@ -6,12 +6,8 @@ import { useForm } from "react-hook-form";
 import { useBoolean } from "minimal-shared/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
-import Alert from "@mui/material/Alert";
-import IconButton from "@mui/material/IconButton";
+import { Box, Link, Alert, InputAdornment, IconButton } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import InputAdornment from "@mui/material/InputAdornment";
 
 import { paths } from "@/routes/paths";
 import { useRouter } from "@/routes/hooks";
@@ -67,7 +63,7 @@ interface RegisterResponse {
 
 // ----------------------------------------------------------------------
 
-export function SignUpView() {
+const SignUpView = () => {
   const callbackUrl = getCookie<string>("next-auth.callback-url");
   const router = useRouter();
   const dispatch = useDispatch();
@@ -245,4 +241,6 @@ export function SignUpView() {
       <FormSocials />
     </>
   );
-}
+};
+
+export default SignUpView;

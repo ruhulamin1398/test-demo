@@ -1,12 +1,13 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 
-import { CONFIG } from '@/global-config';
-
-import { SignInView } from '@/auth/view';
+import { CONFIG } from "@/global-config";
+import SignInView from "@/auth/view/sign-in-view";
 
 // ----------------------------------------------------------------------
 
-export const metadata: Metadata = { title: `Sign in | Jwt - ${CONFIG.appName}` };
+export const metadata: Metadata = {
+  title: `Sign in   - ${CONFIG.appName}`,
+};
 
 export default function Page() {
   return <SignInView />;
