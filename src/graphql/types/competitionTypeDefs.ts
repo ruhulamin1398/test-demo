@@ -87,6 +87,7 @@ export const competitionTypeDefs = `#graphql
     isEnrolled:Boolean
     mySubmission: [EnrollmentSubmission]
     enroledUserCount:Int
+    totalSubmissionCount:Int
   }
 
   # Paginated response for users

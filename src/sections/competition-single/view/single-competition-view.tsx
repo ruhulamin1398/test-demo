@@ -45,7 +45,7 @@ export function SingleCompetitionView() {
           <Container sx={{ my: 5 }}>
             <Grid container spacing={3}>
               <Grid size={{ xs: 12, md: 12, lg: 12 }}>
-                <ContestSummaryOverview />
+                <ContestSummaryOverview competition={competitionDetails} />
               </Grid>
 
               <Grid size={{ xs: 12, md: 6, lg: 8 }}>

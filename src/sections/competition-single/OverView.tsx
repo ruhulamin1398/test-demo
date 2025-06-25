@@ -1,16 +1,21 @@
 import type { CardProps } from "@mui/material/Card";
 
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
 import { CONFIG } from "@/global-config";
 import { PaletteColorKey } from "@/theme";
-import { Typography } from "@mui/material";
+import { Typography, Card, Box } from "@mui/material";
 import { SvgColor } from "@/components/svg-color";
 import { fNumber } from "@/utils/format-number";
+import { ICompetition, RoundStatusEnum } from "@/interfaces";
 
 // ----------------------------------------------------------------------
 
-const ContestSummaryOverview = () => {
+type Props = {
+  competition: ICompetition;
+};
+const ContestSummaryOverview = ({ competition }: Props) => {
+  const roundCompleted = competition.rounds.filter(
+    (round) => round.status === RoundStatusEnum.COMPLETED
+  ).length;
   return (
     <Box
       sx={{
@@ -22,20 +27,20 @@ const ContestSummaryOverview = () => {
     >
       <CourseWidgetSummary
         title="Rounds Compelted"
-        total={2}
+        total={roundCompleted}
         icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
       />
 
       <CourseWidgetSummary
         title="Peoples Enrolled"
-        total={300}
+        total={competition.enroledUserCount || 0}
         color="success"
         icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-completed.svg`}
       />
 
       <CourseWidgetSummary
         title="Submissions"
-        total={500}
+        total={competition.totalSubmissionCount || 0}
         color="secondary"
         icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-certificates.svg`}
       />
@@ -46,21 +51,21 @@ const ContestSummaryOverview = () => {
 export default ContestSummaryOverview;
 // ----------------------------------------------------------------------
 
-type Props = CardProps & {
+type WidgetProps = CardProps & {
   icon: string;
   title: string;
   total: number;
   color?: PaletteColorKey;
 };
 
-export function CourseWidgetSummary({
+const CourseWidgetSummary = ({
   sx,
   icon,
   title,
   total,
   color = "warning",
   ...other
-}: Props) {
+}: WidgetProps) => {
   return (
     <Card
       sx={[{ py: 3, pl: 3, pr: 2.5 }, ...(Array.isArray(sx) ? sx : [sx])]}
@@ -107,4 +112,4 @@ export function CourseWidgetSummary({
       />
     </Card>
   );
-}
+};

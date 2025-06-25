@@ -54,6 +54,7 @@ export interface ICompetition {
   slug?: string;
   activeRound?: IRound;
   enroledUserCount?: number;
+  totalSubmissionCount?: number;
   category?: ICategory;
 }
 

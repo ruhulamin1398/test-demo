@@ -159,7 +159,6 @@ export const GET_COMPETITION_QUERY = gql`
       status
       eligibility
       haveRoundWiseSubmission
-      enroledUserCount
       rounds {
         id
         title
@@ -202,6 +201,9 @@ export const GET_COMPETITION_QUERY = gql`
         rewards
         title
       }
+
+      enroledUserCount
+      totalSubmissionCount
     }
   }
 `;
