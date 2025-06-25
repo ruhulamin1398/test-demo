@@ -206,14 +206,6 @@ export function ProfileAccountTab() {
                     placeholder="Choose a country"
                   />
 
-                  <Field.Select name="role" label="Role">
-                    {Object.values(RoleEnum).map((userRole) => (
-                      <MenuItem key={userRole} value={userRole}>
-                        {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
-                      </MenuItem>
-                    ))}
-                  </Field.Select>
-
                   <Field.Select name="gender" label="Sex">
                     {Object.values(GenderEnum).map((gender) => (
                       <MenuItem key={gender} value={gender}>

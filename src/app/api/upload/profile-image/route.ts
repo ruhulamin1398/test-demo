@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
   try {
     // Parse the form data using `req.formData()`
     const formData = await req.formData();
-    console.log("formData is : _______________", formData);
+    // console.log("formData is : _______________", formData);
 
     // Extract the uploaded file and ID from formData
     const uploadedFile = formData.get("file");
@@ -86,7 +86,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       {
-        data: uploadedFileUrl,
+        data: {
+          mediaUrl: uploadedFileUrl,
+        },
         success: true,
         message: "File uploaded successfully",
       },
