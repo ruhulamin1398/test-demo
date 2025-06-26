@@ -8,7 +8,7 @@ import { mockCoursesReminder, mockMyRecentSubmissions } from "@/_mock/data";
 
 // ----------------------------------------------------------------------
 
-export function ProfileSidebar() {
+const ProfileSidebar = () => {
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
@@ -25,12 +25,12 @@ export function ProfileSidebar() {
         width: 1,
         display: "flex",
         flexDirection: "column",
-        px: { xs: 2, sm: 3, xl: 5 },
-        pt: { lg: 2, xl: 2 },
+        // px: { xs: 2, sm: 3, xl: 5 },
+        // pt: { lg: 2, xl: 2 },
         pb: { xs: 8, xl: 10 },
         flexShrink: { lg: 0 },
         gap: { xs: 2, lg: 2, xl: 2 },
-        maxWidth: { lg: 320, xl: 360 },
+
         bgcolor: { lg: "background.neutral" },
         [`& .${cardClasses.root}`]: {
           p: { xs: 3, lg: 0 },
@@ -48,17 +48,41 @@ export function ProfileSidebar() {
           justifyContent: "center",
         }}
       >
-        <Tabs value={selectedTab} variant="standard">
+        <Tabs
+          value={selectedTab}
+          variant="fullWidth"
+          textColor="primary"
+          indicatorColor="primary"
+          sx={{
+            width: "100%",
+            borderRadius: 0,
+            boxShadow: 1,
+            minHeight: 48,
+            bgcolor: "background.default",
+            ".MuiTab-root": {
+              fontWeight: 600,
+              fontSize: 15,
+              color: "text.secondary",
+              transition: "color 0.2s",
+              "&.Mui-selected": {
+                color: "primary.main",
+                bgcolor: "action.selected",
+                borderRadius: 0,
+              },
+            },
+            ".MuiTabs-indicator": {
+              height: 3,
+              borderRadius: 0,
+              backgroundColor: "primary.main", // Change the color here
+            },
+          }}
+        >
           <Tab
             component={RouterLink}
             key="deadline"
             value=""
             label="Deadlines"
             href={createRedirectPath(pathname, "")}
-            sx={{
-              typography: "caption",
-              minHeight: 48,
-            }}
           />
           <Tab
             component={RouterLink}
@@ -66,10 +90,6 @@ export function ProfileSidebar() {
             value="submissions"
             label="Submissions"
             href={createRedirectPath(pathname, "submissions")}
-            sx={{
-              typography: "caption",
-              minHeight: 48,
-            }}
           />
         </Tabs>
       </Box>
@@ -90,6 +110,6 @@ export function ProfileSidebar() {
       </Grid>
     </Box>
   );
-}
-
+};
+export default ProfileSidebar;
 // ----------------------------------------------------------------------

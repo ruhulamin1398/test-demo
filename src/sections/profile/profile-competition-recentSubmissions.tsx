@@ -37,6 +37,7 @@ export function CompetitionRecentSubmissions({
           gap: 3,
           display: "flex",
           flexDirection: "column",
+          mx: { xs: 2, sm: 3, xl: 5 },
         }}
       >
         {list.map((item, index) => (

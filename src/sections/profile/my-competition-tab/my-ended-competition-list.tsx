@@ -11,31 +11,64 @@ import {
   LinearProgress,
   linearProgressClasses,
   Pagination,
-  SxProps,
-  Theme,
   Typography,
 } from "@mui/material";
 import { varAlpha } from "minimal-shared/utils";
 import { RouterLink } from "@/routes/components";
 import { Iconify } from "@/components/iconify";
 import { ICompetition } from "@/interfaces";
-import { ComponentBox } from "@/layouts/component-box";
 
 // ----------------------------------------------------------------------
-
-const componentBoxStyles: SxProps<Theme> = {
-  flexDirection: "column",
-};
 
 type Props = CardProps & {
   title?: string;
   list: ICompetition[];
+  isPaginate?: Boolean;
+  isViewMore?: Boolean;
 };
 
-export function MyCompetitionList({ title, list, sx, ...other }: Props) {
+const MyEndedCompetitionList = ({
+  title,
+  list,
+  isPaginate = false,
+  isViewMore = false,
+  sx,
+  ...other
+}: Props) => {
   return (
     <Card sx={sx} {...other}>
-      <CardHeader title={title} />
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 2,
+          mt: 3,
+          px: {
+            xs: 2,
+            md: 3,
+          },
+        }}
+      >
+        <Typography variant="h5"> {title}</Typography>
+
+        {isViewMore && (
+          <Link
+            component={RouterLink}
+            href="/profile?profile-tab=my-competitions"
+            color="inherit"
+            underline="none"
+          >
+            <Button
+              color="primary"
+              variant="outlined"
+              endIcon={<Iconify icon="ic:round-arrow-forward" />}
+            >
+              View All
+            </Button>
+          </Link>
+        )}
+      </Box>
 
       <Box
         sx={{
@@ -48,19 +81,16 @@ export function MyCompetitionList({ title, list, sx, ...other }: Props) {
         {list.map((item) => (
           <Item key={item.id} item={item} />
         ))}
-
-        {/* <ComponentBox sx={componentBoxStyles}> */}
         <Pagination
           shape="rounded"
           count={10}
           variant="outlined"
           sx={{ display: "flex", justifyContent: "flex-end" }}
         />
-        {/* </ComponentBox> */}
       </Box>
     </Card>
   );
-}
+};
 
 // ----------------------------------------------------------------------
 
@@ -94,14 +124,19 @@ function Item({ item, sx, ...other }: ItemProps) {
           flexDirection: "column",
         }}
       >
-        <Link
-          color="inherit"
-          href={item.detailsHref}
-          noWrap
-          sx={{ mb: 0.5, typography: "subtitle2" }}
-        >
+        <Link color="inherit" noWrap sx={{ mb: 0.5, typography: "subtitle2" }}>
           {item.title}
         </Link>
+        {/* <Typography
+          variant="body2"
+          sx={{
+            color: "text.secondary",
+            my: 1,
+          }}
+        >
+          {item.description}
+        </Typography> */}
+
         <Box
           sx={{
             gap: 0.5,
@@ -112,7 +147,7 @@ function Item({ item, sx, ...other }: ItemProps) {
           }}
         >
           <Iconify width={16} icon="solar:calendar-date-bold" />
-          {"Ends in 2 days"}
+          {"Ended at 17 jan 2023"}
         </Box>
         {/* <Box
           component="span"
@@ -129,33 +164,10 @@ function Item({ item, sx, ...other }: ItemProps) {
             gap: 2,
             my: 1,
           }}
-        >
-          <LinearProgress
-            color="warning"
-            variant="determinate"
-            value={percent}
-            sx={[
-              (theme) => ({
-                width: 1,
-                height: 6,
-                bgcolor: varAlpha(theme.vars.palette.grey["500Channel"], 0.16),
-                [` .${linearProgressClasses.bar}`]: { opacity: 0.8 },
-              }),
-            ]}
-          />
-          {/* <Box
-            component="span"
-            sx={{
-              width: 40,
-              typography: "caption",
-              color: "text.secondary",
-              fontWeight: "fontWeightMedium",
-            }}
-          >
-            {fPercent(percent)}
-          </Box> */}
-        </Box>
+        ></Box>
       </Box>
     </Box>
   );
 }
+
+export default MyEndedCompetitionList;

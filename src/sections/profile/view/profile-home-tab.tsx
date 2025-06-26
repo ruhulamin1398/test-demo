@@ -1,12 +1,12 @@
 import { _coursesContinue, _coursesFeatured, _tours } from "@/_mock";
 import Grid from "@mui/material/Grid2";
 import { ProfileSummaryOverview } from "../OverView";
-import { ProfileSidebar } from "./profile-sidebar";
-import { ProfileMainContent } from "./profile-main-content";
+import ProfileSidebar from "./profile-sidebar";
+import ProfileMainContent from "./profile-main-content";
 
 // ----------------------------------------------------------------------
 
-export function ProfileHomeTab() {
+const ProfileHomeTab = () => {
   return (
     <>
       <Grid container spacing={3}>
@@ -27,4 +27,6 @@ export function ProfileHomeTab() {
       </Grid>
     </>
   );
-}
+};
+
+export default ProfileHomeTab;

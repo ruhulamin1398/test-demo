@@ -7,10 +7,6 @@ import {
   PhoneNumber,
 } from "react-phone-number-input/input";
 
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import Grid from "@mui/material/Grid2";
-import Stack from "@mui/material/Stack";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 import { toast } from "@/components/snackbar";
@@ -19,7 +15,16 @@ import { Form, Field, schemaHelper } from "@/components/hook-form";
 import { ProfileSecurityTab } from "./profile-security-tab";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { FormControlLabel, MenuItem, Switch, Typography } from "@mui/material";
+import {
+  FormControlLabel,
+  MenuItem,
+  Switch,
+  Typography,
+  Box,
+  Card,
+  Grid2 as Grid,
+  Stack,
+} from "@mui/material";
 import { GenderEnum, IPhoneNumber, IUser, RoleEnum } from "@/interfaces";
 import { LocalizationProvider } from "@/locales";
 import { useMutation, useQuery } from "@apollo/client";
@@ -92,9 +97,9 @@ const defaultValues: UserSchemaType = {
   dob: null,
 };
 
-export function ProfileAccountTab() {
+const ProfileAccountTab = () => {
   const [updateGeneralInfo, { loading }] = useMutation(UPDATE_USER_MUTATION);
-  const loggedUser = useSelector((state: RootState) => state.auth.user);
+  const loggedUser = useSelector((state: RootState) => state.auth?.user);
   const [user, setUser] = useState<IUser | null>(null);
 
   const {
@@ -274,4 +279,6 @@ export function ProfileAccountTab() {
       <ProfileSecurityTab />
     </>
   );
-}
+};
+
+export default ProfileAccountTab;

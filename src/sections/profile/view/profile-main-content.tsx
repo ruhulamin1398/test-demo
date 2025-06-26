@@ -1,28 +1,23 @@
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { competitions } from "@/_mock/contest";
-import { ProfilePageCompetition } from "../profile-page-competitions";
-import { MyCompetitionList } from "../my-competiton-tab/my-competition-lit";
+import ProfilePageCompetition from "../profile-page-competitions";
+import MyCompetitionList from "../my-competition-tab/my-competition-lit";
 // ----------------------------------------------------------------------
 
-export function ProfileMainContent() {
+const ProfileMainContent = () => {
   return (
     <>
-      <Box>
-        {/* <Box
-          sx={{
-            gap: 3,
-            display: "grid",
-            alignItems: "flex-start",
-            gridTemplateColumns: {
-              xs: "repeat(1, 1fr)",
-              md: "repeat(2, 1fr)",
-            },
-          }}
-        > */}
-
+      <Box
+        sx={{
+          gap: 3,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <MyCompetitionList
           title="My running competitions"
           list={competitions}
+          isViewMore={true}
         />
 
         <ProfilePageCompetition title="Active Contests" list={competitions} />
@@ -39,4 +34,6 @@ export function ProfileMainContent() {
       </Box>
     </>
   );
-}
+};
+
+export default ProfileMainContent;

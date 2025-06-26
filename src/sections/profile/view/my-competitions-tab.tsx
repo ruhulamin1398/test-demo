@@ -1,11 +1,11 @@
 import { _coursesContinue, _coursesFeatured, _tours } from "@/_mock";
 import Grid from "@mui/material/Grid2";
-import { MyCompetitionMainContent } from "../my-competiton-tab/my-competition-main-content";
-import { ProfileSidebar } from "./profile-sidebar";
+import ProfileSidebar from "./profile-sidebar";
+import MyCompetitionMainContent from "../my-competition-tab/my-competition-main-content";
 
 // ----------------------------------------------------------------------
 
-export function MyCompetitionsTab() {
+const MyCompetitionsTab = () => {
   return (
     <>
       <Grid container spacing={3}>
@@ -23,4 +23,5 @@ export function MyCompetitionsTab() {
       </Grid>
     </>
   );
-}
+};
+export default MyCompetitionsTab;

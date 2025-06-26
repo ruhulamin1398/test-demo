@@ -2,25 +2,21 @@
 import type { FabProps } from "@mui/material/Fab";
 import type { UseBackToTopReturn } from "minimal-shared/hooks";
 import { useBackToTop } from "minimal-shared/hooks";
-import Fab from "@mui/material/Fab";
-import SvgIcon from "@mui/material/SvgIcon";
 import {
   ScrollProgress,
   useScrollProgress,
 } from "@/components/animate/scroll-progress";
-import { Box, Card, Container, Tab, Tabs } from "@mui/material";
+import { Box, Card, Container, Tab, Tabs, Fab, SvgIcon } from "@mui/material";
 import { ProfilePageHero } from "../profile-page-hero";
 import { _userAbout } from "@/_mock";
-import { useMockedUser } from "@/auth/hooks";
 import { Iconify } from "@/components/iconify";
 import { usePathname, useSearchParams } from "next/navigation";
 import { RouterLink } from "@/routes/components";
-import { ProfileHomeTab } from "./profile-home-tab";
-import { ProfileAccountTab } from "./profile-account-tab";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { CONFIG } from "@/global-config";
-import { MyCompetitionsTab } from "./my-competitions-tab";
+import ProfileHomeTab from "./profile-home-tab";
+import MyCompetitionsTab from "./my-competitions-tab";
+import ProfileAccountTab from "./profile-account-tab";
 
 // ----------------------------------------------------------------------
 
@@ -76,7 +72,7 @@ export function ProfileView() {
           <ProfilePageHero
             role={user?.role || " "}
             name={`${user?.firstName} ${user?.lastName}`}
-            avatarUrl={user?.profilePicture}
+            avatarUrl={user?.profilePicture || ""}
             coverUrl={_userAbout.coverUrl}
           />
 

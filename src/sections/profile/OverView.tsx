@@ -2,11 +2,9 @@ import type { CardProps } from "@mui/material/Card";
 
 import { m } from "framer-motion";
 
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
 import { CONFIG } from "@/global-config";
 import { PaletteColorKey } from "@/theme";
-import { Typography } from "@mui/material";
+import { Typography, Box, Card } from "@mui/material";
 import { SvgColor } from "@/components/svg-color";
 import { fNumber } from "@/utils/format-number";
 import { varFade } from "@/components/animate";
@@ -16,7 +14,7 @@ import { varFade } from "@/components/animate";
 export function ProfileSummaryOverview() {
   return (
     <m.div variants={varFade("inUp")}>
-      <Card>
+      <Box>
         <Box
           sx={{
             gap: 3,
@@ -45,7 +43,7 @@ export function ProfileSummaryOverview() {
             icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-certificates.svg`}
           />
         </Box>
-      </Card>
+      </Box>
     </m.div>
   );
 }
