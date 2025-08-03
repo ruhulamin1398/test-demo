@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript"
+  ],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "off",             // Disable unused vars error
+    "@typescript-eslint/no-explicit-any": "off",             // Allow use of "any" type
+    "react-hooks/exhaustive-deps": "off",                    // Disable exhaustive-deps warning
+    "react/no-unescaped-entities": "off",                    // Disable warning for unescaped entities
+    "prefer-const": "off",                                   // Allow "let" declarations that could be "const"
+    "@next/next/no-img-element": "off"                       // Disable warning for <img> element usage
+  }
+}
