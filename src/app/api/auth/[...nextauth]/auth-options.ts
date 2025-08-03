@@ -19,17 +19,11 @@ export const authOptions: AuthOptions = {
   },
   providers: [
     GoogleProvider({
-      clientId:
-        process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
-        "940596571861-4mfet946ugp4k480gnml58v4td8oo94o.apps.googleusercontent.com",
-      clientSecret:
-        process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET ||
-        "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",
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!,
     }),
   ],
-  secret:
-    process.env.NEXT_PUBLIC_NEXTAUTH_SECRET ||
-    "1a99663db926903959c25fe59d333d61",
+  secret: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET!,
   callbacks: {
     // The jwt callback is called whenever a token is created or updated.
     async jwt({
